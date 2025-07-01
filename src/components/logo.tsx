@@ -1,8 +1,6 @@
 export const Logo = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <svg
-      width="129"
-      height="28"
       viewBox="0 0 129 28"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
