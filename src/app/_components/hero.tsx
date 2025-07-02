@@ -5,28 +5,9 @@ export const HeroSection = () => {
   return (
     <section
       id="hero"
-      className="relative grid min-h-[70svh] place-items-center md:grid-cols-2"
+      className="relative grid place-items-center gap-6 pb-32 lg:min-h-[70svh] lg:grid-cols-2"
     >
-      <div className="grid max-w-sm gap-6">
-        <h2 className="text-h2 font-medium">
-          Un ecosistema digitale per la salute mentale
-        </h2>
-        <p>
-          La piattaforma digitale che integra la ricerca clinica con
-          l&apos;innovazione tecnologica per supportare la diagnosi, il
-          monitoraggio e il trattamento dei disturbi mentali
-        </p>
-        <div className="flex gap-4">
-          <Button asChild>
-            <Link href="/pazienti">Per i pazienti</Link>
-          </Button>
-          <Button variant="secondary" asChild>
-            <Link href="/terapeuti">Per i terapeuti</Link>
-          </Button>
-        </div>
-      </div>
-
-      <div className="absolute top-0 right-0 md:w-2/3">
+      <div className="top-0 right-0 w-full lg:absolute lg:w-2/3">
         <svg
           viewBox="0 0 991 687"
           className="text-primary h-full max-h-[780px] place-self-end"
@@ -66,6 +47,25 @@ export const HeroSection = () => {
             </textPath>
           </text>
         </svg>
+      </div>
+
+      <div className="mx-4 grid max-w-sm place-items-center gap-6 lg:place-items-start">
+        <h2 className="text-h2 font-medium">
+          Un ecosistema digitale per la salute mentale
+        </h2>
+        <p>
+          La piattaforma digitale che integra la ricerca clinica con
+          l&apos;innovazione tecnologica per supportare la diagnosi, il
+          monitoraggio e il trattamento dei disturbi mentali
+        </p>
+        <div className="flex gap-4">
+          <Button asChild>
+            <Link href="/pazienti">Per i pazienti</Link>
+          </Button>
+          <Button variant="secondary" asChild>
+            <Link href="/terapeuti">Per i terapeuti</Link>
+          </Button>
+        </div>
       </div>
     </section>
   );

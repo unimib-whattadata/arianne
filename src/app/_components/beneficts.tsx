@@ -7,7 +7,7 @@ import { cn } from "~/lib/utils";
 
 const CAPTION_TEXT = {
   patients:
-    "Arianne garantisce un supporto personalizzato e costante, un un monitoraggio efficace che aiuta a prevenire ospedalizzazioni e ricadute, l'accessibilità alla terapia in qualsiasi momento e luogo, e una maggiore efficacia del percorso terapeutico ",
+    "Arianne garantisce un supporto personalizzato e costante, un monitoraggio efficace che aiuta a prevenire ospedalizzazioni e ricadute, l'accessibilità alla terapia in qualsiasi momento e luogo, e una maggiore efficacia del percorso terapeutico ",
   therapists:
     "La piattaforma offre la possibilità di una terapia più efficiente e organizzata, consentendo il monitoraggio dei pazienti in tempo reale per interventi più mirati e contribuendo così alla riduzione delle ospedalizzazioni e dei costi sanitari",
 };
@@ -23,11 +23,11 @@ export const BenefitsSection = () => {
   };
 
   return (
-    <section id="benefits">
-      <div className="container mx-auto grid grid-cols-3 place-items-center gap-12 py-32">
-        <div className="grid place-items-start gap-8">
-          <h2 className="text-medium text-h3">I Benefici di Arianne</h2>
-          <div className="grid place-items-start gap-5">
+    <section id="benefits" className="scroll-mt-8">
+      <div className="mx-auto grid w-full max-w-3xl place-items-center gap-8 px-4 py-12 md:grid-cols-2 md:place-items-center md:py-24 lg:grid-cols-3 lg:gap-12 lg:px-0">
+        <div className="grid place-items-center gap-8 md:place-items-start">
+          <h2 className="text-h3 font-medium">I Benefici di Arianne</h2>
+          <div className="grid place-items-center gap-5 md:place-items-start">
             <Button
               variant="link"
               className={cn(
@@ -49,18 +49,24 @@ export const BenefitsSection = () => {
               Per i Terapeuti
             </Button>
           </div>
-          <Button>Scopri come iscriverti</Button>
+          <Button variant="secondary" className="hidden md:inline-flex">
+            Scopri cosa ti offre
+          </Button>
         </div>
-        <div className="col-span-2 grid gap-8">
+        <div className="grid gap-8 lg:col-span-2">
           <Image
             src="/images/benefici-pazienti.png"
             alt="Benefici per i Pazienti"
             width={558}
             height={400}
+            sizes="(max-width: 55rem) 100vw, 31rem"
             className="w-full rounded-lg"
           />
           <p>{CAPTION_TEXT[selectedTab]}</p>
         </div>
+        <Button variant="secondary" className="w-fit md:hidden">
+          Scopri cosa ti offre
+        </Button>
       </div>
     </section>
   );

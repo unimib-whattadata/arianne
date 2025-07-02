@@ -5,6 +5,7 @@ import { Poppins } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import { cn } from "~/lib/utils";
+import { Header } from "./_components/header";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
@@ -20,18 +21,16 @@ const poppins = Poppins({
 
 export default function RootLayout({
   children,
-  header,
   footer,
 }: Readonly<{
   children: React.ReactNode;
-  header: React.ReactNode;
   footer: React.ReactNode;
 }>) {
   return (
     <html lang="en" className={cn("scroll-smooth", poppins.variable)}>
       <body>
         <TRPCReactProvider>
-          {header}
+          <Header />
           {children}
           {footer}
         </TRPCReactProvider>

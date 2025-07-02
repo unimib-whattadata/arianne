@@ -14,11 +14,6 @@
   --text-h2--line-height: 1.2;
   --text-h3: 1.33rem; /* ~24px */
   --text-h3--line-height: auto;
-
-  --breakpoint-*: initial;
-  --breakpoint-sm: 40rem;
-  --breakpoint-md: 48rem;
-  --breakpoint-lg: 55rem;
 }
 
 @theme inline {

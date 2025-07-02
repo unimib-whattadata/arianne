@@ -4,9 +4,9 @@ export const ContactsSection = () => {
   return (
     <section
       id="contacts"
-      className="bg-secondary-light relative rounded-lg pt-32 pb-76"
+      className="bg-secondary-light relative scroll-mt-8 rounded-lg pt-12 pb-34 md:pb-44 lg:pt-24 lg:pb-64"
     >
-      <div className="container mx-auto grid max-w-prose text-center">
+      <div className="container mx-auto grid max-w-prose px-4 text-center">
         <h2 className="text-h2 mb-4 font-medium">
           Vuoi saperne di più su Arianne?
         </h2>
@@ -28,7 +28,7 @@ export const ContactsSection = () => {
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 1280 395"
         fill="none"
-        className="text-primary absolute bottom-34 h-auto max-h-[300px] w-full"
+        className="text-primary absolute bottom-12 h-auto max-h-[300px] w-full lg:bottom-24"
       >
         <path
           d="M-88.2939 39.5947C-88.2939 39.5947 279.167 337.322 582.048 343.903C804.28 348.732 947.861 243.533 1168.24 271.903C1247.95 282.164 1300.6 302.935 1300.6 302.935"
