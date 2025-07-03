@@ -20,6 +20,7 @@ RUN SKIP_ENV_VALIDATION=1 pnpm build
 
 # 4. Runner
 FROM base AS runner
+RUN apt-get update && apt-get install -y curl --no-install-recommends && rm -rf /var/lib/apt/lists/*
 ENV NODE_ENV=production
 COPY --from=builder /app/next.config.js /app/next.config.js
 COPY --from=builder /app/public /app/public
