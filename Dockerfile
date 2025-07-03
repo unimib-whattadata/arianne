@@ -20,13 +20,15 @@ RUN SKIP_ENV_VALIDATION=1 pnpm build
 
 # 4. Runner
 FROM base AS runner
+# Install curl for health checks
 RUN apt-get update && apt-get install -y curl --no-install-recommends && rm -rf /var/lib/apt/lists/*
 ENV NODE_ENV=production
-COPY --from=builder /app/next.config.js /app/next.config.js
-COPY --from=builder /app/public /app/public
-COPY --from=builder /app/package.json /app/package.json
-COPY --from=builder /app/.next/standalone /app/.next/standalone
-COPY --from=builder /app/.next/static /app/.next/static
-
+WORKDIR /app
+# Copy standalone build output
+COPY --from=builder /app/.next/standalone/ .
+# Copy static assets
+COPY --from=builder /app/public ./public
+# Expose port
 EXPOSE 3000
-CMD ["node", "/app/.next/standalone/server.js"]
+# Start the server binding to all interfaces
+CMD ["node", "server.js", "--hostname", "0.0.0.0", "--port", "3000"]
