@@ -19,10 +19,11 @@ import { Individual } from "./_components/_steps/stepIndividual";
 import Navbar from "./_components/navbar";
 import { getDefaultFormValues } from "./_lib/get-default-values";
 import FullSchema from "./_schema/therapy-form-schema";
+import { IndividualDetail0 } from "./_components/_steps/_individualDetails/individualDetail0";
 
 export default function QuestionnairePage() {
   const [currentStep, setCurrentStep] = useState(0);
-  const [path, _setPath] = useState<"individual" | "couple" | "family">(
+  const [path] = useState<"individual" | "couple" | "family">(
     "individual",
   );
 
@@ -48,6 +49,8 @@ export default function QuestionnairePage() {
         return <Couple />;
       case 7:
         return <Family />;
+      case 8:
+        return <IndividualDetail0 />;
       default:
         return <Step1 />;
     }
