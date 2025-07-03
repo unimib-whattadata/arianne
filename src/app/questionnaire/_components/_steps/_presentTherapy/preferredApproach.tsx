@@ -5,7 +5,6 @@ import { useFormContext } from "react-hook-form";
 
 import {
   FormControl,
-  
   FormField,
   FormItem,
   FormLabel,
@@ -14,13 +13,17 @@ import type { FormValues } from "~/app/questionnaire/_schema/therapy-form-schema
 import { Input } from "~/components/ui/input";
 
 const APPROACHES = [
-    { value: 0, label: "Voglio che sia il terapeuta a guidare attivamente la conversazione" },
-    { value: 1, label: "Vorrei avere più spazio per parlare liberamente" },
-    { value: 2, label: "Ci dovrebbe essere equilibrio tra le due opzioni precedenti" },
-    { value: 3, label: "Non lo so/va bene qualsiasi approccio" },
+  {
+    value: 0,
+    label: "Voglio che sia il terapeuta a guidare attivamente la conversazione",
+  },
+  { value: 1, label: "Vorrei avere più spazio per parlare liberamente" },
+  {
+    value: 2,
+    label: "Ci dovrebbe essere equilibrio tra le due opzioni precedenti",
+  },
+  { value: 3, label: "Non lo so/va bene qualsiasi approccio" },
 ];
-
-
 
 export const PreferredApproach = () => {
   const { control } = useFormContext<FormValues>();
@@ -34,8 +37,9 @@ export const PreferredApproach = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-2xl font-semibold">
-Quale deve essere l’approccio del terapeuta?            </FormLabel>
-              
+                Quale deve essere l’approccio del terapeuta?{" "}
+              </FormLabel>
+
               <FormControl>
                 <div className="mt-10 flex flex-col gap-4">
                   {APPROACHES.map((option) => (
@@ -46,7 +50,7 @@ Quale deve essere l’approccio del terapeuta?            </FormLabel>
                       <div className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#006279] text-[#006279]">
                         {field.value === option.value && (
                           <Check
-                            className="h-3 w-3 text-white"
+                            className="text-secondary h-3 w-3"
                             strokeWidth={3}
                           />
                         )}

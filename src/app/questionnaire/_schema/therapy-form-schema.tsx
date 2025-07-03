@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 // --- Common Fields ---
 const Step1 = z.object({
@@ -29,14 +29,14 @@ const FinalSteps = z.object({
   preferredGender: z.number().int().min(0).max(2),
   preferredAge: z.number().int().min(0).max(2),
   preferredOrientation: z.number().int().min(0).max(3),
-  timePreference: z.number().int().min(0).max(2),
+  timePreference: z.array(z.number().int().min(0).max(2)).min(1),
   otherInfo: z.string().min(1).optional(),
 });
 
 // --- Reusable ---
 const detailMap = (maxPerReason: number) =>
   z.record(
-    z.enum(['0', '1', '2', '3', '4', '5']),
+    z.enum(["0", "1", "2", "3", "4", "5"]),
     z
       .array(
         z
@@ -50,7 +50,7 @@ const detailMap = (maxPerReason: number) =>
 
 // --- Individual Path ---
 const IndividualSchema = z.object({
-  path: z.literal('individual'),
+  path: z.literal("individual"),
   individual: z
     .object({
       reasons: z.array(z.number().int().min(0).max(6)).min(1),
@@ -61,11 +61,11 @@ const IndividualSchema = z.object({
       const selected = new Set(val.reasons);
       for (let i = 0; i <= 5; i++) {
         if (selected.has(i)) {
-          const key = i.toString() as '0' | '1' | '2' | '3' | '4' | '5';
+          const key = i.toString() as "0" | "1" | "2" | "3" | "4" | "5";
           if (!val.details?.[key]) {
             ctx.addIssue({
               code: z.ZodIssueCode.custom,
-              path: ['details', key],
+              path: ["details", key],
               message: `Detail for individual reason ${i} is required`,
             });
           }
@@ -74,7 +74,7 @@ const IndividualSchema = z.object({
       if (selected.has(6) && !val.detailText) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          path: ['detailText'],
+          path: ["detailText"],
           message: "Detail text is required for 'Altro'",
         });
       }
@@ -83,7 +83,7 @@ const IndividualSchema = z.object({
 
 // --- Couple Path ---
 const CoupleSchema = z.object({
-  path: z.literal('couple'),
+  path: z.literal("couple"),
   couple: z
     .object({
       reasons: z.array(z.number().int().min(0).max(6)).min(1),
@@ -94,11 +94,11 @@ const CoupleSchema = z.object({
       const selected = new Set(val.reasons);
       for (let i = 0; i <= 5; i++) {
         if (selected.has(i)) {
-          const key = i.toString() as '0' | '1' | '2' | '3' | '4' | '5';
+          const key = i.toString() as "0" | "1" | "2" | "3" | "4" | "5";
           if (!val.details?.[key]) {
             ctx.addIssue({
               code: z.ZodIssueCode.custom,
-              path: ['details', key],
+              path: ["details", key],
               message: `Detail for couple reason ${i} is required`,
             });
           }
@@ -107,7 +107,7 @@ const CoupleSchema = z.object({
       if (selected.has(6) && !val.detailText) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          path: ['detailText'],
+          path: ["detailText"],
           message: "Detail text is required for 'Altro'",
         });
       }
@@ -127,7 +127,7 @@ const childAgeDetails = z.union([
 ]);
 
 const FamilySchema = z.object({
-  path: z.literal('family'),
+  path: z.literal("family"),
   family: z
     .object({
       reasons: z.array(z.number().int().min(0).max(6)).min(1),
@@ -146,23 +146,23 @@ const FamilySchema = z.object({
             if (val.numberOfChildren === undefined) {
               ctx.addIssue({
                 code: z.ZodIssueCode.custom,
-                path: ['numberOfChildren'],
-                message: 'Number of children is required',
+                path: ["numberOfChildren"],
+                message: "Number of children is required",
               });
             }
             if (!val.children || val.children.length === 0) {
               ctx.addIssue({
                 code: z.ZodIssueCode.custom,
-                path: ['children'],
-                message: 'Children details are required',
+                path: ["children"],
+                message: "Children details are required",
               });
             }
           } else {
-            const key = i.toString() as '0' | '1' | '2' | '3' | '4' | '5';
+            const key = i.toString() as "0" | "1" | "2" | "3" | "4" | "5";
             if (!val.details?.[key]) {
               ctx.addIssue({
                 code: z.ZodIssueCode.custom,
-                path: ['details', key],
+                path: ["details", key],
                 message: `Detail for family reason ${i} is required`,
               });
             }
@@ -173,7 +173,7 @@ const FamilySchema = z.object({
       if (selected.has(6) && !val.detailText) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          path: ['detailText'],
+          path: ["detailText"],
           message: "Detail text is required for 'Altro'",
         });
       }
@@ -184,7 +184,7 @@ const FamilySchema = z.object({
 const BaseSteps = Step1.merge(Step2).merge(Step3);
 
 const FullSchema = BaseSteps.and(
-  z.discriminatedUnion('path', [IndividualSchema, CoupleSchema, FamilySchema]),
+  z.discriminatedUnion("path", [IndividualSchema, CoupleSchema, FamilySchema]),
 ).and(FinalSteps);
 
 export default FullSchema;

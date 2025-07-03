@@ -5,7 +5,6 @@ import { useFormContext } from "react-hook-form";
 
 import {
   FormControl,
-  
   FormField,
   FormItem,
   FormLabel,
@@ -13,15 +12,13 @@ import {
 import type { FormValues } from "~/app/questionnaire/_schema/therapy-form-schema";
 import { Input } from "~/components/ui/input";
 
-const AGE_RANGES = [
-    { value: 0, label: "Cognitivo comportamentale" },
-    { value: 1, label: "Integrato" },
-    { value: 2, label: "Psicodinamico" },
-    { value: 3, label: "Sistemico relazionale" },
-    { value: 4, label: "Non ne sono certo/a" },
+const ORIENTATION = [
+  { value: 0, label: "Cognitivo comportamentale" },
+  { value: 1, label: "Integrato" },
+  { value: 2, label: "Psicodinamico" },
+  { value: 3, label: "Sistemico relazionale" },
+  { value: 4, label: "Non ne sono certo/a" },
 ];
-
-
 
 export const TherapistOrientation = () => {
   const { control } = useFormContext<FormValues>();
@@ -35,11 +32,13 @@ export const TherapistOrientation = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-2xl font-semibold">
-Qual era l’orientamento del/la terapeuta con cui hai lavorato prima?            </FormLabel>
-              
+                Qual era l’orientamento del/la terapeuta con cui hai lavorato
+                prima?{" "}
+              </FormLabel>
+
               <FormControl>
                 <div className="mt-10 flex flex-col gap-4">
-                  {AGE_RANGES.map((option) => (
+                  {ORIENTATION.map((option) => (
                     <label
                       key={option.value}
                       className="flex cursor-pointer items-center gap-4 rounded-lg border border-transparent bg-[#DFEBEF] px-6 py-4 text-lg transition hover:bg-[#cae3e9]"
@@ -47,7 +46,7 @@ Qual era l’orientamento del/la terapeuta con cui hai lavorato prima?          
                       <div className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#006279] text-[#006279]">
                         {field.value === option.value && (
                           <Check
-                            className="h-3 w-3 text-white"
+                            className="text-secondary h-3 w-3"
                             strokeWidth={3}
                           />
                         )}

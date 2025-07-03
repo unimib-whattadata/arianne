@@ -21,14 +21,11 @@ const COUPLE_OPTIONS = [
   { value: 4, label: "Infedeltà o perdita di fiducia" },
   { value: 5, label: "Differenze nei progetti di vita o lavori" },
   { value: 6, label: "Altro (specifica)" },
-
 ];
-
 
 export const Couple = () => {
   const { control, watch, setValue } = useFormContext<FormValues>();
 
-  const reasons = watch("couple.reasons") || [];
   const detailText = watch("couple.detailText") ?? "";
 
   const toggleReason = (value: number, current: number[]) => {
@@ -53,7 +50,8 @@ export const Couple = () => {
             return (
               <FormItem>
                 <FormLabel className="text-2xl font-semibold">
-Parliamo di voi. Cosa ti porta qui?                </FormLabel>
+                  Parliamo di voi. Cosa ti porta qui?{" "}
+                </FormLabel>
                 <FormDescription className="text-lg">
                   Puoi selezionare più di un’opzione tra quelle proposte
                 </FormDescription>

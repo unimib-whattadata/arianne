@@ -5,7 +5,6 @@ import { useFormContext } from "react-hook-form";
 
 import {
   FormControl,
-  
   FormField,
   FormItem,
   FormLabel,
@@ -13,14 +12,13 @@ import {
 import type { FormValues } from "~/app/questionnaire/_schema/therapy-form-schema";
 import { Input } from "~/components/ui/input";
 
-const AGE_RANGES = [
+const NUMBER = [
   { value: 0, label: "Soltanto 1" },
   { value: 1, label: "Due figli" },
   { value: 2, label: "Tre figli" },
   { value: 3, label: "Quattro figli" },
   { value: 4, label: "Più di quattro" },
 ];
-
 
 export const NumberOfKids = () => {
   const { control } = useFormContext<FormValues>();
@@ -34,11 +32,12 @@ export const NumberOfKids = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-2xl font-semibold">
-Quanti figli hai/avete?              </FormLabel>
-              
+                Quanti figli hai/avete?{" "}
+              </FormLabel>
+
               <FormControl>
                 <div className="mt-10 flex flex-col gap-4">
-                  {AGE_RANGES.map((option) => (
+                  {NUMBER.map((option) => (
                     <label
                       key={option.value}
                       className="flex cursor-pointer items-center gap-4 rounded-lg border border-transparent bg-[#DFEBEF] px-6 py-4 text-lg transition hover:bg-[#cae3e9]"

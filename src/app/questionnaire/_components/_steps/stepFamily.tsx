@@ -14,15 +14,27 @@ import type { FormValues } from "~/app/questionnaire/_schema/therapy-form-schema
 import { Input } from "~/components/ui/input";
 
 const FAMILY_OPTIONS = [
-  { value: 0, label: "Difficoltà a comunicare con altri membri della famiglia" },
+  {
+    value: 0,
+    label: "Difficoltà a comunicare con altri membri della famiglia",
+  },
   { value: 1, label: "Conflitti frequenti o discussioni che non si risolvono" },
   { value: 2, label: "Problemi con i figli o difficoltà educative" },
-  { value: 3, label: "Eventi stressanti che hanno influenzato la famiglia (separazioni, lutti, cambiamenti)" },
-  { value: 4, label: "Sensazione di distanza o freddezza tra i membri della famiglia" },
-  { value: 5, label: "Voglia di migliorare l'armonia e la relazione familiare" },
+  {
+    value: 3,
+    label:
+      "Eventi stressanti che hanno influenzato la famiglia (separazioni, lutti, cambiamenti)",
+  },
+  {
+    value: 4,
+    label: "Sensazione di distanza o freddezza tra i membri della famiglia",
+  },
+  {
+    value: 5,
+    label: "Voglia di migliorare l'armonia e la relazione familiare",
+  },
   { value: 6, label: "Altro" },
 ];
-
 
 export const Family = () => {
   const { control, watch, setValue } = useFormContext<FormValues>();
@@ -51,7 +63,8 @@ export const Family = () => {
             return (
               <FormItem>
                 <FormLabel className="text-2xl font-semibold">
-Cosa ti ha spinto a cercare una terapia familiare?                </FormLabel>
+                  Cosa ti ha spinto a cercare una terapia familiare?{" "}
+                </FormLabel>
                 <FormDescription className="text-lg">
                   Puoi selezionare più di un’opzione tra quelle proposte
                 </FormDescription>
@@ -65,10 +78,10 @@ Cosa ti ha spinto a cercare una terapia familiare?                </FormLabel>
                             key={option.value}
                             className="flex cursor-pointer items-center gap-4 rounded-lg border border-transparent bg-[#DFEBEF] px-6 py-4 text-lg transition hover:bg-[#cae3e9]"
                           >
-                            <div className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#006279]">
+                            <div className="border-secondary flex h-5 w-5 items-center justify-center rounded-sm border-2">
                               {checked && (
                                 <Check
-                                  className="h-3 w-3 text-white"
+                                  className="text-secondary h-3 w-3"
                                   strokeWidth={3}
                                 />
                               )}
@@ -84,7 +97,6 @@ Cosa ti ha spinto a cercare una terapia familiare?                </FormLabel>
                                 );
                                 field.onChange(newValues);
 
-                                // Se deseleziono "Altro", cancello detailText
                                 if (option.value === 6 && checked) {
                                   setValue("family.detailText", "");
                                 }

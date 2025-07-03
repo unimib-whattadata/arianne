@@ -47,7 +47,7 @@ export const Step4 = () => {
                       <div className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#006279]">
                         {field.value === option.value && (
                           <Check
-                            className="h-3 w-3 text-white"
+                            className="text-secondary h-3 w-3"
                             strokeWidth={3}
                           />
                         )}

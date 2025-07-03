@@ -13,26 +13,21 @@ import { cn } from "~/lib/utils";
 
 interface NavbarProps {
   currentStep: number;
+  totalSteps: number;
   handleNextStep: () => void;
   handlePrevStep: () => void;
+  handleOnSubmit: () => void;
 }
-
-const stepLabels = [
-  "Benvenuto",
-  "Chi sei",
-  "Motivazioni",
-  "Preferenze",
-  "Riepilogo",
-  "Conferma",
-];
 
 export default function Navbar({
   currentStep,
+  totalSteps,
   handleNextStep,
   handlePrevStep,
+  handleOnSubmit,
 }: NavbarProps) {
   const isFirstStep = currentStep === 0;
-  const isLastStep = currentStep === 20;
+  const isLastStep = currentStep === totalSteps - 1;
 
   return (
     <div className="w-full items-center bg-white px-4 py-3 md:px-6">
@@ -76,25 +71,20 @@ export default function Navbar({
         {isLastStep && (
           <>
             <Button
-              type="button"
-              className="flex items-center gap-2 bg-[#006279] text-white"
+              variant="ghost"
+              onClick={handlePrevStep}
+              className="hover:text-accent flex items-center gap-1 text-[#006279] hover:bg-white"
             >
-              <Mail size={16} />
-              Registrati tramite mail
+              <ChevronLeft size={16} />
+              Indietro
             </Button>
             <Button
-              type="button"
-              className="flex items-center gap-2 bg-red-500 text-white"
+              variant="default"
+              onClick={handleOnSubmit}
+              className="flex items-center gap-1 bg-[#006279]"
             >
-              <GanttChartSquare size={16} />
-              Registrati tramite Google
-            </Button>
-            <Button
-              type="button"
-              className="flex items-center gap-2 bg-black text-white"
-            >
-              <Apple size={16} />
-              Registrati tramite Apple
+              Conferma e invia
+              <ChevronRight size={16} />
             </Button>
           </>
         )}
