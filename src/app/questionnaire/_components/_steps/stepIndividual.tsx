@@ -27,7 +27,7 @@ export const Individual = () => {
   const { control, watch, setValue } = useFormContext<FormValues>();
 
   const reasons = watch("individual.reasons") || [];
-  const detailText = watch("individual.detailText") || "";
+  const detailText = watch("individual.detailText") ?? "";
 
   const toggleReason = (value: number, current: number[]) => {
     if (current.includes(value)) {

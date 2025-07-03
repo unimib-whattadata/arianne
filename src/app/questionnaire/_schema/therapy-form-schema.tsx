@@ -30,6 +30,7 @@ const FinalSteps = z.object({
   preferredAge: z.number().int().min(0).max(2),
   preferredOrientation: z.number().int().min(0).max(3),
   timePreference: z.number().int().min(0).max(2),
+  otherInfo: z.string().min(1).optional(),
 });
 
 // --- Reusable ---
