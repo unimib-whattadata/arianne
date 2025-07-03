@@ -16,7 +16,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 FROM base AS builder
 COPY --from=deps /app/node_modules /app/node_modules
 COPY --from=deps /app/package.json /app/package.json
-RUN pnpm build
+RUN SKIP_ENV_VALIDATION=1 pnpm build
 
 # 4. Runner
 FROM base AS runner
