@@ -1,10 +1,10 @@
-import type { FormValues } from '~/app/questionnaire/_schema/therapy-form-schema';
+import type { FormValues } from "~/app/questionnaire/_schema/therapy-form-schema";
 
 export const getDefaultFormValues = (
-  path: 'individual' | 'couple' | 'family',
+  path: "individual" | "couple" | "family",
 ): FormValues => {
   const baseDefaults = {
-    name: '',
+    name: "",
     age: 0,
     gender: 0,
     duration: 0,
@@ -18,29 +18,29 @@ export const getDefaultFormValues = (
     preferredGender: 0,
     preferredAge: 0,
     preferredOrientation: 0,
-    timePreference: 0,
+    timePreference: [0],
   };
 
-  if (path === 'individual') {
+  if (path === "individual") {
     return {
       ...baseDefaults,
-      path: 'individual',
+      path: "individual",
       individual: {
         reasons: [],
         details: {},
-        detailText: '',
+        detailText: "",
       },
     };
   }
 
-  if (path === 'couple') {
+  if (path === "couple") {
     return {
       ...baseDefaults,
-      path: 'couple',
+      path: "couple",
       couple: {
         reasons: [],
         details: {},
-        detailText: '',
+        detailText: "",
       },
     };
   }
@@ -48,11 +48,11 @@ export const getDefaultFormValues = (
   // path === 'family'
   return {
     ...baseDefaults,
-    path: 'family',
+    path: "family",
     family: {
       reasons: [],
       details: {},
-      detailText: '',
+      detailText: "",
       numberOfChildren: 0,
       children: [],
     },
