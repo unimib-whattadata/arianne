@@ -7,7 +7,7 @@ import { cn } from "~/lib/utils";
 
 const CAPTION_TEXT = {
   patients:
-    "Arianne garantisce un supporto personalizzato e costante, un monitoraggio efficace che aiuta a prevenire ospedalizzazioni e ricadute, l'accessibilità alla terapia in qualsiasi momento e luogo, e una maggiore efficacia del percorso terapeutico ",
+    "Arianne offre un supporto personalizzato e continuo, facilitando il percorso terapeutico con un monitoraggio attento, utile a mantenere il benessere nel tempo. La terapia è accessibile ovunque e in qualsiasi momento, per un'esperienza più flessibile ed efficace.",
   therapists:
     "La piattaforma offre la possibilità di una terapia più efficiente e organizzata, consentendo il monitoraggio dei pazienti in tempo reale per interventi più mirati e contribuendo così alla riduzione delle ospedalizzazioni e dei costi sanitari",
 };

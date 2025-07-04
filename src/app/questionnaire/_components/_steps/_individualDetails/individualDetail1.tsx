@@ -15,13 +15,31 @@ import { Input } from "~/components/ui/input";
 
 const DETAIL1_OPTIONS = [
   { value: 0, label: "Mi sento molto spesso giù di morale " },
-  { value: 1, label: "Ho perso interesse o piacere in attività che prima trovavo piacevoli " },
-  { value: 2, label: "Mi sento stanco/a o senza energie anche senza aver fatto sforzi" },
-  { value: 3, label: "Ho pensieri negativi su me stesso/a o un senso di colpa ingiustificato " },
-  { value: 4, label: "Ho cambiamenti nell’appetito o nel sonno (mangio/ dormo troppo o poco) " },
-  { value: 5, label: "Mi è capitato di pensare che la vita non abbia senso o di avere pensieri legati alla morte" },
+  {
+    value: 1,
+    label:
+      "Ho perso interesse o piacere in attività che prima trovavo piacevoli ",
+  },
+  {
+    value: 2,
+    label: "Mi sento stanco/a o senza energie anche senza aver fatto sforzi",
+  },
+  {
+    value: 3,
+    label:
+      "Ho pensieri negativi su me stesso/a o un senso di colpa ingiustificato ",
+  },
+  {
+    value: 4,
+    label:
+      "Ho cambiamenti nell’appetito o nel sonno (mangio/ dormo troppo o poco) ",
+  },
+  {
+    value: 5,
+    label:
+      "Mi è capitato di pensare che la vita non abbia senso o di avere pensieri legati alla morte",
+  },
 ];
-
 
 export const IndividualDetail1 = () => {
   const { control } = useFormContext<FormValues>();
@@ -46,10 +64,12 @@ export const IndividualDetail1 = () => {
             return (
               <FormItem>
                 <FormLabel className="text-2xl font-semibold">
-Ti senti spesso giù o senza energie? 
+                  Ti senti spesso giù o senza energie?
                 </FormLabel>
                 <FormDescription className="text-lg">
-Indica le risposte che ti rappresentano di più, puoi selezionare anche più di un’opzione                </FormDescription>
+                  Indica le risposte che ti rappresentano di più, puoi
+                  selezionare anche più di un’opzione{" "}
+                </FormDescription>
                 <FormControl>
                   <div className="mt-10 flex flex-col gap-4">
                     {DETAIL1_OPTIONS.map((option) => {
@@ -59,10 +79,10 @@ Indica le risposte che ti rappresentano di più, puoi selezionare anche più di 
                           key={option.value}
                           className="flex cursor-pointer items-center gap-4 rounded-lg border border-transparent bg-[#DFEBEF] px-6 py-4 text-lg transition hover:bg-[#cae3e9]"
                         >
-                          <div className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#006279]">
+                          <div className="border-secondary flex h-5 w-5 items-center justify-center rounded-sm border-2">
                             {checked && (
                               <Check
-                                className="h-3 w-3 text-white"
+                                className="text-secondary h-3 w-3"
                                 strokeWidth={3}
                               />
                             )}
@@ -73,7 +93,7 @@ Indica le risposte che ti rappresentano di più, puoi selezionare anche più di 
                             checked={checked}
                             onChange={() =>
                               field.onChange(
-                                toggleReason(option.value, selectedValues)
+                                toggleReason(option.value, selectedValues),
                               )
                             }
                             className="sr-only"

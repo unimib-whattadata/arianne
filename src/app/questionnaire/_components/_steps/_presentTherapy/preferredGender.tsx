@@ -5,7 +5,6 @@ import { useFormContext } from "react-hook-form";
 
 import {
   FormControl,
-  
   FormField,
   FormItem,
   FormLabel,
@@ -14,11 +13,10 @@ import type { FormValues } from "~/app/questionnaire/_schema/therapy-form-schema
 import { Input } from "~/components/ui/input";
 
 const GENDER = [
-    { value: 0, label: "Uomo" },    
-    { value: 1, label: "Donna" },
-    { value: 2, label: "È indifferente" },
+  { value: 0, label: "Uomo" },
+  { value: 1, label: "Donna" },
+  { value: 2, label: "È indifferente" },
 ];
-
 
 export const PreferredGender = () => {
   const { control } = useFormContext<FormValues>();
@@ -32,8 +30,9 @@ export const PreferredGender = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-2xl font-semibold">
-Potendo scegliere, con chi preferisci parlare?         </FormLabel>
-              
+                Potendo scegliere, con chi preferisci parlare?{" "}
+              </FormLabel>
+
               <FormControl>
                 <div className="mt-10 flex flex-col gap-4">
                   {GENDER.map((option) => (
@@ -44,7 +43,7 @@ Potendo scegliere, con chi preferisci parlare?         </FormLabel>
                       <div className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#006279] text-[#006279]">
                         {field.value === option.value && (
                           <Check
-                            className="h-3 w-3 text-white"
+                            className="text-secondary h-3 w-3"
                             strokeWidth={3}
                           />
                         )}

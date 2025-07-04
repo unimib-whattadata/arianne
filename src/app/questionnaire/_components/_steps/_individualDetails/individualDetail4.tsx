@@ -13,14 +13,27 @@ import {
 import type { FormValues } from "~/app/questionnaire/_schema/therapy-form-schema";
 import { Input } from "~/components/ui/input";
 
-const DETAIL_OPTIONS = [
-  { value: 0, label: "Ho vissuto un evento difficile o traumatico che continua a tornarmi in mente " },
-  { value: 1, label: "Evito luoghi, persone o situazioni che mi ricordano l’evento" },
-  { value: 2, label: "Mi sento “scollegato/a” dal presente, come se fossi distaccato/a da ciò che mi circonda " },
+const DETAIL4_OPTIONS = [
+  {
+    value: 0,
+    label:
+      "Ho vissuto un evento difficile o traumatico che continua a tornarmi in mente ",
+  },
+  {
+    value: 1,
+    label: "Evito luoghi, persone o situazioni che mi ricordano l’evento",
+  },
+  {
+    value: 2,
+    label:
+      "Mi sento “scollegato/a” dal presente, come se fossi distaccato/a da ciò che mi circonda ",
+  },
   { value: 3, label: "Ho difficoltà a dormire o ho sogni disturbanti " },
-  { value: 4, label: "Mi sento bloccato/a nella mia crescita professionale o personale" },
+  {
+    value: 4,
+    label: "Mi sento bloccato/a nella mia crescita professionale o personale",
+  },
 ];
-
 
 export const IndividualDetail4 = () => {
   const { control } = useFormContext<FormValues>();
@@ -45,23 +58,25 @@ export const IndividualDetail4 = () => {
             return (
               <FormItem>
                 <FormLabel className="text-2xl font-semibold">
-Hai vissuto un evento difficile che ancora ti pesa molto?
+                  Hai vissuto un evento difficile che ancora ti pesa molto?
                 </FormLabel>
                 <FormDescription className="text-lg">
-Indica le risposte che ti rappresentano di più, puoi selezionare anche più di un’opzione                 </FormDescription>
+                  Indica le risposte che ti rappresentano di più, puoi
+                  selezionare anche più di un’opzione{" "}
+                </FormDescription>
                 <FormControl>
                   <div className="mt-10 flex flex-col gap-4">
-                    {DETAIL_OPTIONS.map((option) => {
+                    {DETAIL4_OPTIONS.map((option) => {
                       const checked = selectedValues.includes(option.value);
                       return (
                         <label
                           key={option.value}
                           className="flex cursor-pointer items-center gap-4 rounded-lg border border-transparent bg-[#DFEBEF] px-6 py-4 text-lg transition hover:bg-[#cae3e9]"
                         >
-                          <div className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#006279]">
+                          <div className="border-secondary flex h-5 w-5 items-center justify-center rounded-sm border-2">
                             {checked && (
                               <Check
-                                className="h-3 w-3 text-white"
+                                className="text-secondary h-3 w-3"
                                 strokeWidth={3}
                               />
                             )}
@@ -72,7 +87,7 @@ Indica le risposte che ti rappresentano di più, puoi selezionare anche più di 
                             checked={checked}
                             onChange={() =>
                               field.onChange(
-                                toggleReason(option.value, selectedValues)
+                                toggleReason(option.value, selectedValues),
                               )
                             }
                             className="sr-only"

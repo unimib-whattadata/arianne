@@ -11,7 +11,10 @@ import {
 import type { FormValues } from "~/app/questionnaire/_schema/therapy-form-schema";
 import { Input } from "~/components/ui/input";
 
-const GOALS_MAP: Record<"individual" | "couple" | "family", { value: number; label: string }[]> = {
+const GOALS_MAP: Record<
+  "individual" | "couple" | "family",
+  { value: number; label: string }[]
+> = {
   individual: [
     { value: 0, label: "Gestire meglio ansia e stress" },
     { value: 1, label: "Ritrovare motivazione ed energia" },
@@ -24,18 +27,35 @@ const GOALS_MAP: Record<"individual" | "couple" | "family", { value: number; lab
   couple: [
     { value: 0, label: "Ritrovare complicità e vicinanza emotiva" },
     { value: 1, label: "Gestire meglio i conflitti e ridurre i litigi" },
-    { value: 2, label: "Ricostruire la fiducia dopo una crisi o un tradimento" },
+    {
+      value: 2,
+      label: "Ricostruire la fiducia dopo una crisi o un tradimento",
+    },
     { value: 3, label: "Riconnettersi a livello sessuale e affettivo" },
     { value: 4, label: "Chiarire se e come proseguire la relazione" },
     { value: 5, label: "" },
     { value: 6, label: "Altro" },
   ],
   family: [
-    { value: 0, label: "Migliorare la comunicazione e la comprensione reciproca" },
+    {
+      value: 0,
+      label: "Migliorare la comunicazione e la comprensione reciproca",
+    },
     { value: 1, label: "Gestire meglio conflitti e tensioni familiari" },
-    { value: 2, label: "Rafforzare il legame emotivo tra i membri della famiglia" },
-    { value: 3, label: "Affrontare e superare difficoltà specifiche (es. eventi traumatici, cambiamenti, ecc.)" },
-    { value: 4, label: "Avere maggiore chiarezza in merito all’origine di distacco e conflitti" },
+    {
+      value: 2,
+      label: "Rafforzare il legame emotivo tra i membri della famiglia",
+    },
+    {
+      value: 3,
+      label:
+        "Affrontare e superare difficoltà specifiche (es. eventi traumatici, cambiamenti, ecc.)",
+    },
+    {
+      value: 4,
+      label:
+        "Avere maggiore chiarezza in merito all’origine di distacco e conflitti",
+    },
     { value: 5, label: "" },
     { value: 6, label: "Altro" },
   ],
@@ -45,7 +65,7 @@ export const GoalsStep = () => {
   const { control, watch, setValue } = useFormContext<FormValues>();
 
   const other = watch("therapyGoals.other") ?? "";
-  const path = watch("path") 
+  const path = watch("path");
 
   const toggleReason = (value: number, current: number[]) => {
     if (current.includes(value)) {
@@ -74,7 +94,8 @@ export const GoalsStep = () => {
                   Quali obiettivi speri di raggiungere con la terapia?
                 </FormLabel>
                 <FormDescription className="text-lg">
-                  Seleziona, tra le alternative, quelli che ritieni più importanti per te
+                  Seleziona, tra le alternative, quelli che ritieni più
+                  importanti per te
                 </FormDescription>
                 <FormControl>
                   <div className="mt-10 flex flex-col gap-4">
@@ -85,10 +106,10 @@ export const GoalsStep = () => {
                           key={option.value}
                           className="flex cursor-pointer items-center gap-4 rounded-lg border border-transparent bg-[#DFEBEF] px-6 py-4 text-lg transition hover:bg-[#cae3e9]"
                         >
-                          <div className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#006279]">
+                          <div className="border-secondary flex h-5 w-5 items-center justify-center rounded-sm border-2">
                             {checked && (
                               <Check
-                                className="h-3 w-3 text-white"
+                                className="text-secondary h-3 w-3"
                                 strokeWidth={3}
                               />
                             )}

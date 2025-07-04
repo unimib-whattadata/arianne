@@ -13,16 +13,13 @@ import type { FormValues } from "~/app/questionnaire/_schema/therapy-form-schema
 
 const TIME_SPAN = [
   { value: 0, label: "Da meno di due settimane" },
-{ value: 1, label: "Da almeno due settimane" },
-    { value: 2, label: "Da circa un mese" },
-    { value: 3, label: "Da qualche mese" },
-    { value: 4, label: "Da più di sei mesi" },
-    
+  { value: 1, label: "Da almeno due settimane" },
+  { value: 2, label: "Da circa un mese" },
+  { value: 3, label: "Da qualche mese" },
+  { value: 4, label: "Da più di sei mesi" },
 ];
 
-
-
-export const Step3 = () => {
+export const SensationDuration = () => {
   const { control } = useFormContext<FormValues>();
 
   return (
@@ -34,7 +31,8 @@ export const Step3 = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-2xl font-semibold">
-Da quanto tempo provi questa sensazione o situazione?              </FormLabel>
+                Da quanto tempo provi questa sensazione o situazione?{" "}
+              </FormLabel>
 
               <FormControl>
                 <div className="mt-10 flex flex-col gap-4">
@@ -46,7 +44,7 @@ Da quanto tempo provi questa sensazione o situazione?              </FormLabel>
                       <div className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#006279] text-[#006279]">
                         {field.value === option.value && (
                           <Check
-                            className="h-3 w-3 text-white"
+                            className="text-secondary h-3 w-3"
                             strokeWidth={3}
                           />
                         )}

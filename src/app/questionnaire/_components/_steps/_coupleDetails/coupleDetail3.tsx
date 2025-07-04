@@ -13,14 +13,28 @@ import {
 import type { FormValues } from "~/app/questionnaire/_schema/therapy-form-schema";
 import { Input } from "~/components/ui/input";
 
-const DETAIL1_OPTIONS = [
-  { value: 0, label: "Ho notato un calo del desiderio sessuale nei confronti del mio partner" },
-  { value: 1, label: "L'intimità fisica è diventata rara o vissuta senza entusiasmo" },
-  { value: 2, label: "Mi sento distante emotivamente dal mio partner anche nella quotidianità" },
+const DETAIL3_OPTIONS = [
+  {
+    value: 0,
+    label:
+      "Ho notato un calo del desiderio sessuale nei confronti del mio partner",
+  },
+  {
+    value: 1,
+    label: "L'intimità fisica è diventata rara o vissuta senza entusiasmo",
+  },
+  {
+    value: 2,
+    label:
+      "Mi sento distante emotivamente dal mio partner anche nella quotidianità",
+  },
   { value: 3, label: "Il contatto fisico è diminuito nel tempo" },
-  { value: 4, label: "Sento di non riuscire più a condividere emozioni profonde con il mio partner" },
+  {
+    value: 4,
+    label:
+      "Sento di non riuscire più a condividere emozioni profonde con il mio partner",
+  },
 ];
-
 
 export const CoupleDetail3 = () => {
   const { control } = useFormContext<FormValues>();
@@ -45,23 +59,26 @@ export const CoupleDetail3 = () => {
             return (
               <FormItem>
                 <FormLabel className="text-2xl font-semibold">
-Senti che nella tua relazione manca intimità emotiva o sessuale?
-           </FormLabel>
+                  Senti che nella tua relazione manca intimità emotiva o
+                  sessuale?
+                </FormLabel>
                 <FormDescription className="text-lg">
-Indica le risposte che ti rappresentano di più, puoi selezionare anche più di un’opzione                     </FormDescription>
+                  Indica le risposte che ti rappresentano di più, puoi
+                  selezionare anche più di un’opzione{" "}
+                </FormDescription>
                 <FormControl>
                   <div className="mt-10 flex flex-col gap-4">
-                    {DETAIL1_OPTIONS.map((option) => {
+                    {DETAIL3_OPTIONS.map((option) => {
                       const checked = selectedValues.includes(option.value);
                       return (
                         <label
                           key={option.value}
                           className="flex cursor-pointer items-center gap-4 rounded-lg border border-transparent bg-[#DFEBEF] px-6 py-4 text-lg transition hover:bg-[#cae3e9]"
                         >
-                          <div className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#006279]">
+                          <div className="border-secondary flex h-5 w-5 items-center justify-center rounded-sm border-2">
                             {checked && (
                               <Check
-                                className="h-3 w-3 text-white"
+                                className="text-secondary h-3 w-3"
                                 strokeWidth={3}
                               />
                             )}
@@ -72,7 +89,7 @@ Indica le risposte che ti rappresentano di più, puoi selezionare anche più di 
                             checked={checked}
                             onChange={() =>
                               field.onChange(
-                                toggleReason(option.value, selectedValues)
+                                toggleReason(option.value, selectedValues),
                               )
                             }
                             className="sr-only"

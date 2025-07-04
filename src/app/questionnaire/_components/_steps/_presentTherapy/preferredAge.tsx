@@ -5,7 +5,6 @@ import { useFormContext } from "react-hook-form";
 
 import {
   FormControl,
-  
   FormField,
   FormItem,
   FormLabel,
@@ -14,12 +13,10 @@ import type { FormValues } from "~/app/questionnaire/_schema/therapy-form-schema
 import { Input } from "~/components/ui/input";
 
 const AGE = [
-    { value: 0, label: "Minore di 40 anni" },
-    { value: 1, label: "Maggiore di 40 anni" },
-    { value: 2, label: "È indifferente" },
+  { value: 0, label: "Minore di 40 anni" },
+  { value: 1, label: "Maggiore di 40 anni" },
+  { value: 2, label: "È indifferente" },
 ];
-
-
 
 export const PreferredAge = () => {
   const { control } = useFormContext<FormValues>();
@@ -33,8 +30,9 @@ export const PreferredAge = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-2xl font-semibold">
-Hai preferenze in merito all’età del terapeuta?          </FormLabel>
-              
+                Hai preferenze in merito all’età del terapeuta?{" "}
+              </FormLabel>
+
               <FormControl>
                 <div className="mt-10 flex flex-col gap-4">
                   {AGE.map((option) => (
@@ -45,7 +43,7 @@ Hai preferenze in merito all’età del terapeuta?          </FormLabel>
                       <div className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#006279] text-[#006279]">
                         {field.value === option.value && (
                           <Check
-                            className="h-3 w-3 text-white"
+                            className="text-secondary h-3 w-3"
                             strokeWidth={3}
                           />
                         )}
@@ -62,7 +60,11 @@ Hai preferenze in merito all’età del terapeuta?          </FormLabel>
                   ))}
                 </div>
               </FormControl>
-              <p className="text-lg">Tutti i nostri professionisti hanno completato un lungo percorso formativo, e per questo hanno una preparazione solida e un’età minima che garantisce maturità e competenza</p>
+              <p className="text-lg">
+                Tutti i nostri professionisti hanno completato un lungo percorso
+                formativo, e per questo hanno una preparazione solida e un’età
+                minima che garantisce maturità e competenza
+              </p>
             </FormItem>
           )}
         />

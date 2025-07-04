@@ -13,12 +13,30 @@ import {
 import type { FormValues } from "~/app/questionnaire/_schema/therapy-form-schema";
 import { Input } from "~/components/ui/input";
 
-const DETAIL1_OPTIONS = [
-  { value: 0, label: "Mi sento confuso sul mio posto nel mondo o sul mio futuro " },
-  { value: 1, label: "Provo un senso di vuoto o mancanza di significato nella mia vita " },
-  { value: 2, label: "Ho difficoltà a prendere decisioni importanti o a fare scelte coerenti" },
-  { value: 3, label: "Mi capita di non riconoscermi più o di non sapere cosa voglio davvero" },
-  { value: 4, label: "Sento il bisogno di rimettere in discussione molte cose della mia vita, ma non so da dove partire " },
+const DETAIL5_OPTIONS = [
+  {
+    value: 0,
+    label: "Mi sento confuso sul mio posto nel mondo o sul mio futuro ",
+  },
+  {
+    value: 1,
+    label: "Provo un senso di vuoto o mancanza di significato nella mia vita ",
+  },
+  {
+    value: 2,
+    label:
+      "Ho difficoltà a prendere decisioni importanti o a fare scelte coerenti",
+  },
+  {
+    value: 3,
+    label:
+      "Mi capita di non riconoscermi più o di non sapere cosa voglio davvero",
+  },
+  {
+    value: 4,
+    label:
+      "Sento il bisogno di rimettere in discussione molte cose della mia vita, ma non so da dove partire ",
+  },
 ];
 
 export const IndividualDetail5 = () => {
@@ -51,17 +69,17 @@ export const IndividualDetail5 = () => {
                 </FormDescription>
                 <FormControl>
                   <div className="mt-10 flex flex-col gap-4">
-                    {DETAIL1_OPTIONS.map((option) => {
+                    {DETAIL5_OPTIONS.map((option) => {
                       const checked = selectedValues.includes(option.value);
                       return (
                         <label
                           key={option.value}
                           className="flex cursor-pointer items-center gap-4 rounded-lg border border-transparent bg-[#DFEBEF] px-6 py-4 text-lg transition hover:bg-[#cae3e9]"
                         >
-                          <div className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#006279]">
+                          <div className="border-secondary flex h-5 w-5 items-center justify-center rounded-sm border-2">
                             {checked && (
                               <Check
-                                className="h-3 w-3 text-white"
+                                className="text-secondary h-3 w-3"
                                 strokeWidth={3}
                               />
                             )}
@@ -72,7 +90,7 @@ export const IndividualDetail5 = () => {
                             checked={checked}
                             onChange={() =>
                               field.onChange(
-                                toggleReason(option.value, selectedValues)
+                                toggleReason(option.value, selectedValues),
                               )
                             }
                             className="sr-only"

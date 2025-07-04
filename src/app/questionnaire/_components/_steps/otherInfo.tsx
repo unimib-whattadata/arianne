@@ -21,15 +21,17 @@ export const OtherInfo = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-2xl font-semibold">
-C’è qualcos’altro che ritieni importante farci sapere? 
-             </FormLabel>
+                C’è qualcos’altro che ritieni importante farci sapere?
+              </FormLabel>
               <FormDescription className="text-lg">
-Aiutaci a conoscerti meglio, scrivi qui sotto ciò che ritieni più importante   
-            </FormDescription>
+                Aiutaci a conoscerti meglio, scrivi qui sotto ciò che ritieni
+                più importante
+              </FormDescription>
               <FormControl>
                 <Input
                   placeholder="Scrivi qui"
                   {...field}
+                  value={field.value ?? ""}
                   className="mt-10 w-full rounded-lg border-none bg-[#DFEBEF] px-6 py-8 !text-lg focus-visible:ring-0 focus-visible:outline-none active:border-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                 />
               </FormControl>

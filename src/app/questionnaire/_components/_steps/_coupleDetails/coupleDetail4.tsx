@@ -13,12 +13,28 @@ import {
 import type { FormValues } from "~/app/questionnaire/_schema/therapy-form-schema";
 import { Input } from "~/components/ui/input";
 
-const DETAIL1_OPTIONS = [
-  { value: 0, label: "Ho subito o commesso un tradimento e fatico a superarlo" },
-  { value: 1, label: "Provo spesso sospetti o mancanza di fiducia verso il mio partner" },
-  { value: 2, label: "Dopo un episodio di infedeltà, faccio fatica a fidarmi nuovamente" },
-  { value: 3, label: "La trasparenza e la comunicazione sono diminuite nella relazione" },
-  { value: 4, label: "Sento che la ferita della fiducia tradita condiziona ancora il nostro rapporto" },
+const DETAIL4_OPTIONS = [
+  {
+    value: 0,
+    label: "Ho subito o commesso un tradimento e fatico a superarlo",
+  },
+  {
+    value: 1,
+    label: "Provo spesso sospetti o mancanza di fiducia verso il mio partner",
+  },
+  {
+    value: 2,
+    label: "Dopo un episodio di infedeltà, faccio fatica a fidarmi nuovamente",
+  },
+  {
+    value: 3,
+    label: "La trasparenza e la comunicazione sono diminuite nella relazione",
+  },
+  {
+    value: 4,
+    label:
+      "Sento che la ferita della fiducia tradita condiziona ancora il nostro rapporto",
+  },
 ];
 
 export const CoupleDetail4 = () => {
@@ -44,23 +60,26 @@ export const CoupleDetail4 = () => {
             return (
               <FormItem>
                 <FormLabel className="text-2xl font-semibold">
-Hai vissuto un`&apos;`infedeltà o una perdita di fiducia nella relazione?
-           </FormLabel>
+                  Hai vissuto un`&apos;`infedeltà o una perdita di fiducia nella
+                  relazione?
+                </FormLabel>
                 <FormDescription className="text-lg">
-Indica le risposte che ti rappresentano di più, puoi selezionare anche più di un’opzione                    </FormDescription>
+                  Indica le risposte che ti rappresentano di più, puoi
+                  selezionare anche più di un’opzione{" "}
+                </FormDescription>
                 <FormControl>
                   <div className="mt-10 flex flex-col gap-4">
-                    {DETAIL1_OPTIONS.map((option) => {
+                    {DETAIL4_OPTIONS.map((option) => {
                       const checked = selectedValues.includes(option.value);
                       return (
                         <label
                           key={option.value}
                           className="flex cursor-pointer items-center gap-4 rounded-lg border border-transparent bg-[#DFEBEF] px-6 py-4 text-lg transition hover:bg-[#cae3e9]"
                         >
-                          <div className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#006279]">
+                          <div className="border-secondary flex h-5 w-5 items-center justify-center rounded-sm border-2">
                             {checked && (
                               <Check
-                                className="h-3 w-3 text-white"
+                                className="text-secondary h-3 w-3"
                                 strokeWidth={3}
                               />
                             )}
@@ -71,7 +90,7 @@ Indica le risposte che ti rappresentano di più, puoi selezionare anche più di 
                             checked={checked}
                             onChange={() =>
                               field.onChange(
-                                toggleReason(option.value, selectedValues)
+                                toggleReason(option.value, selectedValues),
                               )
                             }
                             className="sr-only"

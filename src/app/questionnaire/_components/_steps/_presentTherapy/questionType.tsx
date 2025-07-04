@@ -5,7 +5,6 @@ import { useFormContext } from "react-hook-form";
 
 import {
   FormControl,
-  
   FormField,
   FormItem,
   FormLabel,
@@ -14,13 +13,11 @@ import type { FormValues } from "~/app/questionnaire/_schema/therapy-form-schema
 import { Input } from "~/components/ui/input";
 
 const TYPES = [
-    { value: 0, label: "Strutturate, più precise" },
-    { value: 1, label: "Spontanee, più aperte e libere" },
-    { value: 2, label: "Un mix delle opzioni precedenti" },
-    { value: 3, label: "Non ho nessuna preferenza" },
+  { value: 0, label: "Strutturate, più precise" },
+  { value: 1, label: "Spontanee, più aperte e libere" },
+  { value: 2, label: "Un mix delle opzioni precedenti" },
+  { value: 3, label: "Non ho nessuna preferenza" },
 ];
-
-
 
 export const QuestionType = () => {
   const { control } = useFormContext<FormValues>();
@@ -34,8 +31,9 @@ export const QuestionType = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-2xl font-semibold">
-Come preferisci che siano poste le domande?           </FormLabel>
-              
+                Come preferisci che siano poste le domande?{" "}
+              </FormLabel>
+
               <FormControl>
                 <div className="mt-10 flex flex-col gap-4">
                   {TYPES.map((option) => (
@@ -46,7 +44,7 @@ Come preferisci che siano poste le domande?           </FormLabel>
                       <div className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#006279] text-[#006279]">
                         {field.value === option.value && (
                           <Check
-                            className="h-3 w-3 text-white"
+                            className="text-secondary h-3 w-3"
                             strokeWidth={3}
                           />
                         )}

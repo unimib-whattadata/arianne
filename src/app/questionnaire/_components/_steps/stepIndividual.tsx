@@ -26,7 +26,6 @@ const INDIVIDUAL_OPTIONS = [
 export const Individual = () => {
   const { control, watch, setValue } = useFormContext<FormValues>();
 
-  const reasons = watch("individual.reasons") || [];
   const detailText = watch("individual.detailText") ?? "";
 
   const toggleReason = (value: number, current: number[]) => {
@@ -66,10 +65,10 @@ export const Individual = () => {
                             key={option.value}
                             className="flex cursor-pointer items-center gap-4 rounded-lg border border-transparent bg-[#DFEBEF] px-6 py-4 text-lg transition hover:bg-[#cae3e9]"
                           >
-                            <div className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#006279]">
+                            <div className="border-secondary flex h-5 w-5 items-center justify-center rounded-sm border-2">
                               {checked && (
                                 <Check
-                                  className="h-3 w-3 text-white"
+                                  className="text-secondary h-3 w-3"
                                   strokeWidth={3}
                                 />
                               )}
@@ -85,7 +84,6 @@ export const Individual = () => {
                                 );
                                 field.onChange(newValues);
 
-                                // Se deseleziono "Altro", cancello detailText
                                 if (option.value === 6 && checked) {
                                   setValue("individual.detailText", "");
                                 }
@@ -98,7 +96,6 @@ export const Individual = () => {
                       })}
                     </div>
 
-                    {/* Textarea per "Altro" */}
                     {selectedValues.includes(6) && (
                       <div className="mt-6">
                         <FormLabel htmlFor="detailText" className="text-lg">
