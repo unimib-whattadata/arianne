@@ -1,11 +1,9 @@
 "use client";
 
 import {
-  Apple,
   ChevronLeft,
   ChevronRight,
-  GanttChartSquare,
-  Mail,
+  
 } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
@@ -40,7 +38,7 @@ export default function Navbar({
           <Button
             variant="default"
             onClick={handleNextStep}
-            className="w-fit bg-[#006279] font-light"
+            className="w-fit bg-secondary font-light"
           >
             Procediamo
             <ChevronRight className="h-4 w-4 px-0" />
@@ -52,7 +50,7 @@ export default function Navbar({
             <Button
               variant="ghost"
               onClick={handlePrevStep}
-              className="hover:text-accent flex items-center gap-1 text-[#006279] hover:bg-white"
+              className="hover:text-primary flex items-center gap-1 text-secondary hover:bg-white  "
             >
               <ChevronLeft size={16} />
               Indietro
@@ -60,7 +58,7 @@ export default function Navbar({
             <Button
               variant="default"
               onClick={handleNextStep}
-              className="flex items-center gap-1 bg-[#006279]"
+              className="flex items-center gap-1 bg-secondary"
             >
               Avanti
               <ChevronRight size={16} />
@@ -73,7 +71,7 @@ export default function Navbar({
             <Button
               variant="ghost"
               onClick={handlePrevStep}
-              className="hover:text-accent flex items-center gap-1 text-[#006279] hover:bg-white"
+              className="hover:text-accent flex items-center gap-1 text-secondary hover:bg-white"
             >
               <ChevronLeft size={16} />
               Indietro
@@ -81,7 +79,7 @@ export default function Navbar({
             <Button
               variant="default"
               onClick={handleOnSubmit}
-              className="flex items-center gap-1 bg-[#006279]"
+              className="flex items-center gap-1 bg-secondary"
             >
               Conferma e invia
               <ChevronRight size={16} />

@@ -63,12 +63,12 @@ export const Couple = () => {
                         return (
                           <label
                             key={option.value}
-                            className="flex cursor-pointer items-center gap-4 rounded-lg border border-transparent bg-[#DFEBEF] px-6 py-4 text-lg transition hover:bg-[#cae3e9]"
+                            className="flex cursor-pointer items-center gap-4 rounded-lg border border-transparent bg-secondary-light px-6 py-4 text-lg transition hover:bg-secondary-foreground"
                           >
-                            <div className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#006279]">
+                              <div className="border-secondary flex h-5 w-5 items-center justify-center rounded-sm border-2">
                               {checked && (
                                 <Check
-                                  className="h-3 w-3 text-white"
+                                  className="text-secondary h-3 w-3"
                                   strokeWidth={3}
                                 />
                               )}
@@ -84,7 +84,6 @@ export const Couple = () => {
                                 );
                                 field.onChange(newValues);
 
-                                // Se deseleziono "Altro", cancello detailText
                                 if (option.value === 6 && checked) {
                                   setValue("couple.detailText", "");
                                 }

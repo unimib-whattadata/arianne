@@ -12,6 +12,7 @@ import { stepsMap, getStepFlow } from "./_lib/step-flow";
 import Navbar from "./_components/navbar";
 import { getDefaultFormValues } from "./_lib/get-default-values";
 import FullSchema from "./_schema/therapy-form-schema";
+import CurvedProgressBar from "./_components/progressBar";
 
 export default function QuestionnairePage() {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
@@ -23,7 +24,10 @@ export default function QuestionnairePage() {
     resolver: zodResolver(FullSchema),
     mode: "onChange",
     defaultValues: getDefaultFormValues("individual"),
+
   });
+  console.log({ formValues: form.getValues() });
+  console.log({currentStepIndex, flow: getStepFlow(form.getValues())});
 
   const formValues = useWatch({ control: form.control });
   const flow = getStepFlow(formValues as z.infer<typeof FullSchema>);
@@ -55,7 +59,10 @@ export default function QuestionnairePage() {
     >
       <Form {...form}>
         {StepComponent ? <StepComponent form={form} /> : null}
-
+{currentStepIndex === 0 ? '' : <CurvedProgressBar
+          currentStep={currentStepIndex}
+          totalSteps={flow.length}
+          />}
         <Navbar
           currentStep={currentStepIndex}
           totalSteps={flow.length}
@@ -63,6 +70,7 @@ export default function QuestionnairePage() {
           handlePrevStep={handlePrevStep}
           handleOnSubmit={onSubmit}
         />
+       
       </Form>
       {submittedData && (
         <p className="mt-6 w-full max-w-4xl rounded bg-gray-100 p-4 text-sm">

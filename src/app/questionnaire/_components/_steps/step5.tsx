@@ -20,7 +20,7 @@ const OPTIONS = [
     value: "individual",
     title: "Terapia individuale",
     description: "Lavora su te stesso con un terapeuta ",
-    icon: <UserRound className="h-6 w-6 text-[#FF8C42]" />,
+    icon: <UserRound className="h-6 w-6 text-primary" />,
     modalContent:
       "È il percorso giusto se senti il bisogno di lavorare su di te per ottenere un cambiamento...",
   },
@@ -28,7 +28,7 @@ const OPTIONS = [
     value: "couple",
     title: "Terapia di coppia",
     description: "Lavorate sulla coppia con un terapeuta",
-    icon: <UsersRound className="h-6 w-6 text-[#FF8C42]" />,
+    icon: <UsersRound className="h-6 w-6 text-primary" />,
     modalContent:
       "È il percorso giusto se sentite il bisogno di ritrovare connessione...",
   },
@@ -36,7 +36,7 @@ const OPTIONS = [
     value: "family",
     title: "Terapia familiare",
     description: "Lavora sulle dinamiche familiari con un terapeuta ",
-    icon: <UsersRound className="h-6 w-6 text-[#FF8C42]" />,
+    icon: <UsersRound className="h-6 w-6 text-primary" />,
     modalContent: "Dettagli sul percorso familiare...",
   },
 ];
@@ -82,11 +82,11 @@ export const Step5 = () => {
                         "flex h-full flex-col justify-between rounded-lg border border-transparent p-6 text-left transition",
                         isSelected
                           ? "bg-[#FDE8DC]"
-                          : "bg-[#DFEBEF] hover:bg-[#cae3e9]",
+                          : "bg-secondary-light hover:bg-secondary-foreground",
                       )}
                     >
                       <div className="flex flex-col gap-2">
-                        <div className="text-[#006279]">{option.icon}</div>
+                        <div className="text-secondary">{option.icon}</div>
                         <h3 className="text-xl font-semibold">
                           {option.title}
                         </h3>
@@ -101,7 +101,7 @@ export const Step5 = () => {
                                 e.stopPropagation();
                                 setOpenModal(option.value);
                               }}
-                              className="text-md text-[#006279] underline hover:opacity-80"
+                              className="text-md text-secondary underline hover:opacity-80"
                             >
                               Scopri di più
                             </button>
@@ -119,11 +119,11 @@ export const Step5 = () => {
 
       {openModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-          <div className="relative w-full max-w-md rounded-2xl bg-[#ffffff] p-20 shadow-xl">
+          <div className="relative w-full max-w-md rounded-2xl bg-white p-20 shadow-xl">
             <Button
               onClick={() => setOpenModal(null)}
               variant="outline"
-              className="absolute top-6 right-6 rounded-full border-[#006279] px-2 text-[#006279] transition-colors hover:bg-[#006279] hover:text-[#ffffff]"
+              className="absolute top-6 right-6 rounded-full border-secondary px-2 text-secondary transition-colors hover:bg-secondary hover:text-white"
             >
               <X />
             </Button>

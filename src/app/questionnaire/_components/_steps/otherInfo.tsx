@@ -32,7 +32,7 @@ export const OtherInfo = () => {
                   placeholder="Scrivi qui"
                   {...field}
                   value={field.value ?? ""}
-                  className="mt-10 w-full rounded-lg border-none bg-[#DFEBEF] px-6 py-8 !text-lg focus-visible:ring-0 focus-visible:outline-none active:border-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+                  className="mt-10 w-full rounded-lg border-none bg-secondary-light px-6 py-8 !text-lg focus-visible:ring-0 focus-visible:outline-none active:border-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                 />
               </FormControl>
             </FormItem>

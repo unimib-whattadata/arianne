@@ -115,16 +115,6 @@ const CoupleSchema = z.object({
 });
 
 // --- Family Path ---
-const childAgeDetails = z.union([
-  z.object({
-    age: z.number().int().min(0).max(3),
-    detail: z.array(z.number().int().min(0).max(4)).min(1),
-  }),
-  z.object({
-    age: z.number().int().min(4).max(5),
-    detail: z.array(z.number().int().min(0).max(4)).min(1),
-  }),
-]);
 
 const FamilySchema = z.object({
   path: z.literal("family"),
@@ -134,7 +124,7 @@ const FamilySchema = z.object({
       details: detailMap(5).optional(),
       detailText: z.string().min(1).optional(),
       numberOfChildren: z.number().int().min(0).max(4).optional(),
-      children: z.array(childAgeDetails).optional(),
+childrenAge: z.array(z.number().int().min(0).max(5)).min(1),
     })
     .superRefine((val, ctx) => {
       const selected = new Set(val.reasons);
@@ -150,7 +140,7 @@ const FamilySchema = z.object({
                 message: "Number of children is required",
               });
             }
-            if (!val.children || val.children.length === 0) {
+            if (!val.childrenAge || val.childrenAge.length === 0) {
               ctx.addIssue({
                 code: z.ZodIssueCode.custom,
                 path: ["children"],

@@ -3,11 +3,9 @@
 import { Check } from "lucide-react";
 import {
   useFormContext,
-  useFieldArray,
-  useWatch,
+  
 } from "react-hook-form";
 
-import { useEffect } from "react";
 
 import {
   FormControl,
@@ -30,40 +28,6 @@ const AGE_RANGES = [
 export const ChildrenAges = () => {
   const { control } = useFormContext<FormValues>();
 
-  const numberOfChildren = useWatch({
-    control,
-    name: "family.numberOfChildren",
-  });
-
-  const { fields, append, remove, replace } = useFieldArray({
-    control,
-    name: "family.children",
-  });
-
- useEffect(() => {
-    const count = typeof numberOfChildren === "number" ? numberOfChildren + 1 : 0;
-
-    if (count > 0) {
-      const current = fields.length;
-      if (current < count) {
-        for (let i = current; i < count; i++) {
-          append({ age: 0, detail: [] });
-        }
-      } else if (current > count) {
-        for (let i = current - 1; i >= count; i--) {
-          remove(i);
-        }
-      }
-    } else {
-      replace([]);
-    }
-  }, [numberOfChildren, append, remove, replace, fields.length]);
-
-  const toggleValue = (current: number[], value: number): number[] =>
-    current.includes(value)
-      ? current.filter((v) => v !== value)
-      : [...current, value];
-
   return (
     <div className="flex w-full flex-col items-center gap-6 p-6 md:p-10">
       <div className="w-full space-y-8">
@@ -71,57 +35,50 @@ export const ChildrenAges = () => {
           Qual è l’età dei tuoi figli?
         </FormLabel>
 
-        {fields.map((field, index) => (
-          <FormField
-            key={field.id}
-            control={control}
-            name={`family.children.${index}.detail`}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-lg font-medium">
-                  Figlio/a {index + 1}
-                </FormLabel>
-                <FormControl>
-                  <div className="mt-4 flex flex-col gap-4">
-                    {AGE_RANGES.map((option) => {
-                      const checked = field.value?.includes(option.value);
+        <FormField
+          control={control}
+          name={`family.childrenAge`}
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <div className="mt-4 flex flex-col gap-4">
+                  {AGE_RANGES.map((option) => {
+                    const checked = field.value?.includes(option.value);
 
-                      return (
-                        <label
-                          key={option.value}
-                          className="flex cursor-pointer items-center gap-4 rounded-lg border border-transparent bg-[#DFEBEF] px-6 py-4 text-lg transition hover:bg-[#cae3e9]"
-                        >
-                          <div className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#006279] text-[#006279]">
-                            {checked && (
-                              <Check
-                                className="h-3 w-3 text-white"
-                                strokeWidth={3}
-                              />
-                            )}
-                          </div>
-                          <Input
-                            type="checkbox"
-                            value={option.value}
-                            checked={checked}
-                            onChange={() => {
-                              const newValues = toggleValue(
-                                field.value || [],
-                                option.value,
-                              );
-                              field.onChange(newValues);
-                            }}
-                            className="sr-only"
-                          />
-                          {option.label}
-                        </label>
-                      );
-                    })}
-                  </div>
-                </FormControl>
-              </FormItem>
-            )}
-          />
-        ))}
+                    return (
+                      <label
+                        key={option.value}
+                        className="flex cursor-pointer items-center gap-4 rounded-lg border border-transparent bg-secondary-light px-6 py-4 text-lg transition hover:bg-secondary-foreground"
+                      >
+                        <div className="flex h-5 w-5 items-center justify-center rounded-sm  border-2 border-secondary text-secondary">
+                          {checked && (
+                            <Check
+                              className="h-3 w-3 text-secondary"
+                              strokeWidth={3}
+                            />
+                          )}
+                        </div>
+                        <Input
+                          type="checkbox"
+                          value={option.value}
+                          checked={checked}
+                          onChange={() => {
+                            const newValues = checked
+                              ? field.value.filter((v: number) => v !== option.value)
+                              : [...(field.value || []), option.value];
+                            field.onChange(newValues);
+                          }}
+                          className="sr-only"
+                        />
+                        {option.label}
+                      </label>
+                    );
+                  })}
+                </div>
+              </FormControl>
+            </FormItem>
+          )}
+        />
       </div>
     </div>
   );

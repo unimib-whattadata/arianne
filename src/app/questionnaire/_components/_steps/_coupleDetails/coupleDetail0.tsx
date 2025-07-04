@@ -37,7 +37,6 @@ const DETAIL0_OPTIONS = [
     label:
       "Provo difficoltà a trovare il momento o il modo giusto per parlare di argomenti delicati",
   },
-  { value: 5, label: " " },
 ];
 
 export const CoupleDetail0 = () => {
@@ -76,7 +75,7 @@ export const CoupleDetail0 = () => {
                       return (
                         <label
                           key={option.value}
-                          className="flex cursor-pointer items-center gap-4 rounded-lg border border-transparent bg-[#DFEBEF] px-6 py-4 text-lg transition hover:bg-[#cae3e9]"
+                          className="flex cursor-pointer items-center gap-4 rounded-lg border border-transparent bg-secondary-light px-6 py-4 text-lg transition hover:bg-secondary-foreground"
                         >
                           <div className="border-secondary flex h-5 w-5 items-center justify-center rounded-sm border-2">
                             {checked && (

@@ -18,27 +18,27 @@ const OPTIONS = [
     value: 0,
        title: "Cognitivo comportamentale",
     description: "È un approccio pratico e centrato sul presente. Aiuta a riconoscere pensieri e comportamenti che generano disagio e a sviluppare strategie per cambiarli. Il percorso è strutturato e mira a fornire strumenti concreti per affrontare le difficoltà quotidiane",
-    icon: <Brain className="h-6 w-6 text-[#FF8C42]" />,
+    icon: <Brain className="h-6 w-6 text-primary" />,
    
   },
   {
     value: 1,
     title: "Sistemico relazionale",
     description: "Considera l’individuo all’interno delle sue relazioni significative, come famiglia e coppia. Analizza le dinamiche interpersonali per comprendere come influenzano il benessere della persona. Il lavoro terapeutico si svolge osservando e trasformando queste connessioni",
-    icon: <Link className="h-6 w-6 text-[#FF8C42]" />,
+    icon: <Link className="h-6 w-6 text-primary" />,
    
   },
   {
     value: 2,
  title: "Integrato",
     description: "Combina tecniche e strumenti provenienti da diversi approcci terapeutici. Il percorso viene personalizzato in base alle esigenze e alle caratteristiche della persona. È un modello flessibile che adatta il trattamento al singolo individuo",
-    icon: <Puzzle className="h-6 w-6 text-[#FF8C42]" />,
+    icon: <Puzzle className="h-6 w-6 text-primary" />,
   },
     {
     value: 3,
  title: "Psicodinamico",
     description: "Esplora i vissuti interiori e le emozioni profonde, spesso legate al passato. Mira a portare alla luce aspetti inconsci che influenzano il modo di vivere e relazionarsi. Il percorso favorisce una maggiore consapevolezza e comprensione di sé",
-    icon: <Shell className="h-6 w-6 text-[#FF8C42]" />,
+    icon: <Shell className="h-6 w-6 text-primary" />,
   },
     {
     value: 4,
@@ -88,11 +88,11 @@ export const PreferredOrientation = () => {
                         "flex h-full flex-col justify-between rounded-lg border border-transparent p-6 text-left transition",
                         isSelected
                           ? "bg-[#FDE8DC]"
-                          : "bg-[#DFEBEF] hover:bg-[#cae3e9]",
+                          : "bg-secondary-light hover:bg-secondary-foreground",
                       )}
                     >
                       <div className="flex flex-col gap-2">
-                        <div className="text-[#006279]">{option.icon}</div>
+                        <div className="text-secondary">{option.icon}</div>
                         <h3 className="text-xl font-semibold">
                           {option.title}
                         </h3>

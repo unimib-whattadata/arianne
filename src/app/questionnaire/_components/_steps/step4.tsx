@@ -42,9 +42,9 @@ export const Step4 = () => {
                   {GENDER_OPTIONS.map((option) => (
                     <label
                       key={option.value}
-                      className="flex cursor-pointer items-center gap-4 rounded-lg border border-transparent bg-[#DFEBEF] px-6 py-4 text-lg transition hover:bg-[#cae3e9]"
+                      className="flex cursor-pointer items-center gap-4 rounded-lg border border-transparent bg-secondary-light px-6 py-4 text-lg transition hover:bg-secondary-foreground"
                     >
-                      <div className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#006279]">
+                      <div className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-secondary">
                         {field.value === option.value && (
                           <Check
                             className="text-secondary h-3 w-3"

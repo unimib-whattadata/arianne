@@ -56,7 +56,7 @@ export const stepsMap = {
   individualDetail3: IndividualDetail3,
   individualDetail4: IndividualDetail4,
   individualDetail5: IndividualDetail5,
-  coulpeDetail0: CoupleDetail0,
+  coupeDetail0: CoupleDetail0,
   coupleDetail1: CoupleDetail1,
   coupleDetail2: CoupleDetail2,
   coupleDetail3: CoupleDetail3,
@@ -86,27 +86,56 @@ export const stepsMap = {
 
 export function getStepFlow(formValues: FormValues): (keyof typeof stepsMap)[] {
   const flow: (keyof typeof stepsMap)[] = ['step1', 'step2', 'step3', 'step4', 'step5'];
-
   const path = formValues.path;
 
   flow.push(path);
 
   let reasons: number[] = [];
+  let childrenAge0 = false;
+  let childrenAge1to6 = false;
 
   if (path === 'individual') {
     reasons = formValues.individual.reasons;
+    for (const reason of reasons) {
+      if (reason === 6) continue;
+      flow.push(`individualDetail${reason}` as keyof typeof stepsMap);
+    }
+
   } else if (path === 'couple') {
     reasons = formValues.couple.reasons;
-  } else if (path === 'family') {
-    reasons = formValues.family.reasons;
+    for (const reason of reasons) {
+      if (reason === 6) continue;
+      flow.push(`coupleDetail${reason}` as keyof typeof stepsMap);
+    }
+
+} else if (path === 'family') {
+  reasons = formValues.family.reasons;
+
+  if (reasons.includes(2)) {
+    flow.push('numberOfKids', 'childrenAges');
+
+    const children = formValues.family.childrenAge ?? [];
+    childrenAge0 = children.includes(0);
+    childrenAge1to6 = children.some((age) => age >= 1 && age <= 5);
+
+    if (childrenAge0) flow.push('familyDetail2');
+    if (childrenAge1to6) flow.push('familyDetail3');
   }
 
-    for (const reason of reasons) {
-    if (path === 'family' && reason === 2) {
-      flow.push('numberOfKids', 'childrenAges');
+  for (const reason of reasons) {
+    if (reason === 2 || reason === 5 || reason === 6) continue;
+
+    if (reason === 0) {
+      flow.push('familyDetail0');
+    } else if (reason === 1) {
+      flow.push('familyDetail1');
+    } else if (reason === 3) {
+      flow.push('familyDetail4');
+    } else if (reason === 4) {
+      flow.push('familyDetail5');
     }
-    flow.push(`${path}Detail${reason}` as keyof typeof stepsMap);
   }
+}
 
 
   flow.push('sensationDuration', 'pastTherapy');

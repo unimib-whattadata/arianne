@@ -18,7 +18,7 @@ export const getDefaultFormValues = (
     preferredGender: 0,
     preferredAge: 0,
     preferredOrientation: 0,
-    timePreference: 0,
+    timePreference: [],
   };
 
   if (path === 'individual') {
@@ -54,7 +54,7 @@ export const getDefaultFormValues = (
       details: {},
       detailText: '',
       numberOfChildren: 0,
-      children: [],
+      childrenAge: [],
     },
   };
 };
