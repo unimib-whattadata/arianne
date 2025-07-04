@@ -1,70 +1,39 @@
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
+import Image from "next/image";
 
 export const HeroSection = () => {
   return (
-    <section
-      id="hero"
-      className="relative grid place-items-center gap-6 pb-32 lg:min-h-[70svh] lg:grid-cols-2"
-    >
-      <div className="top-0 right-0 w-full lg:absolute lg:w-2/3">
-        <svg
-          viewBox="0 0 991 687"
-          className="text-primary h-full max-h-[780px] place-self-end"
-          preserveAspectRatio="xMinYMid slice"
-        >
-          <image
-            xlinkHref="/images/immagine-terapeuta.png"
-            type="image/png"
-            x="80"
-            y="-60"
-            width="100%"
-            height="100%"
-            preserveAspectRatio="xMidYMin slice"
-            clipPath="url(#clip-path)"
+    <section>
+      <div className="grid place-items-start md:grid-cols-2">
+        <div className="order-1 mb-16 grid max-w-prose items-center px-5 py-24 text-center md:order-0 md:mb-0 md:place-self-center md:pr-16 md:text-left lg:pr-24">
+          <h1 className="text-h2 mb-4 font-medium sm:text-4xl">
+            un ecosistema digitale
+            <br className="hidden lg:inline-block" />
+            per la salute mentale
+          </h1>
+          <p className="mb-8 leading-relaxed">
+            La piattaforma digitale che unisce ricerca clinica e innovazione
+            tecnologica per rendere la psicoterapia online efficace, accessibile
+            e centrata sui bisogni di pazienti e terapeuti
+          </p>
+          <div className="flex w-full justify-center gap-4 md:justify-start">
+            <Button asChild>
+              <Link href="/pazienti">Per i pazienti</Link>
+            </Button>
+            <Button variant="secondary" asChild>
+              <Link href="/terapeuti">Per i terapeuti</Link>
+            </Button>
+          </div>
+        </div>
+        <div className="order-0 flex w-full items-start justify-end md:order-1 lg:pb-24">
+          <Image
+            src="/images/home-hero.png"
+            width={964}
+            height={730}
+            alt="Immagine di un terapeuta"
+            sizes="(max-width: 55rem) 100vw, 48rem"
           />
-
-          <defs>
-            <clipPath id="clip-path">
-              <path d="M1044.5 532.5V-54.5H131.5C131.5 -54.5 354.931 145.543 379 305C391.679 389 385.003 530.101 457 595C592.342 717 1044.5 532.5 1044.5 532.5Z" />
-            </clipPath>
-          </defs>
-
-          <path
-            id="path-hero"
-            d="M1044.5 532.5V-54.5H131.5C131.5 -54.5 354.931 145.543 379 305C391.679 389 385.003 530.101 457 595C592.342 717 1044.5 532.5 1044.5 532.5Z"
-            stroke="currentColor"
-            fill="none"
-            strokeWidth="100"
-          />
-          <text className="fill-primary-foreground text-6xl font-bold whitespace-nowrap">
-            <textPath
-              href="#path-hero"
-              startOffset="55%"
-              alignmentBaseline="middle"
-            >
-              Il filo digitale tra terapeuti e pazienti
-            </textPath>
-          </text>
-        </svg>
-      </div>
-
-      <div className="mx-4 grid max-w-sm place-items-center gap-6 lg:place-items-start">
-        <h2 className="text-h2 font-medium">
-          Un ecosistema digitale per la salute mentale
-        </h2>
-        <p>
-          La piattaforma digitale che integra la ricerca clinica con
-          l&apos;innovazione tecnologica per supportare la diagnosi, il
-          monitoraggio e il trattamento dei disturbi mentali
-        </p>
-        <div className="flex gap-4">
-          <Button asChild>
-            <Link href="/pazienti">Per i pazienti</Link>
-          </Button>
-          <Button variant="secondary" asChild>
-            <Link href="/terapeuti">Per i terapeuti</Link>
-          </Button>
         </div>
       </div>
     </section>

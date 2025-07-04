@@ -35,24 +35,28 @@ interface MenuItem {
 
 const menu = [
   {
-    title: "Overview",
-    url: "#hero",
+    title: "Pazienti",
+    url: "/pazienti",
+  },
+  {
+    title: "Terapeuti",
+    url: "/terapeuti",
   },
   {
     title: "Funzionalità",
     url: "#features",
   },
   {
-    title: "Benefici",
-    url: "#benefits",
+    title: "Costi",
+    url: "#price",
   },
   {
-    title: "Contatti",
-    url: "#contacts",
+    title: "Efficacia",
+    url: "#efficacy",
   },
 ] satisfies MenuItem[];
 
-export const Header = () => {
+export default function HeaderSlot() {
   return (
     <header className="fixed top-0 z-50 w-full p-4">
       <div className="bg-background container mx-auto rounded-full border px-4 py-2">
@@ -72,7 +76,7 @@ export const Header = () => {
           </div>
           <div className="flex gap-2">
             <Button variant="ghost">Accedi</Button>
-            <Button>Chiedi una demo</Button>
+            <Button>Registrati</Button>
           </div>
         </nav>
 
@@ -109,7 +113,7 @@ export const Header = () => {
                     <Button variant="ghost" className="mr-2">
                       Accedi
                     </Button>
-                    <Button>Chiedi una demo</Button>
+                    <Button>Registrati</Button>
                   </div>
                 </div>
               </SheetContent>
@@ -119,7 +123,7 @@ export const Header = () => {
       </div>
     </header>
   );
-};
+}
 
 export const renderMenuItem = (item: MenuItem) => {
   if (item.items) {
