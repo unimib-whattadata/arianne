@@ -14,6 +14,33 @@
   --text-h2--line-height: 1.2;
   --text-h3: 1.33rem; /* ~24px */
   --text-h3--line-height: auto;
+
+  --breakpoint-*: initial;
+  --breakpoint-sm: 40rem; /* 720px */
+  --breakpoint-md: 48rem; /* 864px */
+  --breakpoint-lg: 64rem; /* 1152px */
+  --breakpoint-xl: 71rem; /* 1280px */
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
 }
 
 @theme inline {
@@ -31,6 +58,7 @@
   --color-popover-foreground: var(--popover-foreground);
 
   --color-primary: var(--primary);
+  --color-primary-light: var(--primary-light);
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-light: var(--secondary-light);
@@ -74,6 +102,7 @@
   --popover-foreground: oklch(20.8% 0.042 265.755);
 
   --primary: oklch(0.7536 0.163659 50.4009);
+  --primary-light: oklch(0.8833 0.0634 53.57);
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.4595 0.0844 221.21);
   --secondary-light: oklch(0.9322 0.0139 219.62);

@@ -1,11 +1,20 @@
-export default function TherapistsPage() {
+import { HydrateClient } from "~/trpc/server";
+import { HeroSection } from "./_components/hero";
+import { FeaturesSection } from "./_components/features";
+import { PriceSection } from "./_components/price";
+import { FaqSection } from "./_components/faq";
+import { AdvantagesSection } from "./_components/advantages";
+
+export default function PatientsPage() {
   return (
-    <main className="min-h-safe flex flex-col items-center justify-center p-4">
-      <h1 className="text-h1 mb-4 font-bold">Terapeuti</h1>
-      <p className="text-h2 mb-2">Benvenuti nella sezione Terapeuti</p>
-      <p className="text-h3">
-        Qui potete gestire le informazioni dei terapeuti.
-      </p>
-    </main>
+    <HydrateClient>
+      <main className="min-h-safe">
+        <HeroSection />
+        <FeaturesSection />
+        <AdvantagesSection />
+        <PriceSection />
+        <FaqSection />
+      </main>
+    </HydrateClient>
   );
 }
