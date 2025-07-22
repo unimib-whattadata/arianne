@@ -388,7 +388,7 @@ importers:
         specifier: 'catalog:'
         version: 3.6.2
       tailwindcss:
-        specifier: 'catalog:'
+        specifier: ^4.1.11
         version: 4.1.11
       ts-node:
         specifier: ^10.9.2

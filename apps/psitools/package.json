@@ -89,7 +89,7 @@
     "eslint": "catalog:",
     "postcss": "catalog:",
     "prettier": "catalog:",
-    "tailwindcss": "catalog:",
+    "tailwindcss": "^4.1.11",
     "ts-node": "^10.9.2",
     "typescript": "catalog:"
   },
