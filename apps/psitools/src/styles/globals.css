@@ -60,42 +60,42 @@
     --chart-5: 27 87% 67%;
   }
   .font-h1 {
-    @apply font-rubik text-xl font-medium tracking-tight text-primary;
+    @apply text-primary text-xl font-medium tracking-tight;
   }
   .font-h2 {
-    @apply font-rubik text-lg font-medium tracking-tight text-primary;
+    @apply text-primary text-lg font-medium tracking-tight;
   }
   .font-h3 {
-    @apply font-rubik text-[18px] font-medium tracking-tight text-space-gray;
+    @apply text-space-gray text-[18px] font-medium tracking-tight;
   }
   .font-default {
-    @apply font-poppins text-base font-normal text-space-gray;
+    @apply font-poppins text-space-gray text-base font-normal;
   }
   .font-strong {
-    @apply font-poppins text-base font-semibold text-space-gray;
+    @apply font-poppins text-space-gray text-base font-semibold;
   }
   .font-small {
-    @apply font-poppins text-sm font-light text-space-gray;
+    @apply font-poppins text-space-gray text-sm font-light;
   }
   .font-button {
     @apply font-poppins text-base font-normal text-white;
   }
   .font-link {
-    @apply font-poppins text-base font-normal text-forest-green-700 underline;
+    @apply font-poppins text-forest-green-700 text-base font-normal underline;
   }
   html,
   body,
   #__next {
-    @apply h-screen bg-background font-poppins text-foreground;
+    @apply bg-background font-poppins text-foreground h-screen;
   }
 }
 
 @layer components {
   .sidebar-link {
-    @apply font-button flex items-center overflow-x-hidden rounded-lg p-2 text-space-gray transition-colors duration-300 hover:bg-forest-green-700/10;
+    @apply font-button text-space-gray hover:bg-forest-green-700/10 flex items-center overflow-x-hidden rounded-lg p-2 transition-colors duration-300;
   }
   .sidebar-link-active {
-    @apply font-button flex items-center rounded-lg text-forest-green-700 hover:bg-forest-green-700/10;
+    @apply font-button text-forest-green-700 hover:bg-forest-green-700/10 flex items-center rounded-lg;
   }
   .sidebar-icon {
     @apply h-6 w-6 max-w-6 flex-shrink-0 flex-grow text-current;
