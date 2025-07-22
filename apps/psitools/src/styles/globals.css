@@ -60,7 +60,7 @@
 }
 
 @layer base {
-  @reference "tailwindcss/base";
+  @reference "tailwindcss";
 
   .font-h1 {
     @apply text-primary text-xl font-medium tracking-tight;
