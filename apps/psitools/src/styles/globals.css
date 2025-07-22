@@ -88,8 +88,7 @@
   }
 
   html,
-  body,
-  #__next {
+  body {
     @apply bg-background font-poppins text-foreground h-screen;
   }
 }
