@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  node:
+    image: node:18-bullseye-slim
+    restart: always
+    container_name: mapseh_node
+    working_dir: /app
+    env_file:
+      - .env
+    environment:
+      - SKIP_ENV_VALIDATION=true
+      - NEXT_TELEMETRY_DISABLED=1
+    ports:
+      - '${OUTSIDEPORT}:3000'
+    volumes:
+      - ./:/app
+    depends_on:
+      - postgres
+    entrypoint: ['npm', 'run', 'start']
+
+  postgres:
+    image: postgres:13.2
+    restart: always
+    container_name: mapseh_postgres
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_MULTIPLE_DATABASES: ${POSTGRESQL_DB},${BOTPRESS_DB},mapseh
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRESQL_PASS}
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+      - ./multipledb:/docker-entrypoint-initdb.d
+      - ./postgresql.conf:/db_config/postgresql.conf
+
+  oidc:
+    restart: always
+    depends_on:
+      - postgres
+    container_name: oidc
+    image: keycloak/keycloak:${KEYCLOAK_VERSION}
+    ports:
+      - '${PORT_KEYCLOAK}:8080'
+    env_file:
+      - .env
+    entrypoint: ['/opt/keycloak/bin/kc.sh', 'start']
+    volumes:
+      - ./keycloak/keycloak.conf:/opt/keycloak/conf/keycloak.conf
+      - ./keycloak/themes:/opt/keycloak/themes
+      - ./keycloak/quarkus.properties:/opt/keycloak/conf/quarkus.properties
+
+    environment:
+      - KEYCLOAK_ADMIN=kcadmin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_DB=postgres
+      - KC_DB_URL=jdbc:postgresql://postgres/keycloak
+      - DB_DATABASE=${POSTGRESQL_DB}
+      - KC_DB_USERNAME=${POSTGRESQL_DB}
+      - KC_DB_PASSWORD=${POSTGRESQL_PASS}
+      - PROXY_ADDRESS_FORWARDING=true
+      - KC_HOSTNAME_STRICT=false
+      - KC_PROXY=edge
+      - KC_HTTP_ENABLED=true
+      - KC_HOSTNAME_URL=${KEYCLOAK_HOSTNAME}
+      - KC_HOSTNAME_ADMIN_URL=${KEYCLOAK_HOSTNAME}

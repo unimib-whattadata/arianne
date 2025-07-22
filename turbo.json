@@ -1,0 +1,111 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "globalEnv": [
+    "DATABASE_URL",
+    "NEXTAUTH_URL",
+    "AUTH_SECRET",
+    "AUTH_JWT_SECRET",
+    "NEXT_PUBLIC_KEYCLOAK_CLIENT_ID",
+    "CLIENT_SECRET",
+    "NEXT_PUBLIC_KEYCLOAK_REALM",
+    "NEXT_PUBLIC_AUTH_URL",
+    "SECRET",
+    "KEYCLOAK_VERSION",
+    "PORT_KEYCLOAK",
+    "BOTPRESS_DB",
+    "POSTGRESQL_PASS",
+    "POSTGRESQL_DB",
+    "PROXY_ADDRESS_FORWARDING",
+    "NEXT_PUBLIC_KEYCLOAK_FRONTEND_URL",
+    "KC_PROXY",
+    "WAZUH_RSYSLOG",
+    "SYSLOG_PORT",
+    "SYSLOG_PROTOCOL",
+    "OUTSIDEPORT",
+    "REMOTELOGGER",
+    "NEXT_PUBLIC_TRPC_LOGGER_ENABLED",
+    "PRODUCTION_URL",
+    "EXPO_PUBLIC_KEYCLOAK_URL",
+    "EXPO_PUBLIC_KEYCLOAK_CLIENT_ID",
+    "EXPO_PUBLIC_CONEY_BASE_URL",
+    "EXPO_PUBLIC_CONEY_USER",
+    "EXPO_PUBLIC_CONEY_PASS",
+    "EXPO_PUBLIC_KEYCLOAK_CLIENT_SECRET",
+    "EXPO_PUBLIC_APPWRITE_API_ENDPOINT",
+    "EXPO_PUBLIC_APPWRITE_PROJECT_ID",
+    "NEXT_PUBLIC_APP_URL",
+    "EXPO_PUBLIC_API_BASE_URL",
+    "COOKIE_SECRET",
+    "EXPO_PUBLIC_KEYCLOAK_REALM",
+    "EXPO_OS",
+    "PORT",
+    "NEXT_PUBLIC_LANDING_URL",
+    "NEXT_PUBLIC_APP_URL",
+    "TRPC_HOST"
+  ],
+  "globalPassThroughEnv": [
+    "NODE_ENV",
+    "CI",
+    "VERCEL",
+    "VERCEL_ENV",
+    "VERCEL_URL",
+    "npm_lifecycle_event"
+  ],
+  "tasks": {
+    "//#clean": {
+      "cache": false
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".cache/tsbuildinfo.json", "dist/**"]
+    },
+    "clean": {
+      "cache": false
+    },
+    "db:create-only": {
+      "cache": false,
+      "interactive": true
+    },
+    "db:migrate": {
+      "cache": false,
+      "interactive": true
+    },
+    "dev": {
+      "cache": false,
+      "dependsOn": ["^dev"],
+      "interactive": true,
+      "persistent": false
+    },
+    "expo:install": {
+      "cache": false
+    },
+    "format": {
+      "outputLogs": "new-only",
+      "outputs": [".cache/.prettiercache"]
+    },
+    "lint": {
+      "dependsOn": ["^topo", "^build"],
+      "outputs": [".cache/.eslintcache"]
+    },
+    "push": {
+      "cache": false,
+      "interactive": true
+    },
+    "studio": {
+      "cache": false,
+      "persistent": true
+    },
+    "topo": {
+      "dependsOn": ["^topo"]
+    },
+    "typecheck": {
+      "dependsOn": ["^topo", "^build"],
+      "outputs": [".cache/tsbuildinfo.json"]
+    },
+    "ui-add": {
+      "cache": false,
+      "interactive": true
+    }
+  },
+  "ui": "tui"
+}

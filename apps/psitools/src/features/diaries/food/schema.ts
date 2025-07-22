@@ -1,0 +1,53 @@
+import { z } from 'zod';
+
+export const FormSchema = z.object({
+  timeConsumation: z.string().optional(),
+  typeConsumation: z.string().optional(),
+  momentDay: z.string().optional(),
+  placeConsumption: z.string().optional(),
+  place: z.string().optional(),
+  company: z.string().optional(),
+  companyPerson: z.string().optional(),
+  activitycompany: z.string().optional(),
+  whatActivitycompany: z.string().optional(),
+  mealConsideration: z.string().optional(),
+  excessiveQuantity: z.string().optional(),
+  relevanceConsumption: z.string().optional(),
+  bodilysensation: z.string().optional(),
+  influenceConsumption: z.string().optional(),
+  reasonInfluence: z.string().optional(),
+  PostConsumerBehaviors: z.string().optional(),
+  physicalActivity: z.string().optional(),
+  PostConsumerEmotions: z.string().optional(),
+  durationPhysicalActivity: z.string().optional(),
+  typeActivityPhysics: z.string().optional(),
+  intensity: z.number().optional(),
+  note: z.string().optional(),
+});
+
+export const defaultValues = {
+  timeConsumation: '',
+  typeConsumation: '',
+  momentDay: '',
+  placeConsumption: '',
+  place: '',
+  company: '',
+  companyPerson: '',
+  activitycompany: '',
+  whatActivitycompany: '',
+  mealConsideration: '',
+  excessiveQuantity: '',
+  relevanceConsumption: '',
+  bodilysensation: '',
+  influenceConsumption: '',
+  reasonInfluence: '',
+  PostConsumerBehaviors: '',
+  PostConsumerEmotions: '',
+  physicalActivity: '',
+  durationPhysicalActivity: '',
+  typeActivityPhysics: '',
+  intensity: 0,
+  note: '',
+};
+
+export type FormData = z.infer<typeof FormSchema>;

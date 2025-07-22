@@ -1,0 +1,212 @@
+import { Sidebar } from 'lucide-react';
+import { Config } from 'tailwindcss';
+import plugin from 'tailwindcss/plugin';
+
+const config: Config = {
+  darkMode: ['class', '[data-theme="dark"]'],
+  content: ['./src/**/*.{js,ts,jsx,tsx}'],
+  theme: {
+    extend: {
+      borderRadius: {
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
+      },
+      height: ({ theme }) => ({
+        'full-safe': `calc(100svh - var(--header-height))`,
+      }),
+      colors: {
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
+        card: {
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
+        },
+        popover: {
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
+        },
+        primary: {
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))',
+        },
+        secondary: {
+          DEFAULT: 'hsl(var(--secondary))',
+          foreground: 'hsl(var(--secondary-foreground))',
+        },
+        muted: {
+          DEFAULT: 'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))',
+        },
+        accent: {
+          DEFAULT: 'hsl(var(--accent))',
+          foreground: 'hsl(var(--accent-foreground))',
+        },
+        destructive: {
+          DEFAULT: 'hsl(var(--destructive))',
+          foreground: 'hsl(var(--destructive-foreground))',
+        },
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+        chart: {
+          '1': 'hsl(var(--chart-1))',
+          '2': 'hsl(var(--chart-2))',
+          '3': 'hsl(var(--chart-3))',
+          '4': 'hsl(var(--chart-4))',
+          '5': 'hsl(var(--chart-5))',
+        },
+        sidebar: {
+          DEFAULT: 'hsl(var(--sidebar-background))',
+          foreground: 'hsl(var(--sidebar-foreground))',
+          primary: 'hsl(var(--sidebar-primary))',
+          'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
+          accent: 'hsl(var(--sidebar-accent))',
+          'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
+          border: 'hsl(var(--sidebar-border))',
+          ring: 'hsl(var(--sidebar-ring))',
+        },
+        lavander: {
+          disabled: 'var(--lavander-disabled)',
+          100: 'var(--lavander-100)',
+          200: 'var(--lavander-200)',
+          300: 'var(--lavander-300)',
+          400: 'var(--lavander-400)',
+          500: 'var(--lavander-500)',
+          600: 'var(--lavander-600)',
+          700: 'var(--lavander-700)',
+          800: 'var(--lavander-800)',
+          900: 'var(--lavander-900)',
+        },
+        blue: {
+          disabled: 'var(--blue-disabled)',
+          water: 'var(--blue-water)',
+          waterTitle: 'var(--blue-water-title)',
+          100: 'var(--blue-100)',
+          200: 'var(--blue-200)',
+          300: 'var(--blue-300)',
+          400: 'var(--blue-400)',
+          500: 'var(--blue-500)',
+          600: 'var(--blue-600)',
+          700: 'var(--blue-700)',
+          800: 'var(--blue-800)',
+          900: 'var(--blue-900)',
+        },
+        grey: {
+          100: 'var(--grey-100)',
+          200: 'var(--grey-200)',
+          300: 'var(--grey-300)',
+          400: 'var(--grey-400)',
+          '400-transparent': 'var(--grey-400-transparent)',
+          500: 'var(--grey-500)',
+          '500-transparent': 'var(--grey-500-transparent)',
+          600: 'var(--grey-600)',
+          700: 'var(--grey-700)',
+          800: 'var(--grey-800)',
+          900: 'var(--grey-900)',
+          1000: 'var(--grey-1000)',
+        },
+        green: {
+          100: 'var(--green-100)',
+          200: 'var(--green-200)',
+          300: 'var(--green-300)',
+          400: 'var(--green-400)',
+          500: 'var(--green-500)',
+          600: 'var(--green-600)',
+          700: 'var(--green-700)',
+          800: 'var(--green-800)',
+          900: 'var(--green-900)',
+        },
+        yellow: {
+          100: 'var(--yellow-100)',
+          200: 'var(--yellow-200)',
+          300: 'var(--yellow-300)',
+          400: 'var(--yellow-400)',
+          500: 'var(--yellow-500)',
+          600: 'var(--yellow-600)',
+          700: 'var(--yellow-700)',
+          800: 'var(--yellow-800)',
+          900: 'var(--yellow-900)',
+        },
+        red: {
+          100: 'var(--red-100)',
+          200: 'var(--red-200)',
+          300: 'var(--red-300)',
+          400: 'var(--red-400)',
+          500: 'var(--red-500)',
+          600: 'var(--red-600)',
+          700: 'var(--red-700)',
+          800: 'var(--red-800)',
+          900: 'var(--red-900)',
+        },
+        pink: {
+          100: 'var(--pink-100)',
+          200: 'var(--pink-200)',
+          300: 'var(--pink-300)',
+          400: 'var(--pink-400)',
+          500: 'var(--pink-500)',
+          600: 'var(--pink-600)',
+          700: 'var(--pink-700)',
+          800: 'var(--pink-800)',
+          900: 'var(--pink-900)',
+        },
+        orange: {
+          disabled: 'var(--orange-disabled)',
+          100: 'var(--orange-100)',
+          200: 'var(--orange-200)',
+          300: 'var(--orange-300)',
+          400: 'var(--orange-400)',
+          500: 'var(--orange-500)',
+          600: 'var(--orange-600)',
+          700: 'var(--orange-700)',
+          800: 'var(--orange-800)',
+          900: 'var(--orange-900)',
+        },
+        white: {
+          50: 'var(--white-50)',
+          60: 'var(--white-60)',
+          100: 'var(--white-100)',
+          300: 'var(--white-300)',
+          400: 'var(--white-400)',
+          500: 'var(--white-500)',
+          600: 'var(--white-600)',
+          700: 'var(--white-700)',
+          800: 'var(--white-800)',
+          900: 'var(--white-900)',
+        },
+      },
+      keyframes: {
+        'accordion-down': {
+          from: { height: '0' },
+          to: { height: 'var(--radix-accordion-content-height)' },
+        },
+        'accordion-up': {
+          from: { height: 'var(--radix-accordion-content-height)' },
+          to: { height: '0' },
+        },
+      },
+      animation: {
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.2s ease-out',
+      },
+    },
+  },
+  plugins: [
+    require('@tailwindcss/container-queries'),
+    require('tailwindcss-animate'),
+    require('./tailwindcss-color-extractor.cjs'),
+    plugin(function ({ addUtilities }) {
+      addUtilities({
+        '.no-scrollbar': {
+          scrollbarWidth: 'none',
+          '-ms-overflow-style': 'none',
+          '&::-webkit-scrollbar': {
+            display: 'none',
+          },
+        },
+      });
+    }),
+  ],
+};
+
+export default config;

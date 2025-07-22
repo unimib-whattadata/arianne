@@ -1,0 +1,34 @@
+<!--
+  - Allowed static fields:
+  - location   - where the log came from (only on FTS)
+  - srcuser    - extracts the source username
+  - dstuser    - extracts the destination (target) username
+  - user       - an alias to dstuser (only one of the two can be used)
+  - srcip      - source ip
+  - dstip      - dst ip
+  - srcport    - source port
+  - dstport    - destination port
+  - protocol   - protocol
+  - id         - event id
+  - url        - url of the event
+  - action     - event action (deny, drop, accept, etc)
+  - status     - event status (success, failure, etc)
+  - extra_data - Any extra data
+-->
+<decoder name="mapseh">
+  <prematch>^\d \d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d.\d\d\dZ \w\w\w\w\w\w\w\w\w\w\w\w MAPSEH</prematch>
+</decoder>
+<decoder name="mapseh2">
+  <parent>mapseh</parent>
+  <regex offset="after_parent">^ (\d+) - - (\S+) (\S+) (\S+) (\S+) (\w+) (\w+)</regex>
+  <order>num,controller,srcuser,role,dstuser,action,status</order>
+</decoder>
+<!--
+  1 2023-10-10T09:05:09.003Z fabd260ced32 MAPSEH 365 - - tag 07be4f90-10d6-4d49-8e88-8c0aa95a70a8-a@b.it therapist 07be4f90-10d6-4d49-8e88-8c0aa95a70a8-a@b.it READALL GRANTED
+  1 2023-10-09T15:48:03.554Z fabd260ced32 MAPSEH 373 - - tag/2d5adce5-9786-45a4-9d87-76d20a04f171 78edd09f-b6ee-4ae3-83be-76478cb1242d-a@b.it default-roles-maps-eh,offline_access,uma_authorization,therapist 78edd09f-b6ee-4ae3-83be-76478cb1242d-a@b.it READALL GRANTED
+  1 2023-03-14T11:05:37.769Z bbc61a4ce9cf MAPSEH 86 - - USER 637d0044f4c9240026268bbb-undefined therapist 637d0044f4c9240026268bbb-undefined 1 0
+  srcip      date    time id user dstuser srcport dstport
+  docker exec -it single-node-wazuh.manager-1 bash
+  cd var/ossec/etc/decoders/
+  /var/ossec/bin/wazuh-logtest
+-->
