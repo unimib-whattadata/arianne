@@ -1,3 +1,4 @@
+import { existsSync, readdirSync } from "fs";
 import { execSync } from "node:child_process";
 import type { PlopTypes } from "@turbo/gen";
 
@@ -7,6 +8,28 @@ interface PackageJson {
   dependencies: Record<string, string>;
   devDependencies: Record<string, string>;
 }
+
+const getApps = (sources: string | string[]) => {
+  if (typeof sources === "string") {
+    sources = [sources];
+  }
+  const choices = sources.flatMap((source) => {
+    return readdirSync(source, { withFileTypes: true })
+      .filter((dirent) => dirent.isDirectory())
+      .filter((dirent) =>
+        existsSync(`${source}/${dirent.name}/components.json`),
+      )
+      .map((dirent) => {
+        const choice = {
+          name: dirent.name,
+          value: `${source}/${dirent.name}`,
+        };
+        return choice;
+      });
+  });
+
+  return choices;
+};
 
 export default function generator(plop: PlopTypes.NodePlopAPI): void {
   plop.setGenerator("init", {
@@ -89,6 +112,54 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
           return "Package scaffolded";
         }
         return "Package not scaffolded";
+      },
+    ],
+  });
+
+  plop.setGenerator("shadcn/ui", {
+    description: "Add new shadcn/ui component",
+    prompts: [
+      {
+        type: "list",
+        name: "source",
+        choices: getApps(["apps", "packages"]),
+        // choices: ["psitools", "psitools-patients", "website"],
+        message: "Where do you want to add the component?",
+      },
+      {
+        type: "input",
+        name: "components",
+        message:
+          "Enter a space separated list of components you would like to install (skip if you want to select later)",
+      },
+    ],
+    actions: [
+      async (answers) => {
+        /**
+         * Run the shadcn/ui CLI to scaffold the component
+         * We use the `pnpm dlx` command to run the CLI without installing it
+         * globally, and we pass the `-c` flag to specify the source directory.
+         */
+        if ("source" in answers && typeof answers.source === "string") {
+          if (
+            "components" in answers &&
+            typeof answers.components === "string"
+          ) {
+            execSync(
+              `pnpm dlx shadcn@latest add -c ${answers.source} ${answers.components}`,
+              {
+                stdio: "inherit",
+              },
+            );
+
+            return "Components scaffolded";
+          }
+          execSync(`pnpm dlx shadcn@latest add -c ${answers.source}`, {
+            stdio: "inherit",
+          });
+          return "Component scaffolded";
+        }
+        return "Components not scaffolded";
       },
     ],
   });

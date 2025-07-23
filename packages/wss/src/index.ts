@@ -1,6 +1,5 @@
-import { appRouter, createTRPCContext } from "@arianne/api";
-import type { Session } from "@arianne/auth";
 import type { CreateWSSContextFnOptions } from "@trpc/server/adapters/ws";
+import { appRouter, createTRPCContext } from "@arianne/api";
 import { applyWSSHandler } from "@trpc/server/adapters/ws";
 import { WebSocketServer } from "ws";
 
@@ -34,17 +33,17 @@ class WebSocketServerSingleton {
               headers: (() => {
                 return heads;
               })(),
-              session: null,
+              // session: null,
             });
           }
 
-          const session = JSON.parse(
-            opts.info.connectionParams?.session,
-          ) as Session | null;
+          // const session = JSON.parse(
+          //   opts.info.connectionParams?.session,
+          // ) as Session | null;
 
           return createTRPCContext({
             headers: heads,
-            session,
+            // session,
           });
         },
       });

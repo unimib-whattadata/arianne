@@ -45,7 +45,7 @@
     "prettier": "catalog:",
     "prettier-plugin-tailwindcss": "catalog:",
     "tailwindcss": "catalog:",
-    "tw-animate-css": "^1.3.4",
+    "tw-animate-css": "catalog:",
     "typescript": "catalog:"
   },
   "name": "@arianne/website",

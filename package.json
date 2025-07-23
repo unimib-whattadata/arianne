@@ -22,7 +22,7 @@
     "lint:ws": "pnpm dlx sherif@latest",
     "postinstall": "pnpm lint:ws",
     "typecheck": "turbo run typecheck",
-    "ui-add": "turbo run ui-add",
+    "add:ui": "turbo gen shadcn/ui",
     "prepare": "husky",
     "release": "semantic-release --no-ci --dry-run",
     "fix-daemon": "turbo daemon clean"

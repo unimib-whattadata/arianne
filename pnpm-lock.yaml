@@ -10,7 +10,7 @@ catalogs:
       specifier: ^5.1.1
       version: 5.1.1
     '@tailwindcss/postcss':
-      specifier: ^4.0.15
+      specifier: 4.1.11
       version: 4.1.11
     '@tanstack/react-query':
       specifier: ^5.80.2
@@ -31,7 +31,7 @@ catalogs:
       specifier: ^22.0.0
       version: 22.16.5
     '@types/react':
-      specifier: ^19.0.0
+      specifier: 19.1.8
       version: 19.1.8
     '@types/react-dom':
       specifier: ^19.0.0
@@ -55,10 +55,10 @@ catalogs:
       specifier: ^0.525.0
       version: 0.525.0
     next:
-      specifier: ^15.0.0
+      specifier: 15.4.2
       version: 15.4.2
     postcss:
-      specifier: ^8.5.3
+      specifier: 8.5.6
       version: 8.5.6
     prettier:
       specifier: ^3.6.2
@@ -67,10 +67,10 @@ catalogs:
       specifier: ^0.6.11
       version: 0.6.14
     react:
-      specifier: ^19.0.0
+      specifier: 19.1.0
       version: 19.1.0
     react-dom:
-      specifier: ^19.0.0
+      specifier: 19.1.0
       version: 19.1.0
     react-hook-form:
       specifier: ^7.59.0
@@ -84,6 +84,9 @@ catalogs:
     tailwindcss:
       specifier: 4.1.11
       version: 4.1.11
+    tw-animate-css:
+      specifier: ^1.3.5
+      version: 1.3.5
     typescript:
       specifier: ^5.8.3
       version: 5.8.3
@@ -137,12 +140,12 @@ importers:
       '@arianne/api':
         specifier: workspace:*
         version: link:../../packages/api
-      '@arianne/auth':
-        specifier: workspace:*
-        version: link:../../packages/auth
       '@arianne/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@arianne/supabase':
+        specifier: workspace:*
+        version: link:../../packages/supabase
       '@arianne/wss':
         specifier: workspace:*
         version: link:../../packages/wss
@@ -236,9 +239,9 @@ importers:
       '@semantic-release/release-notes-generator':
         specifier: ^14.0.2
         version: 14.0.3(semantic-release@24.2.7(typescript@5.8.3))
-      '@tailwindcss/container-queries':
-        specifier: ^0.1.1
-        version: 0.1.1(tailwindcss@4.1.11)
+      '@tailwindcss/postcss':
+        specifier: 'catalog:'
+        version: 4.1.11
       '@tanstack/react-query':
         specifier: 'catalog:'
         version: 5.83.0(react@19.1.0)
@@ -320,9 +323,9 @@ importers:
       tailwind-merge:
         specifier: 'catalog:'
         version: 3.3.1
-      tailwindcss-animate:
-        specifier: ^1.0.7
-        version: 1.0.7(tailwindcss@4.1.11)
+      tw-animate-css:
+        specifier: 'catalog:'
+        version: 1.3.5
       zod:
         specifier: 'catalog:'
         version: 3.25.76
@@ -388,7 +391,7 @@ importers:
         specifier: 'catalog:'
         version: 3.6.2
       tailwindcss:
-        specifier: ^4.1.11
+        specifier: 'catalog:'
         version: 4.1.11
       ts-node:
         specifier: ^10.9.2
@@ -402,12 +405,12 @@ importers:
       '@arianne/api':
         specifier: workspace:*
         version: link:../../packages/api
-      '@arianne/auth':
-        specifier: workspace:*
-        version: link:../../packages/auth
       '@arianne/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@arianne/supabase':
+        specifier: workspace:*
+        version: link:../../packages/supabase
       '@arianne/wss':
         specifier: workspace:*
         version: link:../../packages/wss
@@ -777,7 +780,7 @@ importers:
         specifier: 'catalog:'
         version: 4.1.11
       tw-animate-css:
-        specifier: ^1.3.4
+        specifier: 'catalog:'
         version: 1.3.5
       typescript:
         specifier: 'catalog:'
@@ -818,6 +821,25 @@ importers:
         version: 5.8.3
 
   packages/auth:
+    dependencies:
+      '@supabase/ssr':
+        specifier: ^0.6.1
+        version: 0.6.1(@supabase/supabase-js@2.52.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))
+      '@supabase/supabase-js':
+        specifier: ^2.52.0
+        version: 2.52.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@types/react':
+        specifier: 'catalog:'
+        version: 19.1.8
+      next:
+        specifier: 'catalog:'
+        version: 15.4.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      react:
+        specifier: 'catalog:'
+        version: 19.1.0
+      react-dom:
+        specifier: 'catalog:'
+        version: 19.1.0(react@19.1.0)
     devDependencies:
       '@arianne/eslint-config':
         specifier: workspace:*
@@ -865,6 +887,46 @@ importers:
       drizzle-kit:
         specifier: 'catalog:'
         version: 0.30.6
+      eslint:
+        specifier: 'catalog:'
+        version: 9.31.0(jiti@2.4.2)
+      prettier:
+        specifier: 'catalog:'
+        version: 3.6.2
+      typescript:
+        specifier: 'catalog:'
+        version: 5.8.3
+
+  packages/supabase:
+    dependencies:
+      '@supabase/ssr':
+        specifier: ^0.6.1
+        version: 0.6.1(@supabase/supabase-js@2.52.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))
+      '@supabase/supabase-js':
+        specifier: ^2.52.0
+        version: 2.52.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@types/react':
+        specifier: 'catalog:'
+        version: 19.1.8
+      next:
+        specifier: 'catalog:'
+        version: 15.4.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      react:
+        specifier: 'catalog:'
+        version: 19.1.0
+      react-dom:
+        specifier: 'catalog:'
+        version: 19.1.0(react@19.1.0)
+    devDependencies:
+      '@arianne/eslint-config':
+        specifier: workspace:*
+        version: link:../../tools/eslint
+      '@arianne/prettier-config':
+        specifier: workspace:*
+        version: link:../../tools/prettier
+      '@arianne/tsconfig':
+        specifier: workspace:*
+        version: link:../../tools/typescript
       eslint:
         specifier: 'catalog:'
         version: 9.31.0(jiti@2.4.2)
@@ -936,9 +998,6 @@ importers:
       eslint-plugin-react-hooks:
         specifier: ^5.0.0
         version: 5.2.0(eslint@9.31.0(jiti@2.4.2))
-      eslint-plugin-simple-import-sort:
-        specifier: ^12.1.1
-        version: 12.1.1(eslint@9.31.0(jiti@2.4.2))
       eslint-plugin-turbo:
         specifier: ^2.3.1
         version: 2.5.5(eslint@9.31.0(jiti@2.4.2))(turbo@2.5.5)
@@ -2744,6 +2803,33 @@ packages:
   '@standard-schema/utils@0.3.0':
     resolution: {integrity: sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==}
 
+  '@supabase/auth-js@2.71.1':
+    resolution: {integrity: sha512-mMIQHBRc+SKpZFRB2qtupuzulaUhFYupNyxqDj5Jp/LyPvcWvjaJzZzObv6URtL/O6lPxkanASnotGtNpS3H2Q==}
+
+  '@supabase/functions-js@2.4.5':
+    resolution: {integrity: sha512-v5GSqb9zbosquTo6gBwIiq7W9eQ7rE5QazsK/ezNiQXdCbY+bH8D9qEaBIkhVvX4ZRW5rP03gEfw5yw9tiq4EQ==}
+
+  '@supabase/node-fetch@2.6.15':
+    resolution: {integrity: sha512-1ibVeYUacxWYi9i0cf5efil6adJ9WRyZBLivgjs+AUpewx1F3xPi7gLgaASI2SmIQxPoCEjAsLAzKPgMJVgOUQ==}
+    engines: {node: 4.x || >=6.0.0}
+
+  '@supabase/postgrest-js@1.19.4':
+    resolution: {integrity: sha512-O4soKqKtZIW3olqmbXXbKugUtByD2jPa8kL2m2c1oozAO11uCcGrRhkZL0kVxjBLrXHE0mdSkFsMj7jDSfyNpw==}
+
+  '@supabase/realtime-js@2.11.15':
+    resolution: {integrity: sha512-HQKRnwAqdVqJW/P9TjKVK+/ETpW4yQ8tyDPPtRMKOH4Uh3vQD74vmj353CYs8+YwVBKubeUOOEpI9CT8mT4obw==}
+
+  '@supabase/ssr@0.6.1':
+    resolution: {integrity: sha512-QtQgEMvaDzr77Mk3vZ3jWg2/y+D8tExYF7vcJT+wQ8ysuvOeGGjYbZlvj5bHYsj/SpC0bihcisnwPrM4Gp5G4g==}
+    peerDependencies:
+      '@supabase/supabase-js': ^2.43.4
+
+  '@supabase/storage-js@2.7.1':
+    resolution: {integrity: sha512-asYHcyDR1fKqrMpytAS1zjyEfvxuOIp1CIXX7ji4lHHcJKqyk+sLl/Vxgm4sN6u8zvuUtae9e4kDxQP2qrwWBA==}
+
+  '@supabase/supabase-js@2.52.0':
+    resolution: {integrity: sha512-jbs3CV1f2+ge7sgBeEduboT9v/uGjF22v0yWi/5/XFn5tbM8MfWRccsMtsDwAwu24XK8H6wt2LJDiNnZLtx/bg==}
+
   '@swc/helpers@0.5.15':
     resolution: {integrity: sha512-JQ5TuMi45Owi4/BIMAJBoSQoOJu12oOk/gADqlcUL9JEdHB8vyjUSsxqeNXnmXHjYKMi2WcYtezGEEhqUI/E2g==}
 
@@ -3103,6 +3189,9 @@ packages:
 
   '@types/parse-json@4.0.2':
     resolution: {integrity: sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==}
+
+  '@types/phoenix@1.6.6':
+    resolution: {integrity: sha512-PIzZZlEppgrpoT2QgbnDU+MMzuR6BbCjllj0bM70lWoejMeNJAxCchxnv7J3XFkI8MpygtRpzXrIlmWUBclP5A==}
 
   '@types/react-dom@19.1.6':
     resolution: {integrity: sha512-4hOiT/dwO8Ko0gV1m/TJZYk3y0KBnY9vzDh7W+DH17b2HFSOGgdj33dhihPeuy3l0q23+4e+hoXHV6hCC4dCXw==}
@@ -3754,6 +3843,10 @@ packages:
   convert-source-map@1.9.0:
     resolution: {integrity: sha512-ASFBup0Mz1uyiIjANan1jzLQami9z1PoYSZCiiYW2FczPbenXc45FZdBZLzOT+r6+iciuEModtmCti+hjaAk0A==}
 
+  cookie@1.0.2:
+    resolution: {integrity: sha512-9Kr/j4O16ISv8zBBhJoi4bXOYNTkFLOqSL3UDB0njXxCXNezjeyVrJyGOWtgfs/q2km1gwBcfH8q1yEGoMYunA==}
+    engines: {node: '>=18'}
+
   copy-anything@3.0.5:
     resolution: {integrity: sha512-yCEafptTtb4bk7GLEQoM8KVJpxAfdBJYaXyzQEgQQQgYrZiDp8SJmGKlYza6CYjEDNstAdNdKA3UuoULlEbS6w==}
     engines: {node: '>=12.13'}
@@ -4364,11 +4457,6 @@ packages:
     engines: {node: '>=4'}
     peerDependencies:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9.7
-
-  eslint-plugin-simple-import-sort@12.1.1:
-    resolution: {integrity: sha512-6nuzu4xwQtE3332Uz0to+TxDQYRLTKRESSc2hefVT48Zc8JthmN23Gx9lnYhu0FtkRSL1oxny3kJ2aveVhmOVA==}
-    peerDependencies:
-      eslint: '>=5.0.0'
 
   eslint-plugin-turbo@2.5.5:
     resolution: {integrity: sha512-IlN65X6W7rgK88u5xl1xC+7FIGKA7eyaca0yxZQ9CBNV6keAaqtjZQLw8ZfXdv7T+MzTLYkYOeOHAv8yCRUx4Q==}
@@ -5094,6 +5182,11 @@ packages:
   isexe@3.1.1:
     resolution: {integrity: sha512-LpB/54B+/2J5hqQ7imZHfdU31OlgQqx7ZicVlkm9kzg9/w8GKLEcFfJl/t7DCEDueOyBAD6zCCwTO6Fzs0NoEQ==}
     engines: {node: '>=16'}
+
+  isows@1.0.7:
+    resolution: {integrity: sha512-I1fSfDCZL5P0v33sVqeTDSpcstAg/N+wF5HS033mogOVIp4B+oHC7oOCsA3axAbBSGTJ8QubbNmnIRN/h8U7hg==}
+    peerDependencies:
+      ws: '*'
 
   issue-parser@7.0.1:
     resolution: {integrity: sha512-3YZcUUR2Wt1WsapF+S/WiA2WmlW0cWAoPccMqne7AxEBhCdFeTPjfv/Axb8V2gyCgY3nRw+ksZ3xSUX+R47iAg==}
@@ -8954,6 +9047,54 @@ snapshots:
 
   '@standard-schema/utils@0.3.0': {}
 
+  '@supabase/auth-js@2.71.1':
+    dependencies:
+      '@supabase/node-fetch': 2.6.15
+
+  '@supabase/functions-js@2.4.5':
+    dependencies:
+      '@supabase/node-fetch': 2.6.15
+
+  '@supabase/node-fetch@2.6.15':
+    dependencies:
+      whatwg-url: 5.0.0
+
+  '@supabase/postgrest-js@1.19.4':
+    dependencies:
+      '@supabase/node-fetch': 2.6.15
+
+  '@supabase/realtime-js@2.11.15(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
+    dependencies:
+      '@supabase/node-fetch': 2.6.15
+      '@types/phoenix': 1.6.6
+      '@types/ws': 8.18.1
+      isows: 1.0.7(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@6.0.5))
+      ws: 8.18.3(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+
+  '@supabase/ssr@0.6.1(@supabase/supabase-js@2.52.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))':
+    dependencies:
+      '@supabase/supabase-js': 2.52.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      cookie: 1.0.2
+
+  '@supabase/storage-js@2.7.1':
+    dependencies:
+      '@supabase/node-fetch': 2.6.15
+
+  '@supabase/supabase-js@2.52.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
+    dependencies:
+      '@supabase/auth-js': 2.71.1
+      '@supabase/functions-js': 2.4.5
+      '@supabase/node-fetch': 2.6.15
+      '@supabase/postgrest-js': 1.19.4
+      '@supabase/realtime-js': 2.11.15(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@supabase/storage-js': 2.7.1
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+
   '@swc/helpers@0.5.15':
     dependencies:
       tslib: 2.8.1
@@ -9324,6 +9465,8 @@ snapshots:
   '@types/normalize-package-data@2.4.4': {}
 
   '@types/parse-json@4.0.2': {}
+
+  '@types/phoenix@1.6.6': {}
 
   '@types/react-dom@19.1.6(@types/react@19.1.8)':
     dependencies:
@@ -10022,6 +10165,8 @@ snapshots:
   convert-hrtime@5.0.0: {}
 
   convert-source-map@1.9.0: {}
+
+  cookie@1.0.2: {}
 
   copy-anything@3.0.5:
     dependencies:
@@ -10737,10 +10882,6 @@ snapshots:
       semver: 6.3.1
       string.prototype.matchall: 4.0.12
       string.prototype.repeat: 1.0.0
-
-  eslint-plugin-simple-import-sort@12.1.1(eslint@9.31.0(jiti@2.4.2)):
-    dependencies:
-      eslint: 9.31.0(jiti@2.4.2)
 
   eslint-plugin-turbo@2.5.5(eslint@9.31.0(jiti@2.4.2))(turbo@2.5.5):
     dependencies:
@@ -11549,6 +11690,10 @@ snapshots:
   isexe@2.0.0: {}
 
   isexe@3.1.1: {}
+
+  isows@1.0.7(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@6.0.5)):
+    dependencies:
+      ws: 8.18.3(bufferutil@4.0.9)(utf-8-validate@6.0.5)
 
   issue-parser@7.0.1:
     dependencies:

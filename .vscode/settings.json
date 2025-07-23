@@ -1,4 +1,7 @@
 {
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[typescript,typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -13,8 +16,8 @@
     ["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
   ],
   "material-icon-theme.folders.associations": {
-    "penguin": "mobile",
-    "psitools": "next"
+    "psitools": "next",
+    "psitools-patients": "next"
   },
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -39,11 +42,10 @@
   "eslint.workingDirectories": [
     { "pattern": "apps/*/" },
     { "pattern": "packages/*/" },
-    { "pattern": "tooling/*/" }
+    { "pattern": "tools/*/" }
   ],
   "prettier.ignorePath": ".gitignore",
   "tailwindCSS.classFunctions": ["cva", "cx", "cn"],
-  "tailwindCSS.experimental.configFile": "./tooling/tailwind/web.ts",
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.preferences.autoImportFileExcludePatterns": [
     "zod/dist/types/index.d.ts", // Force auto-imports to v4

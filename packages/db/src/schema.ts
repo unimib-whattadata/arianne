@@ -1,7 +1,6 @@
 // Example model schema from the Drizzle docs
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
-import { sql } from "drizzle-orm";
 import { index, pgTableCreator } from "drizzle-orm/pg-core";
 
 /**
@@ -12,16 +11,12 @@ import { index, pgTableCreator } from "drizzle-orm/pg-core";
  */
 export const createTable = pgTableCreator((name) => `arianne_${name}`);
 
-export const posts = createTable(
-  "post",
+export const users = createTable(
+  "users",
   (d) => ({
-    id: d.integer().primaryKey().generatedByDefaultAsIdentity(),
-    name: d.varchar({ length: 256 }),
-    createdAt: d
-      .timestamp({ withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
+    id: d.serial("id").primaryKey(),
+    fullName: d.text("full_name"),
+    phone: d.varchar("phone", { length: 256 }),
   }),
-  (t) => [index("name_idx").on(t.name)],
+  (t) => [index("fullName").on(t.fullName)],
 );

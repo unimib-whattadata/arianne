@@ -1,10 +1,16 @@
 {
-  "name": "@arianne/auth",
+  "name": "@arianne/supabase",
   "private": true,
   "version": "0.1.0",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./middleware": "./src/middleware.ts",
+    "./client": "./src/client.ts",
+    "./server": "./src/server.ts"
   },
   "license": "MIT",
   "scripts": {
@@ -23,5 +29,13 @@
     "prettier": "catalog:",
     "typescript": "catalog:"
   },
-  "prettier": "@arianne/prettier-config"
+  "prettier": "@arianne/prettier-config",
+  "dependencies": {
+    "@supabase/ssr": "^0.6.1",
+    "@supabase/supabase-js": "^2.52.0",
+    "@types/react": "catalog:",
+    "next": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  }
 }

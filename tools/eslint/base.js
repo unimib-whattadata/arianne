@@ -4,7 +4,6 @@ import * as path from "node:path";
 import { includeIgnoreFile } from "@eslint/compat";
 import eslint from "@eslint/js";
 import importPlugin from "eslint-plugin-import";
-import importSort from "eslint-plugin-simple-import-sort";
 import turboPlugin from "eslint-plugin-turbo";
 import tseslint from "typescript-eslint";
 
@@ -35,7 +34,7 @@ export const restrictEnvAccess = tseslint.config(
         },
       ],
     },
-  }
+  },
 );
 
 export default tseslint.config(
@@ -47,7 +46,6 @@ export default tseslint.config(
     plugins: {
       import: importPlugin,
       turbo: turboPlugin,
-      "simple-import-sort": importSort,
     },
     extends: [
       eslint.configs.recommended,
@@ -76,8 +74,6 @@ export default tseslint.config(
       "@typescript-eslint/no-unsafe-assignment": ["warn"],
       "@typescript-eslint/no-non-null-assertion": "off",
       "@typescript-eslint/prefer-find": "off",
-      "simple-import-sort/imports": "error",
-      "simple-import-sort/exports": "error",
       "import/first": "error",
       "import/newline-after-import": "error",
       "import/no-duplicates": "error",
@@ -88,5 +84,5 @@ export default tseslint.config(
   {
     linterOptions: { reportUnusedDisableDirectives: true },
     languageOptions: { parserOptions: { projectService: true } },
-  }
+  },
 );
