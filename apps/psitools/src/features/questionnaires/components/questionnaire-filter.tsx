@@ -210,7 +210,7 @@ export const FilterPopover = () => {
                 <Checkbox
                   checked={selectedDisorders.includes(disorder)}
                   onCheckedChange={() => toggleDisorder(disorder)}
-                  className="border-1 border border-primary-300"
+                  className="border border border-primary-300"
                 />
                 {disorder}
               </label>

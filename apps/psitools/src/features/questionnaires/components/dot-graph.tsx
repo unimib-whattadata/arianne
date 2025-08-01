@@ -180,7 +180,7 @@ export const DotGraph = (props: DotGraphProps) => {
       .append('text')
       .text('Items')
       .classed(
-        'fill-space-gray text-[1rem] [writing-mode:vertical-rl] [transform-box:fill-box] origin-center rotate-180',
+        'fill-space-gray text-[1rem] [writing-mode:vertical-rl] transform-fill origin-center rotate-180',
         true,
       )
       .attr('x', -45)

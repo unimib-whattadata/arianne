@@ -39,7 +39,7 @@ import { cn } from '@/utils/cn';
 
 export interface CompilationData {
   therapistName: string;
-  therapistlastName: string;
+  therapistLastname: string;
 
   modality: modality;
   createdAt: string;
@@ -60,7 +60,7 @@ const FormContextProvider = (props: {
 
   const compilationData: CompilationData = {
     therapistName: searchParams.get('therapistName') || '',
-    therapistlastName: searchParams.get('therapistlastName') || '',
+    therapistLastname: searchParams.get('therapistLastname') || '',
 
     modality: searchParams.get('modality') as modality,
     createdAt: searchParams.get('createdAt') || '',
@@ -110,7 +110,7 @@ export const FormContent = <FormValues extends FieldValues>(
   return (
     <FormContextProvider viewOnly={props.viewOnly}>
       <Form {...form}>
-        <header className="sticky top-0 mx-auto flex justify-center bg-gray-10 pb-3">
+        <header className="bg-gray-10 sticky top-0 mx-auto flex justify-center pb-3">
           <FormTitle title={title} />
         </header>
         <div className="relative pb-8">
@@ -131,10 +131,10 @@ interface FormHeaderProps {
 export const FormHeader = (props: FormHeaderProps) => {
   const { viewOnly } = useFormContext();
   return (
-    <header className="sticky top-0 z-10 w-full space-y-4 bg-gray-10 pb-4">
+    <header className="bg-gray-10 sticky top-0 z-10 w-full space-y-4 pb-4">
       {props.children}
       {viewOnly && (
-        <p className="font-h3 absolute -right-32 top-80 z-20 rotate-90">
+        <p className="font-h3 absolute top-80 -right-32 z-20 rotate-90">
           (sola visualizzazione)
         </p>
       )}
@@ -199,7 +199,7 @@ export const FormFooter = (props: FormFooterProps) => {
 
   return (
     <>
-      <footer className="absolute bottom-0 left-0 right-0 flex justify-center bg-gray-10 p-3">
+      <footer className="bg-gray-10 absolute right-0 bottom-0 left-0 flex justify-center p-3">
         <div className={cn('flex w-full max-w-prose', className)}>
           {children}
         </div>
@@ -208,7 +208,7 @@ export const FormFooter = (props: FormFooterProps) => {
         <AlertDialog open={sent} onOpenChange={setSent}>
           <AlertDialogContent
             portalProps={{
-              className: 'absolute mt-3 h-screen-safe',
+              className: 'absolute mt-3 h-full-safe',
             }}
             overlayProps={{
               className: 'absolute',
@@ -216,7 +216,7 @@ export const FormFooter = (props: FormFooterProps) => {
           >
             <AlertDialogHeader>
               <AlertDialogTitle className="flex items-center">
-                <Verified className="mr-1.5 h-20 w-20 text-primary" />
+                <Verified className="text-primary mr-1.5 h-20 w-20" />
                 Il questionario è stato caricato con successo!
               </AlertDialogTitle>
               <AlertDialogDescription className="sr-only">
@@ -289,9 +289,9 @@ export const FormSubmit = <FormValues extends FieldValues>(
       <span>Invia</span>
       <AnimatePresence mode="wait">
         {isSubmitting ? (
-          <Loader2 key="icon" className="ml-1 mr-2 h-4 w-4 animate-spin" />
+          <Loader2 key="icon" className="mr-2 ml-1 h-4 w-4 animate-spin" />
         ) : (
-          <Send key="icon" className="ml-1 mr-2 h-4 w-4 rotate-45" />
+          <Send key="icon" className="mr-2 ml-1 h-4 w-4 rotate-45" />
         )}
       </AnimatePresence>
     </Button>

@@ -37,9 +37,9 @@ export const Item2 = (props: Props) => {
               field.value && 'border-slate-200 bg-slate-100',
             )}
           >
-            <div className="grid grid-cols-[1fr,auto,auto,auto] items-center rounded-md transition-colors duration-300">
+            <div className="grid grid-cols-[1fr_auto_auto_auto] items-center rounded-md transition-colors duration-300">
               <FormLabel>
-                <div className="grid grid-cols-[auto,1fr] gap-2">
+                <div className="grid grid-cols-[auto_1fr] gap-2">
                   <span className="text-primary font-bold">
                     {question.index}.
                   </span>

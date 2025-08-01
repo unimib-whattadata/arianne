@@ -90,7 +90,7 @@ export const AdministrationResultsTable = <TData, TValue>({
   }, [isAllSelected, selectAll, questionnaire, setIsAllSelected]);
 
   return (
-    <div className="grid grid-rows-[1fr,auto] justify-center pl-0 pr-8">
+    <div className="grid grid-rows-[1fr_auto] justify-center pl-0 pr-8">
       <div className="flex flex-col justify-between overflow-hidden rounded-md bg-white">
         <Table className="w-full table-fixed">
           <AdministrationTableBody table={table} />

@@ -1,6 +1,6 @@
 'use client';
 
-import type { KeycloakUser } from '@arianne/auth';
+import type { KeycloakUser } from '@arianne/supabase';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';

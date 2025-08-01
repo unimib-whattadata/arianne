@@ -213,7 +213,7 @@ export function FormLayout<T extends FieldValues>(props: FormLayoutProps<T>) {
           ) : null}
         </div>
       </div>
-      <section className="grid h-[calc(100svh_-_var(--header-height))] grid-rows-[auto,1fr,auto]">
+      <section className="grid h-[calc(100svh-var(--header-height))] grid-rows-[auto_1fr_auto]">
         <header className="grid gap-2 pb-4">
           <div className="px-4">
             <nav className="flex items-center justify-between">

@@ -34,7 +34,7 @@ export const useColumns = (currentPath: string, exportMode: boolean) => {
                   }}
                   aria-checked={isIndeterminate ? 'mixed' : allRowsSelected}
                   aria-label="Seleziona tutte le righe"
-                  className="border-1 peer border border-primary-300"
+                  className="border peer border border-primary-300"
                 />
               )}
             </div>
@@ -61,7 +61,7 @@ export const useColumns = (currentPath: string, exportMode: boolean) => {
               <Checkbox
                 checked={row.getIsSelected()}
                 onCheckedChange={(value) => row.toggleSelected(!!value)}
-                className="border-1 border border-primary-300"
+                className="border border border-primary-300"
               />
             </div>
           );

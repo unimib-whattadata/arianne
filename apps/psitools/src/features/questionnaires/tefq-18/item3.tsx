@@ -65,7 +65,7 @@ export const Item3 = (props: Props) => {
           >
             <FormItem className="w-full items-center space-y-0">
               <FormLabel>
-                <div className="grid grid-cols-[auto,1fr] gap-2">
+                <div className="grid grid-cols-[auto_1fr] gap-2">
                   <span className="text-primary font-bold">{id}.</span>
                   <span className="pb-5 font-bold leading-5 text-space-gray">
                     {text}

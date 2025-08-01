@@ -114,7 +114,7 @@ const SearchBarComponent = memo(
     const numberOfSelectedIds = selectedIds.length;
 
     return (
-      <div className="sticky top-0 z-10 flex flex-col gap-2 bg-gray-10 py-3">
+      <div className="bg-gray-10 sticky top-0 z-10 flex flex-col gap-2 py-3">
         <div className="flex w-full flex-row justify-between gap-2">
           <div className="flex flex-row">
             <Toggle
@@ -122,7 +122,7 @@ const SearchBarComponent = memo(
               size="sm"
               pressed={props.favoritesOnly}
               onPressedChange={props.setFavoritesOnly}
-              className="h-9 w-10 border border-primary text-base text-primary hover:bg-primary/5 [&>svg]:data-[state=on]:fill-primary [&>svg]:data-[state=on]:stroke-white"
+              className="border-primary text-primary hover:bg-primary/5 [&>svg]:data-[state=on]:fill-primary h-9 w-10 border text-base [&>svg]:data-[state=on]:stroke-white"
             >
               <Star className="h-5 w-5" />
             </Toggle>
@@ -145,7 +145,7 @@ const SearchBarComponent = memo(
               </Button>
             </PopoverTrigger>
             <PopoverContent
-              className="w-72 border border-primary-300 p-3"
+              className="border-primary-300 w-72 border p-3"
               align="start"
               side="right"
             >
@@ -155,7 +155,7 @@ const SearchBarComponent = memo(
                     <h4 className="text-sm font-normal">Aggiungi filtro</h4>
                     <Button
                       variant="ghost"
-                      className="h-fit p-0 text-sm font-normal text-primary hover:bg-white hover:text-slate-900"
+                      className="text-primary h-fit p-0 text-sm font-normal hover:bg-white hover:text-slate-900"
                       onClick={clearAllFilters}
                     >
                       Cancella
@@ -164,7 +164,7 @@ const SearchBarComponent = memo(
                   <div className="flex w-full flex-col gap-2">
                     <Button
                       variant="ghost"
-                      className="w-full flex-row justify-between px-0 text-[14px] transition-all hover:bg-muted hover:px-1"
+                      className="hover:bg-muted w-full flex-row justify-between px-0 text-[14px] transition-all hover:px-1"
                       onClick={() => setStep('sort')}
                     >
                       Ordina per
@@ -183,7 +183,7 @@ const SearchBarComponent = memo(
                     </Button>
                     <Button
                       variant="ghost"
-                      className="w-full flex-row justify-between px-0 text-[14px] transition-all hover:bg-muted hover:px-1"
+                      className="hover:bg-muted w-full flex-row justify-between px-0 text-[14px] transition-all hover:px-1"
                       onClick={() => setStep('disorder')}
                     >
                       Disturbo
@@ -198,7 +198,7 @@ const SearchBarComponent = memo(
                     </Button>
                     <Button
                       variant="ghost"
-                      className="w-full flex-row justify-between px-0 text-[14px] transition-all hover:bg-muted hover:px-1"
+                      className="hover:bg-muted w-full flex-row justify-between px-0 text-[14px] transition-all hover:px-1"
                       onClick={() => setStep('status')}
                     >
                       Stato
@@ -259,7 +259,7 @@ const SearchBarComponent = memo(
                         value={option.value}
                         checked={props.sortOption === option.value}
                         onChange={() => props.setSortOption(option.value)}
-                        className="h-4 w-4 accent-primary"
+                        className="accent-primary h-4 w-4"
                       />
                       {option.label}
                     </label>
@@ -276,7 +276,7 @@ const SearchBarComponent = memo(
                       <Checkbox
                         checked={props.selectedDisorders.includes(disorder)}
                         onCheckedChange={() => toggleDisorder(disorder)}
-                        className="border-1 border border-primary-300"
+                        className="border-primary-300 border"
                       />
                       {disorder}
                     </label>
@@ -296,7 +296,7 @@ const SearchBarComponent = memo(
                         value={option.value}
                         checked={props.statusOption === option.value}
                         onChange={() => props.setStatusOption(option.value)}
-                        className="h-4 w-4 accent-primary"
+                        className="accent-primary h-4 w-4"
                       />
                       {option.label}
                     </label>
@@ -311,11 +311,11 @@ const SearchBarComponent = memo(
               type="text"
               value={props.query}
               onChange={(e) => props.setQuery(e.target.value)}
-              className="peer w-10 border-primary transition-[color,width] placeholder:text-primary/50 focus-within:w-80 focus-within:pr-9 focus:w-80 focus:pr-9 active:w-80 group-hover:w-80 group-hover:pr-9 [&:not(:placeholder-shown)]:w-80 [&:not(:placeholder-shown)]:pr-9"
+              className="peer border-primary placeholder:text-primary/50 w-10 transition-[color,width] not-placeholder-shown:w-80 not-placeholder-shown:pr-9 group-hover:w-80 group-hover:pr-9 focus-within:w-80 focus-within:pr-9 focus:w-80 focus:pr-9 active:w-80"
             />
-            <Search className="absolute right-2.5 top-2 h-5 w-5 bg-background text-primary peer-[&:not(:placeholder-shown)]:hidden" />
+            <Search className="bg-background text-primary absolute top-2 right-2.5 h-5 w-5 peer-not-placeholder-shown:hidden" />
             <X
-              className="absolute right-2.5 top-2 h-5 w-5 cursor-pointer bg-background text-primary peer-placeholder-shown:hidden"
+              className="bg-background text-primary absolute top-2 right-2.5 h-5 w-5 cursor-pointer peer-placeholder-shown:hidden"
               onClick={props.clearQuery}
             />
           </div>
@@ -325,7 +325,7 @@ const SearchBarComponent = memo(
               size="sm"
               pressed={exportMode}
               onPressedChange={toggleExportMode}
-              className="h-9 gap-2 border border-primary px-4 text-base text-primary hover:bg-primary/5 hover:text-primary [&>svg]:data-[state=on]:fill-primary [&>svg]:data-[state=on]:stroke-white"
+              className="border-primary text-primary hover:bg-primary/5 hover:text-primary [&>svg]:data-[state=on]:fill-primary h-9 gap-2 border px-4 text-base [&>svg]:data-[state=on]:stroke-white"
             >
               <FileUp className="h-5 w-5" />
               <span className="text-sm">Export</span>
@@ -345,7 +345,7 @@ const SearchBarComponent = memo(
                   e.stopPropagation();
                   selectAllGlobally(!isEverithingSelected, e);
                 }}
-                className="border-1 border border-primary-300"
+                className="border-primary-300 border"
               />
               Hai selezionato:
               <span className="text-sm text-gray-500">

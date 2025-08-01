@@ -232,7 +232,7 @@ const AdministrationResultsPid5BF: NextPage = () => {
           ticks={[]}
         />
 
-        <Separator orientation="horizontal" className="h-[1px] w-full" />
+        <Separator orientation="horizontal" className="h-px w-full" />
 
         {allDomains.map(({ label, scoreKey, maxScore }) => {
           const facetScorePrev = prevScore[scoreKey] ?? 0;

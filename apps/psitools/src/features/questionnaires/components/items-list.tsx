@@ -64,9 +64,9 @@ export const ItemsList = (props: ItemsListProps) => {
   return (
     <div
       className={cn(
-        'relative grid grid-cols-[max-content,600px,fit-content(30ch)] items-center gap-2',
+        'relative grid grid-cols-[max-content_600px_fit-content(30ch)] items-center gap-2',
         isComparison &&
-          'grid-cols-[max-content,600px,fit-content(30ch),fit-content(30ch)]',
+          'grid-cols-[max-content_600px_fit-content(30ch)_fit-content(30ch)]',
       )}
     >
       <Separator className="absolute col-start-3 col-end-3 h-full w-px bg-slate-300" />

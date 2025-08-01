@@ -44,7 +44,7 @@ const NewAdministration = () => {
       response: data.response,
       score,
       therapistName: data.therapistName,
-      therapistlastName: data.therapistlastName,
+      therapistLastname: data.therapistLastname,
       modality: data.modality,
       createdAt: data.createdAt,
     };
@@ -64,7 +64,7 @@ const NewAdministration = () => {
         <FormInstructions>
           <p className="font-bold">Istruzioni</p>
           <p>{INSTRUCTIONS_1}</p>
-          <ul className="mb-4 ml-4 mt-4 list-disc">
+          <ul className="mt-4 mb-4 ml-4 list-disc">
             <li>
               Per favore, legga ciascun gruppo di affermazioni attentamente.
             </li>

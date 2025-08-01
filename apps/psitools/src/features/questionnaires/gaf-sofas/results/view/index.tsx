@@ -51,7 +51,7 @@ export default function GafSofasPage() {
   // TODO: Test if response is returned as expected and if default value is set correctly
 
   return (
-    <div className="grid h-[calc(100dvh_-_theme(spacing.6)_-_theme(spacing.32))] grid-rows-[auto_1fr_auto]">
+    <div className="grid h-[calc(100dvh-(--spacing(6))-(--spacing(32)))] grid-rows-[auto_1fr_auto]">
       <Form {...form}>
         <header className="sticky top-0 mx-auto max-w-prose pb-3">
           <h1 className="font-h1 leading-tight">

@@ -198,7 +198,7 @@ export default function AdministrationResultsAebsPage() {
         <Card>
           <CardHeader>
             <div className="flex justify-center">Fattore </div>
-            <span className="flex min-w-[10rem] justify-center font-semibold">
+            <span className="flex min-w-40 justify-center font-semibold">
               Appetite Drive
             </span>
           </CardHeader>
@@ -219,7 +219,7 @@ export default function AdministrationResultsAebsPage() {
         <Card>
           <CardHeader>
             <div className="flex justify-center">Fattore </div>
-            <span className="flex min-w-[10rem] justify-center font-semibold">
+            <span className="flex min-w-40 justify-center font-semibold">
               {' '}
               Low Dietary Control
             </span>

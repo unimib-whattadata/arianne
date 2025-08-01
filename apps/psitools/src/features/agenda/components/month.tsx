@@ -585,7 +585,7 @@ const Month: React.FC = () => {
           />
         </div>
 
-        <div className="sticky top-14 z-30 grid grid-cols-[50px,_1fr,_1fr,_1fr,_1fr,_1fr,_1fr,_1fr] bg-white text-center text-sm font-semibold">
+        <div className="sticky top-14 z-30 grid grid-cols-[50px_1fr_1fr_1fr_1fr_1fr_1fr_1fr] bg-white text-center text-sm font-semibold">
           <div className="p-2"></div>
           {days.map((day, index) => {
             if (!eventList) return null;
@@ -599,7 +599,7 @@ const Month: React.FC = () => {
             );
           })}
         </div>
-        <div className="col-span-8 grid grid-cols-[50px,_repeat(7,_1fr)] bg-white">
+        <div className="col-span-8 grid grid-cols-[50px_repeat(7,1fr)] bg-white">
           <Button
             variant="ghost"
             onClick={() => setIsExpanded(!isExpanded)}
@@ -704,7 +704,7 @@ const Month: React.FC = () => {
           className="overflow-y-auto no-scrollbar"
           style={{ maxHeight: 'calc(100vh - 320px)' }}
         >
-          <div className="relative grid grid-cols-[50px,_1fr,_1fr,_1fr,_1fr,_1fr,_1fr,_1fr]">
+          <div className="relative grid grid-cols-[50px_1fr_1fr_1fr_1fr_1fr_1fr_1fr]">
             {hours.map((hour, hourIndex) => {
               const isFullHour = hour.includes(':00');
 

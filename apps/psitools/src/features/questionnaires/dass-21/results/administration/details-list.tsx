@@ -25,14 +25,14 @@ export const DetailsList = (props: Props) => {
   });
 
   return (
-    <div className="-mb-px grid grid-cols-[1fr,auto,auto] items-center">
+    <div className="-mb-px grid grid-cols-[1fr_auto_auto] items-center">
       <p className="p-4 font-bold">Elenco item</p>
       <Separator orientation="vertical" className="mx-4" />
       <p className="pr-4 font-bold">Risposte</p>
       <Separator className="col-span-3" />
       {items.map(([index, response]) => (
         <Fragment key={index}>
-          <div className="grid h-14 grid-cols-[auto,1fr] items-center gap-2 pl-4 text-sm">
+          <div className="grid h-14 grid-cols-[auto_1fr] items-center gap-2 pl-4 text-sm">
             <span className="text-primary">{QUESTIONS[index]?.id}</span>
             <span>{QUESTIONS[index]?.text}</span>
           </div>

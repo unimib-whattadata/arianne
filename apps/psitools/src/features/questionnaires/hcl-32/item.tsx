@@ -40,7 +40,7 @@ export const Item = (props: Props) => {
           >
             <FormItem className="flex items-center justify-between space-y-0">
               <FormLabel>
-                <div className="grid grid-cols-[auto,1fr] gap-2">
+                <div className="grid grid-cols-[auto_1fr] gap-2">
                   <span className="text-primary font-bold">{index}.</span>
                   <span className="text-space-gray">{`${question}`}</span>
                 </div>

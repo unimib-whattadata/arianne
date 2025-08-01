@@ -139,7 +139,7 @@ function SortableSection({
     <div
       ref={setNodeRef}
       style={style}
-      className="border-1 relative mb-3 rounded-md border border-primary bg-white p-4"
+      className="border relative mb-3 rounded-md border border-primary bg-white p-4"
     >
       {/* Grip centrato in alto */}
       <div className="mb-3 flex items-center justify-center">

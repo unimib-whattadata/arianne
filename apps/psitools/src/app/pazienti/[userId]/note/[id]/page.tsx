@@ -129,7 +129,7 @@ export default function Nota() {
         <Card className="space-y-4 p-4">
           <Form {...form}>
             <form className="space-y-4">
-              <div className="grid grid-cols-[1fr,_auto] grid-rows-[auto,_1fr] items-center gap-2">
+              <div className="grid grid-cols-[1fr_auto] grid-rows-[auto_1fr] items-center gap-2">
                 <FormField
                   control={form.control}
                   name="title"
@@ -237,7 +237,7 @@ export default function Nota() {
         </div>
       </div>
       <Card className="grid gap-4 p-4">
-        <div className="grid grid-cols-[1fr,_auto] grid-rows-[auto,_1fr] items-center gap-2">
+        <div className="grid grid-cols-[1fr_auto] grid-rows-[auto_1fr] items-center gap-2">
           <p className="col-span-2 text-sm font-medium leading-none text-muted-foreground">
             Titolo
           </p>

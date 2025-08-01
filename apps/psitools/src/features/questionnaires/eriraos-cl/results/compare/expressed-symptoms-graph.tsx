@@ -46,7 +46,7 @@ const WIDTH_DICT = {
   43: 'w-[59.83rem]',
   44: 'w-[61.22rem]',
   45: 'w-[62.61rem]',
-  46: 'w-[64rem]',
+  46: 'w-5xl',
 } as Record<string, string>;
 
 interface Props {
@@ -73,11 +73,11 @@ export const ExpressedSymptomsGraph = (props: Props) => {
 
   return (
     <div className="relative grid">
-      <div className="grid grid-cols-[auto,1fr] place-items-center">
+      <div className="grid grid-cols-[auto_1fr] place-items-center">
         <div className="w-12">
           <span className="text-primary">T{prevT}</span>
         </div>
-        <div className="relative h-4 w-[64rem] rounded-md bg-gray-300">
+        <div className="relative h-4 w-5xl rounded-md bg-gray-300">
           <div className="absolute bottom-0 left-0 flex items-end justify-end">
             <div
               className={cn(
@@ -104,11 +104,11 @@ export const ExpressedSymptomsGraph = (props: Props) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-[auto,1fr] place-items-center">
+      <div className="grid grid-cols-[auto_1fr] place-items-center">
         <div className="w-12">
           <span className="text-primary">T{nextT}</span>
         </div>
-        <div className="relative h-4 w-[64rem] rounded-md bg-gray-300">
+        <div className="relative h-4 w-5xl rounded-md bg-gray-300">
           <div className="absolute bottom-0 left-0 flex items-end justify-end">
             <div
               className={cn(

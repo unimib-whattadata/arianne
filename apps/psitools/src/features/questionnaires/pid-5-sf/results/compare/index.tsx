@@ -280,7 +280,7 @@ export default function AdministrationResultsPid5SFPage() {
               ticks={[]}
             />
 
-            <Separator orientation="horizontal" className="h-[1px] w-full" />
+            <Separator orientation="horizontal" className="h-px w-full" />
           </>
         )}
 

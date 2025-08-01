@@ -50,10 +50,10 @@ export const PQ16Item = (props: Props) => {
   });
 
   return (
-    <div className="mb-2 grid grid-cols-[1fr,auto]">
-      <div className="mr-4 grid grid-cols-[1fr,auto] rounded-md border border-white bg-white p-4 transition-colors duration-300">
+    <div className="mb-2 grid grid-cols-[1fr_auto]">
+      <div className="mr-4 grid grid-cols-[1fr_auto] rounded-md border border-white bg-white p-4 transition-colors duration-300">
         <FormLabel>
-          <div className="grid grid-cols-[auto,1fr] gap-2">
+          <div className="grid grid-cols-[auto_1fr] gap-2">
             <span className="text-slate-500">{index}.</span>
             <span className="text-space-gray">{`${question}`}</span>
           </div>

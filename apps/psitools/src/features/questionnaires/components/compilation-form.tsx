@@ -38,7 +38,7 @@ import { cn } from '@/utils/cn';
 
 const formSchema = z.object({
   therapistName: z.string().min(1, { message: 'Nome è obbligatorio' }),
-  therapistlastName: z.string().min(1, { message: 'Cognome è obbligatorio' }),
+  therapistLastname: z.string().min(1, { message: 'Cognome è obbligatorio' }),
   modality: z.enum(['autonoma_presenza', 'intervista', 'accompagnatore']),
   date: z.date(),
   time: z.string(),
@@ -80,11 +80,11 @@ export default function CompilationForm({
         api.therapist.findUnique.queryOptions(),
       );
       const therapistName = therapist?.user?.firstName || '';
-      const therapistlastName = therapist?.user?.lastName || '';
+      const therapistLastname = therapist?.user?.lastName || '';
 
       return {
         therapistName,
-        therapistlastName,
+        therapistLastname,
         modality: 'autonoma_presenza',
         date: new Date(),
         time: new Date().toTimeString().slice(0, 5),
@@ -96,7 +96,7 @@ export default function CompilationForm({
     const queryParams = new URLSearchParams();
 
     queryParams.set('therapistName', data.therapistName);
-    queryParams.set('therapistlastName', data.therapistlastName);
+    queryParams.set('therapistLastname', data.therapistLastname);
     queryParams.set('modality', data.modality);
 
     const dateString = data.date.toISOString().split('T')[0];
@@ -256,7 +256,7 @@ export default function CompilationForm({
 
             <FormField
               control={form.control}
-              name="therapistlastName"
+              name="therapistLastname"
               defaultValue=""
               render={({ field }) => (
                 <FormItem>

@@ -11,7 +11,7 @@ export default function PatientLayout(props: Props) {
 
   return (
     <ExportProvider>
-      <div className="h-[calc(100svh_-_var(--header-height))]">{children}</div>
+      <div className="h-[calc(100svh-var(--header-height))]">{children}</div>
     </ExportProvider>
   );
 }

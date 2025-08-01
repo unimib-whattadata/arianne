@@ -93,7 +93,7 @@ export default function NuovaNotaPage() {
       <Card className="p-4">
         <Form {...form}>
           <form className="space-y-4">
-            <div className="grid grid-cols-[1fr,_auto] grid-rows-[auto,_1fr] items-center gap-2">
+            <div className="grid grid-cols-[1fr_auto] grid-rows-[auto_1fr] items-center gap-2">
               <FormField
                 control={form.control}
                 name="title"

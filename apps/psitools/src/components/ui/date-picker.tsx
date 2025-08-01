@@ -27,7 +27,7 @@ export const DatePicker = (props: InputProps) => {
           variant="outline"
           tabIndex={tabIndex}
           className={cn(
-            'font-default border-primary focus:ring-primary flex min-h-[2.5rem] w-full items-center justify-between rounded-md border bg-gray-10 px-2.5 py-0 text-space-gray hover:bg-white hover:text-slate-200 disabled:cursor-not-allowed disabled:opacity-50 data-[state=open]:bg-gray-10',
+            'font-default border-primary focus:ring-primary flex min-h-10 w-full items-center justify-between rounded-md border bg-gray-10 px-2.5 py-0 text-space-gray hover:bg-white hover:text-slate-200 disabled:cursor-not-allowed disabled:opacity-50 data-[state=open]:bg-gray-10',
             !selected && 'text-muted-foreground',
             className,
           )}

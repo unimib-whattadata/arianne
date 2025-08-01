@@ -50,9 +50,9 @@ export const ItemStepOne = (props: Props) => {
         })
       }
     >
-      <div className="grid grid-cols-[1fr,auto,auto,auto] items-center rounded-md transition-colors duration-300">
+      <div className="grid grid-cols-[1fr_auto_auto_auto] items-center rounded-md transition-colors duration-300">
         <FormLabel>
-          <div className="grid grid-cols-[auto,1fr] gap-2">
+          <div className="grid grid-cols-[auto_1fr] gap-2">
             <span className="text-slate-500">{question.index}.</span>
             <span className="text-space-gray">{`${question.text}`}</span>
           </div>

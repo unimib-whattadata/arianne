@@ -571,7 +571,7 @@ const EventDetails: React.FC<EventViewProps> = ({
               <label className="col-span-1 block text-[14px]">
                 Aggiungi link Meet
               </label>
-              <div className="relative grid grid-cols-[1fr,auto] gap-2">
+              <div className="relative grid grid-cols-[1fr_auto] gap-2">
                 <div className="group relative">
                   <Input
                     type="text"

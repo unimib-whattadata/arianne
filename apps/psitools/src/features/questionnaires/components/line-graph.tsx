@@ -179,7 +179,7 @@ export const LineGraph = (props: LineGraphProps) => {
   return (
     <div>
       <span className="font-bold">{label}</span>
-      <div className="relative my-10 grid grid-cols-[max-content,1fr] items-center gap-x-4">
+      <div className="relative my-10 grid grid-cols-[max-content_1fr] items-center gap-x-4">
         <Bar score={scoresArr[0].score} T={scoresArr[0].T} />
         {isComparison && (
           <Bar

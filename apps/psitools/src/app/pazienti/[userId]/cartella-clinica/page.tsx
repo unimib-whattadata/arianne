@@ -1,6 +1,6 @@
 'use client';
 
-import type { KeycloakUser, Session } from '@arianne/auth';
+import type { Session } from '@arianne/supabase';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import format from 'date-fns/format';
@@ -11,7 +11,6 @@ import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-import { authClient } from '@/auth/client';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
@@ -56,7 +55,7 @@ export default function CartellaClinica() {
   const [edit, setEdit] = useState(false);
 
   const { mutateAsync } = useMutation(
-    api.medicalRecord.update.mutationOptions({
+    api.medicalRecords.update.mutationOptions({
       onSuccess: () => {
         toast.success('Cartella clinica aggiornata');
         setEdit(false);
@@ -67,10 +66,10 @@ export default function CartellaClinica() {
       },
       onSettled: async () => {
         await queryClient.invalidateQueries(
-          api.patient.findUnique.queryFilter(),
+          api.patients.findUnique.queryFilter(),
         );
         await queryClient.invalidateQueries(
-          api.therapist.findUnique.queryFilter(),
+          api.therapists.findUnique.queryFilter(),
         );
       },
     }),
@@ -210,8 +209,8 @@ export default function CartellaClinica() {
 
   if (edit) {
     return (
-      <div className="relative grid h-full-safe grid-rows-[repeat(2,min-content)] overflow-auto p-4 pt-0">
-        <div className="sticky top-0 z-10 bg-background pb-3">
+      <div className="h-full-safe relative grid grid-rows-[repeat(2,min-content)] overflow-auto p-4 pt-0">
+        <div className="bg-background sticky top-0 z-10 pb-3">
           <h1 className="text-xl font-semibold">Cartella Clinica</h1>
           <div className="flex justify-end">
             <Button variant="ghost" onClick={() => setEdit(false)}>
@@ -241,7 +240,7 @@ export default function CartellaClinica() {
                       <FormItem>
                         <FormLabel>
                           Nome
-                          <span className="ml-2 text-primary">
+                          <span className="text-primary ml-2">
                             Obbligatorio
                           </span>
                         </FormLabel>
@@ -261,7 +260,7 @@ export default function CartellaClinica() {
                       <FormItem>
                         <FormLabel>
                           Cognome
-                          <span className="ml-2 text-primary">
+                          <span className="text-primary ml-2">
                             Obbligatorio
                           </span>
                         </FormLabel>
@@ -569,13 +568,13 @@ export default function CartellaClinica() {
                 >
                   {fieldsCaregivers.length > 0 && (
                     <>
-                      <p className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                      <p className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                         Nome
-                        <span className="ml-2 text-primary">Obbligatorio</span>
+                        <span className="text-primary ml-2">Obbligatorio</span>
                       </p>
-                      <p className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                      <p className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                         Parentela
-                        <span className="ml-2 text-primary">Obbligatorio</span>
+                        <span className="text-primary ml-2">Obbligatorio</span>
                       </p>
                     </>
                   )}
@@ -679,7 +678,7 @@ export default function CartellaClinica() {
                       <FormItem>
                         <FormLabel>
                           Email
-                          <span className="ml-2 text-primary">
+                          <span className="text-primary ml-2">
                             Obbligatorio
                           </span>
                         </FormLabel>
@@ -698,7 +697,7 @@ export default function CartellaClinica() {
                       <FormItem>
                         <FormLabel>
                           Numero di telefono
-                          <span className="ml-2 text-primary">
+                          <span className="text-primary ml-2">
                             Obbligatorio
                           </span>
                         </FormLabel>
@@ -943,9 +942,9 @@ export default function CartellaClinica() {
                   className={cn('grid gap-3', fieldsTags.length === 0 && 'p-0')}
                 >
                   {fieldsTags.length > 0 && (
-                    <p className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    <p className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                       Tag
-                      <span className="ml-2 text-primary">Obbligatorio</span>
+                      <span className="text-primary ml-2">Obbligatorio</span>
                     </p>
                   )}
                   {fieldsTags.map((field, index) => (
@@ -1007,7 +1006,7 @@ export default function CartellaClinica() {
                       !(patient.user.accounts.length > 0) && 'p-0',
                     )}
                   >
-                    <p className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    <p className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                       Nome utente
                     </p>
                     <p>{patient.user.username}</p>
@@ -1029,7 +1028,7 @@ export default function CartellaClinica() {
                     <Button
                       variant="link"
                       className="w-auto p-0"
-                      onClick={() => void addPatient(patient.user!)}
+                      onClick={() => void addPatient(patient.user)}
                     >
                       Crea account paziente
                     </Button>
@@ -1044,8 +1043,8 @@ export default function CartellaClinica() {
   }
 
   return (
-    <div className="relative grid h-full-safe grid-rows-[repeat(2,min-content)] overflow-auto p-4 pt-0">
-      <div className="sticky top-0 z-10 bg-background pb-3">
+    <div className="h-full-safe relative grid grid-rows-[repeat(2,min-content)] overflow-auto p-4 pt-0">
+      <div className="bg-background sticky top-0 z-10 pb-3">
         <h1 className="text-xl font-semibold">Cartella Clinica</h1>
         <div className="flex justify-end">
           <Button className="ml-2" onClick={() => setEdit(true)}>
@@ -1059,27 +1058,27 @@ export default function CartellaClinica() {
             <CardHeader className="font-semibold">Dati anamnestici</CardHeader>
             <CardContent className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <p className="text-sm font-medium leading-none text-muted-foreground">
+                <p className="text-muted-foreground text-sm leading-none font-medium">
                   Nome
                 </p>
                 <p>{patient.user.firstName}</p>
               </div>
               <div className="space-y-2">
-                <p className="text-sm font-medium leading-none text-muted-foreground">
+                <p className="text-muted-foreground text-sm leading-none font-medium">
                   Cognome
                 </p>
                 <p>{patient.user.lastName}</p>
               </div>
 
               <div className="col-span-2 space-y-2">
-                <p className="text-sm font-medium leading-none text-muted-foreground">
+                <p className="text-muted-foreground text-sm leading-none font-medium">
                   Nome d'elezione
                 </p>
                 <p>{patient.medicalRecord.alias || '-'}</p>
               </div>
 
               <div className="col-span-2 space-y-2">
-                <p className="text-sm font-medium leading-none text-muted-foreground">
+                <p className="text-muted-foreground text-sm leading-none font-medium">
                   Data di nascita
                 </p>
                 <p>
@@ -1092,43 +1091,43 @@ export default function CartellaClinica() {
               </div>
 
               <div className="col-span-2 space-y-2">
-                <p className="text-sm font-medium leading-none text-muted-foreground">
+                <p className="text-muted-foreground text-sm leading-none font-medium">
                   Luogo di nascita
                 </p>
                 <p>{patient.medicalRecord.birthPlace || '-'}</p>
               </div>
               <div className="space-y-2">
-                <p className="text-sm font-medium leading-none text-muted-foreground">
+                <p className="text-muted-foreground text-sm leading-none font-medium">
                   Sesso
                 </p>
                 <p>{patient.medicalRecord.sex || '-'}</p>
               </div>
               <div className="space-y-2">
-                <p className="text-sm font-medium leading-none text-muted-foreground">
+                <p className="text-muted-foreground text-sm leading-none font-medium">
                   Genere
                 </p>
                 <p>{patient.medicalRecord.gender || '-'}</p>
               </div>
               <div className="space-y-2">
-                <p className="text-sm font-medium leading-none text-muted-foreground">
+                <p className="text-muted-foreground text-sm leading-none font-medium">
                   Pronome
                 </p>
                 <p>{patient.medicalRecord.pronoun || '-'}</p>
               </div>
               <div className="col-span-2 space-y-2">
-                <p className="text-sm font-medium leading-none text-muted-foreground">
+                <p className="text-muted-foreground text-sm leading-none font-medium">
                   Professione
                 </p>
                 <p>{patient.medicalRecord.occupation || '-'}</p>
               </div>
               <div className="col-span-2 space-y-2">
-                <p className="text-sm font-medium leading-none text-muted-foreground">
+                <p className="text-muted-foreground text-sm leading-none font-medium">
                   Istruzione
                 </p>
                 <p>{patient.medicalRecord.education || '-'}</p>
               </div>
               <div className="col-span-2 space-y-2">
-                <p className="text-sm font-medium leading-none text-muted-foreground">
+                <p className="text-muted-foreground text-sm leading-none font-medium">
                   Note ulteriori
                 </p>
                 <p
@@ -1144,31 +1143,31 @@ export default function CartellaClinica() {
             <CardHeader className="font-semibold">Dati familiari</CardHeader>
             <CardContent className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <p className="text-sm font-medium leading-none text-muted-foreground">
+                <p className="text-muted-foreground text-sm leading-none font-medium">
                   Nome madre
                 </p>
                 <p>{patient.medicalRecord.motherName || '-'}</p>
               </div>
               <div className="space-y-2">
-                <p className="text-sm font-medium leading-none text-muted-foreground">
+                <p className="text-muted-foreground text-sm leading-none font-medium">
                   Stato madre
                 </p>
                 <p>{patient.medicalRecord.motherStatus || '-'}</p>
               </div>
               <div className="space-y-2">
-                <p className="text-sm font-medium leading-none text-muted-foreground">
+                <p className="text-muted-foreground text-sm leading-none font-medium">
                   Nome padre
                 </p>
                 <p>{patient.medicalRecord.patherName || '-'}</p>
               </div>
               <div className="space-y-2">
-                <p className="text-sm font-medium leading-none text-muted-foreground">
+                <p className="text-muted-foreground text-sm leading-none font-medium">
                   Stato padre
                 </p>
                 <p>{patient.medicalRecord.fatherStatus || '-'}</p>
               </div>
               <div className="col-span-2 space-y-2">
-                <p className="text-sm font-medium leading-none text-muted-foreground">
+                <p className="text-muted-foreground text-sm leading-none font-medium">
                   Note ulteriori
                 </p>
                 <p
@@ -1189,13 +1188,13 @@ export default function CartellaClinica() {
                 ).map((caregiver) => (
                   <Fragment key={caregiver.name}>
                     <div className="space-y-2">
-                      <p className="text-sm font-medium leading-none text-muted-foreground">
+                      <p className="text-muted-foreground text-sm leading-none font-medium">
                         Nome
                       </p>
                       <p>{caregiver.name}</p>
                     </div>
                     <div className="space-y-2">
-                      <p className="text-sm font-medium leading-none text-muted-foreground">
+                      <p className="text-muted-foreground text-sm leading-none font-medium">
                         Parentela
                       </p>
                       <p>{caregiver.kinship}</p>
@@ -1203,7 +1202,7 @@ export default function CartellaClinica() {
                   </Fragment>
                 ))
               ) : (
-                <p className="text-sm font-medium leading-none">
+                <p className="text-sm leading-none font-medium">
                   Nessun accompagnatore selezionato
                 </p>
               )}
@@ -1214,13 +1213,13 @@ export default function CartellaClinica() {
             <CardHeader className="font-semibold">Contatti</CardHeader>
             <CardContent className="grid gap-4">
               <div className="space-y-2">
-                <p className="text-sm font-medium leading-none text-muted-foreground">
+                <p className="text-muted-foreground text-sm leading-none font-medium">
                   Email
                 </p>
                 <p>{patient.user.email}</p>
               </div>
               <div className="space-y-2">
-                <p className="text-sm font-medium leading-none text-muted-foreground">
+                <p className="text-muted-foreground text-sm leading-none font-medium">
                   Numero di telefono
                 </p>
                 <p>{patient.user.phone}</p>
@@ -1241,14 +1240,14 @@ export default function CartellaClinica() {
               )}
 
               <div className="space-y-2">
-                <p className="text-sm font-medium leading-none text-muted-foreground">
+                <p className="text-muted-foreground text-sm leading-none font-medium">
                   Ipotesi diagnostica
                 </p>
                 <p>{patient.medicalRecord.diagnosticHypothesis || '-'}</p>
               </div>
 
               <div className="space-y-2">
-                <p className="text-sm font-medium leading-none text-muted-foreground">
+                <p className="text-muted-foreground text-sm leading-none font-medium">
                   Sintomi
                 </p>
                 <p
@@ -1259,7 +1258,7 @@ export default function CartellaClinica() {
               </div>
 
               <div className="space-y-2">
-                <p className="text-sm font-medium leading-none text-muted-foreground">
+                <p className="text-muted-foreground text-sm leading-none font-medium">
                   Motivo della presa in carico
                 </p>
                 <p
@@ -1270,14 +1269,14 @@ export default function CartellaClinica() {
               </div>
 
               <div className="space-y-2">
-                <p className="text-sm font-medium leading-none text-muted-foreground">
+                <p className="text-muted-foreground text-sm leading-none font-medium">
                   Interventi precedenti
                 </p>
                 <p>{patient.medicalRecord.previousInterventions || '-'}</p>
               </div>
 
               <div className="space-y-2">
-                <p className="text-sm font-medium leading-none text-muted-foreground">
+                <p className="text-muted-foreground text-sm leading-none font-medium">
                   Note ulteriori
                 </p>
                 <p
@@ -1293,14 +1292,14 @@ export default function CartellaClinica() {
             <CardHeader className="font-semibold">Intervento</CardHeader>
             <CardContent className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <p className="text-sm font-medium leading-none text-muted-foreground">
+                <p className="text-muted-foreground text-sm leading-none font-medium">
                   Stato
                 </p>
                 <StateBadge state={patient.medicalRecord.state} />
               </div>
 
               <div className="col-span-2 space-y-2">
-                <p className="text-sm font-medium leading-none text-muted-foreground">
+                <p className="text-muted-foreground text-sm leading-none font-medium">
                   Obiettivi
                 </p>
                 <p
@@ -1312,7 +1311,7 @@ export default function CartellaClinica() {
 
               <div className="col-span-2 space-y-2">
                 <p
-                  className="text-sm font-medium leading-none text-muted-foreground"
+                  className="text-muted-foreground text-sm leading-none font-medium"
                   title="Piano terapeutico"
                 >
                   Piano terapeutico
@@ -1324,13 +1323,13 @@ export default function CartellaClinica() {
                 />
               </div>
               <div className="space-y-2">
-                <p className="text-sm font-medium leading-none text-muted-foreground">
+                <p className="text-muted-foreground text-sm leading-none font-medium">
                   Frequenza
                 </p>
                 <p>{patient.medicalRecord.frequency || '-'}</p>
               </div>
               <div className="space-y-2">
-                <p className="text-sm font-medium leading-none text-muted-foreground">
+                <p className="text-muted-foreground text-sm leading-none font-medium">
                   Data presa in carico
                 </p>
                 <p>
@@ -1351,14 +1350,14 @@ export default function CartellaClinica() {
                 (patient.medicalRecord.tags as PrismaJson.TagType[]).map(
                   (tag) => (
                     <Fragment key={tag.text}>
-                      <p className="text-sm font-medium leading-none text-muted-foreground">
+                      <p className="text-muted-foreground text-sm leading-none font-medium">
                         {tag.text}
                       </p>
                     </Fragment>
                   ),
                 )
               ) : (
-                <p className="text-sm font-medium leading-none">
+                <p className="text-sm leading-none font-medium">
                   Nessun tag selezionato
                 </p>
               )}
@@ -1369,13 +1368,13 @@ export default function CartellaClinica() {
             <CardContent className="grid gap-4">
               {patient.user.accounts.length > 0 ? (
                 <>
-                  <p className="text-sm font-medium leading-none text-muted-foreground">
+                  <p className="text-muted-foreground text-sm leading-none font-medium">
                     Nome utente
                   </p>
                   <p>{patient.user.username}</p>
                 </>
               ) : (
-                <p className="text-sm font-medium leading-none">
+                <p className="text-sm leading-none font-medium">
                   Nessun account paziente
                 </p>
               )}

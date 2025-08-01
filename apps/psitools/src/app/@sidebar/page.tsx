@@ -93,7 +93,7 @@ export default function AppSidebarDefaultSlot({
         <NavMain items={NAV_MAIN} />
         <NavSecondary items={NAV_SECONDARY} className="mt-auto" />
       </SidebarContent>
-      <Separator className="mx-auto h-0.5 w-[calc(100%-theme(spacing.6))] bg-muted" />
+      <Separator className="mx-auto h-0.5 w-[calc(100%-(--spacing(6)))] bg-muted" />
       <SidebarFooter>
         {loading || !session?.user ? (
           <SidebarMenuButton

@@ -299,7 +299,7 @@ export const MultiSelect = React.forwardRef<
           align="start"
           onEscapeKeyDown={() => setIsPopoverOpen(false)}
         >
-          <Command className="min-w-[var(--radix-popover-trigger-width)]">
+          <Command className="min-w-(--radix-popover-trigger-width)">
             {searchable && (
               <CommandInput
                 placeholder="Cerca..."

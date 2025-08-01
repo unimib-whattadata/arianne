@@ -16,9 +16,9 @@ const PatientsTable = () => {
   const { data: events } = useQuery(api.event.getAll.queryOptions());
 
   const { data: patients } = useQuery(
-    api.patient.findMany.queryOptions(
+    api.patients.findRecent.queryOptions(
       {
-        recent: user?.recentPatients,
+        recent: user?.recentPatients || [],
       },
       {
         enabled: !!user,
@@ -45,7 +45,7 @@ const PatientsTable = () => {
           Pazienti Recenti
         </CardTitle>
         <Link
-          className="px-0 text-[14px] text-primary hover:underline"
+          className="text-primary px-0 text-[14px] hover:underline"
           href={'/pazienti'}
         >
           Vedi tutti
@@ -53,7 +53,7 @@ const PatientsTable = () => {
       </CardHeader>
       <CardContent>
         {/* Header Grid */}
-        <div className="grid w-full grid-cols-[1fr_1fr_1fr_1fr_40px] gap-4 bg-muted px-4 py-3 text-[14px] font-semibold">
+        <div className="bg-muted grid w-full grid-cols-[1fr_1fr_1fr_1fr_40px] gap-4 px-4 py-3 text-[14px] font-semibold">
           <p>Paziente</p>
           <p>Tag</p>
           <p>Ultima visita</p>
@@ -69,7 +69,7 @@ const PatientsTable = () => {
                 index % 2 === 0 ? 'bg-white' : 'bg-gray-50',
               )}
             >
-              <span className="overflow-hidden text-ellipsis whitespace-nowrap font-medium">
+              <span className="overflow-hidden font-medium text-ellipsis whitespace-nowrap">
                 {patient.user?.name || 'Sconosciuto'}
               </span>
               <span className="overflow-hidden text-ellipsis whitespace-nowrap">
@@ -106,7 +106,7 @@ const PatientsTable = () => {
               </span>
               <Link
                 href={`/pazienti/${patient.id}/cartella-clinica`}
-                className="text-right text-primary hover:underline"
+                className="text-primary text-right hover:underline"
               >
                 Apri
               </Link>

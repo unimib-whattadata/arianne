@@ -34,7 +34,7 @@ export const SettingsBar = <_TData,>() => {
     <div className="relative flex items-center justify-between gap-2">
       <Link
         href="/impostazioni"
-        className="w-11 rounded-md border-[1px] border-primary bg-background p-2 text-primary"
+        className="w-11 rounded-md border border-primary bg-background p-2 text-primary"
       >
         <Settings className="m-auto h-4 w-4" />
       </Link>

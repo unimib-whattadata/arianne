@@ -50,7 +50,7 @@ const WIDTH_DICT = {
   47: 'w-[30.08rem]',
   48: 'w-[30.72rem]',
   49: 'w-[31.36rem]',
-  50: 'w-[32rem]',
+  50: 'w-lg',
   51: 'w-[32.64rem]',
   52: 'w-[33.28rem]',
   53: 'w-[33.92rem]',
@@ -75,7 +75,7 @@ const WIDTH_DICT = {
   72: 'w-[46.08rem]',
   73: 'w-[46.72rem]',
   74: 'w-[47.36rem]',
-  75: 'w-[48rem]',
+  75: 'w-3xl',
   76: 'w-[48.64rem]',
   77: 'w-[49.28rem]',
   78: 'w-[49.92rem]',
@@ -100,7 +100,7 @@ const WIDTH_DICT = {
   97: 'w-[62.08rem]',
   98: 'w-[62.72rem]',
   99: 'w-[63.36rem]',
-  100: 'w-[64rem]',
+  100: 'w-5xl',
 } as Record<string, string>;
 
 interface Props {
@@ -115,11 +115,11 @@ export const Graph = (props: Props) => {
 
   return (
     <div className="relative grid">
-      <div className="grid grid-cols-[auto,1fr] place-items-center">
+      <div className="grid grid-cols-[auto_1fr] place-items-center">
         <div className="w-12">
           <span className="text-primary">T{prevT}</span>
         </div>
-        <div className="relative h-4 w-[64rem] rounded-md bg-gray-300">
+        <div className="relative h-4 w-5xl rounded-md bg-gray-300">
           <div className="absolute bottom-0 left-0 flex items-end justify-end">
             <div
               className={cn(
@@ -135,11 +135,11 @@ export const Graph = (props: Props) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-[auto,1fr] place-items-center">
+      <div className="grid grid-cols-[auto_1fr] place-items-center">
         <div className="w-12">
           <span className="text-primary">T{nextT}</span>
         </div>
-        <div className="relative h-4 w-[64rem] rounded-md bg-gray-300">
+        <div className="relative h-4 w-5xl rounded-md bg-gray-300">
           <div className="absolute bottom-0 left-0 flex items-end justify-end">
             <div
               className={cn(

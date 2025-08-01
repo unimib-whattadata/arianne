@@ -95,7 +95,7 @@ export const Combobox = (props: ComboboxProps) => {
             {options.map((option) => (
               <CommandItem
                 className={cn(
-                  'font-default relative flex w-full cursor-pointer select-none items-center justify-between rounded-md px-2.5 py-1.5 text-sm text-gray-500 outline-none transition-colors hover:bg-slate-200 focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+                  'font-default relative flex w-full cursor-pointer select-none items-center justify-between rounded-md px-2.5 py-1.5 text-sm text-gray-500 outline-none transition-colors hover:bg-slate-200 focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50',
                   value === option.value && 'bg-primary-200 hover:bg-slate-200',
                   itemClassName,
                 )}
@@ -185,7 +185,7 @@ export function ComboboxPopover(props: ComboboxProps) {
                   key={option.value}
                   onSelect={handleOnSelect}
                   className={cn(
-                    'font-default relative flex w-full cursor-pointer select-none items-center justify-between rounded-md px-2.5 py-1.5 text-sm text-gray-500 outline-none transition-colors hover:bg-slate-200 focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+                    'font-default relative flex w-full cursor-pointer select-none items-center justify-between rounded-md px-2.5 py-1.5 text-sm text-gray-500 outline-none transition-colors hover:bg-slate-200 focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50',
                     value === option.value &&
                       'bg-primary-200 hover:bg-slate-200',
                     itemClassName,

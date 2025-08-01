@@ -95,7 +95,7 @@ export const ScoreCard = (props: Props) => {
   return (
     <div
       className={cn(
-        'm-auto flex min-w-[11rem] flex-col justify-end space-y-2 p-6',
+        'm-auto flex min-w-44 flex-col justify-end space-y-2 p-6',
         props.className,
       )}
     >

@@ -78,7 +78,7 @@ export default function AdministrationResultsPswq16Page() {
             <h2 className="font-h2 pb-4">
               Depression Anxiety Stress Scales 21 (DASS-21)
             </h2>
-            <div className="flex w-[50rem] flex-col">
+            <div className="flex w-200 flex-col">
               <AdministrationResultsTable
                 columns={columnsCompare}
                 data={[prevAdministration, nextAdministration]}

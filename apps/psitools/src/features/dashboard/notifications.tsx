@@ -132,7 +132,7 @@ const NotificationCard = () => {
                   <Button
                     variant={notification.read ? 'outline' : 'default'}
                     size="sm"
-                    className="w-fit border-[1px] border-primary"
+                    className="w-fit border border-primary"
                     onClick={() =>
                       updateNotifications.mutate({
                         id: notification.id,
@@ -143,7 +143,7 @@ const NotificationCard = () => {
                     {notification.read ? (
                       <MailOpen className="text-primary" />
                     ) : (
-                      <Mail className="border-1 text-white" />
+                      <Mail className="border text-white" />
                     )}
                   </Button>
                 </div>

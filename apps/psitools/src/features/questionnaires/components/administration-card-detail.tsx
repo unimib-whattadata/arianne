@@ -37,7 +37,7 @@ export const AdministrationCardDetail = (
           <CardTitle className="font-h2">Somministrazione</CardTitle>
         </CardHeader>
         <CardContent className="pb-0">
-          <div className="grid grid-cols-[auto,_1fr] grid-rows-3 items-center gap-x-2 gap-y-2">
+          <div className="grid grid-cols-[auto_1fr] grid-rows-3 items-center gap-x-2 gap-y-2">
             <ClipboardList className="text-slate-400" size={18} />
             <span>{testType}</span>
 

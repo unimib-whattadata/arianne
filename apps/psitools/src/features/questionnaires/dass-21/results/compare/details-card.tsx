@@ -150,7 +150,7 @@ export const DetailsCard = (props: Props) => {
             </div>
           </CardTitle>
         </CardHeader>
-        <CardContent className="grid w-[50rem] items-center gap-4">
+        <CardContent className="grid w-200 items-center gap-4">
           <ToggleGroup
             type="single"
             value={scale}

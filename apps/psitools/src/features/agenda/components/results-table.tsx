@@ -43,7 +43,7 @@ const EventSearchTable: React.FC<Props> = ({
                 idx % 2 === 0 ? 'bg-[#f6f9fc]' : 'bg-white'
               } hover:bg-[#EFF3F7]`}
             >
-              <div className="grid w-3/4 grid-cols-[auto_auto_minmax(100px,_1fr)_1fr] gap-8">
+              <div className="grid w-3/4 grid-cols-[auto_auto_minmax(100px,1fr)_1fr] gap-8">
                 <p className="min-w-32 p-3">
                   {format(event.date, 'dd/MM/yyyy')}
                 </p>

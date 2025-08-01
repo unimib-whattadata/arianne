@@ -51,7 +51,7 @@ export const Shimmer = ({
   return (
     <div
       className={cn(
-        'from-8% via-18% to-18% animate-shimmering bg-[#78b6f4] bg-gradient-to-r from-[rgb(238_238_238)] via-[rgb(203,203,203)] to-[rgb(238_238_238)]',
+        'from-8% via-18% to-18% animate-shimmering bg-[#78b6f4] bg-linear-to-r from-[rgb(238_238_238)] via-[rgb(203,203,203)] to-[rgb(238_238_238)]',
         className,
       )}
       style={style}

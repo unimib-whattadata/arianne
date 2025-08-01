@@ -118,7 +118,7 @@ export const useColumns = (patientMap: Map<string, string>) => {
               <Button
                 variant={notification.read ? 'outline' : 'default'}
                 size="sm"
-                className="w-fit border-[1px] border-primary"
+                className="w-fit border border-primary"
                 onClick={() =>
                   updateNotifications.mutate({
                     id: notification.id,
@@ -129,7 +129,7 @@ export const useColumns = (patientMap: Map<string, string>) => {
                 {notification.read ? (
                   <MailOpen className="text-primary" />
                 ) : (
-                  <Mail className="border-1 text-white" />
+                  <Mail className="border text-white" />
                 )}
               </Button>
             </div>

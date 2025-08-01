@@ -8,7 +8,7 @@ export default function ChatsPatientPage() {
   const { userId } = useParams<{ userId: string }>();
 
   return (
-    <main className="relative mx-auto grid h-full-safe w-full grid-rows-[_auto,1fr,_auto] p-2">
+    <main className="relative mx-auto grid h-full-safe w-full grid-rows-[auto_1fr_auto] p-2">
       <Chat chatId={userId} />
       <ChatInput chatId={userId} />
     </main>

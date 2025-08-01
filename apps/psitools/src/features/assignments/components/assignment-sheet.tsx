@@ -603,7 +603,7 @@ export const AssignmentSheet = React.forwardRef<
                                 </Button>
                               </FormControl>
                             </PopoverTrigger>
-                            <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
+                            <PopoverContent className="w-(--radix-popover-trigger-width) p-0">
                               <Command>
                                 <CommandInput
                                   placeholder="Cerca assegnazione..."
@@ -709,7 +709,7 @@ export const AssignmentSheet = React.forwardRef<
                                 <SelectValue placeholder="Ora" />
                               </SelectTrigger>
                               <SelectContent
-                                className="max-h-60 min-w-[var(--radix-popper-anchor-width)]"
+                                className="max-h-60 min-w-(--radix-popper-anchor-width)"
                                 onCloseAutoFocus={(e) => e.preventDefault()}
                               >
                                 {hours.map((hour) => (
@@ -755,7 +755,7 @@ export const AssignmentSheet = React.forwardRef<
                                 <SelectValue placeholder="Minuti" />
                               </SelectTrigger>
                               <SelectContent
-                                className="max-h-60 min-w-[var(--radix-popper-anchor-width)]"
+                                className="max-h-60 min-w-(--radix-popper-anchor-width)"
                                 onCloseAutoFocus={(e) => e.preventDefault()}
                               >
                                 {minutes.map((minute) => (

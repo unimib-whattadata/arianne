@@ -26,7 +26,7 @@ export const Details = (props: Props) => {
   if (!prevItem || !nextItem) return null;
 
   return (
-    <div className="mt-4 grid w-[644px] grid-cols-[min-content,1fr] place-items-start gap-4">
+    <div className="mt-4 grid w-[644px] grid-cols-[min-content_1fr] place-items-start gap-4">
       <span className="text-primary">T{prevT}</span>
       <div className="border-primary rounded-md border bg-card p-4">
         <p className="font-bold">

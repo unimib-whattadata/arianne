@@ -35,7 +35,7 @@ export const ComparisonLabels = (props: Props) => {
   };
 
   return (
-    <div className="m-auto flex min-w-[11rem] flex-col justify-center p-6">
+    <div className="m-auto flex min-w-44 flex-col justify-center p-6">
       <h1 className="pr-1 text-center text-base font-normal">{baseText} </h1>
       <span className="pb-3 text-center font-semibold">
         {getDifferenceText(difference)}

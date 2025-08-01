@@ -11,7 +11,7 @@ export const SingleLabel = (props: Props) => {
   const { title, score } = props;
 
   return (
-    <div className="m-auto flex min-w-[11rem] flex-col justify-center p-6">
+    <div className="m-auto flex min-w-44 flex-col justify-center p-6">
       <h1 className="pr-1 text-center text-base font-normal">{title} </h1>
 
       <div className="flex h-16 w-16 items-center justify-center self-center rounded-full bg-emerald-500 p-4">

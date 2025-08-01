@@ -2,7 +2,7 @@ import { createContext, useContext } from 'react';
 
 interface NewCompilationContextType {
   therapistName?: string;
-  therapistLastName?: string;
+  therapistLastname?: string;
 }
 
 const NewCompilationContext = createContext<NewCompilationContextType>({});
@@ -10,15 +10,15 @@ const NewCompilationContext = createContext<NewCompilationContextType>({});
 export const NewCompilationProvider = ({
   children,
   therapistName,
-  therapistLastName,
+  therapistLastname,
 }: {
   children: React.ReactNode;
   therapistName?: string;
-  therapistLastName?: string;
+  therapistLastname?: string;
 }) => {
   return (
     <NewCompilationContext.Provider
-      value={{ therapistName, therapistLastName }}
+      value={{ therapistName, therapistLastname }}
     >
       {children}
     </NewCompilationContext.Provider>

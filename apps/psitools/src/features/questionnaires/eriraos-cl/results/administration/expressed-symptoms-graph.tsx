@@ -46,7 +46,7 @@ const WIDTH_DICT = {
   43: 'w-[59.83rem]',
   44: 'w-[61.22rem]',
   45: 'w-[62.61rem]',
-  46: 'w-[64rem]',
+  46: 'w-5xl',
 } as Record<string, string>;
 
 interface Props {
@@ -58,7 +58,7 @@ export const ExpressedSymptomsGraph = (props: Props) => {
   const { expressedSymptomsCount, cutOff } = props;
 
   return (
-    <div className="relative h-4 w-[64rem] rounded-md bg-gray-300">
+    <div className="relative h-4 w-5xl rounded-md bg-gray-300">
       <div className="absolute bottom-0 left-0 flex items-end justify-end">
         <div
           className={cn(

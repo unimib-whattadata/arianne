@@ -133,7 +133,7 @@ export const Graph = (props: Props) => {
     <div className="relative">
       <span className="font-bold">{label}</span>
       <div className="my-10 space-y-4">
-        <div className="grid grid-cols-[1rem,1fr] place-items-center gap-4">
+        <div className="grid grid-cols-[1rem_1fr] place-items-center gap-4">
           <span className="text-primary">T{prevT}</span>
           <div
             style={{ width: `${SIZE}rem` }}
@@ -162,7 +162,7 @@ export const Graph = (props: Props) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-[1rem,1fr] place-items-center gap-4">
+        <div className="grid grid-cols-[1rem_1fr] place-items-center gap-4">
           <span className="text-primary">T{nextT}</span>
           <div
             style={{ width: `${SIZE}rem` }}

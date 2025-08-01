@@ -44,7 +44,7 @@ export const ScoreCard = (props: Props) => {
           </div>
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex w-[50rem] items-center gap-12">
+      <CardContent className="flex w-200 items-center gap-12">
         {toggleGraph === 'chart' ? (
           <>
             <Chart

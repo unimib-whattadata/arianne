@@ -166,7 +166,7 @@ const ExportSheet: React.FC<ExportSheetProps> = ({ isOpen, onClose }) => {
             <Checkbox
               checked={includeAll}
               onCheckedChange={(val) => toggleAll(Boolean(val))}
-              className="border-1 border border-primary-300"
+              className="border border border-primary-300"
             />
             <p className="text-base">Tutto</p>
           </div>
@@ -179,7 +179,7 @@ const ExportSheet: React.FC<ExportSheetProps> = ({ isOpen, onClose }) => {
               <Checkbox
                 checked={includeValues[key]}
                 onCheckedChange={() => toggleSingle(key)}
-                className="border-1 border border-primary-300"
+                className="border border border-primary-300"
               />
               <p className="text-base">{label}</p>
             </div>

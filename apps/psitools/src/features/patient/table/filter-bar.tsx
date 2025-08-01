@@ -49,7 +49,7 @@ export const FilterBar = <TData,>(props: FilterBarProps<TData>) => {
               </p>
             </div>
 
-            <div className="w-[calc(theme(spacing.80)_-_theme(spacing.8))] items-center">
+            <div className="w-[calc(--spacing(80)-(--spacing(8)))] items-center">
               <Label htmlFor="name" className="font-semibold">
                 Stato
               </Label>
@@ -75,7 +75,7 @@ export const FilterBar = <TData,>(props: FilterBarProps<TData>) => {
               />
             </div>
 
-            <div className="w-[calc(theme(spacing.80)_-_theme(spacing.8))] items-center">
+            <div className="w-[calc(--spacing(80)-(--spacing(8)))] items-center">
               <Label htmlFor="cod" className="font-semibold">
                 Codice ID
               </Label>
