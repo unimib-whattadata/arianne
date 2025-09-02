@@ -1,7 +1,5 @@
 'use client';
 
-import type { Assignment } from '@prisma/client';
-import { $Enums } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
 
 import { Accordion } from '@/components/ui/accordion';
@@ -13,34 +11,44 @@ import {
 import { AssignmentSheet } from '@/features/assignments/components/assignment-sheet';
 import { usePatient } from '@/hooks/use-patient';
 import { useTRPC } from '@/trpc/react';
+import type { RouterOutputs } from '@arianne/api';
+import { assignmentTypeEnum } from '@arianne/db/schema';
+
+type Assignments = RouterOutputs['assignments']['get'];
 
 export default function DrivePage() {
   const { patient } = usePatient();
   const api = useTRPC();
 
   const { data: assignments, isLoading } = useQuery(
-    api.assignments.get.queryOptions(patient?.id, {
-      enabled: !!patient,
-      select: (data) => {
-        const grouped = {} as Record<$Enums.AssignmentType, Assignment[]>;
-        for (const type in $Enums.AssignmentType) {
-          grouped[type as $Enums.AssignmentType] = [];
-        }
+    api.assignments.get.queryOptions(
+      { where: { id: patient?.id } },
+      {
+        enabled: !!patient,
+        select: (data) => {
+          const grouped = {} as Record<
+            (typeof assignmentTypeEnum.enumValues)[number],
+            Assignments
+          >;
+          for (const type of assignmentTypeEnum.enumValues) {
+            grouped[type] = [];
+          }
 
-        for (const assignment of data) {
-          grouped[assignment.type].push(assignment);
-        }
+          for (const assignment of data) {
+            grouped[assignment.type].push(assignment);
+          }
 
-        return grouped;
+          return grouped;
+        },
       },
-    }),
+    ),
   );
 
-  const accordionValue = Object.keys($Enums.AssignmentType);
+  const accordionValue = assignmentTypeEnum.enumValues;
 
   return (
-    <div className="relative grid h-full-safe grid-rows-[repeat(2,min-content)] overflow-auto p-4 pt-0">
-      <div className="sticky top-0 z-10 bg-background pb-3">
+    <div className="h-full-safe relative grid grid-rows-[repeat(2,min-content)] overflow-auto p-4 pt-0">
+      <div className="bg-background sticky top-0 z-10 pb-3">
         <h1 className="text-xl font-semibold">Assegnazioni</h1>
         <div className="flex justify-end">
           <AssignmentSheet />
@@ -59,11 +67,11 @@ export default function DrivePage() {
           return (
             <AccordionItem
               key={type}
-              type={type as $Enums.AssignmentType}
-              assignments={assignments[type as $Enums.AssignmentType]}
+              type={type}
+              assignments={assignments[type]}
             >
-              {assignments[type as $Enums.AssignmentType].length > 0 &&
-                assignments[type as $Enums.AssignmentType].map((assignment) => (
+              {assignments[type].length > 0 &&
+                assignments[type].map((assignment) => (
                   <AccordionContent
                     key={assignment.id}
                     assignment={assignment}

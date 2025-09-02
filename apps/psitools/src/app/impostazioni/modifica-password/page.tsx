@@ -4,35 +4,22 @@ import { useQuery } from '@tanstack/react-query';
 import { Loader2, MoveLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
-import { toast } from 'sonner';
+// import { toast } from 'sonner';
 
-import { authClient } from '@/auth/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { useTRPC } from '@/trpc/react';
 
 export default function PasswordPage() {
   const api = useTRPC();
-  const { data } = useQuery(api.therapist.findUnique.queryOptions());
+  const { data } = useQuery(api.therapists.findUnique.queryOptions());
   const [submitting, setSubmitting] = useState(false);
 
-  const restPassword = async () => {
+  const restPassword = /* async */ () => {
     if (submitting || !data?.user) return;
     setSubmitting(true);
-    await authClient.keycloak.resetPassword({
-      id: data.user.accounts[0].accountId,
-      username: data.user.username,
-      fetchOptions: {
-        onSuccess: () => {
-          toast.success('Email di reset password inviata con successo!');
-          setSubmitting(false);
-        },
-        onError: (error) => {
-          toast.error(error.error.message);
-          setSubmitting(false);
-        },
-      },
-    });
+    // TODO: modifica password
+    setSubmitting(false);
   };
 
   return (
@@ -42,7 +29,7 @@ export default function PasswordPage() {
         <CardHeader className="text-sm">
           <p>
             Riceverai una mail per reimpostare la tua password all'indirizzo
-            <strong> {data?.user?.email}</strong>
+            <strong> {data?.profile?.email}</strong>
           </p>
           <p>
             Se non ricevi la mail, controlla la cartella spam o riprova più

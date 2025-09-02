@@ -1,5 +1,3 @@
-import type { Assignment } from '@prisma/client';
-import { $Enums } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 
@@ -9,13 +7,18 @@ import { ADMINISTRATION_TYPES } from '@/features/questionnaires/settings';
 import { useTherapist } from '@/hooks/use-therapist';
 import { useTRPC } from '@/trpc/react';
 import { cn } from '@/utils/cn';
+import type { RouterOutputs } from '@arianne/api';
+import { $Enums } from '@arianne/db/enums';
 
-const AssignmentTable: React.FC = () => {
+type Assignment = RouterOutputs['assignments']['latest'][number];
+
+const AssignmentTable = () => {
   const { user, isLoading } = useTherapist();
 
   const api = useTRPC();
 
   const { data: assignments } = useQuery(api.assignments.latest.queryOptions());
+
   const getAssignmentStatus = (assignment: Assignment) => {
     const today = new Date();
     const assignDate = new Date(assignment.date);
@@ -70,7 +73,7 @@ const AssignmentTable: React.FC = () => {
       </CardHeader>
       <CardContent>
         {/* Header Grid */}
-        <div className="grid w-full grid-cols-[1fr_1fr_1fr_1fr_40px] gap-4 bg-muted px-4 py-3 text-[14px] font-semibold">
+        <div className="bg-muted grid w-full grid-cols-[1fr_1fr_1fr_1fr_40px] gap-4 px-4 py-3 text-[14px] font-semibold">
           <p>Assegnazioni</p>
           <p>Paziente</p>
           <p>Data</p>
@@ -89,8 +92,8 @@ const AssignmentTable: React.FC = () => {
               <span className="overflow-hidden text-ellipsis whitespace-nowrap">
                 {getSheetTitle(assignment)}
               </span>
-              <span className="overflow-hidden text-ellipsis whitespace-nowrap font-medium">
-                {assignment.patient?.user?.name || 'Sconosciuto'}
+              <span className="overflow-hidden font-medium text-ellipsis whitespace-nowrap">
+                {assignment.patient.profile.name || 'Sconosciuto'}
               </span>
               <span>{new Date(assignment.date).toLocaleDateString()}</span>
               <span>
@@ -107,7 +110,7 @@ const AssignmentTable: React.FC = () => {
               </span>
               <Link
                 href={`/pazienti/${assignment.patientId}/assegnazioni`}
-                className="text-right text-primary hover:underline"
+                className="text-primary text-right hover:underline"
               >
                 Apri
               </Link>

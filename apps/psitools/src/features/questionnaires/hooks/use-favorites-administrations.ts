@@ -10,31 +10,30 @@ export const useFavoritesAdministrations = () => {
   const queryClient = useQueryClient();
 
   const { data: favorites, isLoading } = useQuery(
-    api.preferences.getFavoritesAdministrations.queryOptions(
-      {
-        patientId: patient?.id,
-      },
+    api.preferences.getByPatientId.queryOptions(
+      { patientId: patient!.id },
       {
         enabled: !!patient && !isPatientLoading,
-        select: (data) => data?.types,
+        select: (data) => data?.favoriteAdministrations,
       },
     ),
   );
 
   const setFavoritesMutation = useMutation(
-    api.preferences.setFavoritesAdministrations.mutationOptions({
+    api.preferences.set.mutationOptions({
       onSettled: async () => {
-        await queryClient.invalidateQueries(
-          api.preferences.getFavoritesAdministrations.queryFilter(),
-        );
+        await queryClient.invalidateQueries(api.preferences.get.queryFilter());
       },
     }),
   );
 
   const setFavorites = (favorites: string[]) => {
     setFavoritesMutation.mutate({
-      patientId: patient!.id,
-      types: favorites,
+      type: 'patient',
+      patientId: patient.id,
+      values: {
+        favoriteAdministrations: favorites,
+      },
     });
   };
 

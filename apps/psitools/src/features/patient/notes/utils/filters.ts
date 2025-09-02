@@ -1,6 +1,8 @@
-import type { Note as TNote } from '@prisma/client';
+import type { RouterOutputs } from '@arianne/api';
 import { addDays } from 'date-fns';
 import type { DateRange } from 'react-day-picker';
+
+type TNote = RouterOutputs['notes']['findUnique'];
 
 export const titleFilter = (note: TNote, search: string) => {
   if (!search) return true;

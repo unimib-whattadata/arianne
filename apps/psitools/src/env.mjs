@@ -11,7 +11,6 @@ const server = z.object({
   // WAZUH_RSYSLOG: z.string(),
   // SYSLOG_PORT: z.string().regex(/^\d+$/).transform(Number),
   // REMOTELOGGER: z.string(),
-  CLIENT_SECRET: z.string(),
   COOKIE_SECRET: z.string(),
 });
 
@@ -22,9 +21,6 @@ const server = z.object({
 const client = z.object({
   //NEXT_PUBLIC_KEYCLOAK_LOGOUT_URL: z.string().url(),
   NEXT_PUBLIC_TRPC_LOGGER_ENABLED: z.enum(['true', 'false']).optional(),
-  NEXT_PUBLIC_KEYCLOAK_FRONTEND_URL: z.string().url(),
-  NEXT_PUBLIC_KEYCLOAK_REALM: z.string(),
-  NEXT_PUBLIC_KEYCLOAK_CLIENT_ID: z.string(),
   NEXT_PUBLIC_APP_URL: z.string().url(),
   NEXT_PUBLIC_LANDING_URL: z.string().url(),
   NEXT_PUBLIC_MIROTALK_URL: z.string().url(),

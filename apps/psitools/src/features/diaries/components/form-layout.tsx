@@ -1,6 +1,6 @@
 'use client';
 
-import type { DiaryTypeSchema } from '@arianne/db';
+import type { diariesTypeEnum } from '@arianne/db/schema';
 import { useMutation } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import {
@@ -21,7 +21,7 @@ import { debounce } from '@/utils/debounce';
 
 interface FormLayoutProps<T extends FieldValues> {
   children: React.ReactNode;
-  type: z.infer<typeof DiaryTypeSchema>;
+  type: (typeof diariesTypeEnum.enumValues)[number];
   steps: number;
   methods: ReturnType<typeof useForm<T>>;
   defaultStep?: string;
@@ -30,7 +30,7 @@ interface FormLayoutProps<T extends FieldValues> {
 
 enum Title {
   food = 'Diario alimentare',
-  cognitive_beahvioral = 'Diario cognitivo-comportamentale',
+  cognitive_behavioral = 'Diario cognitivo-comportamentale',
   sleep_morning = 'Diario del sonno (mattina)',
   sleep_evening = 'Diario del sonno (sera)',
 }
@@ -66,12 +66,12 @@ export function FormLayout<T extends FieldValues>(props: FormLayoutProps<T>) {
         return;
       }
 
-      const diary = await client.diary.find.query({ type: props.type });
+      const diary = await client.diaries.find.query({ type: props.type });
 
       if (diary) {
         setDiaryId(diary.id);
       } else {
-        const newDiary = await client.diary.create.mutate({
+        const newDiary = await client.diaries.create.mutate({
           type: props.type,
           content: {},
         });
@@ -86,7 +86,7 @@ export function FormLayout<T extends FieldValues>(props: FormLayoutProps<T>) {
 
   const autoSaveData = debounce(async (data: DeepPartial<T>) => {
     if (diaryId) {
-      await client.diary.update.mutate({ id: diaryId, content: data });
+      await client.diaries.update.mutate({ id: diaryId, content: data });
     }
   }, 3000);
 
@@ -155,7 +155,7 @@ export function FormLayout<T extends FieldValues>(props: FormLayoutProps<T>) {
   const updateDiary = useMutation({
     mutationFn: async () => {
       if (diaryId) {
-        return await client.diary.update.mutate({
+        return await client.diaries.update.mutate({
           id: diaryId,
           content: getValues(),
           state: true,
@@ -227,12 +227,12 @@ export function FormLayout<T extends FieldValues>(props: FormLayoutProps<T>) {
 
             <div
               ref={bar}
-              className="relative mt-2 h-2 w-full rounded-full bg-card"
+              className="bg-card relative mt-2 h-2 w-full rounded-full"
             >
               <div
                 style={{ width: `${(currentStep / props.steps) * 100}%` }}
                 suppressHydrationWarning
-                className="absolute left-0 top-0 h-full rounded-full bg-forest-green-700 transition-all"
+                className="bg-forest-green-700 absolute top-0 left-0 h-full rounded-full transition-all"
               />
             </div>
           </div>

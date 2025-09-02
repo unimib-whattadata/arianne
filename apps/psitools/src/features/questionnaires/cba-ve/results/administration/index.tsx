@@ -1,6 +1,5 @@
 'use client';
 
-import type { Administration } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import type { ReactElement } from 'react';
@@ -13,6 +12,10 @@ import { useTRPC } from '@/trpc/react';
 import type { CbaRecord } from '@/types/cba-records';
 import type { TView } from '@/types/view-types';
 import { dateFormatting } from '@/utils/date-formatter';
+import type { RouterOutputs } from '@arianne/api';
+
+type Administration =
+  RouterOutputs['administrations']['findUnique']['administration'];
 
 const getAverageScores = (
   data: Administration[],
@@ -30,7 +33,7 @@ const getAverageScores = (
   let depressioneAVG = 0;
 
   data.forEach((admin) => {
-    const records = admin.records as CbaRecord;
+    const records = admin.records as unknown as CbaRecord;
     const scores = records.scores;
     ansiaAVG += scores.ansia;
     disagioAVG += scores.disagio;
@@ -63,22 +66,16 @@ const ShowAdministrationResults = () => {
 
   const api = useTRPC();
   const { data: currentAdministration, isLoading } = useQuery(
-    api.administration.findUnique.queryOptions(
-      {
-        where: {
-          id: administration,
-        },
-      },
+    api.administrations.findUnique.queryOptions(
+      { id: administration },
       {
         enabled: !!administration,
       },
     ),
   );
   const { data: allCBAdministrations, isLoading: allCBAisLoading } = useQuery(
-    api.administration.findMany.queryOptions({
-      where: {
-        type: 'cba-ve',
-      },
+    api.administrations.findMany.queryOptions({
+      where: { type: 'cba-ve' },
     }),
   );
 
@@ -91,36 +88,36 @@ const ShowAdministrationResults = () => {
     return <Shimmer className="h-full w-full" />;
 
   const records = currentAdministration.administration
-    .records as CbaRecord;
+    .records as unknown as CbaRecord;
 
   const adminAverageScores = getAverageScores(allCBAdministrations);
   const ansiaDS = getStandardDeviation(
     allCBAdministrations.map(
-      (admin) => (admin.records as CbaRecord).scores.ansia,
+      (admin) => (admin.records as unknown as CbaRecord).scores.ansia,
     ),
     adminAverageScores.ansia,
   );
   const disagioDS = getStandardDeviation(
     allCBAdministrations.map(
-      (admin) => (admin.records as CbaRecord).scores.disagio,
+      (admin) => (admin.records as unknown as CbaRecord).scores.disagio,
     ),
     adminAverageScores.disagio,
   );
   const benessereDS = getStandardDeviation(
     allCBAdministrations.map(
-      (admin) => (admin.records as CbaRecord).scores.benessere,
+      (admin) => (admin.records as unknown as CbaRecord).scores.benessere,
     ),
     adminAverageScores.benessere,
   );
   const cambiamentoDS = getStandardDeviation(
     allCBAdministrations.map(
-      (admin) => (admin.records as CbaRecord).scores.cambiamento,
+      (admin) => (admin.records as unknown as CbaRecord).scores.cambiamento,
     ),
     adminAverageScores.cambiamento,
   );
   const depressioneDS = getStandardDeviation(
     allCBAdministrations.map(
-      (admin) => (admin.records as CbaRecord).scores.depressione,
+      (admin) => (admin.records as unknown as CbaRecord).scores.depressione,
     ),
     adminAverageScores.depressione,
   );

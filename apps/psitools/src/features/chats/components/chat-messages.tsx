@@ -43,7 +43,7 @@ export const ChatMessages = (props: ChatMessagesProps) => {
   const [isTyping, setIsTyping] = useState<boolean>(false);
 
   useSubscription(
-    api.chat.onAdd.subscriptionOptions(
+    api.chats.onAdd.subscriptionOptions(
       { chatId: chatId },
       {
         onData: (newMessage) => {
@@ -54,7 +54,7 @@ export const ChatMessages = (props: ChatMessagesProps) => {
   );
 
   useSubscription(
-    api.chat.onUserStatus.subscriptionOptions(undefined, {
+    api.chats.onUserStatus.subscriptionOptions(undefined, {
       onData: (data) => {
         if (data.userId === chatId && data.chatId === chatId)
           setIsTyping(data.status === 'isTyping');
@@ -85,7 +85,7 @@ export const ChatMessages = (props: ChatMessagesProps) => {
               <Fragment key={index}>
                 {isNewDay && (
                   <div className="sticky top-0 z-10 my-4 flex justify-center">
-                    <span className="min-w-24 rounded-full bg-primary-200 px-3 py-1 text-center text-xs text-gray-600 shadow">
+                    <span className="bg-primary-200 min-w-24 rounded-full px-3 py-1 text-center text-xs text-gray-600 shadow">
                       {formatMessageDate(currentDate)}
                     </span>
                   </div>
@@ -119,9 +119,9 @@ export const ChatMessages = (props: ChatMessagesProps) => {
           <ChatBubble className="w-full max-w-full" variant={'received'}>
             <Avatar>
               <AvatarFallback className="text-xs">
-                {patient?.user?.firstName[0].toUpperCase() ?? ''}
+                {patient?.profile?.firstName[0].toUpperCase() ?? ''}
                 {''}
-                {patient?.user?.lastName[0].toUpperCase() ?? ''}
+                {patient?.profile?.lastName[0].toUpperCase() ?? ''}
               </AvatarFallback>
             </Avatar>
             <ChatBubbleMessage

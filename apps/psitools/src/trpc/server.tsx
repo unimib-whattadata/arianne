@@ -1,14 +1,15 @@
 import type { AppRouter } from '@arianne/api';
-import { appRouter, createCallerFactory, createTRPCContext } from '@arianne/api';
+import { appRouter, createCaller, createTRPCContext } from '@arianne/api';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import type { TRPCQueryOptions } from '@trpc/tanstack-react-query';
 import { createTRPCOptionsProxy } from '@trpc/tanstack-react-query';
-import { headers } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import { cache } from 'react';
 
-import { auth } from '@/auth/server';
-
 import { createQueryClient } from './query-client';
+import { createClient } from '@arianne/supabase/server';
+
+const supabase = await createClient(cookies());
 
 /**
  * This wraps the `createTRPCContext` helper and provides the required context for the tRPC API when
@@ -18,8 +19,10 @@ const createContext = cache(async () => {
   const heads = new Headers(await headers());
   heads.set('x-trpc-source', 'rsc');
 
+  const user = await supabase.auth.getUser();
+
   return createTRPCContext({
-    auth,
+    user,
     headers: heads,
   });
 });
@@ -32,7 +35,6 @@ export const trpc = createTRPCOptionsProxy<AppRouter>({
   queryClient: getQueryClient,
 });
 
-const createCaller = createCallerFactory(appRouter);
 export const api = createCaller(createContext);
 
 export function HydrateClient(props: { children: React.ReactNode }) {
@@ -55,23 +57,3 @@ export function prefetch<T extends ReturnType<TRPCQueryOptions<any>>>(
     void queryClient.prefetchQuery(queryOptions);
   }
 }
-
-// const handler = applyWSSHandler({
-//   wss: wss,
-//   router: appRouter,
-//   createContext,
-//   // Enable heartbeat messages to keep connection open (disabled by default)
-//   keepAlive: {
-//     enabled: true,
-//     // server ping message interval in milliseconds
-//     pingMs: 30000,
-//     // connection is terminated if pong message is not received in this many milliseconds
-//     pongWaitMs: 5000,
-//   },
-// });
-
-// process.on('SIGTERM', () => {
-//   console.log('SIGTERM');
-//   handler.broadcastReconnectNotification();
-//   wss.close();
-// });

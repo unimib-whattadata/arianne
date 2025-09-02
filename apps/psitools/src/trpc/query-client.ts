@@ -15,7 +15,7 @@ export const createQueryClient = () =>
           // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
           error.data.code === 'UNAUTHORIZED'
         ) {
-          window.location.href = `/auth/sign-in?from=${encodeURIComponent(
+          window.location.href = `/auth/login?from=${encodeURIComponent(
             window.location.pathname + window.location.search,
           )}`;
         }

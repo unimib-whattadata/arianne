@@ -20,12 +20,8 @@ export default function AdministrationResultsIusRPage() {
   const api = useTRPC();
 
   const { data: currentAdministration, isLoading } = useQuery(
-    api.administration.findUnique.queryOptions(
-      {
-        where: {
-          id: administration,
-        },
-      },
+    api.administrations.findUnique.queryOptions(
+      { id: administration },
       {
         enabled: !!administration,
       },

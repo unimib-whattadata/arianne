@@ -1,6 +1,5 @@
 'use client';
 
-import type { Administration } from '@prisma/client';
 import type { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
@@ -11,6 +10,10 @@ import { useEffect, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useExport } from '@/features/questionnaires/context/export-context';
+import type { RouterOutputs } from '@arianne/api';
+
+type Administration =
+  RouterOutputs['administrations']['findUnique']['administration'];
 
 export const useColumns = (currentPath: string, exportMode: boolean) => {
   const { setSelectedIds } = useExport();
@@ -34,7 +37,7 @@ export const useColumns = (currentPath: string, exportMode: boolean) => {
                   }}
                   aria-checked={isIndeterminate ? 'mixed' : allRowsSelected}
                   aria-label="Seleziona tutte le righe"
-                  className="border peer border border-primary-300"
+                  className="peer border-primary-300 border"
                 />
               )}
             </div>
@@ -61,7 +64,7 @@ export const useColumns = (currentPath: string, exportMode: boolean) => {
               <Checkbox
                 checked={row.getIsSelected()}
                 onCheckedChange={(value) => row.toggleSelected(!!value)}
-                className="border border border-primary-300"
+                className="border-primary-300 border"
               />
             </div>
           );
@@ -138,7 +141,7 @@ export const useColumns = (currentPath: string, exportMode: boolean) => {
                 <>
                   <Link
                     href={`${currentPath}/${administrationId}`}
-                    className="ml-auto px-0 text-sm text-primary"
+                    className="text-primary ml-auto px-0 text-sm"
                   >
                     Apri
                   </Link>
@@ -226,7 +229,7 @@ export const useColumnsCompare = () => {
               <Link
                 href={`administration/${id}`}
                 target="_blank"
-                className="ml-auto px-0 text-sm text-primary"
+                className="text-primary ml-auto px-0 text-sm"
               >
                 Apri
               </Link>

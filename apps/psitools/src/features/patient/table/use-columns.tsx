@@ -1,4 +1,3 @@
-import type { $Enums, User } from '@prisma/client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { Column, ColumnDef } from '@tanstack/react-table';
 import { ChevronDown, ChevronsUpDown, ChevronUp } from 'lucide-react';
@@ -9,13 +8,17 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { StateBadge } from '@/features/patient/components/state-badge';
 import { useTRPC } from '@/trpc/react';
-import type { PatientWithRelations } from '@/types/patient-with-relations';
+import type { RouterOutputs } from '@arianne/api';
+import type { medicalRecordStateEnum, Tag } from '@arianne/db/schema';
+
+type Patient = RouterOutputs['patients']['findUnique'];
+type Profile = RouterOutputs['profiles']['get'];
 
 const SortHeader = ({
   column,
   label,
 }: {
-  column: Column<PatientWithRelations, unknown>;
+  column: Column<Patient, unknown>;
   label: string;
 }) => {
   const isSorted = column.getIsSorted();
@@ -23,7 +26,7 @@ const SortHeader = ({
     <Button
       variant="link"
       size="sm"
-      className="px-0 font-semibold text-foreground [&:has([role=checkbox])]:pr-0"
+      className="text-foreground px-0 font-semibold [&:has([role=checkbox])]:pr-0"
       onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
     >
       {label}
@@ -39,15 +42,15 @@ export const useColumns = () => {
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation(
-    api.therapist.updateRecentPatients.mutationOptions({
+    api.therapists.updateRecentPatients.mutationOptions({
       onSettled: async () => {
         await queryClient.invalidateQueries(
-          api.therapist.findUnique.queryFilter(),
+          api.therapists.findUnique.queryFilter(),
         );
       },
     }),
   );
-  return useMemo<ColumnDef<PatientWithRelations>[]>(
+  return useMemo<ColumnDef<Patient>[]>(
     () => [
       {
         header: ({ column }) => (
@@ -55,13 +58,13 @@ export const useColumns = () => {
         ),
         id: 'name',
         accessorKey: 'user',
-        accessorFn: (patient) => patient.user,
+        accessorFn: (patient) => patient?.profile,
         filterFn: 'fuzzy',
         cell(props) {
           const { getValue } = props;
-          const user = getValue() as User;
-          if (!user) return null;
-          return <p>{user.name}</p>;
+          const profile = getValue() as Profile;
+          if (!profile) return null;
+          return <p>{profile.name}</p>;
         },
       },
       {
@@ -70,13 +73,13 @@ export const useColumns = () => {
           <SortHeader column={column} label="Codice ID" />
         ),
         accessorKey: 'user',
-        accessorFn: (patient) => patient.user,
+        accessorFn: (patient) => patient?.profile,
         filterFn: 'fuzzy',
         cell(props) {
           const { getValue } = props;
-          const user = getValue() as User;
-          if (!user) return null;
-          return <p>{user.id}</p>;
+          const profile = getValue() as Profile;
+          if (!profile) return null;
+          return <p>{profile.id}</p>;
         },
       },
       {
@@ -85,7 +88,7 @@ export const useColumns = () => {
         accessorKey: 'medicalRecord.tags',
         cell(props) {
           const { getValue } = props;
-          const tags = getValue() as PrismaJson.TagType[];
+          const tags = getValue() as Tag[];
           if (!tags) return null;
           return tags.map((tag) => (
             <Badge key={tag.text} className="mr-1">
@@ -100,7 +103,8 @@ export const useColumns = () => {
         filterFn: 'state',
         cell: (props) => {
           const { getValue } = props;
-          const state = getValue() as $Enums.StateType;
+          const state =
+            getValue() as (typeof medicalRecordStateEnum.enumValues)[number];
 
           return <StateBadge state={state} />;
         },
@@ -111,12 +115,12 @@ export const useColumns = () => {
         enableResizing: true,
         cell(props) {
           const { row } = props;
-          const { user } = row.original;
-          if (!user?.id) return null;
+          const { profileId } = row.original!;
+          if (!profileId) return null;
 
           const updateRecentPatients = () => {
             mutate({
-              patientId: user?.id,
+              patientId: profileId,
             });
           };
 
@@ -128,7 +132,7 @@ export const useColumns = () => {
               className="font-medium text-blue-600 hover:underline dark:text-blue-500"
               onClick={updateRecentPatients}
             >
-              <Link href={`/pazienti/${user.id}/cartella-clinica`}>
+              <Link href={`/pazienti/${profileId}/cartella-clinica`}>
                 Vai al paziente
               </Link>
             </Button>

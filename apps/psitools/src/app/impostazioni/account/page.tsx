@@ -1,6 +1,5 @@
 'use client';
 
-import type { KeycloakUser } from '@arianne/supabase';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
@@ -9,7 +8,6 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-import { authClient } from '@/auth/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import {
@@ -34,18 +32,20 @@ type AccountFormValues = z.infer<typeof accountFormSchema>;
 
 export default function AccountPage() {
   const api = useTRPC();
-  const queryClient = useQueryClient();
+  const _queryClient = useQueryClient();
 
-  const { data: therapist } = useQuery(api.therapist.findUnique.queryOptions());
+  const { data: therapist } = useQuery(
+    api.therapists.findUnique.queryOptions(),
+  );
 
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(accountFormSchema),
     values: therapist?.user
       ? {
-          firstName: therapist.user.firstName,
-          lastName: therapist.user.lastName,
-          phone: therapist.user.phone ?? '',
-          email: therapist.user.email,
+          firstName: therapist.profile.firstName,
+          lastName: therapist.profile.lastName,
+          phone: therapist.profile.phone ?? '',
+          email: therapist.profile.email,
         }
       : {
           firstName: '',
@@ -55,43 +55,22 @@ export default function AccountPage() {
         },
   });
 
-  const onSubmit: SubmitHandler<AccountFormValues> = async (data) => {
-    if (!therapist?.user?.accounts || therapist.user.accounts.length === 0) {
+  const onSubmit: SubmitHandler<AccountFormValues> = /* async */ (_data) => {
+    if (!therapist?.profile) {
       toast.error("C'è stato un errore nel recupero dei dati dell'account.");
       return;
     }
 
-    const account = therapist.user.accounts[0];
+    // const profile = {
+    //   firstName: data.firstName,
+    //   lastName: data.lastName,
+    //   attributes: {
+    //     phoneNumber: data.phone ? [data.phone] : [],
+    //   },
+    //   email: data.email,
+    // } satisfies Partial<KeycloakUser>;
 
-    const user = {
-      firstName: data.firstName,
-      lastName: data.lastName,
-      attributes: {
-        phoneNumber: data.phone ? [data.phone] : [],
-      },
-      email: data.email,
-    } satisfies Partial<KeycloakUser>;
-
-    await authClient.keycloak.updateUser({
-      accountId: account.accountId,
-      user: {
-        ...user,
-        id: therapist.user.id,
-      },
-      fetchOptions: {
-        onSuccess: async () => {
-          toast.success("Dati dell'account aggiornati con successo.");
-          await queryClient.invalidateQueries(
-            api.therapist.findUnique.queryFilter(),
-          );
-        },
-        onError: () => {
-          toast.error(
-            "C'è stato un errore durante l'aggiornamento dei dati dell'account.",
-          );
-        },
-      },
-    });
+    // TODO: Update user profile
   };
 
   return (

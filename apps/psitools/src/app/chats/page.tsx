@@ -10,7 +10,7 @@ export default function ChatsPage() {
 
   if (isLoading) {
     return (
-      <main className="relative grid h-full-safe grid-rows-[auto_auto_1fr_auto] gap-3 p-4">
+      <main className="h-full-safe relative grid grid-rows-[auto_auto_1fr_auto] gap-3 p-4">
         <h1 className="text-xl font-semibold">Chats</h1>
         <div className="flex items-center justify-center">
           <Loader2 className="h-4 w-4 animate-spin" />
@@ -20,17 +20,17 @@ export default function ChatsPage() {
   }
 
   return (
-    <main className="relative grid h-full-safe grid-rows-[auto_auto_1fr_auto] gap-3 p-4">
+    <main className="h-full-safe relative grid grid-rows-[auto_auto_1fr_auto] gap-3 p-4">
       <h1 className="text-xl font-semibold">Chats</h1>
       <div className="grid grid-cols-1 gap-2">
         {user && user.patients.length > 0 ? (
           user.patients.map(
             (patient, index) =>
-              patient.user && (
+              patient.profile && (
                 <PatientChatButton
                   key={index}
-                  patientId={patient.user.id}
-                  fullName={`${patient.user.firstName} ${patient.user.lastName}`}
+                  patientId={patient.profile.id}
+                  fullName={`${patient.profile.firstName} ${patient.profile.lastName}`}
                 />
               ),
           )

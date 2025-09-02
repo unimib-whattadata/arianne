@@ -1,4 +1,3 @@
-import type { Event } from '@arianne/db';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
@@ -28,6 +27,10 @@ import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet';
 import { Textarea } from '@/components/ui/textarea';
 import { generateMeetingLink } from '@/features/agenda/utils/generate-meeting-link';
 import { useTRPC } from '@/trpc/react';
+
+import type { RouterOutputs } from '@arianne/api';
+
+type Event = RouterOutputs['events']['getAll'][number];
 
 const handleCopyToClipboard = async (text: string) => {
   try {
@@ -78,7 +81,7 @@ const Modal: React.FC<ModalProps> = ({
   const [eventName, setEventName] = useState('');
   const [eventDescription, setEventDescription] = useState('');
   const [patient, setPatient] = useState('');
-  const [meetingLink, setMeetingLink] = useState<string | null | undefined>('');
+  const [meetingLink, setMeetingLink] = useState<string | null>('');
   const [location, setLocation] = useState('');
   const [labelColor, setLabelColor] = useState('');
   const [eventDate, setEventDate] = useState(selectedDate || new Date());
@@ -114,10 +117,10 @@ const Modal: React.FC<ModalProps> = ({
 
   const api = useTRPC();
   const queryClient = useQueryClient();
-  const therapist = useQuery(api.therapist.getAllPatients.queryOptions());
+  const therapist = useQuery(api.therapists.getAllPatients.queryOptions());
 
   const options = therapist.data?.map((patient) => {
-    return { label: patient.user?.name ?? '', value: patient.id ?? '' };
+    return { label: patient.profile?.name ?? '', value: patient.id ?? '' };
   });
 
   const handleAddParticipant = () => {
@@ -165,10 +168,10 @@ const Modal: React.FC<ModalProps> = ({
   }, [isOpen, selectedDate]);
 
   const createEvent = useMutation(
-    api.event.create.mutationOptions({
+    api.events.create.mutationOptions({
       //TODO: Add toast notification
       onSuccess: async () => {
-        await queryClient.invalidateQueries(api.event.getAll.queryFilter());
+        await queryClient.invalidateQueries(api.events.getAll.queryFilter());
       },
     }),
   );
@@ -243,7 +246,7 @@ const Modal: React.FC<ModalProps> = ({
               type="text"
               value={eventName}
               onChange={(e) => setEventName(e.target.value)}
-              className="w-full rounded-md border border-[#ccdbef] p-2 placeholder:text-[#94a3b8] focus:border-forest-green-700 focus:outline-none md:text-base"
+              className="focus:border-forest-green-700 w-full rounded-md border border-[#ccdbef] p-2 placeholder:text-[#94a3b8] focus:outline-none md:text-base"
               placeholder="Nome evento"
             />
           </div>
@@ -273,7 +276,7 @@ const Modal: React.FC<ModalProps> = ({
                       }}
                       className={`h-6 w-6 rounded-sm border ${
                         labelColor === color
-                          ? 'ring-1 ring-forest-green-700'
+                          ? 'ring-forest-green-700 ring-1'
                           : ''
                       }`}
                       style={{ backgroundColor: color }}
@@ -333,7 +336,7 @@ const Modal: React.FC<ModalProps> = ({
           <Button
             variant="ghost"
             onClick={handleAddParticipant}
-            className="justify-start py-0 pl-0 text-base text-primary hover:bg-white hover:text-primary/80"
+            className="text-primary hover:text-primary/80 justify-start py-0 pl-0 text-base hover:bg-white"
           >
             + Aggiungi partecipante
           </Button>
@@ -491,7 +494,7 @@ const Modal: React.FC<ModalProps> = ({
                 type="text"
                 value={meetingLink ?? ''}
                 onChange={(e) => setMeetingLink(e.target.value)}
-                className="col-span-1 w-full rounded-md border border-[#ccdbef] p-2 text-base placeholder:text-[#94a3b8] focus:border-forest-green-700 focus:outline-none md:text-base"
+                className="focus:border-forest-green-700 col-span-1 w-full rounded-md border border-[#ccdbef] p-2 text-base placeholder:text-[#94a3b8] focus:outline-none md:text-base"
                 placeholder="Link Meet"
               />
 
@@ -499,7 +502,7 @@ const Modal: React.FC<ModalProps> = ({
                 <Button
                   size="icon"
                   onClick={() => handleCopyToClipboard(meetingLink)}
-                  className="absolute right-1 top-1 hidden h-7 w-7 bg-primary-200 text-primary hover:bg-primary-300 hover:text-gray-700 group-hover:flex"
+                  className="bg-primary-200 text-primary hover:bg-primary-300 absolute top-1 right-1 hidden h-7 w-7 group-hover:flex hover:text-gray-700"
                 >
                   <Copy className="h-4 w-4" />
                 </Button>
@@ -528,7 +531,7 @@ const Modal: React.FC<ModalProps> = ({
             type="text"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
-            className="col-span-1 w-full rounded-md border border-[#ccdbef] p-2 text-base placeholder:text-[#94a3b8] focus:border-forest-green-700 focus:outline-none md:text-base"
+            className="focus:border-forest-green-700 col-span-1 w-full rounded-md border border-[#ccdbef] p-2 text-base placeholder:text-[#94a3b8] focus:outline-none md:text-base"
             placeholder="Indirizzo"
           />
         </div>

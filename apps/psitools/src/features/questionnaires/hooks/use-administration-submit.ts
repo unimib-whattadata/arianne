@@ -1,5 +1,4 @@
 import type { ReactQueryOptions } from '@arianne/api';
-import type { Prisma } from '@prisma/client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { FieldValues, SubmitHandler } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -11,10 +10,8 @@ import { usePatient } from '@/hooks/use-patient';
 import { useTRPC } from '@/trpc/react';
 
 interface Props<FormValues extends FieldValues & CompilationData> {
-  mutationOptions?: ReactQueryOptions['administration']['create'];
-  formatRecords: (
-    data: FormValues,
-  ) => Prisma.NullTypes.JsonNull | Prisma.InputJsonValue;
+  mutationOptions?: ReactQueryOptions['administrations']['create'];
+  formatRecords: (data: FormValues) => Record<string, unknown>;
   type: (typeof available)[number];
 }
 
@@ -31,7 +28,7 @@ export const useAdministrationSubmit = <
   const api = useTRPC();
   const queryClient = useQueryClient();
 
-  const deafultOptions: ReactQueryOptions['administration']['create'] = {
+  const deafultOptions: ReactQueryOptions['administrations']['create'] = {
     onSuccess: async (data) => {
       dispatch({
         type: 'set_state',
@@ -40,7 +37,9 @@ export const useAdministrationSubmit = <
           sent: true,
         },
       });
-      await queryClient.invalidateQueries(api.patient.findUnique.queryFilter());
+      await queryClient.invalidateQueries(
+        api.patients.findUnique.queryFilter(),
+      );
     },
     onError: () => {
       return toast.error(
@@ -58,7 +57,7 @@ export const useAdministrationSubmit = <
   };
 
   const administration = useMutation(
-    api.administration.create.mutationOptions({
+    api.administrations.create.mutationOptions({
       ...deafultOptions,
       ...mutationOptions,
     }),
@@ -77,26 +76,14 @@ export const useAdministrationSubmit = <
     const records = formatRecords(data);
 
     await administration.mutateAsync({
-      data: {
-        patientId: patient.id,
-        records,
-        therapistName: data.therapistName,
-        therapistlastName: data.therapistlastName,
-        createdAt: data.createdAt,
-        modality: data.modality,
+      patientId: patient.id,
+      records,
+      therapistName: data.therapistName,
+      therapistLastname: data.therapistLastname,
+      createdAt: data.createdAt,
+      modality: data.modality,
 
-        type,
-        medicalRecord: {
-          connectOrCreate: {
-            where: {
-              patientId: patient.id,
-            },
-            create: {
-              patientId: patient.id,
-            },
-          },
-        },
-      },
+      type,
     });
   };
 

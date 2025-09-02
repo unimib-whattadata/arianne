@@ -31,10 +31,8 @@ export default function GafSofasPage() {
     isLoading,
     isFetching,
   } = useQuery(
-    api.administration.findUnique.queryOptions(
-      {
-        where: { id: idTest },
-      },
+    api.administrations.findUnique.queryOptions(
+      { id: idTest },
       {
         enabled: !!idTest,
         select: (data) => data.administration,
@@ -61,7 +59,7 @@ export default function GafSofasPage() {
         <div className="overflow-y-auto pb-8">
           <form className="mx-auto max-w-prose space-y-6">
             <section className="pb-4">
-              <header className="sticky top-0 z-10 bg-gray-10 pb-3">
+              <header className="bg-gray-10 sticky top-0 z-10 pb-3">
                 <p className="mb-4 rounded-md bg-white p-4">
                   Considerare il funzionamento psicologico, sociale e lavorativo
                   nell&apos;ambito di un ipotetico continuum salute-malattia
@@ -72,7 +70,7 @@ export default function GafSofasPage() {
                     68, 72. .
                   </span>
                 </p>
-                <p className="font-h3 absolute -right-28 top-80 z-20 rotate-90">
+                <p className="font-h3 absolute top-80 -right-28 z-20 rotate-90">
                   (sola visualizzazione)
                 </p>
                 <FormField
@@ -81,17 +79,17 @@ export default function GafSofasPage() {
                   name="response.value"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm text-primary">
+                      <FormLabel className="text-primary text-sm">
                         Codice
                       </FormLabel>
                       <FormControl>
-                        <div className="relative pb-5 pt-12">
+                        <div className="relative pt-12 pb-5">
                           <div className="absolute flex h-12 w-full -translate-y-5 items-center justify-between px-4">
                             {TICKS.map((tick) => (
                               <div
                                 key={tick}
                                 className={cn(
-                                  'relative h-10 w-px bg-space-gray',
+                                  'bg-space-gray relative h-10 w-px',
                                   tick % 10 === 0 ? 'h-12' : 'h-6',
                                 )}
                               >

@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { initAuth } from '@arianne/auth';
+import { initAuth } from '@arianne/supabase';
 import { headers } from 'next/headers';
 import { cache } from 'react';
 

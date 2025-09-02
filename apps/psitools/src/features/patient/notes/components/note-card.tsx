@@ -1,4 +1,3 @@
-import type { Note as TNote } from '@prisma/client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
@@ -17,6 +16,9 @@ import {
 import { useTherapist } from '@/hooks/use-therapist';
 import { useTRPC } from '@/trpc/react';
 import { cn } from '@/utils/cn';
+import type { RouterOutputs } from '@arianne/api';
+
+type TNote = RouterOutputs['notes']['findUnique'];
 
 interface Props {
   note: TNote;
@@ -30,9 +32,9 @@ export const NoteCard = (props: Props) => {
   const api = useTRPC();
   const queryClient = useQueryClient();
   const updateNote = useMutation(
-    api.note.update.mutationOptions({
+    api.notes.update.mutationOptions({
       onSettled: () => {
-        return queryClient.invalidateQueries(api.note.findMany.queryFilter());
+        return queryClient.invalidateQueries(api.notes.findMany.queryFilter());
       },
     }),
   );
@@ -55,7 +57,7 @@ export const NoteCard = (props: Props) => {
   return (
     <Card key={id} className="flex items-center gap-2">
       <CardHeader className="space-y-0">
-        <CardTitle className="line-clamp-1 break-all pr-1 text-base">
+        <CardTitle className="line-clamp-1 pr-1 text-base break-all">
           {title}
         </CardTitle>
         <CardDescription>
@@ -63,7 +65,8 @@ export const NoteCard = (props: Props) => {
           <span className="text-primary">
             {format(date, 'P', { locale: it })}
           </span>{' '}
-          da <span className="text-primary">{therapist?.user?.name}</span>{' '}
+          da{' '}
+          <span className="text-primary">{therapist?.profile?.name}</span>{' '}
         </CardDescription>
       </CardHeader>
       <CardFooter className="ml-auto flex items-center gap-2 pt-4">

@@ -1,4 +1,8 @@
 import { z } from 'zod';
+import {
+  medicalRecordParentStateEnum,
+  medicalRecordStateEnum,
+} from '@arianne/db/schema';
 
 export const FormSchema = z.object({
   user: z.object({
@@ -52,16 +56,16 @@ export const FormSchema = z.object({
 
       .optional(),
     motherName: z.string().optional(),
-    motherStatus: z.enum(['alive', 'dead']).optional(),
-    patherName: z.string().optional(),
-    fatherStatus: z.enum(['alive', 'dead']).optional(),
+    motherStatus: z.enum(medicalRecordParentStateEnum.enumValues).optional(),
+    fatherName: z.string().optional(),
+    fatherStatus: z.enum(medicalRecordParentStateEnum.enumValues).optional(),
     parentsNotes: z.string().optional(),
     diagnosticHypothesis: z.string().optional(),
     simptoms: z.string().optional(),
     reason: z.string().optional(),
     previousInterventions: z.string().optional(),
     clinicalDataNotes: z.string().optional(),
-    state: z.enum(['incoming', 'ongoing', 'archived']).optional(),
+    state: z.enum(medicalRecordStateEnum.enumValues),
     goals: z.string().optional(),
     therapeuticPlan: z.string().optional(),
     frequency: z.string().optional(),

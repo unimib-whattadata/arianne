@@ -1,10 +1,10 @@
-import { modality } from '@prisma/client';
 import { z } from 'zod';
+import { $Enums } from '@arianne/db/enums';
 
 export const therapistSchema = z.object({
   therapistName: z.string().min(1, { message: 'Nome è obbligatorio' }),
-  therapistlastName: z.string().min(1, { message: 'Cognome è obbligatorio' }),
-  modality: z.nativeEnum(modality),
+  therapistLastname: z.string().min(1, { message: 'Cognome è obbligatorio' }),
+  modality: z.nativeEnum($Enums.AssignmentModality),
   createdAt: z.string(),
 });
 

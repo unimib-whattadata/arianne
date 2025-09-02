@@ -26,9 +26,11 @@ const NextEventBanner = () => {
   const { user, isLoading } = useTherapist();
   const router = useRouter();
   const api = useTRPC();
-  const therapist = useQuery(api.therapist.getAllPatients.queryOptions());
+  const { data: patients } = useQuery(
+    api.therapists.getAllPatients.queryOptions(),
+  );
   const { data: events, isLoading: loadingEvents } = useQuery(
-    api.event.getAll.queryOptions(),
+    api.events.getAll.queryOptions(),
   );
 
   if (isLoading || !user || loadingEvents) return null;
@@ -56,13 +58,13 @@ const NextEventBanner = () => {
             Prossimi eventi{' '}
           </CardTitle>
           <Link
-            className="px-0 text-[14px] text-primary hover:underline"
+            className="text-primary px-0 text-[14px] hover:underline"
             href="/agenda"
           >
             Vedi tutti
           </Link>
         </CardHeader>
-        <CardContent className="py-4 text-center text-sm text-muted-foreground">
+        <CardContent className="text-muted-foreground py-4 text-center text-sm">
           Nessun evento in programma{' '}
         </CardContent>
       </Card>
@@ -80,7 +82,7 @@ const NextEventBanner = () => {
           Prossimi eventi
         </CardTitle>
         <Link
-          className="px-0 text-[14px] text-primary hover:underline"
+          className="text-primary px-0 text-[14px] hover:underline"
           href="/agenda"
         >
           Vedi tutti
@@ -117,16 +119,21 @@ const NextEventBanner = () => {
               ? event.startTime
               : '';
 
-          const patientName =
-            therapist.data?.find((p) => p.id === event?.patientId)?.user
-              ?.name ?? event?.patientId;
-          const title = patientName || event.name;
+          const patientsName =
+            patients
+              ?.filter((patient) => {
+                event.participants.find(
+                  (participant) => participant.id === patient.id,
+                );
+              })
+              .map((p) => p.profile.name) || [];
 
-          const rawDescription = patientName
-            ? `${event.name}${event.description ? `: ${event.description}` : ''}`
-            : event.description || '';
+          const title =
+            patientsName.length > 1
+              ? `${event.name} (${patientsName.join(', ')})`
+              : patientsName[0] || event.name;
 
-          const safeDescription = rawDescription
+          const safeDescription = title
             .replace(/<\/?[^>]+(>|$)/g, '')
             .replace(/\n/g, ' ')
             .trim();
@@ -137,8 +144,8 @@ const NextEventBanner = () => {
             <Card
               key={event.id}
               className={cn(
-                'w-full cursor-pointer bg-background hover:bg-[#EFF3F7]',
-                index === 0 ? 'border border-primary/50' : 'border-none',
+                'bg-background w-full cursor-pointer hover:bg-[#EFF3F7]',
+                index === 0 ? 'border-primary/50 border' : 'border-none',
               )}
               onClick={() => {
                 router.push(`/agenda?eventId=${event.id}`);
@@ -146,13 +153,13 @@ const NextEventBanner = () => {
             >
               <CardHeader className="flex w-full flex-row items-center justify-between space-y-0 p-3">
                 <CardTitle className="text-base font-normal">{title}</CardTitle>
-                <Badge className="text-xs text-primary" variant="default">
+                <Badge className="text-primary text-xs" variant="default">
                   {time ? `${label}, ${time}` : label}
                 </Badge>
               </CardHeader>
               <CardContent className="w-full px-3 pb-3">
                 <p
-                  className="mb-2 block overflow-hidden truncate text-ellipsis text-xs"
+                  className="mb-2 block truncate overflow-hidden text-xs text-ellipsis"
                   dangerouslySetInnerHTML={{ __html: safeDescription }}
                 />
                 {showButton && (

@@ -7,9 +7,9 @@ export const useNotes = () => {
   const { patient, isLoading } = usePatient();
   const api = useTRPC();
   const { data: notes, isLoading: isLoadingNotes } = useQuery(
-    api.note.findMany.queryOptions(
+    api.notes.findMany.queryOptions(
       {
-        where: { patientId: patient?.id },
+        where: { patientId: patient!.id },
       },
       { enabled: !!patient },
     ),

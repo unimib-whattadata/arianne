@@ -1,12 +1,16 @@
 import { type Config } from "drizzle-kit";
 
-import { env } from "~/env";
-
 export default {
-  schema: "./src/server/db/schema.ts",
+  schema: "./src/schema.ts",
   dialect: "postgresql",
+  out: "./supabase/migrations",
   dbCredentials: {
-    url: env.DATABASE_URL,
+    url: process.env.DATABASE_URL!,
+  },
+  entities: {
+    roles: {
+      provider: "supabase",
+    },
   },
   tablesFilter: ["arianne_*"],
 } satisfies Config;

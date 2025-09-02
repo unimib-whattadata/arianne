@@ -32,7 +32,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             queryKey: ['diary.find', { id: diaryId }],
             queryFn: async () => {
               const allDiaries = await queryClient.fetchQuery(
-                api.diary.getAll.queryOptions({ type: 'cognitive_beahvioral' }),
+                api.diaries.getAll.queryOptions({
+                  type: 'cognitive_beahvioral',
+                }),
               );
 
               const foundDiary = allDiaries?.find(

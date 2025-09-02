@@ -393,7 +393,7 @@ export const useSearchBar = () => {
 
   const { patient } = usePatient();
 
-  const administrations = patient?.medicalRecord?.administrations ?? [];
+  const administrations = patient?.medicalRecords?.administrations ?? [];
 
   interface Administration {
     id: string;

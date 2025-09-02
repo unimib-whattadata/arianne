@@ -1,6 +1,5 @@
 'use client';
 
-import type { Session } from '@arianne/supabase';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import format from 'date-fns/format';
@@ -100,46 +99,12 @@ export default function CartellaClinica() {
   });
 
   const submintHandler: SubmitHandler<FormValues> = async (data) => {
-    if (!patient?.user) {
+    if (!patient?.profile) {
       toast.error('Paziente non trovato. Ricarica la pagina e riprova.');
       return;
     }
 
-    if (patient.user.accounts.length === 0) {
-      return await mutateAsync({
-        where: { patientId: patient?.id },
-        data: {
-          ...data.medicalRecords,
-        },
-      });
-    }
-
-    const user: Omit<
-      KeycloakUser,
-      'requiredActions' | 'enabled' | 'emailVerified'
-    > = {
-      id: patient.user.id,
-      username: patient.user.username,
-      email: data.user.email,
-      firstName: data.user.firstName,
-      lastName: data.user.lastName,
-      attributes: {
-        phoneNumber: data.user.phone || '',
-      },
-      groups: patient.user.group,
-    };
-
-    const res = await authClient.keycloak.updateUser({
-      user,
-      accountId: patient.user.accounts[0].accountId,
-    });
-
-    if (res.error) {
-      toast.error(res.error.message);
-      return;
-    }
-
-    await mutateAsync({
+    return await mutateAsync({
       where: { patientId: patient?.id },
       data: {
         ...data.medicalRecords,
@@ -151,60 +116,7 @@ export default function CartellaClinica() {
     console.error(error);
   };
 
-  const addPatient = async (user: Session['user']) => {
-    await authClient.keycloak.addPatient({
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      emailVerified: user.emailVerified,
-      groups: user.group,
-      attributes: {
-        phoneNumber: user.phone || '',
-      },
-      requiredActions: ['VERIFY_EMAIL', 'UPDATE_PASSWORD'],
-      fetchOptions: {
-        onError: (ctx) => {
-          toast.error(
-            `Errore durante l'aggiunta del paziente: ${ctx.error.message}`,
-          );
-        },
-        onSuccess: async () => {
-          toast.success('Paziente aggiunto con successo');
-          await queryClient.invalidateQueries(
-            api.patient.findUnique.queryFilter(),
-          );
-        },
-      },
-    });
-  };
-
-  const resetPassword = async (user: Partial<Session['user']>) => {
-    if (!user.id || !user.username) {
-      toast.error('Impossibile reimpostare la password: utente non trovato');
-      return;
-    }
-    await authClient.keycloak.resetPassword({
-      id: user.id,
-      username: user.username,
-      fetchOptions: {
-        onError: (ctx) => {
-          toast.error(ctx.error.message);
-        },
-        onSuccess: async () => {
-          toast.success(
-            'Email per il reset della password inviata con successo, segui le istruzioni contenute al suo interno',
-          );
-          await queryClient.invalidateQueries(
-            api.patient.findUnique.queryFilter(),
-          );
-        },
-      },
-    });
-  };
-
-  if (isLoading || !patient?.user?.id || !patient?.medicalRecord)
+  if (isLoading || !patient?.profile?.id || !patient?.medicalRecords)
     return <p>Loading...</p>;
 
   if (edit) {
@@ -235,7 +147,7 @@ export default function CartellaClinica() {
                   <FormField
                     control={form.control}
                     name="user.firstName"
-                    defaultValue={patient.user.firstName}
+                    defaultValue={patient.profile.firstName}
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>
@@ -255,7 +167,7 @@ export default function CartellaClinica() {
                   <FormField
                     control={form.control}
                     name="user.lastName"
-                    defaultValue={patient.user.lastName}
+                    defaultValue={patient.profile.lastName}
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>
@@ -275,7 +187,7 @@ export default function CartellaClinica() {
                   <FormField
                     control={form.control}
                     name="medicalRecords.alias"
-                    defaultValue={patient.medicalRecord.alias}
+                    defaultValue={patient.medicalRecords.alias}
                     render={({ field }) => (
                       <FormItem className="col-span-2">
                         <FormLabel>Nome d'elezione</FormLabel>
@@ -290,7 +202,7 @@ export default function CartellaClinica() {
                   <FormField
                     control={form.control}
                     name="medicalRecords.birthDate"
-                    defaultValue={patient.medicalRecord.birthDate ?? undefined}
+                    defaultValue={patient.medicalRecords.birthDate ?? undefined}
                     render={({ field }) => (
                       <FormItem className="col-span-2 flex flex-col">
                         <FormLabel>Data di nascita</FormLabel>
@@ -336,7 +248,7 @@ export default function CartellaClinica() {
                   <FormField
                     control={form.control}
                     name="medicalRecords.birthPlace"
-                    defaultValue={patient.medicalRecord.birthPlace}
+                    defaultValue={patient.medicalRecords.birthPlace}
                     render={({ field }) => (
                       <FormItem className="col-span-2">
                         <FormLabel>Luogo di nascita</FormLabel>
@@ -351,7 +263,7 @@ export default function CartellaClinica() {
                   <FormField
                     control={form.control}
                     name="medicalRecords.sex"
-                    defaultValue={patient.medicalRecord.sex ?? undefined}
+                    defaultValue={patient.medicalRecords.sex ?? undefined}
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Sesso</FormLabel>
@@ -377,7 +289,7 @@ export default function CartellaClinica() {
                   <FormField
                     control={form.control}
                     name="medicalRecords.gender"
-                    defaultValue={patient.medicalRecord.gender}
+                    defaultValue={patient.medicalRecords.gender}
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Genere</FormLabel>
@@ -392,7 +304,7 @@ export default function CartellaClinica() {
                   <FormField
                     control={form.control}
                     name="medicalRecords.pronoun"
-                    defaultValue={patient.medicalRecord.pronoun}
+                    defaultValue={patient.medicalRecords.pronoun}
                     render={({ field }) => (
                       <FormItem className="col-span-2">
                         <FormLabel>Pronome</FormLabel>
@@ -407,7 +319,7 @@ export default function CartellaClinica() {
                   <FormField
                     control={form.control}
                     name="medicalRecords.occupation"
-                    defaultValue={patient.medicalRecord.occupation}
+                    defaultValue={patient.medicalRecords.occupation}
                     render={({ field }) => (
                       <FormItem className="col-span-2">
                         <FormLabel>Professione</FormLabel>
@@ -422,7 +334,7 @@ export default function CartellaClinica() {
                   <FormField
                     control={form.control}
                     name="medicalRecords.education"
-                    defaultValue={patient.medicalRecord.education}
+                    defaultValue={patient.medicalRecords.education}
                     render={({ field }) => (
                       <FormItem className="col-span-2">
                         <FormLabel>Istruzione</FormLabel>
@@ -437,7 +349,7 @@ export default function CartellaClinica() {
                   <FormField
                     control={form.control}
                     name="medicalRecords.otherNotes"
-                    defaultValue={patient.medicalRecord.otherNotes}
+                    defaultValue={patient.medicalRecords.otherNotes}
                     render={({ field }) => (
                       <FormItem className="col-span-2">
                         <FormLabel>Note ulteriori</FormLabel>
@@ -459,7 +371,7 @@ export default function CartellaClinica() {
                   <FormField
                     control={form.control}
                     name="medicalRecords.motherName"
-                    defaultValue={patient.medicalRecord.motherName}
+                    defaultValue={patient.medicalRecords.motherName}
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Nome madre</FormLabel>
@@ -474,7 +386,7 @@ export default function CartellaClinica() {
                     control={form.control}
                     name="medicalRecords.motherStatus"
                     defaultValue={
-                      patient.medicalRecord.motherStatus ?? undefined
+                      patient.medicalRecords.motherStatus ?? undefined
                     }
                     render={({ field }) => (
                       <FormItem>
@@ -500,8 +412,8 @@ export default function CartellaClinica() {
 
                   <FormField
                     control={form.control}
-                    name="medicalRecords.patherName"
-                    defaultValue={patient.medicalRecord.patherName}
+                    name="medicalRecords.fatherName"
+                    defaultValue={patient.medicalRecords.fatherName}
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Nome padre</FormLabel>
@@ -516,7 +428,7 @@ export default function CartellaClinica() {
                     control={form.control}
                     name="medicalRecords.fatherStatus"
                     defaultValue={
-                      patient.medicalRecord.fatherStatus ?? undefined
+                      patient.medicalRecords.fatherStatus ?? undefined
                     }
                     render={({ field }) => (
                       <FormItem>
@@ -542,7 +454,7 @@ export default function CartellaClinica() {
                   <FormField
                     control={form.control}
                     name="medicalRecords.parentsNotes"
-                    defaultValue={patient.medicalRecord.parentsNotes}
+                    defaultValue={patient.medicalRecords.parentsNotes}
                     render={({ field }) => (
                       <FormItem className="col-span-2">
                         <FormLabel>Note ulteriori</FormLabel>
@@ -583,10 +495,8 @@ export default function CartellaClinica() {
                       <FormField
                         control={form.control}
                         defaultValue={
-                          (
-                            patient.medicalRecord
-                              ?.caregivers as PrismaJson.CaregiverType[]
-                          )?.[index]?.name ?? ''
+                          patient.medicalRecords?.caregivers?.[index]?.name ??
+                          ''
                         }
                         name={`medicalRecords.caregivers.${index}.name`}
                         render={({ field }) => (
@@ -602,10 +512,8 @@ export default function CartellaClinica() {
                         control={form.control}
                         name={`medicalRecords.caregivers.${index}.kinship`}
                         defaultValue={
-                          (
-                            patient.medicalRecord
-                              ?.caregivers as PrismaJson.CaregiverType[]
-                          )?.[index]?.kinship ?? undefined
+                          patient.medicalRecords?.caregivers?.[index]
+                            ?.kinship ?? undefined
                         }
                         render={({ field }) => (
                           <FormItem>
@@ -673,7 +581,7 @@ export default function CartellaClinica() {
                   <FormField
                     control={form.control}
                     name="user.email"
-                    defaultValue={patient.user.email}
+                    defaultValue={patient.profile.email}
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>
@@ -692,7 +600,7 @@ export default function CartellaClinica() {
                   <FormField
                     control={form.control}
                     name="user.phone"
-                    defaultValue={patient.user.phone ?? ''}
+                    defaultValue={patient.profile.phone ?? ''}
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>
@@ -719,7 +627,7 @@ export default function CartellaClinica() {
                   <FormField
                     control={form.control}
                     name="medicalRecords.diagnosticHypothesis"
-                    defaultValue={patient.medicalRecord.diagnosticHypothesis}
+                    defaultValue={patient.medicalRecords.diagnosticHypothesis}
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Ipotesi diagnostica</FormLabel>
@@ -733,7 +641,7 @@ export default function CartellaClinica() {
                   <FormField
                     control={form.control}
                     name="medicalRecords.simptoms"
-                    defaultValue={patient.medicalRecord.simptoms}
+                    defaultValue={patient.medicalRecords.simptoms}
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Sintomi</FormLabel>
@@ -747,7 +655,7 @@ export default function CartellaClinica() {
                   <FormField
                     control={form.control}
                     name="medicalRecords.reason"
-                    defaultValue={patient.medicalRecord.reason}
+                    defaultValue={patient.medicalRecords.reason}
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Motivo della presa in carico</FormLabel>
@@ -764,7 +672,7 @@ export default function CartellaClinica() {
                   <FormField
                     control={form.control}
                     name="medicalRecords.previousInterventions"
-                    defaultValue={patient.medicalRecord.previousInterventions}
+                    defaultValue={patient.medicalRecords.previousInterventions}
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Interventi precedenti</FormLabel>
@@ -781,7 +689,7 @@ export default function CartellaClinica() {
                   <FormField
                     control={form.control}
                     name="medicalRecords.clinicalDataNotes"
-                    defaultValue={patient.medicalRecord.clinicalDataNotes}
+                    defaultValue={patient.medicalRecords.clinicalDataNotes}
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Note ulteriori</FormLabel>
@@ -795,7 +703,7 @@ export default function CartellaClinica() {
                   <FormField
                     control={form.control}
                     name="medicalRecords.highRisk"
-                    defaultValue={patient.medicalRecord.highRisk}
+                    defaultValue={patient.medicalRecords.highRisk}
                     render={({ field }) => (
                       <FormItem>
                         <div className="flex items-center justify-between">
@@ -822,7 +730,7 @@ export default function CartellaClinica() {
                   <FormField
                     control={form.control}
                     name="medicalRecords.state"
-                    defaultValue={patient.medicalRecord.state}
+                    defaultValue={patient.medicalRecords.state}
                     render={({ field }) => (
                       <FormItem className="col-span-2">
                         <FormLabel>Stato</FormLabel>
@@ -848,7 +756,7 @@ export default function CartellaClinica() {
                   <FormField
                     control={form.control}
                     name="medicalRecords.goals"
-                    defaultValue={patient.medicalRecord.goals}
+                    defaultValue={patient.medicalRecords.goals}
                     render={({ field }) => (
                       <FormItem className="col-span-2">
                         <FormLabel>Obiettivi</FormLabel>
@@ -862,7 +770,7 @@ export default function CartellaClinica() {
                   <FormField
                     control={form.control}
                     name="medicalRecords.therapeuticPlan"
-                    defaultValue={patient.medicalRecord.therapeuticPlan}
+                    defaultValue={patient.medicalRecords.therapeuticPlan}
                     render={({ field }) => (
                       <FormItem className="col-span-2">
                         <FormLabel>Piano terapeutico</FormLabel>
@@ -879,7 +787,7 @@ export default function CartellaClinica() {
                   <FormField
                     control={form.control}
                     name="medicalRecords.frequency"
-                    defaultValue={patient.medicalRecord.frequency}
+                    defaultValue={patient.medicalRecords.frequency}
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Frequenza</FormLabel>
@@ -894,7 +802,7 @@ export default function CartellaClinica() {
                     control={form.control}
                     name="medicalRecords.takingChargeDate"
                     defaultValue={
-                      patient.medicalRecord.takingChargeDate ?? undefined
+                      patient.medicalRecords.takingChargeDate ?? undefined
                     }
                     render={({ field }) => (
                       <FormItem>
@@ -953,9 +861,7 @@ export default function CartellaClinica() {
                         control={form.control}
                         name={`medicalRecords.tags.${index}.text`}
                         defaultValue={
-                          (
-                            patient.medicalRecord?.tags as PrismaJson.TagType[]
-                          )?.[index]?.text ?? ''
+                          patient.medicalRecords?.tags?.[index]?.text ?? ''
                         }
                         render={({ field }) => (
                           <FormItem>
@@ -994,47 +900,6 @@ export default function CartellaClinica() {
                   </Button>
                 </CardFooter>
               </Card>
-
-              <Card>
-                <CardHeader className="font-semibold">
-                  Account paziente
-                </CardHeader>
-                {patient.user.accounts.length > 0 ? (
-                  <CardContent
-                    className={cn(
-                      'grid gap-3',
-                      !(patient.user.accounts.length > 0) && 'p-0',
-                    )}
-                  >
-                    <p className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                      Nome utente
-                    </p>
-                    <p>{patient.user.username}</p>
-                    <Button
-                      variant="link"
-                      className="w-min justify-start p-0"
-                      onClick={() =>
-                        void resetPassword({
-                          id: patient.user?.accounts[0].accountId,
-                          username: patient.user?.username,
-                        })
-                      }
-                    >
-                      Reimposta password
-                    </Button>
-                  </CardContent>
-                ) : (
-                  <CardFooter>
-                    <Button
-                      variant="link"
-                      className="w-auto p-0"
-                      onClick={() => void addPatient(patient.user)}
-                    >
-                      Crea account paziente
-                    </Button>
-                  </CardFooter>
-                )}
-              </Card>
             </div>
           </form>
         </Form>
@@ -1061,20 +926,20 @@ export default function CartellaClinica() {
                 <p className="text-muted-foreground text-sm leading-none font-medium">
                   Nome
                 </p>
-                <p>{patient.user.firstName}</p>
+                <p>{patient.profile.firstName}</p>
               </div>
               <div className="space-y-2">
                 <p className="text-muted-foreground text-sm leading-none font-medium">
                   Cognome
                 </p>
-                <p>{patient.user.lastName}</p>
+                <p>{patient.profile.lastName}</p>
               </div>
 
               <div className="col-span-2 space-y-2">
                 <p className="text-muted-foreground text-sm leading-none font-medium">
                   Nome d'elezione
                 </p>
-                <p>{patient.medicalRecord.alias || '-'}</p>
+                <p>{patient.medicalRecords.alias || '-'}</p>
               </div>
 
               <div className="col-span-2 space-y-2">
@@ -1082,8 +947,8 @@ export default function CartellaClinica() {
                   Data di nascita
                 </p>
                 <p>
-                  {patient.medicalRecord.birthDate
-                    ? format(patient.medicalRecord.birthDate, 'PPP', {
+                  {patient.medicalRecords.birthDate
+                    ? format(patient.medicalRecords.birthDate, 'PPP', {
                         locale: it,
                       })
                     : '-'}
@@ -1094,37 +959,37 @@ export default function CartellaClinica() {
                 <p className="text-muted-foreground text-sm leading-none font-medium">
                   Luogo di nascita
                 </p>
-                <p>{patient.medicalRecord.birthPlace || '-'}</p>
+                <p>{patient.medicalRecords.birthPlace || '-'}</p>
               </div>
               <div className="space-y-2">
                 <p className="text-muted-foreground text-sm leading-none font-medium">
                   Sesso
                 </p>
-                <p>{patient.medicalRecord.sex || '-'}</p>
+                <p>{patient.medicalRecords.sex || '-'}</p>
               </div>
               <div className="space-y-2">
                 <p className="text-muted-foreground text-sm leading-none font-medium">
                   Genere
                 </p>
-                <p>{patient.medicalRecord.gender || '-'}</p>
+                <p>{patient.medicalRecords.gender || '-'}</p>
               </div>
               <div className="space-y-2">
                 <p className="text-muted-foreground text-sm leading-none font-medium">
                   Pronome
                 </p>
-                <p>{patient.medicalRecord.pronoun || '-'}</p>
+                <p>{patient.medicalRecords.pronoun || '-'}</p>
               </div>
               <div className="col-span-2 space-y-2">
                 <p className="text-muted-foreground text-sm leading-none font-medium">
                   Professione
                 </p>
-                <p>{patient.medicalRecord.occupation || '-'}</p>
+                <p>{patient.medicalRecords.occupation || '-'}</p>
               </div>
               <div className="col-span-2 space-y-2">
                 <p className="text-muted-foreground text-sm leading-none font-medium">
                   Istruzione
                 </p>
-                <p>{patient.medicalRecord.education || '-'}</p>
+                <p>{patient.medicalRecords.education || '-'}</p>
               </div>
               <div className="col-span-2 space-y-2">
                 <p className="text-muted-foreground text-sm leading-none font-medium">
@@ -1132,7 +997,7 @@ export default function CartellaClinica() {
                 </p>
                 <p
                   dangerouslySetInnerHTML={{
-                    __html: patient.medicalRecord.otherNotes || '-',
+                    __html: patient.medicalRecords.otherNotes || '-',
                   }}
                 />
               </div>
@@ -1146,25 +1011,25 @@ export default function CartellaClinica() {
                 <p className="text-muted-foreground text-sm leading-none font-medium">
                   Nome madre
                 </p>
-                <p>{patient.medicalRecord.motherName || '-'}</p>
+                <p>{patient.medicalRecords.motherName || '-'}</p>
               </div>
               <div className="space-y-2">
                 <p className="text-muted-foreground text-sm leading-none font-medium">
                   Stato madre
                 </p>
-                <p>{patient.medicalRecord.motherStatus || '-'}</p>
+                <p>{patient.medicalRecords.motherStatus || '-'}</p>
               </div>
               <div className="space-y-2">
                 <p className="text-muted-foreground text-sm leading-none font-medium">
                   Nome padre
                 </p>
-                <p>{patient.medicalRecord.patherName || '-'}</p>
+                <p>{patient.medicalRecords.fatherName || '-'}</p>
               </div>
               <div className="space-y-2">
                 <p className="text-muted-foreground text-sm leading-none font-medium">
                   Stato padre
                 </p>
-                <p>{patient.medicalRecord.fatherStatus || '-'}</p>
+                <p>{patient.medicalRecords.fatherStatus || '-'}</p>
               </div>
               <div className="col-span-2 space-y-2">
                 <p className="text-muted-foreground text-sm leading-none font-medium">
@@ -1172,7 +1037,7 @@ export default function CartellaClinica() {
                 </p>
                 <p
                   dangerouslySetInnerHTML={{
-                    __html: patient.medicalRecord.parentsNotes || '-',
+                    __html: patient.medicalRecords.parentsNotes || '-',
                   }}
                 />
               </div>
@@ -1182,10 +1047,8 @@ export default function CartellaClinica() {
           <Card>
             <CardHeader className="font-semibold">Accompagnatore</CardHeader>
             <CardContent className="grid grid-cols-2 gap-4">
-              {patient.medicalRecord.caregivers.length > 0 ? (
-                (
-                  patient.medicalRecord.caregivers as PrismaJson.CaregiverType[]
-                ).map((caregiver) => (
+              {patient.medicalRecords.caregivers.length > 0 ? (
+                patient.medicalRecords.caregivers.map((caregiver) => (
                   <Fragment key={caregiver.name}>
                     <div className="space-y-2">
                       <p className="text-muted-foreground text-sm leading-none font-medium">
@@ -1216,13 +1079,13 @@ export default function CartellaClinica() {
                 <p className="text-muted-foreground text-sm leading-none font-medium">
                   Email
                 </p>
-                <p>{patient.user.email}</p>
+                <p>{patient.profile.email}</p>
               </div>
               <div className="space-y-2">
                 <p className="text-muted-foreground text-sm leading-none font-medium">
                   Numero di telefono
                 </p>
-                <p>{patient.user.phone}</p>
+                <p>{patient.profile.phone}</p>
               </div>
             </CardContent>
           </Card>
@@ -1232,7 +1095,7 @@ export default function CartellaClinica() {
           <Card>
             <CardHeader className="font-semibold">Dati clinici</CardHeader>
             <CardContent className="grid gap-4">
-              {patient.medicalRecord.highRisk && (
+              {patient.medicalRecords.highRisk && (
                 <div className="flex items-center gap-2 rounded-md border border-[#e55934] bg-[#faded6] p-3 text-[#e55934]">
                   <TriangleAlert className="h-4 w-4" />
                   <span className="text-base font-medium">High Risk</span>
@@ -1243,7 +1106,7 @@ export default function CartellaClinica() {
                 <p className="text-muted-foreground text-sm leading-none font-medium">
                   Ipotesi diagnostica
                 </p>
-                <p>{patient.medicalRecord.diagnosticHypothesis || '-'}</p>
+                <p>{patient.medicalRecords.diagnosticHypothesis || '-'}</p>
               </div>
 
               <div className="space-y-2">
@@ -1252,7 +1115,7 @@ export default function CartellaClinica() {
                 </p>
                 <p
                   dangerouslySetInnerHTML={{
-                    __html: patient.medicalRecord.simptoms || '-',
+                    __html: patient.medicalRecords.simptoms || '-',
                   }}
                 />
               </div>
@@ -1263,7 +1126,7 @@ export default function CartellaClinica() {
                 </p>
                 <p
                   dangerouslySetInnerHTML={{
-                    __html: patient.medicalRecord.reason || '-',
+                    __html: patient.medicalRecords.reason || '-',
                   }}
                 />
               </div>
@@ -1272,7 +1135,7 @@ export default function CartellaClinica() {
                 <p className="text-muted-foreground text-sm leading-none font-medium">
                   Interventi precedenti
                 </p>
-                <p>{patient.medicalRecord.previousInterventions || '-'}</p>
+                <p>{patient.medicalRecords.previousInterventions || '-'}</p>
               </div>
 
               <div className="space-y-2">
@@ -1281,7 +1144,7 @@ export default function CartellaClinica() {
                 </p>
                 <p
                   dangerouslySetInnerHTML={{
-                    __html: patient.medicalRecord.clinicalDataNotes || '-',
+                    __html: patient.medicalRecords.clinicalDataNotes || '-',
                   }}
                 />
               </div>
@@ -1295,7 +1158,7 @@ export default function CartellaClinica() {
                 <p className="text-muted-foreground text-sm leading-none font-medium">
                   Stato
                 </p>
-                <StateBadge state={patient.medicalRecord.state} />
+                <StateBadge state={patient.medicalRecords.state} />
               </div>
 
               <div className="col-span-2 space-y-2">
@@ -1304,7 +1167,7 @@ export default function CartellaClinica() {
                 </p>
                 <p
                   dangerouslySetInnerHTML={{
-                    __html: patient.medicalRecord.goals || '-',
+                    __html: patient.medicalRecords.goals || '-',
                   }}
                 />
               </div>
@@ -1318,7 +1181,7 @@ export default function CartellaClinica() {
                 </p>
                 <p
                   dangerouslySetInnerHTML={{
-                    __html: patient.medicalRecord.therapeuticPlan || '-',
+                    __html: patient.medicalRecords.therapeuticPlan || '-',
                   }}
                 />
               </div>
@@ -1326,15 +1189,15 @@ export default function CartellaClinica() {
                 <p className="text-muted-foreground text-sm leading-none font-medium">
                   Frequenza
                 </p>
-                <p>{patient.medicalRecord.frequency || '-'}</p>
+                <p>{patient.medicalRecords.frequency || '-'}</p>
               </div>
               <div className="space-y-2">
                 <p className="text-muted-foreground text-sm leading-none font-medium">
                   Data presa in carico
                 </p>
                 <p>
-                  {patient.medicalRecord.takingChargeDate
-                    ? format(patient.medicalRecord.takingChargeDate, 'PPP', {
+                  {patient.medicalRecords.takingChargeDate
+                    ? format(patient.medicalRecords.takingChargeDate, 'PPP', {
                         locale: it,
                       })
                     : '-'}
@@ -1346,36 +1209,17 @@ export default function CartellaClinica() {
           <Card>
             <CardHeader className="font-semibold">Tags</CardHeader>
             <CardContent className="grid gap-4">
-              {patient.medicalRecord.tags.length > 0 ? (
-                (patient.medicalRecord.tags as PrismaJson.TagType[]).map(
-                  (tag) => (
-                    <Fragment key={tag.text}>
-                      <p className="text-muted-foreground text-sm leading-none font-medium">
-                        {tag.text}
-                      </p>
-                    </Fragment>
-                  ),
-                )
+              {patient.medicalRecords.tags.length > 0 ? (
+                patient.medicalRecords.tags.map((tag) => (
+                  <Fragment key={tag.text}>
+                    <p className="text-muted-foreground text-sm leading-none font-medium">
+                      {tag.text}
+                    </p>
+                  </Fragment>
+                ))
               ) : (
                 <p className="text-sm leading-none font-medium">
                   Nessun tag selezionato
-                </p>
-              )}
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="font-semibold">Account paziente</CardHeader>
-            <CardContent className="grid gap-4">
-              {patient.user.accounts.length > 0 ? (
-                <>
-                  <p className="text-muted-foreground text-sm leading-none font-medium">
-                    Nome utente
-                  </p>
-                  <p>{patient.user.username}</p>
-                </>
-              ) : (
-                <p className="text-sm leading-none font-medium">
-                  Nessun account paziente
                 </p>
               )}
             </CardContent>

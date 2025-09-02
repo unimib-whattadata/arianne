@@ -84,7 +84,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           queryKey: ['diary.find', { id: diaryId }],
           queryFn: async () => {
             const allDiaries = await queryClient.fetchQuery(
-              api.diary.getAll.queryOptions({ type: 'food' }),
+              api.diaries.getAll.queryOptions({ type: 'food' }),
             );
             return allDiaries?.find((diary) => diary.id === diaryId);
           },

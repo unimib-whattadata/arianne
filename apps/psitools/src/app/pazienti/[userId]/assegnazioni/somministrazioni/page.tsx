@@ -13,11 +13,11 @@ export default function AdministrationsPage() {
   const { filteredAdministrationList, SearchBar } = useSearchBar();
 
   if (isLoading || !patient) return null;
-  const administrations = patient.medicalRecord?.administrations;
+  const administrations = patient.medicalRecords?.administrations;
 
   return (
-    <div className="relative grid h-full-safe grid-rows-[repeat(2,min-content)] overflow-auto p-4 pt-0">
-      <div className="sticky top-0 z-10 bg-background pb-3">
+    <div className="h-full-safe relative grid grid-rows-[repeat(2,min-content)] overflow-auto p-4 pt-0">
+      <div className="bg-background sticky top-0 z-10 pb-3">
         <h1 className="text-xl font-semibold">Somministrazioni</h1>
         {SearchBar}
 

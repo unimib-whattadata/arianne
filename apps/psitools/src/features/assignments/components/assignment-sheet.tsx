@@ -1,8 +1,6 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { Assignment } from '@prisma/client';
-import { $Enums } from '@prisma/client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
@@ -16,7 +14,7 @@ import type {
 } from 'react-hook-form';
 import { useForm, useWatch } from 'react-hook-form';
 import { toast } from 'sonner';
-import { z } from 'zod';
+import type { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -64,68 +62,22 @@ import { ADMINISTRATION_TYPES } from '@/features/questionnaires/settings';
 import { usePatient } from '@/hooks/use-patient';
 import { useTRPC } from '@/trpc/react';
 import { cn } from '@/utils/cn';
+import type { RouterOutputs } from '@arianne/api';
+import type {
+  assignmentRecurrenceEnum,
+  Weekday,
+  WeeklyRecurrence,
+  MonthlyRecurrence,
+  assignmentTypeEnum,
+} from '@arianne/db/schema';
+import { assignmentSchema } from '@arianne/db/schema';
+import { $Enums } from '@arianne/db/enums';
+
+type Assignment = RouterOutputs['assignments']['get'][number];
 
 const available = ADMINISTRATION_TYPES.map((type) => {
   return { value: type.id, label: type.name };
 });
-
-const Weekday = z.enum(['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom']);
-type TWeekday = z.infer<typeof Weekday>;
-
-const noneRecurrence = z.object({
-  name: z.string().min(1, { message: "L'assegnazione è obbligatoria" }),
-  type: z.nativeEnum($Enums.AssignmentType),
-  date: z.date(),
-  recurrence: z.literal($Enums.AssignmentRecurrence.none),
-  recurrenceConfig: z.object({
-    weekdays: z.array(Weekday),
-    dayOfMonth: z.array(z.number().int().min(1).max(31)),
-  }),
-});
-
-const dailyRecurrence = z.object({
-  name: z.string().min(1, { message: "L'assegnazione è obbligatoria" }),
-  type: z.nativeEnum($Enums.AssignmentType),
-  date: z.date(),
-  recurrence: z.literal($Enums.AssignmentRecurrence.daily),
-  recurrenceConfig: z.object({
-    weekdays: z.array(Weekday),
-    dayOfMonth: z.array(z.number().int().min(1).max(31)),
-  }),
-});
-
-const weeklyRecurrence = z.object({
-  name: z.string().min(1, { message: "L'assegnazione è obbligatoria" }),
-  type: z.nativeEnum($Enums.AssignmentType),
-  date: z.date(),
-  recurrence: z.literal($Enums.AssignmentRecurrence.weekly),
-  recurrenceConfig: z.object({
-    weekdays: z.array(Weekday).min(1, {
-      message: 'Deve essere presente almeno un giorno della settimana',
-    }),
-  }),
-});
-type WeeklyRecurrence = z.infer<typeof weeklyRecurrence>;
-
-const monthlyRecurrence = z.object({
-  name: z.string().min(1, { message: "L'assegnazione è obbligatoria" }),
-  type: z.nativeEnum($Enums.AssignmentType),
-  date: z.date(),
-  recurrence: z.literal($Enums.AssignmentRecurrence.monthly),
-  recurrenceConfig: z.object({
-    dayOfMonth: z
-      .array(z.number().int().min(1).max(31))
-      .min(1, { message: 'Deve essere presente almeno un giorno del mese' }),
-  }),
-});
-type MonthlyRecurrence = z.infer<typeof monthlyRecurrence>;
-
-export const assignmentSchema = z.discriminatedUnion('recurrence', [
-  noneRecurrence,
-  dailyRecurrence,
-  weeklyRecurrence,
-  monthlyRecurrence,
-]);
 
 const assigmentTypeEnum = {
   [$Enums.AssignmentType.diary]: 'Diario',
@@ -155,7 +107,7 @@ const RecurrenceConfig = ({
   recurrence,
   ...form
 }: {
-  recurrence: $Enums.AssignmentRecurrence;
+  recurrence: (typeof assignmentRecurrenceEnum.enumValues)[number];
 } & UseFormReturn<AssignmentForm>) => {
   if (recurrence === $Enums.AssignmentRecurrence.weekly) {
     const items = [
@@ -193,7 +145,7 @@ const RecurrenceConfig = ({
                         <FormControl>
                           <Checkbox
                             className="sr-only"
-                            checked={value.includes(item.id as TWeekday)}
+                            checked={value.includes(item.id as Weekday)}
                             onCheckedChange={(checked) => {
                               return checked
                                 ? field.onChange(
@@ -211,10 +163,10 @@ const RecurrenceConfig = ({
                         </FormControl>
                         <FormLabel
                           className={cn(
-                            'block cursor-pointer rounded-sm border border-primary text-center text-sm transition-colors',
-                            value.includes(item.id as TWeekday)
+                            'border-primary block cursor-pointer rounded-sm border text-center text-sm transition-colors',
+                            value.includes(item.id as Weekday)
                               ? 'bg-primary text-primary-foreground'
-                              : 'bg-transparent text-primary',
+                              : 'text-primary bg-transparent',
                           )}
                         >
                           {item.label}
@@ -407,7 +359,7 @@ export const AssignmentSheet = React.forwardRef<
   const type = useWatch({ name: 'type', control: form.control });
   const recurrence = useWatch({ name: 'recurrence', control: form.control });
 
-  const getOptions = (type: $Enums.AssignmentType) => {
+  const getOptions = (type: (typeof assignmentTypeEnum.enumValues)[number]) => {
     switch (type) {
       case $Enums.AssignmentType.diary:
         return [
@@ -435,6 +387,8 @@ export const AssignmentSheet = React.forwardRef<
   const onSubmit: SubmitHandler<AssignmentForm> = async (data) => {
     let mutateObj: AssignmentForm;
 
+    const patientId = assignment?.patientId ?? userId;
+
     switch (data.recurrence) {
       case $Enums.AssignmentRecurrence.none:
       case $Enums.AssignmentRecurrence.daily:
@@ -447,6 +401,7 @@ export const AssignmentSheet = React.forwardRef<
             weekdays: data.recurrenceConfig.weekdays ?? [],
             dayOfMonth: data.recurrenceConfig.dayOfMonth ?? [],
           },
+          patientId,
         };
         break;
       case $Enums.AssignmentRecurrence.weekly:
@@ -456,6 +411,7 @@ export const AssignmentSheet = React.forwardRef<
           type: data.type,
           date: data.date,
           recurrenceConfig: { weekdays: data.recurrenceConfig.weekdays ?? [] },
+          patientId,
         };
         break;
       case $Enums.AssignmentRecurrence.monthly:
@@ -467,6 +423,7 @@ export const AssignmentSheet = React.forwardRef<
           recurrenceConfig: {
             dayOfMonth: data.recurrenceConfig.dayOfMonth ?? [],
           },
+          patientId,
         };
         break;
       default:
@@ -475,8 +432,10 @@ export const AssignmentSheet = React.forwardRef<
 
     if (assignment?.id) {
       await update({
+        where: {
+          id: assignment.id,
+        },
         data: { ...mutateObj, patientId: assignment?.patientId ?? userId },
-        id: assignment.id,
       });
       return;
     } else {
@@ -574,7 +533,7 @@ export const AssignmentSheet = React.forwardRef<
                             placeholder="Nome del farmaco"
                             {...field}
                             className={cn(
-                              'w-full border-input bg-transparent',
+                              'border-input w-full bg-transparent',
                               !field.value && 'text-muted-foreground',
                             )}
                           />
@@ -586,7 +545,7 @@ export const AssignmentSheet = React.forwardRef<
                                   variant="outline"
                                   role="combobox"
                                   className={cn(
-                                    'w-full justify-between border-input bg-transparent px-3 text-foreground hover:bg-transparent',
+                                    'border-input text-foreground w-full justify-between bg-transparent px-3 hover:bg-transparent',
                                     !field.value && 'text-muted-foreground',
                                   )}
                                 >
@@ -625,7 +584,7 @@ export const AssignmentSheet = React.forwardRef<
                                         {option.label}
                                         <Check
                                           className={cn(
-                                            'ml-auto h-4 w-4 text-primary',
+                                            'text-primary ml-auto h-4 w-4',
                                             option.value === field.value
                                               ? 'opacity-100'
                                               : 'opacity-0',
@@ -893,19 +852,19 @@ const AssignmentDescription = ({
         return `ogni ${recurrenceConfig.weekdays
           .map((day) => {
             switch (day) {
-              case 'Lun':
+              case 'monday':
                 return 'lunedì';
-              case 'Mar':
+              case 'tuesday':
                 return 'martedì';
-              case 'Mer':
+              case 'wednesday':
                 return 'mercoledì';
-              case 'Gio':
+              case 'thursday':
                 return 'giovedì';
-              case 'Ven':
+              case 'friday':
                 return 'venerdì';
-              case 'Sab':
+              case 'saturday':
                 return 'sabato';
-              case 'Dom':
+              case 'sunday':
                 return 'domenica';
             }
           })
@@ -928,7 +887,7 @@ const AssignmentDescription = ({
     if (type !== $Enums.AssignmentType.drugs) {
       return (
         <p>
-          <strong>{patient.user?.name}</strong> riceverà{' '}
+          <strong>{patient.profile?.name}</strong> riceverà{' '}
           <strong>{assignmentName}</strong> da compilare{' '}
           <strong>{recurrenceDescription}</strong> {when}{' '}
           <strong>{formattedDate}</strong> alle <strong>{formattedTime}</strong>
@@ -938,7 +897,7 @@ const AssignmentDescription = ({
     }
     return (
       <p>
-        <strong>{patient.user?.name}</strong> deve assumere{' '}
+        <strong>{patient.profile?.name}</strong> deve assumere{' '}
         <strong>{assignmentName}</strong>{' '}
         <strong>{recurrenceDescription}</strong> {when}{' '}
         <strong>{formattedDate}</strong> alle <strong>{formattedTime}</strong>.

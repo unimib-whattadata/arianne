@@ -1,7 +1,6 @@
 {
   "dependencies": {
     "drizzle-orm": "catalog:",
-    "drizzle-zod": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
@@ -26,6 +25,14 @@
     "./schema": {
       "types": "./dist/schema.d.ts",
       "default": "./src/schema.ts"
+    },
+    "./schemas/*": {
+      "types": "./dist/schemas/*.d.ts",
+      "default": "./src/schemas/*.ts"
+    },
+    "./enums": {
+      "types": "./dist/enums.d.ts",
+      "default": "./src/enums.ts"
     }
   },
   "license": "MIT",
@@ -38,10 +45,12 @@
     "dev": "tsc",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint",
-    "push": "pnpm with-env drizzle-kit push",
-    "studio": "pnpm with-env drizzle-kit studio",
+    "db:generate": "pnpm with-env drizzle-kit generate --name",
+    "db:migrate": "pnpx supabase db push",
+    "db:studio": "pnpm with-env drizzle-kit studio",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
-    "with-env": "dotenv -e ../../.env --"
+    "with-env": "dotenv -e ../../.env --",
+    "db:utils": "pnpm with-env pnpm dlx tsx ./src/utils.ts"
   },
   "type": "module",
   "version": "0.1.0"

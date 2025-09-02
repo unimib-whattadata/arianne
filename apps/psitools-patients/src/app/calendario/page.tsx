@@ -8,7 +8,7 @@ import { useTRPC } from '@/trpc/react';
 export default function Page() {
   const api = useTRPC();
   const { data: events } = useQuery(
-    api.event.getAll.queryOptions({
+    api.events.getAll.queryOptions({
       who: 'patient',
     }),
   );
@@ -22,7 +22,7 @@ export default function Page() {
         <PatientCalendar events={events} />
       ) : (
         <div className="flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <Loader2 className="text-primary h-8 w-8 animate-spin" />
         </div>
       )}
     </div>

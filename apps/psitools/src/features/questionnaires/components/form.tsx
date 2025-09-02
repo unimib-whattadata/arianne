@@ -1,6 +1,5 @@
 'use client';
 
-import type { modality } from '@prisma/client';
 import { AlertDialogDescription } from '@radix-ui/react-alert-dialog';
 import { AnimatePresence, motion } from 'framer-motion';
 import { LoaderIcon, SendIcon, Verified } from 'lucide-react';
@@ -36,12 +35,13 @@ import { Form } from '@/components/ui/form';
 import { useAdministrationContext } from '@/features/questionnaires/context/administration';
 import type { available } from '@/features/questionnaires/settings';
 import { cn } from '@/utils/cn';
+import type { assignmentModalityEnum } from '@arianne/db/schema';
 
 export interface CompilationData {
   therapistName: string;
   therapistLastname: string;
 
-  modality: modality;
+  modality: (typeof assignmentModalityEnum.enumValues)[number];
   createdAt: string;
 }
 
@@ -62,7 +62,9 @@ const FormContextProvider = (props: {
     therapistName: searchParams.get('therapistName') || '',
     therapistLastname: searchParams.get('therapistLastname') || '',
 
-    modality: searchParams.get('modality') as modality,
+    modality: searchParams.get(
+      'modality',
+    ) as unknown as (typeof assignmentModalityEnum.enumValues)[number],
     createdAt: searchParams.get('createdAt') || '',
   };
 
@@ -157,7 +159,7 @@ export const FormInstructions = (props: FormInstructionsProps) => {
       <AccordionItem value="expandible" className="border-b-0">
         <AccordionTrigger
           className="flex items-center justify-between font-bold"
-          icon="CircleHelp"
+          icon="CircleQuestionMark"
           iconClassName="h-5 w-5 text-primary"
         >
           Istruzioni

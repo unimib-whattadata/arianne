@@ -1,6 +1,6 @@
 'use client';
 
-import type { $Enums } from '@prisma/client';
+import type { medicalRecordSexEnum } from '@arianne/db/schemas/medical-records';
 import { useQuery } from '@tanstack/react-query';
 import { useParams, useSearchParams } from 'next/navigation';
 
@@ -19,7 +19,7 @@ interface TAdministration<FormValues> {
 
 interface TAdministrationReturn<FormValues> {
   isLoading: boolean;
-  sex?: $Enums.Sex;
+  sex?: (typeof medicalRecordSexEnum.enumValues)[number];
   administration:
     | TAdministration<FormValues>[]
     | TAdministration<FormValues>
@@ -60,7 +60,7 @@ export function useAdministration<FormValues>(props?: {
   isComparison?: true;
 }): {
   isLoading: boolean;
-  sex: $Enums.Sex;
+  sex: (typeof medicalRecordSexEnum.enumValues)[number];
   administration: TAdministration<FormValues>[] | undefined;
 };
 
@@ -69,7 +69,7 @@ export function useAdministration<FormValues>(props?: {
   isComparison?: false;
 }): {
   isLoading: boolean;
-  sex: $Enums.Sex;
+  sex: (typeof medicalRecordSexEnum.enumValues)[number];
   administration: TAdministration<FormValues> | undefined;
 };
 
@@ -87,18 +87,14 @@ export function useAdministration<FormValues>(props?: {
   const api = useTRPC();
 
   const { data: singleData, isLoading: singleIsLoading } = useQuery(
-    api.administration.findUnique.queryOptions(
-      {
-        where: {
-          id,
-        },
-      },
+    api.administrations.findUnique.queryOptions(
+      { id },
       {
         enabled: !!id && !isComparison,
         select: (data) => {
           return {
             ...data.administration,
-            T: data.administration.T!,
+            T: data.administration.T,
             records: data.administration.records as FormValues,
           };
         },
@@ -107,10 +103,13 @@ export function useAdministration<FormValues>(props?: {
   );
 
   const { data: comparisonData, isLoading: comparisonIsLoading } = useQuery(
-    api.administration.findMany.queryOptions(
+    api.administrations.findMany.queryOptions(
       {
         where: {
-          OR: [{ id: tA }, { id: tB }],
+          id: {
+            a: tA,
+            b: tB,
+          },
         },
         orderBy: {
           T: 'asc',
@@ -121,7 +120,7 @@ export function useAdministration<FormValues>(props?: {
         select: (data) => {
           return data.map((item) => ({
             ...item,
-            T: item.T!,
+            T: item.T,
             records: item.records as FormValues,
           }));
         },
@@ -129,15 +128,14 @@ export function useAdministration<FormValues>(props?: {
     ),
   );
 
-  // debug id undefined. Perché?????????
   const { data: sex } = useQuery(
-    api.medicalRecord.findUnique.queryOptions(
+    api.medicalRecords.findUnique.queryOptions(
       {
         where: {
           id:
-            singleData?.medicalRecordId || comparisonData?.[0]?.medicalRecordId,
+            singleData!.medicalRecordId ?? comparisonData?.[0]!.medicalRecordId,
         },
-        select: {
+        columns: {
           sex: true,
         },
       },

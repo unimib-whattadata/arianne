@@ -53,7 +53,7 @@ const PatientPage = () => {
         {editMode && (
           <button
             onClick={() => toggleBlock(key)}
-            className="absolute right-2 top-2 z-50 rounded bg-white p-1 shadow"
+            className="absolute top-2 right-2 z-50 rounded bg-white p-1 shadow"
           >
             {isVisible ? (
               <EyeOff className="h-4 w-4" />
@@ -73,8 +73,8 @@ const PatientPage = () => {
     : 'grid-cols-[auto_300px] grid-rows-auto';
 
   return (
-    <main className="grid h-full-safe grid-cols-[1fr_300px] gap-3 p-4">
-      <div className="sticky top-0 z-40 col-span-full flex items-center justify-between bg-background">
+    <main className="h-full-safe grid grid-cols-[1fr_300px] gap-3 p-4">
+      <div className="bg-background sticky top-0 z-40 col-span-full flex items-center justify-between">
         <h1 className="text-xl font-semibold">Dashboard</h1>
         {/* <Button variant="outline" onClick={() => setEditMode((prev) => !prev)}>
           <Settings2 className="mr-2 h-4 w-4" />
@@ -97,7 +97,7 @@ const PatientPage = () => {
       <div
         className={cn(
           '[--header-height:140px]',
-          isSingleCol ? 'col-span-full' : 'col-start-2 h-full-safe',
+          isSingleCol ? 'col-span-full' : 'h-full-safe col-start-2',
         )}
       >
         {renderBlock('events', <NextEventBanner />)}

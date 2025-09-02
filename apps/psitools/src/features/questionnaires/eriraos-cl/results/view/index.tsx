@@ -1,6 +1,6 @@
 'use client';
 
-import type { JsonObject } from '@prisma/client/runtime/library';
+import type { JsonObject } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
@@ -66,10 +66,8 @@ export default function PQ16Page() {
     isLoading,
     isFetching,
   } = useQuery(
-    api.administration.findUnique.queryOptions(
-      {
-        where: { id: idTest },
-      },
+    api.administrations.findUnique.queryOptions(
+      { id: idTest },
       {
         enabled: !!idTest,
         select: (data) => data.administration,
@@ -79,7 +77,10 @@ export default function PQ16Page() {
 
   const records = administration?.records as JsonObject;
   const response = records.response as JsonObject;
-  const items = response.items as JsonObject;
+  const items = response.items as Record<
+    string,
+    { value: string; note: string }
+  >;
   const post = response.post as Props['defaultValue'];
 
   const form = useForm<FormValues>();
@@ -137,10 +138,10 @@ export default function PQ16Page() {
       {step === 1 && (
         <>
           <section>
-            <header className="sticky top-[72px] flex justify-between bg-gray-10 py-4">
+            <header className="bg-gray-10 sticky top-[72px] flex justify-between py-4">
               <span className="self-center text-sm">Negli ultimi 6 mesi</span>
               <div className="flex">
-                <ul className="flex gap-2 text-primary">
+                <ul className="text-primary flex gap-2">
                   <li className="flex w-10 items-center justify-center text-sm">
                     Sì
                   </li>
@@ -169,25 +170,19 @@ export default function PQ16Page() {
                   question={question}
                   expanded={expand[`item-${question.index}`] ?? false}
                   setExpand={setExpand}
-                  defaultValue={
-                    (items[`item-${question.index}`] as JsonObject)
-                      ?.value as string
-                  }
-                  defaultNote={
-                    (items[`item-${question.index}`] as JsonObject)
-                      ?.note as string
-                  }
+                  defaultValue={items[`item-${question.index}`]?.value}
+                  defaultNote={items[`item-${question.index}`]?.note}
                 />
               );
             })}
           </section>
           <section>
-            <header className="sticky top-[72px] flex justify-between bg-gray-10 py-4">
+            <header className="bg-gray-10 sticky top-[72px] flex justify-between py-4">
               <span className="self-center text-sm">
                 In qualche momento della vita
               </span>
               <div className="flex">
-                <ul className="flex gap-2 text-primary">
+                <ul className="text-primary flex gap-2">
                   <li className="flex w-10 items-center justify-center text-sm">
                     Sì
                   </li>
@@ -216,14 +211,8 @@ export default function PQ16Page() {
                   question={question}
                   expanded={expand[`item-${question.index}`] ?? false}
                   setExpand={setExpand}
-                  defaultValue={
-                    (items[`item-${question.index}`] as JsonObject)
-                      ?.value as string
-                  }
-                  defaultNote={
-                    (items[`item-${question.index}`] as JsonObject)
-                      ?.note as string
-                  }
+                  defaultValue={items[`item-${question.index}`]?.value}
+                  defaultNote={items[`item-${question.index}`]?.note}
                 />
               );
             })}

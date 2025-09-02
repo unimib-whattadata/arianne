@@ -25,7 +25,7 @@ export default function SleepMorning() {
   const formattedDate = date ? format(date, 'yyyy-MM-dd') : undefined;
 
   const { data, refetch } = useQuery(
-    api.diary.find.queryOptions({
+    api.diaries.find.queryOptions({
       type: 'sleep_morning',
       patientId: patient?.id,
       date: date,
@@ -34,7 +34,7 @@ export default function SleepMorning() {
   );
 
   const { data: diaries } = useQuery(
-    api.diary.getAll.queryOptions({
+    api.diaries.getAll.queryOptions({
       type: 'sleep_morning',
       patientId: patient?.id,
     }),
@@ -74,11 +74,11 @@ export default function SleepMorning() {
   };
 
   const createDiary = useMutation(
-    api.diary.create.mutationOptions({
+    api.diaries.create.mutationOptions({
       onSuccess: (data) => {
         queryClient
           .invalidateQueries({
-            queryKey: api.diary.getAll.queryKey({
+            queryKey: api.diaries.getAll.queryKey({
               type: 'sleep_morning',
               patientId: patient?.id,
             }),
@@ -135,14 +135,14 @@ export default function SleepMorning() {
           />
 
           <div className="mt-4 flex w-full flex-col overflow-hidden">
-            <p className="mb-3 text-[20px] font-bold text-darkest-blue">
+            <p className="text-darkest-blue mb-3 text-[20px] font-bold">
               Preview compilazioni
             </p>
 
             <div className="scrollbar-blue flex-1 overflow-y-auto">
               {dailyDiaries.length > 0 ? (
                 dailyDiaries.map((diary) => {
-                  const lastUpdate = new Date(diary.lastUpdate);
+                  const lastUpdate = new Date(diary.updatedAt);
                   const timeString = format(lastUpdate, 'HH:mm');
 
                   return (
@@ -197,7 +197,7 @@ export default function SleepMorning() {
             <Diarylayout
               key={selectedDiaryId}
               type="sleep_morning"
-              compilationTime={format(new Date(data.lastUpdate), 'HH:mm')}
+              compilationTime={format(new Date(data.updatedAt), 'HH:mm')}
               content={
                 data.content as {
                   nap: string;

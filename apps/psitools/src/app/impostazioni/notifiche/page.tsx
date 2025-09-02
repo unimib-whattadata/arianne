@@ -1,12 +1,10 @@
 'use client';
 
-import type { NotificationPreference } from '@arianne/db';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -14,17 +12,23 @@ import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Switch } from '@/components/ui/switch';
 import { useTRPC } from '@/trpc/react';
 
-type FormValues = Pick<
-  NotificationPreference,
-  'patientMessages' | 'assignmentCompleted' | 'eventModified' | 'eventCancelled'
->;
+import type { PreferenceValues } from '@arianne/db/schema';
+import { preferenceValuesSchema, defaultValues } from '@arianne/db/schema';
 
-const defaultNotification: FormValues = {
-  patientMessages: true,
-  assignmentCompleted: true,
-  eventModified: true,
-  eventCancelled: true,
-};
+const notificationSchema = preferenceValuesSchema.pick({
+  notifications: true,
+});
+type NotificationFormValues = Pick<PreferenceValues, 'notifications'>;
+
+const ITEM = [
+  { name: 'patientMessages', label: 'Messaggio paziente' },
+  {
+    name: 'assignmentCompleted',
+    label: 'Assegnazione completata',
+  },
+  { name: 'eventModified', label: 'Evento modificato' },
+  { name: 'eventCancelled', label: 'Evento annullato' },
+];
 
 export default function NotificationSettingsPage() {
   const api = useTRPC();
@@ -34,26 +38,17 @@ export default function NotificationSettingsPage() {
     data: notificationPrefs,
     isLoading,
     error,
-  } = useQuery(api.notificationsPreference.get.queryOptions());
+  } = useQuery(api.preferences.get.queryOptions());
 
-  const form = useForm<FormValues>({
-    resolver: zodResolver(
-      z.object({
-        patientMessages: z.boolean(),
-        assignmentCompleted: z.boolean(),
-        eventModified: z.boolean(),
-        eventCancelled: z.boolean(),
-      }),
-    ),
-    defaultValues: notificationPrefs || defaultNotification,
+  const form = useForm<NotificationFormValues>({
+    resolver: zodResolver(notificationSchema),
+    defaultValues: defaultValues.notifications,
   });
 
   const updateNotifications = useMutation(
-    api.notificationsPreference.update.mutationOptions({
+    api.preferences.set.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(
-          api.notificationsPreference.get.queryFilter(),
-        );
+        await queryClient.invalidateQueries(api.preferences.get.queryFilter());
       },
     }),
   );
@@ -79,7 +74,10 @@ export default function NotificationSettingsPage() {
           </Link>
           <Button
             onClick={form.handleSubmit((values) => {
-              updateNotifications.mutate(values);
+              updateNotifications.mutate({
+                type: 'profile',
+                values,
+              });
             })}
           >
             Salva
@@ -90,15 +88,7 @@ export default function NotificationSettingsPage() {
           <Card>
             <CardHeader className="font-semibold">Notifiche</CardHeader>
             <CardContent className="grid gap-4">
-              {[
-                { name: 'patientMessages', label: 'Messaggio paziente' },
-                {
-                  name: 'assignmentCompleted',
-                  label: 'Assegnazione completata',
-                },
-                { name: 'eventModified', label: 'Evento modificato' },
-                { name: 'eventCancelled', label: 'Evento annullato' },
-              ].map(({ name, label }) => (
+              {ITEM.map(({ name, label }) => (
                 <FormField
                   key={name}
                   control={form.control}

@@ -8,12 +8,13 @@ import { StateBadge } from '@/features/patient/components/state-badge';
 import { useTherapist } from '@/hooks/use-therapist';
 import { useTRPC } from '@/trpc/react';
 import { cn } from '@/utils/cn';
+import type { Tag } from '@arianne/db/schema';
 
 const PatientsTable = () => {
   const { user, isLoading } = useTherapist();
 
   const api = useTRPC();
-  const { data: events } = useQuery(api.event.getAll.queryOptions());
+  const { data: events } = useQuery(api.events.getAll.queryOptions());
 
   const { data: patients } = useQuery(
     api.patients.findRecent.queryOptions(
@@ -30,7 +31,10 @@ const PatientsTable = () => {
     if (!events) return null;
 
     const pastEvents = events
-      .filter((e) => e.patientId === patientId && new Date(e.date) < new Date())
+      .filter(
+        (e) =>
+          e.participants[0].id === patientId && new Date(e.date) < new Date(),
+      )
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
     return pastEvents.length ? new Date(pastEvents[0].date) : null;
@@ -70,13 +74,13 @@ const PatientsTable = () => {
               )}
             >
               <span className="overflow-hidden font-medium text-ellipsis whitespace-nowrap">
-                {patient.user?.name || 'Sconosciuto'}
+                {patient.profile?.name || 'Sconosciuto'}
               </span>
               <span className="overflow-hidden text-ellipsis whitespace-nowrap">
-                {patient.medicalRecord?.tags?.length ? (
-                  patient.medicalRecord.tags
+                {patient.medicalRecords?.tags?.length ? (
+                  patient.medicalRecords.tags
                     .filter(
-                      (tag): tag is PrismaJson.TagType =>
+                      (tag): tag is Tag =>
                         typeof tag === 'object' &&
                         tag !== null &&
                         'text' in tag,
@@ -101,7 +105,7 @@ const PatientsTable = () => {
 
               <span>
                 <StateBadge
-                  state={patient.medicalRecord?.state || 'incoming'}
+                  state={patient.medicalRecords?.state || 'incoming'}
                 />
               </span>
               <Link

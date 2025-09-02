@@ -1,4 +1,4 @@
-import type { JsonObject } from '@prisma/client/runtime/library';
+import type { JsonObject } from '@/types';
 import PDFMerger from 'pdf-merger-js/browser';
 import puppeteer from 'puppeteer';
 

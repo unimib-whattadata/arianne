@@ -12,19 +12,19 @@ export const SettingsBar = <_TData,>() => {
   const api = useTRPC();
   const queryClient = useQueryClient();
 
-  const { data: dashboardNotifications } = useQuery(
-    api.dashboardNotifications.all.queryOptions(),
+  const { data: notifications } = useQuery(
+    api.notifications.all.queryOptions(),
   );
 
   const unreadCount = useMemo(() => {
-    return dashboardNotifications?.filter((n) => !n.read).length ?? 0;
-  }, [dashboardNotifications]);
+    return notifications?.filter((n) => !n.read).length ?? 0;
+  }, [notifications]);
 
   const markAllAsRead = useMutation(
-    api.dashboardNotifications.markAllAsRead.mutationOptions({
+    api.notifications.markAllAsRead.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries({
-          queryKey: api.dashboardNotifications.all.queryKey(),
+          queryKey: api.notifications.all.queryKey(),
         });
       },
     }),
@@ -34,7 +34,7 @@ export const SettingsBar = <_TData,>() => {
     <div className="relative flex items-center justify-between gap-2">
       <Link
         href="/impostazioni"
-        className="w-11 rounded-md border border-primary bg-background p-2 text-primary"
+        className="border-primary bg-background text-primary w-11 rounded-md border p-2"
       >
         <Settings className="m-auto h-4 w-4" />
       </Link>

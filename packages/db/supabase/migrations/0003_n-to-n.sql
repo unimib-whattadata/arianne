@@ -1,0 +1,1 @@
+ALTER TABLE "arianne_events" DROP COLUMN "patients_ids";

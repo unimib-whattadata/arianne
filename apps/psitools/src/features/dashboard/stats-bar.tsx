@@ -11,11 +11,11 @@ const StatsBar = () => {
   const patientsNumber: number = user.patients.length;
 
   const incomingPatients = user.patients.filter(
-    (patient) => patient.medicalRecord?.state === 'incoming',
+    (patient) => patient.medicalRecords?.state === 'incoming',
   );
 
   const highRiskPatients = user.patients.filter(
-    (patient) => patient.medicalRecord?.highRisk === true,
+    (patient) => patient.medicalRecords?.highRisk === true,
   );
 
   return (
@@ -24,14 +24,14 @@ const StatsBar = () => {
         <CardHeader className="flex w-full flex-row items-end justify-between space-y-0">
           <CardTitle className="text-base"> Pazienti totali</CardTitle>
           <Link
-            className="px-0 text-[14px] text-primary hover:underline"
+            className="text-primary px-0 text-[14px] hover:underline"
             href={'/pazienti'}
           >
             Vedi tutti
           </Link>
         </CardHeader>
         <CardContent>
-          <p className="text-2xl font-semibold text-primary">
+          <p className="text-primary text-2xl font-semibold">
             {patientsNumber}
           </p>
         </CardContent>
@@ -40,14 +40,14 @@ const StatsBar = () => {
         <CardHeader className="flex w-full flex-row items-center justify-between space-y-0">
           <CardTitle className="text-base">Nuovi</CardTitle>
           <Link
-            className="px-0 text-[14px] text-primary hover:underline"
+            className="text-primary px-0 text-[14px] hover:underline"
             href={'/pazienti'}
           >
             Vedi tutti
           </Link>
         </CardHeader>
         <CardContent>
-          <p className="text-2xl font-semibold text-primary">
+          <p className="text-primary text-2xl font-semibold">
             {incomingPatients.length}
           </p>
         </CardContent>
@@ -56,7 +56,7 @@ const StatsBar = () => {
         <CardHeader className="flex w-full flex-row items-center justify-between space-y-0">
           <CardTitle className="text-base">High-Risk</CardTitle>
           <Link
-            className="px-0 text-[14px] text-primary hover:underline"
+            className="text-primary px-0 text-[14px] hover:underline"
             href={'/pazienti'}
           >
             Vedi tutti

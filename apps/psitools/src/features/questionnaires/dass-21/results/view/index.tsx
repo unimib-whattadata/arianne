@@ -1,6 +1,6 @@
 'use client';
 
-import type { JsonObject } from '@prisma/client/runtime/library';
+import type { JsonObject } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -27,10 +27,8 @@ export default function IusRPage() {
     isLoading,
     isFetching,
   } = useQuery(
-    api.administration.findUnique.queryOptions(
-      {
-        where: { id: idTest },
-      },
+    api.administrations.findUnique.queryOptions(
+      { id: idTest },
       {
         enabled: !!idTest,
         select: (data) => data.administration,
@@ -62,10 +60,10 @@ export default function IusRPage() {
             la prima risposta è la più accurata. Grazie per la sua preziosa
             disponibilità e collaborazione.
           </p>
-          <p className="font-h3 absolute -right-32 top-80 z-20 rotate-90">
+          <p className="font-h3 absolute top-80 -right-32 z-20 rotate-90">
             (sola visualizzazione)
           </p>
-          <ul className="flex items-end justify-end gap-2 pr-4 text-primary">
+          <ul className="text-primary flex items-end justify-end gap-2 pr-4">
             <li className="flex h-32 w-10 rotate-180 items-center text-sm leading-3 [writing-mode:vertical-rl]">
               Non mi è mai accaduto
             </li>

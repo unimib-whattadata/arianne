@@ -1,42 +1,37 @@
-/**
- * YOU PROBABLY DON'T NEED TO EDIT THIS FILE, UNLESS:
- * 1. You want to modify request context (see Part 1).
- * 2. You want to create a new middleware or type of procedure (see Part 3).
- *
- * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
- * need to use are documented accordingly near the end.
- */
+import type { UserResponse } from "@arianne/supabase";
 import { db } from "@arianne/db";
-import { initTRPC } from "@trpc/server";
+// import { verifyJWT } from "@arianne/supabase";
+import { initTRPC, TRPCError } from "@trpc/server";
+import { sql } from "drizzle-orm/sql";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
-/**
- * 1. CONTEXT
- *
- * This section defines the "contexts" that are available in the backend API.
- *
- * These allow you to access things when processing a request, like the database, the session, etc.
- *
- * This helper generates the "internals" for a tRPC context. The API handler and RSC clients each
- * wrap this and provides the required context.
- *
- * @see https://trpc.io/docs/server/context
- */
-export const createTRPCContext = async (opts: { headers: Headers }) => {
+interface CreateContextOptions {
+  headers: Headers;
+  user: UserResponse;
+}
+
+const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
+    user: opts.user,
     db,
-    ...opts,
   };
 };
 
-/**
- * 2. INITIALIZATION
- *
- * This is where the tRPC API is initialized, connecting the context and transformer. We also parse
- * ZodErrors so that you get typesafety on the frontend if your procedure fails due to validation
- * errors on the backend.
- */
+export const createTRPCContext = (opts: {
+  headers: Headers;
+  user: UserResponse;
+}) => {
+  const source = opts.headers.get("x-trpc-source") ?? "unknown";
+  const { data } = opts.user;
+  console.log(">>> tRPC Request from", source, "by", data.user?.id);
+
+  return createInnerTRPCContext({
+    headers: opts.headers,
+    user: opts.user,
+  });
+};
+
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
   errorFormatter({ shape, error }) {
@@ -52,13 +47,6 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
 });
 
 /**
- * Create a server-side caller.
- *
- * @see https://trpc.io/docs/server/server-side-calls
- */
-export const createCallerFactory = t.createCallerFactory;
-
-/**
  * 3. ROUTER & PROCEDURE (THE IMPORTANT BIT)
  *
  * These are the pieces you use to build your tRPC API. You should import these a lot in the
@@ -72,28 +60,7 @@ export const createCallerFactory = t.createCallerFactory;
  */
 export const createTRPCRouter = t.router;
 
-/**
- * Middleware for timing procedure execution and adding an artificial delay in development.
- *
- * You can remove this if you don't like it, but it can help catch unwanted waterfalls by simulating
- * network latency that would occur in production but not in local development.
- */
-const timingMiddleware = t.middleware(async ({ next, path }) => {
-  const start = Date.now();
-
-  if (t._config.isDev) {
-    // artificial delay in dev
-    const waitMs = Math.floor(Math.random() * 400) + 100;
-    await new Promise((resolve) => setTimeout(resolve, waitMs));
-  }
-
-  const result = await next();
-
-  const end = Date.now();
-  console.log(`[TRPC] ${path} took ${end - start}ms to execute`);
-
-  return result;
-});
+export const createCallerFactory = t.createCallerFactory;
 
 /**
  * Public (unauthenticated) procedure
@@ -102,4 +69,91 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
  * guarantee that a user querying is authorized, but you can still access user session data if they
  * are logged in.
  */
-export const publicProcedure = t.procedure.use(timingMiddleware);
+export const publicProcedure = t.procedure;
+
+/** Reusable middleware that enforces users are logged in before running the procedure. */
+/**
+ * check middleware @see https://trpc.io/docs/server/middleware
+ */
+
+const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
+  if (ctx.user.error) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      cause: ctx.user.error.cause,
+      message:
+        process.env.NODE_ENV === "production"
+          ? "Unauthorized access."
+          : ctx.user.error.message,
+    });
+  }
+
+  if (!ctx.user.data.user) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      cause: "User not found",
+      message:
+        process.env.NODE_ENV === "production"
+          ? "Unauthorized access."
+          : "User not found.",
+    });
+  }
+
+  const user = ctx.user.data.user;
+
+  const currentUser = await ctx.db.query.profiles.findFirst({
+    where: (t, { eq }) => eq(t.id, user.id),
+    extras: (fields) => {
+      return {
+        name: sql<string>`concat(${fields.firstName}, ' ', ${fields.lastName})`.as(
+          "full_name",
+        ),
+      };
+    },
+  });
+
+  if (!currentUser) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      cause: "User not found",
+      message:
+        process.env.NODE_ENV === "production"
+          ? "Unauthorized access."
+          : "User not found.",
+    });
+  }
+
+  // Verify the JWT token
+  // try {
+  //   await verifyJWT(ctx.session.access_token);
+  // } catch (_error) {
+  //   throw new TRPCError({
+  //     code: "UNAUTHORIZED",
+  //     cause: "Invalid JWT token",
+  //     message:
+  //       process.env.NODE_ENV === "production"
+  //         ? "Unauthorized access."
+  //         : "Your session has expired or is invalid. Please log in again.",
+  //   });
+  // }
+
+  return next({
+    ctx: {
+      // infers the `user` as non-nullable
+      user: currentUser,
+    },
+  });
+});
+
+/**
+ * Protected (authenticated) procedure
+ *
+ * If you want a query or mutation to ONLY be accessible to logged in users, use this. It verifies
+ * the session is valid and guarantees `ctx.session.user` is not null.
+ *
+ * @see https://trpc.io/docs/procedures
+ */
+export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
+
+export type Context = Awaited<ReturnType<typeof createTRPCContext>>;
+//type RouterOutput = inferRouterOutputs<AppRouter>;

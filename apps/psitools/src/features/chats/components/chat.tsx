@@ -28,21 +28,21 @@ export const Chat = (props: ChatProps) => {
   const { chatId } = props;
   const api = useTRPC();
   const { data } = useQuery(
-    api.chat.getOrCreate.queryOptions({
+    api.chats.getOrCreate.queryOptions({
       patientId: chatId,
     }),
   );
   const { patient } = usePatient({ id: chatId });
   return (
     <>
-      {patient?.user && (
+      {patient?.profile && (
         <ChatHeader
           patientId={chatId}
-          fullName={`${patient.user.firstName} ${patient.user.lastName}`}
+          fullName={`${patient.profile.firstName} ${patient.profile.lastName}`}
         />
       )}
       {data && <ChatMessages chatMessages={data.messages} chatId={chatId} />}
-      {!data && <Loader2 className="h-8 w-8 animate-spin text-primary" />}
+      {!data && <Loader2 className="text-primary h-8 w-8 animate-spin" />}
     </>
   );
 };

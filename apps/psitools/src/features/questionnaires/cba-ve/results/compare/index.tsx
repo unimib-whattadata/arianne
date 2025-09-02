@@ -21,26 +21,20 @@ export default function AdministrationsComparisonPage() {
   const columnsCompare = useColumnsCompare();
 
   const { data: administrationT0, isLoading: isLoadingT0 } = useQuery(
-    api.administration.findUnique.queryOptions({
-      where: {
-        id: t0,
-      },
-    }),
+    api.administrations.findUnique.queryOptions({ id: t0 }),
   );
 
   const { data: administrationT1, isLoading: isLoadingT1 } = useQuery(
-    api.administration.findUnique.queryOptions({
-      where: {
-        id: t1,
-      },
-    }),
+    api.administrations.findUnique.queryOptions({ id: t1 }),
   );
 
   if (!administrationT0 || isLoadingT0 || !administrationT1 || isLoadingT1)
     return <Shimmer className="h-full w-full" />;
 
-  const recordsT0 = administrationT0.administration.records as CbaRecord;
-  const recordsT1 = administrationT1.administration.records as CbaRecord;
+  const recordsT0 = administrationT0.administration
+    .records as unknown as CbaRecord;
+  const recordsT1 = administrationT1.administration
+    .records as unknown as CbaRecord;
 
   const populateCards = (): ReactElement[] => {
     const cards: ReactElement[] = [];

@@ -1,8 +1,10 @@
-import type { Event } from '@arianne/db';
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 
 import { useTRPC } from '@/trpc/react';
+import type { RouterOutputs } from '@arianne/api';
+
+type Event = RouterOutputs['events']['getAll'][number];
 
 interface WeekEventProps extends Event {
   onEventClick: (event: Event) => void;
@@ -20,11 +22,14 @@ const WeekEvent: React.FC<WeekEventProps> = ({
   ...event
 }) => {
   const api = useTRPC();
-  const therapist = useQuery(api.therapist.getAllPatients.queryOptions());
+  const therapist = useQuery(api.therapists.getAllPatients.queryOptions());
 
-  const patientName =
-    therapist.data?.find((p) => p.id === event?.patientId)?.user?.name ??
-    event?.patientId;
+  const patientsName =
+    therapist.data
+      ?.filter((patient) => {
+        event.participants.find((participant) => participant.id === patient.id);
+      })
+      .map((p) => p.profile.name) || [];
 
   const labelColorStyles: Record<string, { border: string; text: string }> = {
     '#def2d9': { border: 'border-l-[#92d482]', text: 'text-[#489834]' },
@@ -59,7 +64,7 @@ const WeekEvent: React.FC<WeekEventProps> = ({
 
   return (
     <div
-      className={`event-label z-10 mb-1 min-h-[24px] w-fill items-center truncate border-l-[6px] ${borderStyle} ${heightClass} p-1 ${
+      className={`event-label w-fill z-10 mb-1 min-h-[24px] items-center truncate border-l-[6px] ${borderStyle} ${heightClass} p-1 ${
         dayPosition === 'start'
           ? 'rounded-l-sm'
           : dayPosition === 'end'
@@ -79,7 +84,9 @@ const WeekEvent: React.FC<WeekEventProps> = ({
       {shouldShowTitle && (
         <div className="gap-1">
           <h2 className={`w-full truncate text-xs text-[#64748b]`}>
-            {event.patientId ? patientName : event.name}
+            {event.participants.length > 0
+              ? patientsName.join(', ')
+              : event.name}
           </h2>
         </div>
       )}

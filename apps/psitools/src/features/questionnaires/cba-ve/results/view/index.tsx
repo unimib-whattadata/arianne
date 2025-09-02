@@ -1,6 +1,6 @@
 'use client';
 
-import type { JsonObject } from '@prisma/client/runtime/library';
+import type { JsonObject } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -27,10 +27,8 @@ export default function ShowSingleAdministrationPage() {
     isLoading,
     isFetching,
   } = useQuery(
-    api.administration.findUnique.queryOptions(
-      {
-        where: { id: idTest },
-      },
+    api.administrations.findUnique.queryOptions(
+      { id: idTest },
       {
         select: (data) => data.administration,
       },
@@ -54,7 +52,7 @@ export default function ShowSingleAdministrationPage() {
         <section key={index.toString()} className="bg-gray-10 pb-4">
           <FormHeader>
             <FormInstructions>{section.instruction}</FormInstructions>
-            <ul className="flex justify-end gap-2 pr-4 text-primary">
+            <ul className="text-primary flex justify-end gap-2 pr-4">
               <li className="w-20 text-center text-sm">Per nulla</li>
               <li className="w-20 text-center text-sm">Poco</li>
               <li className="w-20 text-center text-sm">Abbastanza</li>

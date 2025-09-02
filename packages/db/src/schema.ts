@@ -1,22 +1,18 @@
-// Example model schema from the Drizzle docs
-// https://orm.drizzle.team/docs/sql-schema-declaration
-
-import { index, pgTableCreator } from "drizzle-orm/pg-core";
-
 /**
- * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
- * database instance for multiple projects.
- *
- * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
+ * Exporting all schemas and tables from the database schema.
+ * This allows for easy access to all database structures.
  */
-export const createTable = pgTableCreator((name) => `arianne_${name}`);
 
-export const users = createTable(
-  "users",
-  (d) => ({
-    id: d.serial("id").primaryKey(),
-    fullName: d.text("full_name"),
-    phone: d.varchar("phone", { length: 256 }),
-  }),
-  (t) => [index("fullName").on(t.fullName)],
-);
+export * from "./table";
+export * from "./schemas/administrations";
+export * from "./schemas/assignments";
+export * from "./schemas/chats";
+export * from "./schemas/diaries";
+export * from "./schemas/events";
+export * from "./schemas/medical-records";
+export * from "./schemas/notes";
+export * from "./schemas/notifications";
+export * from "./schemas/patients";
+export * from "./schemas/preferences";
+export * from "./schemas/profiles";
+export * from "./schemas/therapists";

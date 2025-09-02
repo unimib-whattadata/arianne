@@ -15,9 +15,8 @@ import { createTRPCContext } from '@trpc/tanstack-react-query';
 import { useState } from 'react';
 import SuperJSON from 'superjson';
 
-import { authClient } from '@/auth/client';
-
 import { createQueryClient } from './query-client';
+import { createClient } from '@arianne/supabase/client';
 
 let clientQueryClientSingleton: QueryClient | undefined = undefined;
 const getQueryClient = () => {
@@ -38,13 +37,14 @@ const getBaseUrl = (wss?: boolean) => {
   if (typeof window !== 'undefined') return window.location.origin;
 
   // eslint-disable-next-line no-restricted-properties
-  return `http://localhost:${process.env.PORT ?? 3001}`;
+  return `http://localhost:${process.env.PORT ?? 3000}`;
 };
 
 const wsClient = createWSClient({
   url: getBaseUrl(true),
   connectionParams: async () => {
-    const { data, error } = await authClient.getSession();
+    const supabase = createClient();
+    const { data, error } = await supabase.auth.getUser();
     if (error) {
       console.error('WebSocket connection error:', error);
       return { error: error.message };
@@ -84,15 +84,6 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
               return headers;
             },
           }),
-        }),
-        httpBatchStreamLink({
-          transformer: SuperJSON,
-          url: getBaseUrl() + '/api/trpc',
-          headers() {
-            const headers = new Headers();
-            headers.set('x-trpc-source', 'nextjs-react');
-            return headers;
-          },
         }),
       ],
     }),

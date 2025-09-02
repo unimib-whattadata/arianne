@@ -1,6 +1,5 @@
 'use client';
 
-import type { Event } from '@arianne/db';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   addDays,
@@ -21,7 +20,7 @@ import {
 import { it } from 'date-fns/locale';
 import { ChevronDown } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
-import React, { Fragment, useEffect, useMemo, useRef, useState } from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 
 import { SearchInput } from '@/components/search-input';
 import { Button } from '@/components/ui/button';
@@ -35,6 +34,9 @@ import EventDetails from './event-details';
 import CurrentTimeLine from './hour-line';
 import MonthEvent from './month-event';
 import WeekEvent from './week-event';
+import type { RouterOutputs } from '@arianne/api';
+
+type Event = RouterOutputs['events']['getAll'][number];
 
 const Month: React.FC = () => {
   const [view, setView] = useState<'month' | 'week' | 'day'>('month');
@@ -100,29 +102,29 @@ const Month: React.FC = () => {
   const api = useTRPC();
   const queryClient = useQueryClient();
   const { data: eventList, isLoading } = useQuery(
-    api.event.getAll.queryOptions(),
+    api.events.getAll.queryOptions(),
   );
   const createEvent = useMutation(
-    api.event.create.mutationOptions({
+    api.events.create.mutationOptions({
       //TODO: Add toast notification
       onSuccess: async () => {
-        await queryClient.invalidateQueries(api.event.getAll.queryFilter());
+        await queryClient.invalidateQueries(api.events.getAll.queryFilter());
       },
     }),
   );
 
   const deleteEvent = useMutation(
-    api.event.delete.mutationOptions({
+    api.events.delete.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(api.event.getAll.queryFilter());
+        await queryClient.invalidateQueries(api.events.getAll.queryFilter());
       },
     }),
   );
 
   const updateEvent = useMutation(
-    api.event.update.mutationOptions({
+    api.events.update.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(api.event.getAll.queryFilter());
+        await queryClient.invalidateQueries(api.events.getAll.queryFilter());
       },
     }),
   );
@@ -137,9 +139,9 @@ const Month: React.FC = () => {
       labelColor: event.labelColor,
       location: event.location,
       meetingLink: event.meetingLink,
-      otherPartecipants: event.otherPartecipants,
+      otherParticipants: event.otherParticipants,
       therapistId: event.therapistId,
-      patientId: event.patientId,
+      participants: event.participants,
       recurring: event.recurring,
       description: event.description,
       notification: event.notification,
@@ -155,7 +157,7 @@ const Month: React.FC = () => {
     id: '',
     therapistId: '',
     name: '',
-    patientId: '',
+    participants: [],
     date: new Date(),
     endDate: new Date(),
     meetingLink: '',
@@ -164,16 +166,19 @@ const Month: React.FC = () => {
     startTime: '9:00',
     endTime: '10:00',
     isAllDay: false,
-    otherPartecipants: [],
+    otherParticipants: [],
+    description: '',
+    notification: '',
+    recurring: '',
   };
 
   const [searchValue, setSearchValue] = useState('');
   const [filteredEvents, setFilteredEvents] = useState<Event[] | null>(null);
 
-  const therapist = useQuery(api.therapist.getAllPatients.queryOptions());
-  const patients = useMemo(() => therapist.data || [], [therapist.data]);
+  const therapist = useQuery(api.therapists.getAllPatients.queryOptions());
+
   useEffect(() => {
-    if (!searchValue || !eventList || !patients) {
+    if (!searchValue || !eventList) {
       setFilteredEvents(null);
       return;
     }
@@ -181,17 +186,23 @@ const Month: React.FC = () => {
     const lowerSearch = searchValue.toLowerCase();
 
     const results = eventList.filter((event) => {
-      const patient = patients.find((p) => p.id === event.patientId);
-      const patientName = patient?.user?.name?.toLowerCase() ?? '';
+      const patientsName =
+        therapist.data
+          ?.filter((patient) => {
+            event.participants.find(
+              (participant) => participant.id === patient.id,
+            );
+          })
+          .map((p) => p.profile.name.toLowerCase()) || [];
 
       return (
         event.name.toLowerCase().includes(lowerSearch) ||
-        patientName.includes(lowerSearch)
+        patientsName.includes(lowerSearch)
       );
     });
 
     setFilteredEvents(results);
-  }, [searchValue, eventList, patients]);
+  }, [searchValue, eventList, therapist.data]);
 
   useEffect(() => {
     const checkOverflow = () => {
@@ -368,7 +379,7 @@ const Month: React.FC = () => {
 
                   {hiddenCount > 0 && (
                     <div
-                      className={`mt-1 cursor-pointer text-center text-xs text-primary underline`}
+                      className={`text-primary mt-1 cursor-pointer text-center text-xs underline`}
                       onClick={(e) => {
                         e.stopPropagation();
                         setSelectedDate(day);
@@ -701,7 +712,7 @@ const Month: React.FC = () => {
 
         <div
           ref={scrollContainerRef}
-          className="overflow-y-auto no-scrollbar"
+          className="no-scrollbar overflow-y-auto"
           style={{ maxHeight: 'calc(100vh - 320px)' }}
         >
           <div className="relative grid grid-cols-[50px_1fr_1fr_1fr_1fr_1fr_1fr_1fr]">
@@ -1009,7 +1020,7 @@ const Month: React.FC = () => {
             Nuovo Evento
           </Button>
         </div>
-        <div className="relative h-[calc(100vh-127px)] min-h-[600px] rounded-md bg-white px-10 pb-10 pt-7">
+        <div className="relative h-[calc(100vh-127px)] min-h-[600px] rounded-md bg-white px-10 pt-7 pb-10">
           {filteredEvents ? (
             <div className="absolute inset-0 overflow-auto">
               <EventSearchTable

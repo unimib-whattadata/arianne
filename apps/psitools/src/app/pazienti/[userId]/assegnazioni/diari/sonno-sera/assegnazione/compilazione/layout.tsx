@@ -29,10 +29,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       if (diaryId) {
         try {
           const diaryData = await queryClient.fetchQuery({
-            queryKey: ['diary.find', { id: diaryId }],
+            queryKey: ['diaries.find', { id: diaryId }],
             queryFn: async () => {
               const allDiaries = await queryClient.fetchQuery(
-                api.diary.getAll.queryOptions({ type: 'sleep_evening' }),
+                api.diaries.getAll.queryOptions({ type: 'sleep_evening' }),
               );
 
               const foundDiary = allDiaries?.find(

@@ -21,10 +21,10 @@ export default function AdministrationResultsPswq16Page() {
   const api = useTRPC();
 
   const { data, isLoading } = useQuery(
-    api.administration.findMany.queryOptions(
+    api.administrations.findMany.queryOptions(
       {
         where: {
-          OR: [{ id: tA }, { id: tB }],
+          id: { a: tA, b: tB },
         },
         orderBy: {
           T: 'asc',

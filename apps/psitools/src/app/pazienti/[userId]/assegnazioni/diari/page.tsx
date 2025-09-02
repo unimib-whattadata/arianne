@@ -16,7 +16,7 @@ const useDiaryStats = (diaryType: DiaryType, patientId?: string) => {
   const api = useTRPC();
 
   const { data: diaries } = useQuery(
-    api.diary.getAll.queryOptions(
+    api.diaries.getAll.queryOptions(
       { type: diaryType, patientId },
       { enabled: !!patientId },
     ),

@@ -1,4 +1,3 @@
-import type { Event } from '@arianne/db';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { format, isSameDay } from 'date-fns';
 import { it } from 'date-fns/locale';
@@ -28,6 +27,9 @@ import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet';
 import { Textarea } from '@/components/ui/textarea';
 import { generateMeetingLink } from '@/features/agenda/utils/generate-meeting-link';
 import { useTRPC } from '@/trpc/react';
+import type { RouterOutputs } from '@arianne/api';
+
+type Event = RouterOutputs['events']['getAll'][number];
 
 interface EventViewProps {
   isOpen: boolean;
@@ -56,7 +58,9 @@ const EventDetails: React.FC<EventViewProps> = ({
   isEditingModeTrigger,
 }) => {
   const [eventName, setEventName] = useState(event.name);
-  const [patient, setPatient] = useState(event.patientId);
+  const [patient, setPatient] = useState(
+    event.participants[0]?.patientId || '',
+  );
   const [eventDate, setEventDate] = useState(event.date);
   const [startTime, setStartTime] = useState(event.startTime);
   const [endTime, setEndTime] = useState(event.endTime);
@@ -93,11 +97,11 @@ const EventDetails: React.FC<EventViewProps> = ({
   const api = useTRPC();
   const queryClient = useQueryClient();
 
-  const therapist = useQuery(api.therapist.getAllPatients.queryOptions());
+  const therapist = useQuery(api.therapists.getAllPatients.queryOptions());
   useEffect(() => {
     if (event) {
       setEventName(event.name || '');
-      setPatient(event.patientId || '');
+      setPatient(event.participants[0]?.patientId || '');
       setMeetingLink(event.meetingLink || '');
       setLocation(event.location || '');
       setLabelColor(event.labelColor || defaultColors[0]);
@@ -111,10 +115,10 @@ const EventDetails: React.FC<EventViewProps> = ({
       );
       setEventDescription(event.description || '');
       setEventEndDate(event.endDate || new Date());
-      setAdditionalParticipants(event.otherPartecipants || []);
+      setAdditionalParticipants(event.otherParticipants || []);
     }
-    if (event.patientId) {
-      setSelected([event.patientId]);
+    if (event.participants[0]?.patientId) {
+      setSelected([event.participants[0]?.patientId]);
     } else {
       setSelected([]);
     }
@@ -122,19 +126,20 @@ const EventDetails: React.FC<EventViewProps> = ({
   }, [event]);
 
   useEffect(() => {
-    if (event?.patientId && therapist.data) {
+    if (event?.participants[0]?.patientId && therapist.data) {
       const selectedPatient = therapist.data.find(
-        (p) => p.id === event.patientId,
+        (p) => p.id === event.participants[0]?.patientId,
       );
       if (selectedPatient) {
         setSelected([selectedPatient.id]);
-        setSelectedString(selectedPatient.user?.name ?? '');
+        setSelectedString(selectedPatient.profile?.name ?? '');
       }
     }
-  }, [event?.patientId, therapist.data]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [event?.participants[0]?.patientId, therapist.data]);
 
   const options = therapist.data?.map((patient) => {
-    return { label: patient.user?.name ?? '', value: patient.id ?? '' };
+    return { label: patient.profile?.name ?? '', value: patient.id ?? '' };
   });
   const generateTimeSlots = () => {
     const times = [];
@@ -148,17 +153,17 @@ const EventDetails: React.FC<EventViewProps> = ({
   const timeOptions = generateTimeSlots();
 
   const updateEvent = useMutation(
-    api.event.update.mutationOptions({
+    api.events.update.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(api.event.getAll.queryFilter());
+        await queryClient.invalidateQueries(api.events.getAll.queryFilter());
       },
     }),
   );
 
   const createEvent = useMutation(
-    api.event.create.mutationOptions({
+    api.events.create.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(api.event.getAll.queryFilter());
+        await queryClient.invalidateQueries(api.events.getAll.queryFilter());
       },
     }),
   );
@@ -179,6 +184,8 @@ const EventDetails: React.FC<EventViewProps> = ({
     if (
       !isAllDay &&
       eventEndDate.toDateString() === eventDate.toDateString() &&
+      endTime != null &&
+      startTime != null &&
       endTime <= startTime
     ) {
       toast.error(
@@ -197,7 +204,7 @@ const EventDetails: React.FC<EventViewProps> = ({
       startTime: startTime,
       endTime: endTime,
       isAllDay: isAllDay,
-      otherPartecipants: [...additionalParticipants],
+      otherParticipants: [...additionalParticipants],
       recurring: repeat,
       notification: notificationLabel,
       description: eventDescription,
@@ -264,8 +271,11 @@ const EventDetails: React.FC<EventViewProps> = ({
   }, [isEditingModeTrigger]);
 
   const patientName =
-    therapist.data?.find((p) => p.id === event?.patientId)?.user?.name ??
-    event?.patientId;
+    therapist.data
+      ?.filter((patient) => {
+        event.participants.find((participant) => participant.id === patient.id);
+      })
+      .map((p) => p.profile.name) || [];
 
   const [isEditingMode, setIsEditingMode] = useState(false);
 
@@ -316,7 +326,7 @@ const EventDetails: React.FC<EventViewProps> = ({
                   type="text"
                   value={eventName}
                   onChange={(e) => setEventName(e.target.value)}
-                  className="w-full rounded-md border border-[#ccdbef] p-2 placeholder:text-[#94a3b8] focus:border-forest-green-700 focus:outline-none md:text-base"
+                  className="focus:border-forest-green-700 w-full rounded-md border border-[#ccdbef] p-2 placeholder:text-[#94a3b8] focus:outline-none md:text-base"
                   placeholder="Nome evento"
                 />
               </div>
@@ -351,7 +361,7 @@ const EventDetails: React.FC<EventViewProps> = ({
                           }}
                           className={`h-6 w-6 rounded-sm border ${
                             labelColor === color
-                              ? 'ring-1 ring-forest-green-700'
+                              ? 'ring-forest-green-700 ring-1'
                               : ''
                           }`}
                           style={{ backgroundColor: color }}
@@ -413,7 +423,7 @@ const EventDetails: React.FC<EventViewProps> = ({
               <Button
                 variant="ghost"
                 onClick={handleAddParticipant}
-                className="justify-start py-0 pl-0 text-base text-primary hover:bg-white hover:text-primary/80"
+                className="text-primary hover:text-primary/80 justify-start py-0 pl-0 text-base hover:bg-white"
               >
                 + Aggiungi partecipante
               </Button>
@@ -577,7 +587,7 @@ const EventDetails: React.FC<EventViewProps> = ({
                     type="text"
                     value={meetingLink ?? ''}
                     onChange={(e) => setMeetingLink(e.target.value)}
-                    className="col-span-1 w-full rounded-md border border-[#ccdbef] p-2 text-base placeholder:text-[#94a3b8] focus:border-forest-green-700 focus:outline-none md:text-base"
+                    className="focus:border-forest-green-700 col-span-1 w-full rounded-md border border-[#ccdbef] p-2 text-base placeholder:text-[#94a3b8] focus:outline-none md:text-base"
                     placeholder="Link Meet"
                   />
 
@@ -585,7 +595,7 @@ const EventDetails: React.FC<EventViewProps> = ({
                     <Button
                       size="icon"
                       onClick={() => handleCopyToClipboard(meetingLink)}
-                      className="absolute right-1 top-1 hidden h-7 w-7 bg-primary-200 text-primary hover:bg-primary-300 hover:text-gray-700 group-hover:flex"
+                      className="bg-primary-200 text-primary hover:bg-primary-300 absolute top-1 right-1 hidden h-7 w-7 group-hover:flex hover:text-gray-700"
                     >
                       <Copy className="h-4 w-4" />
                     </Button>
@@ -614,7 +624,7 @@ const EventDetails: React.FC<EventViewProps> = ({
                 type="text"
                 value={location ?? ''}
                 onChange={(e) => setLocation(e.target.value)}
-                className="col-span-1 w-full rounded-md border border-[#ccdbef] p-2 text-base placeholder:text-[#94a3b8] focus:border-forest-green-700 focus:outline-none md:text-base"
+                className="focus:border-forest-green-700 col-span-1 w-full rounded-md border border-[#ccdbef] p-2 text-base placeholder:text-[#94a3b8] focus:outline-none md:text-base"
                 placeholder="Indirizzo"
               />
             </div>
@@ -694,22 +704,22 @@ const EventDetails: React.FC<EventViewProps> = ({
               )}
             </div>
 
-            {event.patientId && (
+            {event.participants[0] && (
               <div className="mb-4">
                 <label className="py-2 text-[14px] text-[#64748B]">
                   Paziente
                 </label>
-                <p>{patientName}</p>
+                <p>{patientName[0]}</p>
               </div>
             )}
 
-            {event.otherPartecipants && event.otherPartecipants.length > 0 && (
+            {event.otherParticipants && event.otherParticipants.length > 0 && (
               <div className="mb-4">
                 <label className="py-2 text-[14px] text-[#64748B]">
                   Altri partecipanti
                 </label>
                 <div className="mb-4 flex flex-col gap-2">
-                  {event.otherPartecipants.map((email, index) => (
+                  {event.otherParticipants.map((email, index) => (
                     <p key={index}>{email}</p>
                   ))}
                 </div>

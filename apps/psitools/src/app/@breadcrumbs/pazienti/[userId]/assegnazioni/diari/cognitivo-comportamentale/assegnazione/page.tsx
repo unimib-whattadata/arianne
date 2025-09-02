@@ -14,7 +14,7 @@ export default async function BreadcrumbSlot({
   params: Promise<{ userId: string }>;
 }) {
   const { userId } = await params;
-  const user = await api.user.findUnique({ where: { id: userId } });
+  const user = await api.profiles.get({ where: { id: userId } });
 
   return (
     <Breadcrumb>

@@ -5,8 +5,8 @@ import { useTRPC } from '@/trpc/react';
 export const useTherapist = () => {
   const api = useTRPC();
   const { data: user, ...rest } = useQuery(
-    api.therapist.findUnique.queryOptions(),
+    api.therapists.findUnique.queryOptions(),
   );
 
-  return { user, userInfo: user?.user, ...rest };
+  return { user, profile: user?.profile, ...rest };
 };

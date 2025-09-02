@@ -1,4 +1,3 @@
-import type { Event } from '@arianne/db';
 import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { EllipsisVertical, Files, Pen, Trash2 } from 'lucide-react';
@@ -12,6 +11,9 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { useTRPC } from '@/trpc/react';
+import type { RouterOutputs } from '@arianne/api';
+
+type Event = RouterOutputs['events']['getAll'][number];
 
 interface Props {
   events: Event[];
@@ -29,8 +31,14 @@ const EventSearchTable: React.FC<Props> = ({
   const [openPopoverIdx, setOpenPopoverIdx] = useState<number | null>(null);
 
   const api = useTRPC();
-  const therapist = useQuery(api.therapist.getAllPatients.queryOptions());
-  const patients = therapist.data || [];
+  const therapist = useQuery(api.therapists.getAllPatients.queryOptions());
+
+  const getPatientsName = (event: Event) =>
+    therapist.data
+      ?.filter((patient) => {
+        event.participants.find((participant) => participant.id === patient.id);
+      })
+      .map((p) => p.profile.name) || [];
 
   return (
     <div className="mt-3 overflow-x-auto bg-white px-4">
@@ -48,10 +56,7 @@ const EventSearchTable: React.FC<Props> = ({
                   {format(event.date, 'dd/MM/yyyy')}
                 </p>
                 <p className="min-w-32 p-3">{`${event.startTime} - ${event.endTime}`}</p>
-                <p className="p-3">
-                  {patients.find((p) => p.id === event.patientId)?.user?.name ??
-                    event.patientId}
-                </p>
+                <p className="p-3">{getPatientsName(event)}</p>
                 <p className="p-3">{event.name}</p>
               </div>
               <div className="p-3 text-center">
@@ -61,11 +66,11 @@ const EventSearchTable: React.FC<Props> = ({
                 >
                   <PopoverTrigger asChild>
                     <button onClick={() => setOpenPopoverIdx(idx)}>
-                      <EllipsisVertical className="h-7 w-7 rounded-sm p-1 text-primary hover:bg-primary/10" />
+                      <EllipsisVertical className="text-primary hover:bg-primary/10 h-7 w-7 rounded-sm p-1" />
                     </button>
                   </PopoverTrigger>
                   <PopoverContent
-                    className="w-72 border-[0.5px] border-primary/50 p-2"
+                    className="border-primary/50 w-72 border-[0.5px] p-2"
                     side="left"
                   >
                     <div className="flex flex-col gap-1">
@@ -78,7 +83,7 @@ const EventSearchTable: React.FC<Props> = ({
                         }}
                       >
                         Duplica
-                        <Files className="h-6 w-6 text-primary" />
+                        <Files className="text-primary h-6 w-6" />
                       </Button>
                       <Button
                         variant="ghost"
@@ -89,7 +94,7 @@ const EventSearchTable: React.FC<Props> = ({
                         }}
                       >
                         Modifica
-                        <Pen className="h-6 w-6 text-primary" />
+                        <Pen className="text-primary h-6 w-6" />
                       </Button>
                       <Button
                         variant="ghost"

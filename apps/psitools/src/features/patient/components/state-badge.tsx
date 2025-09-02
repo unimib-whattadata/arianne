@@ -1,10 +1,14 @@
-import type { $Enums } from '@prisma/client';
 import type { ClassValue } from 'clsx';
 
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/utils/cn';
+import type { medicalRecordStateEnum } from '@arianne/db/schema';
 
-export function StateBadge({ state }: { state: $Enums.StateType }) {
+export function StateBadge({
+  state,
+}: {
+  state: (typeof medicalRecordStateEnum.enumValues)[number];
+}) {
   let colors: ClassValue;
   let label: string;
 

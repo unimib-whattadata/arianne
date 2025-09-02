@@ -60,7 +60,7 @@ export default function CompilationForm({
   const queryClient = useQueryClient();
 
   const { data: tValueData } = useQuery(
-    api.export.getTValue.queryOptions(
+    api.exports.getTValue.queryOptions(
       {
         patientId: patient?.id || '',
         type: administrationId || '',
@@ -77,10 +77,10 @@ export default function CompilationForm({
     resolver: zodResolver(formSchema),
     defaultValues: async () => {
       const therapist = await queryClient.fetchQuery(
-        api.therapist.findUnique.queryOptions(),
+        api.therapists.findUnique.queryOptions(),
       );
-      const therapistName = therapist?.user?.firstName || '';
-      const therapistLastname = therapist?.user?.lastName || '';
+      const therapistName = therapist?.profile?.firstName || '';
+      const therapistLastname = therapist?.profile?.lastName || '';
 
       return {
         therapistName,

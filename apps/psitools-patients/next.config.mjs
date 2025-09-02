@@ -6,7 +6,7 @@
 
 /** @type {import("next").NextConfig} */
 const config = {
-  transpilePackages: ['@arianne/api', '@arianne/auth', '@arianne/db'],
+  transpilePackages: ['@arianne/api', '@arianne/supabase', '@arianne/db'],
   output: 'standalone',
   outputFileTracingRoot: '../../',
   reactStrictMode: true,

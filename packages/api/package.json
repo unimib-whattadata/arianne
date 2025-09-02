@@ -1,7 +1,10 @@
 {
   "dependencies": {
     "@arianne/db": "workspace:*",
+    "@arianne/supabase": "workspace:*",
     "@trpc/server": "catalog:",
+    "drizzle-orm": "catalog:",
+    "ioredis": "^5.7.0",
     "superjson": "catalog:",
     "zod": "catalog:"
   },
@@ -29,7 +32,8 @@
     "dev": "tsc",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
+    "with-env": "dotenv -e ../../.env --"
   },
   "type": "module",
   "version": "0.1.0"

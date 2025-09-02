@@ -1,3 +1,4 @@
+import type { UserResponse } from "@supabase/supabase-js";
 import type { CreateWSSContextFnOptions } from "@trpc/server/adapters/ws";
 import { appRouter, createTRPCContext } from "@arianne/api";
 import { applyWSSHandler } from "@trpc/server/adapters/ws";
@@ -16,7 +17,7 @@ class WebSocketServerSingleton {
       const handler = applyWSSHandler({
         wss: WebSocketServerSingleton.instance,
         router: appRouter,
-        createContext: async (opts: CreateWSSContextFnOptions) => {
+        createContext: (opts: CreateWSSContextFnOptions) => {
           const heads = new Headers();
           for (const [key, value] of Object.entries(opts.req.headers)) {
             if (typeof value === "string") {
@@ -27,23 +28,13 @@ class WebSocketServerSingleton {
           }
           heads.set("x-trpc-source", "wss");
 
-          // Extract session from connection parameters
-          if (!opts.info.connectionParams?.session) {
-            return createTRPCContext({
-              headers: (() => {
-                return heads;
-              })(),
-              // session: null,
-            });
-          }
-
-          // const session = JSON.parse(
-          //   opts.info.connectionParams?.session,
-          // ) as Session | null;
+          const userResponse = JSON.parse(
+            opts.info.connectionParams!.user!,
+          ) as UserResponse;
 
           return createTRPCContext({
             headers: heads,
-            // session,
+            user: userResponse,
           });
         },
       });

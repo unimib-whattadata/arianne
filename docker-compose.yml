@@ -1,0 +1,13 @@
+services:
+  adminer:
+    image: adminer
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+
+  redis:
+    image: redis
+    restart: unless-stopped
+    container_name: redis
+    ports:
+      - "6379:6379"

@@ -1,5 +1,3 @@
-import type { Assignment } from '@prisma/client';
-import { $Enums } from '@prisma/client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   Calendar1,
@@ -30,6 +28,11 @@ import { Separator } from '@/components/ui/separator';
 import { useTRPC } from '@/trpc/react';
 
 import { AssignmentSheet } from './assignment-sheet';
+import type { RouterOutputs } from '@arianne/api';
+import { $Enums } from '@arianne/db/enums';
+import type { assignmentTypeEnum } from '@arianne/db/schema';
+
+type Assignment = RouterOutputs['assignments']['get'][number];
 
 export const AccordionContent = ({
   assignment,
@@ -52,7 +55,7 @@ export const AccordionContent = ({
   );
 
   const handleUnassign = async (id: string) => {
-    await removeAssignment.mutateAsync(id);
+    await removeAssignment.mutateAsync({ where: { id } });
   };
 
   let path = '';
@@ -120,7 +123,7 @@ export const AccordionItem = ({
   children,
 }: {
   assignments: Assignment[];
-  type: $Enums.AssignmentType;
+  type: (typeof assignmentTypeEnum.enumValues)[number];
   children: React.ReactNode;
 }) => {
   const pathname = usePathname();

@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import * as React from 'react';
 
-import { authClient } from '@/auth/client';
 import { Separator } from '@/components/ui/separator';
 import {
   Sidebar,
@@ -23,13 +22,18 @@ import { NavMain } from '@/features/sidebar/components/nav-main';
 import { NavSecondary } from '@/features/sidebar/components/nav-secondary';
 import { NavUser } from '@/features/sidebar/components/nav-user';
 import { useMenu } from '@/features/sidebar/default';
+import { useTRPC } from '@/trpc/react';
+import { useQuery } from '@tanstack/react-query';
 
 export default function AppSidebarLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { data: session, isPending: loading } = authClient.useSession();
+  const api = useTRPC();
+  const { data: profile, isLoading } = useQuery(
+    api.profiles.get.queryOptions(),
+  );
   const { NAV_MAIN, NAV_SECONDARY } = useMenu();
 
   const { toggleSidebar, isMobile } = useSidebar();
@@ -56,7 +60,7 @@ export default function AppSidebarLayout({
               className="group-data-[collapsible=icon]:hidden"
             >
               <Link href="/" onClick={closeSidebar}>
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-muted text-sidebar-primary-foreground">
+                <div className="bg-muted text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                   <Heart className="fill-slate-300 stroke-0" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
@@ -78,9 +82,9 @@ export default function AppSidebarLayout({
         <NavSecondary items={NAV_SECONDARY} className="mt-auto" />
       </SidebarContent>
 
-      <Separator className="mx-auto h-0.5 w-[calc(100%-theme(spacing.6))] bg-muted" />
+      <Separator className="bg-muted mx-auto h-0.5 w-[calc(100%-(--spacing(6)))]" />
       <SidebarFooter>
-        {loading || !session?.user ? (
+        {isLoading || !profile ? (
           <SidebarMenuButton
             size="lg"
             className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
@@ -88,7 +92,7 @@ export default function AppSidebarLayout({
             <Skeleton className="h-8 w-full rounded-lg" />
           </SidebarMenuButton>
         ) : (
-          <NavUser user={session.user} />
+          <NavUser user={profile} />
         )}
       </SidebarFooter>
     </Sidebar>

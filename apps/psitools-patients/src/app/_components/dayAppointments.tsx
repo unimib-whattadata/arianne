@@ -45,7 +45,7 @@ const DayAppointment = (props: DayAppointmentProps) => {
 export const DayAppointments = () => {
   const api = useTRPC();
   const { data: events } = useQuery(
-    api.event.getAll.queryOptions({
+    api.events.getAll.queryOptions({
       who: 'patient',
     }),
   );

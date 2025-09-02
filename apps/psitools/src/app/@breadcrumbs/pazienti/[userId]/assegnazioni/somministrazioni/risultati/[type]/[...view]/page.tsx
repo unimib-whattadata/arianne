@@ -17,11 +17,11 @@ export default async function BreadcrumbSlot({
   searchParams: Promise<{ comparison?: [string, string] }>;
 }) {
   const { userId, type, view } = await params;
-  const user = await api.user.findUnique({ where: { id: userId } });
+  const user = await api.profiles.get({ where: { id: userId } });
 
   let ViewType = <></>;
   if (view[0] === 'administration') {
-    const { administration } = await api.administration.findUnique({
+    const { administration } = await api.administrations.findUnique({
       where: { id: view[1] },
     });
     ViewType = (
@@ -34,7 +34,7 @@ export default async function BreadcrumbSlot({
   }
 
   if (view[0] === 'view') {
-    const { administration } = await api.administration.findUnique({
+    const { administration } = await api.administrations.findUnique({
       where: { id: view[1] },
     });
     ViewType = (
@@ -58,7 +58,7 @@ export default async function BreadcrumbSlot({
     const { comparison } = await searchParams;
     if (!comparison) return <></>;
     const [first, second] = comparison;
-    const tCompared = await api.administration.findMany({
+    const tCompared = await api.administrations.findMany({
       where: { OR: [{ id: first }, { id: second }] },
       orderBy: { T: 'asc' },
     });

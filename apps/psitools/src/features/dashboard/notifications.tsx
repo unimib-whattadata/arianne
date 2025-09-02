@@ -1,7 +1,6 @@
 'use client';
 
-import type { Notifications } from '@arianne/db';
-import type { NotificationType } from '@prisma/client';
+import type { RouterOutputs } from '@arianne/api';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { formatDistanceToNow } from 'date-fns';
 import { it } from 'date-fns/locale';
@@ -21,17 +20,20 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTRPC } from '@/trpc/react';
 
-const getIconForType = (type: NotificationType) => {
+type Notifications = RouterOutputs['notifications']['latest'];
+type Notification = Notifications[number];
+
+const getIconForType = (type: Notification['type']) => {
   switch (type) {
     case 'event_cancelled':
     case 'event_modified':
-      return <Calendar1 className="size-6 text-primary" />;
+      return <Calendar1 className="text-primary size-6" />;
     case 'task_completed':
-      return <NotepadText className="size-6 text-primary" />;
+      return <NotepadText className="text-primary size-6" />;
     case 'administration_completed':
-      return <Sticker className="size-6 text-primary" />;
+      return <Sticker className="text-primary size-6" />;
     case 'diary_completed':
-      return <BookHeart className="size-6 text-primary" />;
+      return <BookHeart className="text-primary size-6" />;
   }
 };
 
@@ -39,20 +41,20 @@ const NotificationCard = () => {
   const api = useTRPC();
 
   const { data: dashboardNotifications, isLoading } = useQuery(
-    api.dashboardNotifications.latest.queryOptions(),
+    api.notifications.latest.queryOptions(),
   );
-  const latestNotifications = dashboardNotifications as Notifications[];
-  const therapist = useQuery(api.therapist.getAllPatients.queryOptions());
+  const latestNotifications = dashboardNotifications;
+  const therapist = useQuery(api.therapists.getAllPatients.queryOptions());
 
   const queryClient = useQueryClient();
   const updateNotifications = useMutation(
-    api.dashboardNotifications.markAsRead.mutationOptions({
+    api.notifications.markAsRead.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries({
-          queryKey: api.dashboardNotifications.latest.queryKey(),
+          queryKey: api.notifications.latest.queryKey(),
         });
         await queryClient.invalidateQueries({
-          queryKey: api.dashboardNotifications.all.queryKey(),
+          queryKey: api.notifications.all.queryKey(),
         });
       },
     }),
@@ -63,7 +65,7 @@ const NotificationCard = () => {
       <CardHeader className="flex w-full flex-row items-center justify-between space-y-0">
         <CardTitle className="text-base font-semibold">Notifiche</CardTitle>
         <Link
-          className="px-0 text-[14px] text-primary hover:underline"
+          className="text-primary px-0 text-[14px] hover:underline"
           href="/notifiche"
         >
           Vedi tutti
@@ -72,15 +74,15 @@ const NotificationCard = () => {
 
       <CardContent className="flex flex-col gap-6">
         {isLoading ? (
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             Caricamento notifiche...
           </p>
         ) : latestNotifications && latestNotifications.length > 0 ? (
-          latestNotifications.map((notification: Notifications) => {
+          latestNotifications.map((notification: Notification) => {
             const patient = therapist.data?.find(
               (p) => p.id === notification.patientId,
             );
-            const patientName = patient?.user?.name ?? '';
+            const patientName = patient?.profile.firstName;
 
             return (
               <div
@@ -88,13 +90,13 @@ const NotificationCard = () => {
                 className="flex flex-row items-center justify-between"
               >
                 <div className="flex flex-row items-center">
-                  <Badge className="mr-4 flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-white">
+                  <Badge className="bg-primary/10 mr-4 flex h-10 w-10 items-center justify-center rounded-full text-white">
                     {getIconForType(notification.type)}
                   </Badge>
 
                   <div className="flex flex-col">
                     <div className="flex gap-1">
-                      <p className="line-clamp-1 break-all pr-1 text-base">
+                      <p className="line-clamp-1 pr-1 text-base break-all">
                         {notification.title}:
                       </p>
                       <p className="font-semibold">
@@ -102,8 +104,8 @@ const NotificationCard = () => {
                       </p>
                     </div>
 
-                    <p className="text-sm text-muted-foreground first-letter:uppercase">
-                      {formatDistanceToNow(new Date(notification.date), {
+                    <p className="text-muted-foreground text-sm first-letter:uppercase">
+                      {formatDistanceToNow(new Date(notification.createdAt), {
                         addSuffix: true,
                         locale: it,
                       })}{' '}
@@ -132,7 +134,7 @@ const NotificationCard = () => {
                   <Button
                     variant={notification.read ? 'outline' : 'default'}
                     size="sm"
-                    className="w-fit border border-primary"
+                    className="border-primary w-fit border"
                     onClick={() =>
                       updateNotifications.mutate({
                         id: notification.id,
@@ -151,7 +153,7 @@ const NotificationCard = () => {
             );
           })
         ) : (
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             Nessuna notifica recente
           </p>
         )}

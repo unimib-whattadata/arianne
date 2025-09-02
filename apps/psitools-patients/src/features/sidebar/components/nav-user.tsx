@@ -1,7 +1,7 @@
 'use client';
 
-import type { Session } from '@arianne/auth';
-import { clientConfig } from '@arianne/auth';
+import type { Session } from '@arianne/supabase';
+import { clientConfig } from '@arianne/supabase';
 import { useQuery } from '@tanstack/react-query';
 import {
   Bell,

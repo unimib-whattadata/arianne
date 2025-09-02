@@ -17,7 +17,7 @@ export const ChatInput = (props: ChatInputProps) => {
   const [text, setText] = useState<string>('');
   const api = useTRPC();
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const { mutate } = useMutation(api.chat.addMessage.mutationOptions());
+  const { mutate } = useMutation(api.chats.addMessage.mutationOptions());
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,7 +30,7 @@ export const ChatInput = (props: ChatInputProps) => {
   };
 
   const { mutate: setTyping } = useMutation(
-    api.chat.setUserTyping.mutationOptions({
+    api.chats.setUserTyping.mutationOptions({
       onSuccess: () => {
         console.log('User typing status updated successfully.');
       },
@@ -76,6 +76,7 @@ export const ChatInput = (props: ChatInputProps) => {
         typingTimeoutRef.current = null;
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -83,7 +84,7 @@ export const ChatInput = (props: ChatInputProps) => {
       <form
         ref={formRef}
         onSubmit={onSubmit}
-        className="relative w-full rounded-lg border bg-background px-4 pb-2 focus-within:ring-1 focus-within:ring-ring"
+        className="bg-background focus-within:ring-ring relative w-full rounded-lg border px-4 pb-2 focus-within:ring-1"
       >
         <Textarea
           value={text}
@@ -91,7 +92,7 @@ export const ChatInput = (props: ChatInputProps) => {
             handleTextChange(e);
           }}
           placeholder="Type your message here..."
-          className="rounded-lg border-0 bg-background shadow-none"
+          className="bg-background rounded-lg border-0 shadow-none"
         />
         <div className="flex items-center p-3 pt-0">
           <Button type="submit" size="lg" className="ml-auto gap-1.5">

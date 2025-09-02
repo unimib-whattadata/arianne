@@ -1,4 +1,3 @@
-import type { Notifications, NotificationType } from '@prisma/client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { ColumnDef } from '@tanstack/react-table';
 import { formatDistanceToNow } from 'date-fns';
@@ -17,18 +16,22 @@ import { useMemo } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useTRPC } from '@/trpc/react';
+import type { RouterOutputs } from '@arianne/api';
 
-const getIconForType = (type: NotificationType) => {
+type Notifications = RouterOutputs['notifications']['latest'];
+type Notification = Notifications[number];
+
+const getIconForType = (type: Notification['type']) => {
   switch (type) {
     case 'event_cancelled':
     case 'event_modified':
-      return <Calendar1 className="size-6 text-primary" />;
+      return <Calendar1 className="text-primary size-6" />;
     case 'task_completed':
-      return <NotepadText className="size-6 text-primary" />;
+      return <NotepadText className="text-primary size-6" />;
     case 'administration_completed':
-      return <Sticker className="size-6 text-primary" />;
+      return <Sticker className="text-primary size-6" />;
     case 'diary_completed':
-      return <BookHeart className="size-6 text-primary" />;
+      return <BookHeart className="text-primary size-6" />;
   }
 };
 
@@ -36,27 +39,27 @@ export const useColumns = (patientMap: Map<string, string>) => {
   const api = useTRPC();
   const queryClient = useQueryClient();
   const updateNotifications = useMutation(
-    api.dashboardNotifications.markAsRead.mutationOptions({
+    api.notifications.markAsRead.mutationOptions({
       onSuccess: async () => {
         console.log('Notifica aggiornata con successo');
         await queryClient.invalidateQueries({
-          queryKey: api.dashboardNotifications.all.queryKey(),
+          queryKey: api.notifications.all.queryKey(),
         });
         await queryClient.invalidateQueries({
-          queryKey: api.dashboardNotifications.latest.queryKey(),
+          queryKey: api.notifications.latest.queryKey(),
         });
       },
     }),
   );
 
-  return useMemo<ColumnDef<Notifications>[]>(
+  return useMemo<ColumnDef<Notification>[]>(
     () => [
       {
         id: 'badge',
         cell: ({ row }) => {
           const notification = row.original;
           return (
-            <Badge className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-white">
+            <Badge className="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-full text-white">
               {getIconForType(notification.type)}
             </Badge>
           );
@@ -72,7 +75,7 @@ export const useColumns = (patientMap: Map<string, string>) => {
           return (
             <div className="flex flex-col">
               <div className="flex gap-1">
-                <p className="line-clamp-1 break-all pr-1 text-base">
+                <p className="line-clamp-1 pr-1 text-base break-all">
                   {notification.title}:
                 </p>
                 <p className="text-base font-semibold">
@@ -80,8 +83,8 @@ export const useColumns = (patientMap: Map<string, string>) => {
                 </p>
               </div>
 
-              <p className="text-sm text-muted-foreground first-letter:uppercase">
-                {formatDistanceToNow(new Date(notification.date), {
+              <p className="text-muted-foreground text-sm first-letter:uppercase">
+                {formatDistanceToNow(new Date(notification.createdAt), {
                   addSuffix: true,
                   locale: it,
                 })}{' '}
@@ -118,7 +121,7 @@ export const useColumns = (patientMap: Map<string, string>) => {
               <Button
                 variant={notification.read ? 'outline' : 'default'}
                 size="sm"
-                className="w-fit border border-primary"
+                className="border-primary w-fit border"
                 onClick={() =>
                   updateNotifications.mutate({
                     id: notification.id,

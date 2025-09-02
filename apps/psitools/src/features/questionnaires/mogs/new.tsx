@@ -2,7 +2,6 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import type { z } from 'zod';
 
 import {
   FormContent,
@@ -21,6 +20,7 @@ import {
   INSTRUCTIONS,
   QUESTIONS,
 } from '@/features/questionnaires/mogs/questions';
+import type z from 'zod';
 
 const formSchema = extendWithTherapistData(formSchemaItem);
 type FormValues = z.infer<typeof formSchema>;
@@ -72,7 +72,7 @@ const NewAdministration = () => {
         <FormInstructions>
           <p>{INSTRUCTIONS}</p>
         </FormInstructions>
-        <ul className="flex items-end justify-end gap-2 pr-4 text-primary">
+        <ul className="text-primary flex items-end justify-end gap-2 pr-4">
           <li className="flex w-10 rotate-180 items-center text-sm [writing-mode:vertical-rl]">
             Per nulla
           </li>

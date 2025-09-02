@@ -1,7 +1,9 @@
-import type { Event } from '@arianne/db';
 import { useQuery } from '@tanstack/react-query';
 
 import { useTRPC } from '@/trpc/react';
+import type { RouterOutputs } from '@arianne/api';
+
+type Event = RouterOutputs['events']['getAll'][number];
 
 interface MonthEventProps extends Event {
   isFirstDay?: boolean;
@@ -25,11 +27,14 @@ const MonthEvent: React.FC<MonthEventProps> = ({
   ...event
 }) => {
   const api = useTRPC();
-  const therapist = useQuery(api.therapist.getAllPatients.queryOptions());
+  const therapist = useQuery(api.therapists.getAllPatients.queryOptions());
 
-  const patientName =
-    therapist.data?.find((p) => p.id === event?.patientId)?.user?.name ??
-    event?.patientId;
+  const patientsName =
+    therapist.data
+      ?.filter((patient) => {
+        event.participants.find((participant) => participant.id === patient.id);
+      })
+      .map((p) => p.profile.name) || [];
 
   const styles = labelColorStyles[event.labelColor ?? ''] ?? {
     border: 'border-l-gray-300',
@@ -38,7 +43,7 @@ const MonthEvent: React.FC<MonthEventProps> = ({
 
   return (
     <div
-      className={`event-label z-10 mb-1 h-[22px] w-fill items-center truncate border-l-[6px] ${
+      className={`event-label w-fill z-10 mb-1 h-[22px] items-center truncate border-l-[6px] ${
         isFirstDay ? styles.border : 'border-transparent'
       } p-1 ${
         dayPosition === 'start'
@@ -74,7 +79,7 @@ const MonthEvent: React.FC<MonthEventProps> = ({
             </p>
           )}
           <h2 className="w-full truncate text-xs text-[#64748b]">
-            {event.patientId ? patientName : event.name}
+            {event.participants[0] ? patientsName.join(', ') : event.name}
           </h2>
         </div>
       )}

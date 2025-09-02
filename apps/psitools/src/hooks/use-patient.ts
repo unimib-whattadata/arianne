@@ -11,7 +11,7 @@ export const usePatient = ({ id }: { id?: string } = {}) => {
   const api = useTRPC();
 
   const { data, ...rest } = useQuery(
-    api.patient.findUnique.queryOptions(
+    api.patients.findUnique.queryOptions(
       {
         where: id ? { id } : { id: userId },
       },

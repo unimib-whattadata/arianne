@@ -85,7 +85,7 @@ export const useAdministrationSubmit = <FormValues extends FieldValues>(
     await administration.mutateAsync({
       data: {
         therapistName: therapist.user!.firstName,
-        therapistlastName: therapist.user!.lastName,
+        therapistLastname: therapist.user!.lastName,
         modality: 'autonoma_presenza',
         createdAt: new Date(),
         date: new Date(),

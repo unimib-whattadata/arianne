@@ -33,10 +33,11 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Toggle } from '@/components/ui/toggle';
-import type { UpdateNoteType } from '@/features/patient/notes/schema';
-import { updateNoteSchema } from '@/features/patient/notes/schema';
+
 import { useTRPC } from '@/trpc/react';
 import { cn } from '@/utils/cn';
+import { NoteUpdateSchema } from '@arianne/db/schema';
+import type z from 'zod';
 
 export default function Nota() {
   const { id } = useParams<{ id: string }>();
@@ -47,27 +48,33 @@ export default function Nota() {
   const api = useTRPC();
   const queryClient = useQueryClient();
   const { data: note } = useQuery(
-    api.note.findUnique.queryOptions({ id }, { enabled: !!id }),
+    api.notes.findUnique.queryOptions({ where: { id } }, { enabled: !!id }),
   );
 
-  const form = useForm<UpdateNoteType>({
-    resolver: zodResolver(updateNoteSchema),
+  const noteUpdateSchema = NoteUpdateSchema.pick({ data: true });
+  type TNoteUpdate = z.infer<typeof noteUpdateSchema>;
+
+  const form = useForm<TNoteUpdate>({
+    resolver: zodResolver(noteUpdateSchema),
     defaultValues: async () => {
       const asyncNote = await queryClient.fetchQuery(
-        api.note.findUnique.queryOptions({ id }),
+        api.notes.findUnique.queryOptions({ where: { id } }),
       );
       return {
-        pinned: asyncNote.pinned,
-        title: asyncNote.title,
-        content: asyncNote.content,
+        data: {
+          pinned: asyncNote.pinned,
+          title: asyncNote.title,
+          content: asyncNote.content,
+          patientId: asyncNote.patientId,
+        },
       };
     },
   });
 
   const { mutateAsync: deleteNote } = useMutation(
-    api.note.delete.mutationOptions({
+    api.notes.delete.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(api.note.findMany.queryFilter());
+        await queryClient.invalidateQueries(api.notes.findMany.queryFilter());
         toast.success('Nota eliminata con successo.');
         router.back();
       },
@@ -78,9 +85,9 @@ export default function Nota() {
   );
 
   const { mutateAsync: updateNote } = useMutation(
-    api.note.update.mutationOptions({
+    api.notes.update.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(api.note.findUnique.queryFilter());
+        await queryClient.invalidateQueries(api.notes.findUnique.queryFilter());
         toast.success('Nota aggiornata con successo.');
         setEdit(false);
       },
@@ -92,14 +99,14 @@ export default function Nota() {
 
   if (!note) return null;
 
-  const handleUpdate: SubmitHandler<UpdateNoteType> = async (data) => {
+  const handleUpdate: SubmitHandler<TNoteUpdate> = async (data) => {
     await updateNote({
       where: { id: note.id },
-      data,
+      data: data.data,
     });
   };
 
-  const submitErrorHandler: SubmitErrorHandler<UpdateNoteType> = (error) => {
+  const submitErrorHandler: SubmitErrorHandler<TNoteUpdate> = (error) => {
     console.error('Error updating note:', error);
     toast.error(
       "Si è verificato un errore durante l'aggiornamento della nota.",
@@ -112,8 +119,8 @@ export default function Nota() {
 
   if (edit) {
     return (
-      <div className="relative grid h-full-safe grid-rows-[repeat(2,min-content)] overflow-auto p-4 pt-0">
-        <div className="sticky top-0 z-10 bg-background pb-3">
+      <div className="h-full-safe relative grid grid-rows-[repeat(2,min-content)] overflow-auto p-4 pt-0">
+        <div className="bg-background sticky top-0 z-10 pb-3">
           <h1 className="text-xl font-semibold">Note</h1>
           <div className="flex items-center justify-end gap-2">
             <Button variant="link" onClick={() => setEdit(false)}>
@@ -132,7 +139,7 @@ export default function Nota() {
               <div className="grid grid-cols-[1fr_auto] grid-rows-[auto_1fr] items-center gap-2">
                 <FormField
                   control={form.control}
-                  name="title"
+                  name="data.title"
                   render={({ field }) => (
                     <FormItem className="row-start-1 row-end-3 grid grid-cols-subgrid grid-rows-subgrid space-y-0">
                       <FormLabel className="row-start-1 row-end-2">
@@ -151,7 +158,7 @@ export default function Nota() {
                 />
                 <FormField
                   control={form.control}
-                  name="pinned"
+                  name="data.pinned"
                   render={({ field }) => (
                     <FormItem className="row-start-1 row-end-3 grid grid-cols-subgrid grid-rows-subgrid">
                       <FormControl>
@@ -174,7 +181,7 @@ export default function Nota() {
 
               <FormField
                 control={form.control}
-                name="content"
+                name="data.content"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Contenuto</FormLabel>
@@ -192,7 +199,7 @@ export default function Nota() {
           </Form>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button variant="link" className="px-0 text-destructive">
+              <Button variant="link" className="text-destructive px-0">
                 Elimina nota
               </Button>
             </AlertDialogTrigger>
@@ -226,8 +233,8 @@ export default function Nota() {
   }
 
   return (
-    <div className="relative grid h-full-safe grid-rows-[repeat(2,min-content)] overflow-auto p-4 pt-0">
-      <div className="sticky top-0 z-10 bg-background pb-3">
+    <div className="h-full-safe relative grid grid-rows-[repeat(2,min-content)] overflow-auto p-4 pt-0">
+      <div className="bg-background sticky top-0 z-10 pb-3">
         <h1 className="text-xl font-semibold">Note</h1>
         <div className="flex items-center justify-end gap-2">
           <Button variant="link" onClick={() => router.back()}>
@@ -238,7 +245,7 @@ export default function Nota() {
       </div>
       <Card className="grid gap-4 p-4">
         <div className="grid grid-cols-[1fr_auto] grid-rows-[auto_1fr] items-center gap-2">
-          <p className="col-span-2 text-sm font-medium leading-none text-muted-foreground">
+          <p className="text-muted-foreground col-span-2 text-sm leading-none font-medium">
             Titolo
           </p>
           <p>{note.title}</p>
@@ -253,7 +260,7 @@ export default function Nota() {
           </p>
         </div>
         <div className="space-y-2">
-          <p className="text-sm font-medium leading-none text-muted-foreground">
+          <p className="text-muted-foreground text-sm leading-none font-medium">
             Contenuto
           </p>
           <p dangerouslySetInnerHTML={{ __html: note.content }} />

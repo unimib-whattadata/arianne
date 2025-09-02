@@ -1,6 +1,6 @@
 'use client';
 
-import type { JsonObject } from '@prisma/client/runtime/library';
+import type { JsonObject } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -27,10 +27,8 @@ export default function IusRPage() {
     isLoading,
     isFetching,
   } = useQuery(
-    api.administration.findUnique.queryOptions(
-      {
-        where: { id: idTest },
-      },
+    api.administrations.findUnique.queryOptions(
+      { id: idTest },
       {
         enabled: !!idTest,
         select: (data) => data.administration,
@@ -61,7 +59,7 @@ export default function IusRPage() {
             meglio la descrive.
           </p>
         </FormInstructions>
-        <ul className="flex items-end justify-end gap-2 pr-4 text-primary">
+        <ul className="text-primary flex items-end justify-end gap-2 pr-4">
           <li className="flex w-10 rotate-180 items-center text-sm [writing-mode:vertical-rl]">
             Per nulla
           </li>

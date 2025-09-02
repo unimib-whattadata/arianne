@@ -64,18 +64,18 @@ export default function Page() {
   }, [selectedDate]);
 
   const { data: allDiaries, isLoading: isLoadingAllDiaries } = useQuery(
-    api.diary.getAll.queryOptions({
+    api.diaries.getAll.queryOptions({
       type: 'food',
       patientId: patient?.id,
     }),
   );
 
   const createDiary = useMutation(
-    api.diary.create.mutationOptions({
+    api.diaries.create.mutationOptions({
       onSuccess: (data) => {
         queryClient
           .invalidateQueries({
-            queryKey: api.diary.getAll.queryKey({
+            queryKey: api.diaries.getAll.queryKey({
               type: 'food',
               patientId: patient?.id,
             }),
@@ -201,7 +201,7 @@ export default function Page() {
               </span>
               <span className="text-lg font-semibold">{format(day, 'd')}</span>
               {hasDiary(day) && (
-                <span className="mt-1 h-1 w-1 rounded-full bg-forest-green-400"></span>
+                <span className="bg-forest-green-400 mt-1 h-1 w-1 rounded-full"></span>
               )}
             </button>
           ))}
@@ -220,10 +220,10 @@ export default function Page() {
           <TabsContent value="in-progress">
             {isLoadingDayDiary ? (
               <div className="flex justify-center py-8">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                <Loader2 className="text-primary h-8 w-8 animate-spin" />
               </div>
             ) : inProgressDiaries.length === 0 ? (
-              <div className="py-8 text-center text-muted-foreground">
+              <div className="text-muted-foreground py-8 text-center">
                 Nessun diario in corso per il{' '}
                 {format(selectedDate, 'dd/MM/yyyy')}. Clicca su "Nuova
                 compilazione" per iniziare.
@@ -242,7 +242,7 @@ export default function Page() {
                         </p>
                         <p>
                           <strong>Ultimo aggiornamento:</strong>{' '}
-                          {new Date(diary.lastUpdate).toLocaleString('it-IT')}
+                          {new Date(diary.updatedAt).toLocaleString('it-IT')}
                         </p>
                       </div>
                     </CardContent>
@@ -278,10 +278,10 @@ export default function Page() {
         <TabsContent value="completed">
           {isLoadingDayDiary ? (
             <div className="flex justify-center py-8">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              <Loader2 className="text-primary h-8 w-8 animate-spin" />
             </div>
           ) : completedDiaries.length === 0 ? (
-            <div className="py-8 text-center text-muted-foreground">
+            <div className="text-muted-foreground py-8 text-center">
               Nessun diario completato per il{' '}
               {format(selectedDate, 'dd/MM/yyyy')}.
             </div>
@@ -302,7 +302,7 @@ export default function Page() {
                       </p>
                       <p>
                         <strong>Completato il:</strong>{' '}
-                        {new Date(diary.lastUpdate).toLocaleString('it-IT')}
+                        {new Date(diary.updatedAt).toLocaleString('it-IT')}
                       </p>
                     </div>
                   </CardContent>

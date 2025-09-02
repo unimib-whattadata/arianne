@@ -36,7 +36,7 @@ export default function ViewDiary() {
   const { patient } = usePatient();
 
   const { data: allDiaries, isLoading } = useQuery(
-    api.diary.getAll.queryOptions({
+    api.diaries.getAll.queryOptions({
       type: 'cognitive_beahvioral',
       patientId: patient?.id,
     }),
@@ -58,7 +58,7 @@ export default function ViewDiary() {
   if (isLoading) {
     return (
       <div className="flex h-full items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <Loader2 className="text-primary h-8 w-8 animate-spin" />
       </div>
     );
   }
@@ -79,7 +79,7 @@ export default function ViewDiary() {
             Diario Cognitivo-Comportamentale
           </h1>
         </div>
-        <div className="py-8 text-center text-muted-foreground">
+        <div className="text-muted-foreground py-8 text-center">
           Diario non trovato.
         </div>
       </div>
@@ -129,7 +129,7 @@ export default function ViewDiary() {
           </p>
           <p>
             <strong>Completato il:</strong>{' '}
-            {new Date(diary.lastUpdate).toLocaleString('it-IT')}
+            {new Date(diary.updatedAt).toLocaleString('it-IT')}
           </p>
         </CardContent>
       </Card>
@@ -148,9 +148,9 @@ export default function ViewDiary() {
               <CardContent className="py-3">
                 {typeof value === 'number' ? (
                   <div className="space-y-2">
-                    <div className="relative h-2 w-full rounded-full bg-muted">
+                    <div className="bg-muted relative h-2 w-full rounded-full">
                       <div
-                        className="absolute left-0 top-0 h-full rounded-full bg-forest-green-700"
+                        className="bg-forest-green-700 absolute top-0 left-0 h-full rounded-full"
                         style={{ width: `${(value / 10) * 100}%` }}
                       />
                     </div>

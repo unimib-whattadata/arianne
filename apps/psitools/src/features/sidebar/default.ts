@@ -19,7 +19,7 @@ import type { SibebarMenuItems } from './components/nav-main';
 
 export const useMenu = (active?: string) => {
   const api = useTRPC();
-  const { data } = useQuery(api.dashboardNotifications.all.queryOptions());
+  const { data } = useQuery(api.notifications.all.queryOptions());
 
   const unreadCount = useMemo(() => {
     return data?.filter((n) => !n.read).length ?? 0;
@@ -98,8 +98,8 @@ export const usePatientMenu = ({
 }) => {
   const api = useTRPC();
   const { data: user, isLoading } = useQuery(
-    api.user.findUnique.queryOptions(
-      { where: { id: userId } },
+    api.profiles.get.queryOptions(
+      { id: userId },
       { enabled: !!userId, staleTime: Infinity },
     ),
   );

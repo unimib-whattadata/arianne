@@ -39,11 +39,11 @@ const ExportSheet: React.FC<ExportSheetProps> = ({ isOpen, onClose }) => {
   const api = useTRPC();
 
   const { mutateAsync: mutatePDF } = useMutation(
-    api.export.exportPDF.mutationOptions(),
+    api.exports.exportPDF.mutationOptions(),
   );
 
   const { mutateAsync: mutateCSV } = useMutation(
-    api.export.exportCSV.mutationOptions(),
+    api.exports.exportCSV.mutationOptions(),
   );
 
   useEffect(() => {
@@ -103,7 +103,7 @@ const ExportSheet: React.FC<ExportSheetProps> = ({ isOpen, onClose }) => {
       const blob = new Blob([pdf], { type: 'application/pdf' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
-      link.download = 'Export questionari ' + patient?.user?.name; // nome file
+      link.download = 'Export questionari ' + patient?.profile?.name; // nome file
       link.click();
     } else {
       const zip = new JSZip();
@@ -120,7 +120,7 @@ const ExportSheet: React.FC<ExportSheetProps> = ({ isOpen, onClose }) => {
           ' (T' +
           administrations[0].T +
           ') ' +
-          patient?.user?.name;
+          patient?.profile?.name;
         link.click();
       } else {
         for (const administration of administrations) {
@@ -129,7 +129,7 @@ const ExportSheet: React.FC<ExportSheetProps> = ({ isOpen, onClose }) => {
               ' (T' +
               administration.T +
               ') ' +
-              patient?.user?.name +
+              patient?.profile?.name +
               '.csv',
             administration.csv,
           );
@@ -138,7 +138,7 @@ const ExportSheet: React.FC<ExportSheetProps> = ({ isOpen, onClose }) => {
         await zip.generateAsync({ type: 'blob' }).then(function (content) {
           FileSaver.saveAs(
             content,
-            'Export questionari ' + patient?.user?.name + '.zip',
+            'Export questionari ' + patient?.profile?.name + '.zip',
           );
         });
       }
@@ -150,9 +150,9 @@ const ExportSheet: React.FC<ExportSheetProps> = ({ isOpen, onClose }) => {
       <SheetContent className="w-full sm:max-w-lg">
         <SheetTitle className="text-md font-semibold">Esporta</SheetTitle>
 
-        <p className="pb-4 pt-5 text-base">
+        <p className="pt-5 pb-4 text-base">
           Hai selezionato:{' '}
-          <span className="font-semibold text-primary">
+          <span className="text-primary font-semibold">
             {numberOfSelectedIds}{' '}
             {numberOfSelectedIds === 1
               ? 'somministrazione'
@@ -166,7 +166,7 @@ const ExportSheet: React.FC<ExportSheetProps> = ({ isOpen, onClose }) => {
             <Checkbox
               checked={includeAll}
               onCheckedChange={(val) => toggleAll(Boolean(val))}
-              className="border border border-primary-300"
+              className="border-primary-300 border"
             />
             <p className="text-base">Tutto</p>
           </div>
@@ -179,7 +179,7 @@ const ExportSheet: React.FC<ExportSheetProps> = ({ isOpen, onClose }) => {
               <Checkbox
                 checked={includeValues[key]}
                 onCheckedChange={() => toggleSingle(key)}
-                className="border border border-primary-300"
+                className="border-primary-300 border"
               />
               <p className="text-base">{label}</p>
             </div>
@@ -199,7 +199,7 @@ const ExportSheet: React.FC<ExportSheetProps> = ({ isOpen, onClose }) => {
                 value={option.value}
                 checked={formatOption === option.value}
                 onChange={() => setFormatOption(option.value)}
-                className="h-4 w-4 text-primary accent-primary"
+                className="text-primary accent-primary h-4 w-4"
               />
               {option.label}
             </label>

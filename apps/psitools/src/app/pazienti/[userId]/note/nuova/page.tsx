@@ -8,7 +8,6 @@ import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-import { authClient } from '@/auth/client';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import {
@@ -22,16 +21,15 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Toggle } from '@/components/ui/toggle';
-import type { CreateNoteType } from '@/features/patient/notes/schema';
-import { createNoteSchema } from '@/features/patient/notes/schema';
 import { usePatient } from '@/hooks/use-patient';
 import { useTRPC } from '@/trpc/react';
+import type { NoteCreate } from '@arianne/db/schema';
+import { NoteCreateSchema } from '@arianne/db/schema';
 
 export default function NuovaNotaPage() {
-  const form = useForm<CreateNoteType>({
-    resolver: zodResolver(createNoteSchema),
+  const form = useForm<NoteCreate>({
+    resolver: zodResolver(NoteCreateSchema),
     defaultValues: {
-      pinned: false,
       title: '',
       content: '',
     },
@@ -39,14 +37,13 @@ export default function NuovaNotaPage() {
   const router = useRouter();
   const api = useTRPC();
   const queryClient = useQueryClient();
-  const { data: session } = authClient.useSession();
   const { patient } = usePatient();
 
   const { mutateAsync: createNote } = useMutation(
-    api.note.create.mutationOptions({
+    api.notes.create.mutationOptions({
       onSuccess: async () => {
         toast.success('Nota creata con successo.');
-        await queryClient.invalidateQueries(api.note.findMany.queryFilter());
+        await queryClient.invalidateQueries(api.notes.findMany.queryFilter());
         form.reset();
         router.back();
       },
@@ -59,25 +56,22 @@ export default function NuovaNotaPage() {
     }),
   );
 
-  if (!session?.user || !patient?.id) return null;
+  if (!patient?.id) return null;
 
-  const submitHandler: SubmitHandler<CreateNoteType> = async (data) => {
+  const submitHandler: SubmitHandler<NoteCreate> = async (data) => {
     await createNote({
-      data: {
-        ...data,
-        therapistId: session?.user.id,
-        patientId: patient?.id,
-      },
+      ...data,
+      patientId: patient.id,
     });
   };
 
-  const submitErrorHandler: SubmitErrorHandler<CreateNoteType> = (error) => {
+  const submitErrorHandler: SubmitErrorHandler<NoteCreate> = (error) => {
     console.error('Error creating note:', error);
   };
 
   return (
-    <div className="relative grid h-full-safe grid-rows-[repeat(2,min-content)] overflow-auto p-4 pt-0">
-      <div className="sticky top-0 z-10 bg-background pb-3">
+    <div className="h-full-safe relative grid grid-rows-[repeat(2,min-content)] overflow-auto p-4 pt-0">
+      <div className="bg-background sticky top-0 z-10 pb-3">
         <h1 className="text-xl font-semibold">Note</h1>
         <div className="flex items-center justify-end gap-2">
           <Button variant="link" onClick={() => router.back()}>
