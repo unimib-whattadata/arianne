@@ -1,0 +1,136 @@
+export const QUESTIONS = [
+  {
+    id: 1,
+    text: 'Mi sento agitato/a e teso/a:',
+    options: ['Quasi sempre', 'Spesso', 'Ogni tanto, a volte', 'Mai'],
+    reverse: true,
+  },
+  {
+    id: 2,
+    text: 'Le cose che un tempo mi piacevano, ora mi piacciono:',
+    options: [
+      'Nello stesso modo',
+      'Meno di prima',
+      'Molto poco',
+      'Quasi per niente',
+    ],
+    reverse: false,
+  },
+  {
+    id: 3,
+    text: 'Provo un sentimento di apprensione, come se dovesse succedere qualcosa di terribile:',
+    options: [
+      'Indiscutibilmente e in forma acuta',
+      'Chiaramente, ma in modo non troppo oppressivo',
+      'In modo relativo e ciò non mi da preoccupazione',
+      'Niente affatto',
+    ],
+    reverse: true,
+  },
+  {
+    id: 4,
+    text: 'Posso ridere ed accorgermi del lato divertente delle cose:',
+    options: [
+      'Come ho sempre fatto',
+      "Un po' meno di un tempo",
+      'Indubbiamente molto meno di un tempo',
+      'Niente affatto',
+    ],
+    reverse: false,
+  },
+  {
+    id: 5,
+    text: 'Dei pensieri preoccupanti mi attraversano la mente:',
+    options: [
+      'Molto spesso',
+      'Spesso',
+      'A volte, non troppo spesso',
+      'Solo ogni tanto',
+    ],
+    reverse: true,
+  },
+  {
+    id: 6,
+    text: 'Mi sento allegro/a:',
+    options: ['Mai', 'Non spesso', 'Qualche volta', 'Quasi sempre'],
+    reverse: true,
+  },
+  {
+    id: 7,
+    text: 'Posso sedermi e rilassarmi',
+    options: ['Senza difficoltà', 'Usualmente', 'Non spesso', 'Niente affatto'],
+    reverse: false,
+  },
+  {
+    id: 8,
+    text: 'Mi sento fiacco, incapace di agire',
+    options: [
+      'Quasi sempre',
+      'Molto spesso',
+      'Qualche volta',
+      'Niente affatto',
+    ],
+    reverse: true,
+  },
+  {
+    id: 9,
+    text: 'Provo un sentimento di apprensione, come se avessi lo stomaco in subbuglio:',
+    options: [
+      'Niente affatto',
+      'Qualche volta',
+      'Abbastanza spesso',
+      'Molto spesso',
+    ],
+    reverse: false,
+  },
+  {
+    id: 10,
+    text: 'Ho perso interesse riguardo alla cura del mio aspetto fisico:',
+    options: [
+      'Indubbiamente',
+      'Abbastanza, non me ne curo a sufficienza',
+      "Un po', me ne curo di meno",
+      "Per nulla, non ho affatto perso l'interesse",
+    ],
+    reverse: true,
+  },
+  {
+    id: 11,
+    text: 'Mi sento irrequieto/a come se fossi costretto/a a muovermi:',
+    options: [
+      'In maniera acuta',
+      'In maniera marcata',
+      'Non particolarmente',
+      'Niente affatto',
+    ],
+    reverse: true,
+  },
+  {
+    id: 12,
+    text: 'Guardo con gioia e speranza a ciò che mi può capitare:',
+    options: [
+      'Come ho sempre fatto',
+      "Un bel po' di meno di un tempo",
+      'Molto meno di un tempo',
+      'Quasi per niente',
+    ],
+    reverse: false,
+  },
+  {
+    id: 13,
+    text: 'Provo un sentimento improvviso di panico:',
+    options: [
+      'Molto spesso',
+      'Abbastanza spesso',
+      'Non molto spesso',
+      'Niente affatto',
+    ],
+    reverse: true,
+  },
+  {
+    id: 14,
+    text: 'Traggo soddisfazione da un libro o da una trasmissione piacevole alla radio o alla TV:',
+    options: ['Spesso', 'Qualche volta', 'Non spesso', 'Molto raramente'],
+    reverse: false,
+  },
+];

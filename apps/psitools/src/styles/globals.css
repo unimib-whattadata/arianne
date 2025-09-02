@@ -1,0 +1,242 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@theme {
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  --animate-slide-down: slide-down 0.25s ease-out;
+  --animate-slide-up: slide-up 0.25s ease-out;
+  --animate-shimmering: shimmering 0.02s forwards infinite ease-in-out;
+  --animate-shake: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  --animate-fade-in: fadein 0.5s ease-in-out;
+  --animate-fade-out: fadein 0.5s ease-in-out reverse;
+
+  @keyframes fadein {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes shimmering {
+    from {
+      backgroundposition: 'top right';
+    }
+    to {
+      backgroundposition: 'top left';
+    }
+  }
+  @keyframes shake {
+    10%,
+    90% {
+      transform: translate3d(-1px, 0, 0);
+    }
+    20%,
+    80% {
+      transform: translate3d(2px, 0, 0);
+    }
+    30%,
+    50%,
+    70% {
+      transform: translate3d(-4px, 0, 0);
+    }
+    40%,
+    60% {
+      transform: translate3d(4px, 0, 0);
+    }
+  }
+
+  @keyframes slide-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-collapsible-content-height);
+    }
+  }
+
+  @keyframes slide-up {
+    from {
+      height: var(--radix-collapsible-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+}
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --spacing-full-safe: calc(100svh - var(--header-height));
+  --spacing-fill: fill-available;
+  --spacing-webkit-fill: -webkit-fill-available;
+  --spacinf-moz-fill: -moz-available;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-light: var(--primary-light);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-light: var(--secondary-light);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --fs-sm: 12px;
+  --fs-base: 16px;
+  --fs-lg: 20px;
+  --fs-xl: 24px;
+
+  --primary: oklch(0.5202 0.1309 145.11);
+  --primary-foreground: oklch(0.9699 0.0149 12.4);
+  --primary-600: oklch(0.6158 0.107 146.39);
+  --primary-500: oklch(0.689 0.0866 147.52);
+  --primary-400: oklch(0.7605 0.0649 147.59);
+  --primary-300: oklch(0.8332 0.0458 147.96);
+  --primary-200: oklch(88.066% 0.03239 148.324);
+
+  --secondary: oklch(43.864% 0.16973 258.973);
+  --secondary-foreground: oklch(96.941% 0.01515 12.013);
+
+  --accent: oklch(96.826% 0.00696 248.26);
+  --accent-foreground: oklch(20.768% 0.03985 265.767);
+
+  --background: oklch(98.34% 0.00426 237.357);
+  --foreground: oklch(20.768% 0.03985 265.767);
+
+  --muted: oklch(96.826% 0.00696 248.26);
+  --muted-foreground: oklch(55.439% 0.04078 257.446);
+
+  --popover: oklch(100% 0.00011 271.152);
+  --popover-foreground: oklch(20.768% 0.03985 265.767);
+
+  --card: oklch(100% 0.00011 271.152);
+  --card-foreground: oklch(20.768% 0.03985 265.767);
+
+  --destructive: oklch(63.681% 0.20784 25.315);
+  --destructive-foreground: oklch(98.511% 0.00011 271.152);
+  --border: oklch(92.573% 0.01273 255.643);
+  --input: oklch(92.876% 0.01272 255.643);
+  --ring: oklch(62.706% 0.1699 149.234);
+
+  --radius: 0.5rem;
+
+  --sidebar-background: oklch(100% 0.00011 271.152);
+  --sidebar-foreground: oklch(20.768% 0.03985 265.767);
+  --sidebar-primary: oklch(52.071% 0.13096 145.154);
+  --sidebar-primary-foreground: oklch(96.941% 0.01515 12.013);
+  --sidebar-accent: oklch(96.826% 0.00696 248.26);
+  --sidebar-accent-foreground: oklch(20.768% 0.03985 265.767);
+  --sidebar-border: oklch(92.758% 0.00592 264.656);
+  --sidebar-ring: oklch(62.31% 0.1881 259.83);
+
+  --chart-1: oklch(67.671% 0.15715 35.076);
+  --chart-2: oklch(63.075% 0.10093 183.889);
+  --chart-3: oklch(37.899% 0.04379 226.199);
+  --chart-4: oklch(83.297% 0.11844 88.35);
+  --chart-5: oklch(78.425% 0.12556 58.98);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility font-h1 {
+  color: var(--color-primary);
+  font-size: var(--fs-xl);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-tight);
+}
+
+@utility font-h2 {
+  color: var(--color-primary);
+  font-size: var(--fs-lg);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-tight);
+}
+
+@utility font-h3 {
+  color: var(--color-foreground);
+  font-size: 18px;
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-tight);
+}
+
+@utility font-default {
+  font-family: var(--font-poppins);
+  font-size: var(--fs-base);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-foreground);
+}

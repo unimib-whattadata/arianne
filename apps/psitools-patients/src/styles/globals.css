@@ -1,0 +1,188 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 236 16% 21%;
+    --card: 0 0% 96%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 236 16% 21%;
+    --primary: 17 99% 58%;
+    --primary-foreground: 24.6 95% 96%;
+    --secondary: 241 100% 74%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 17 99% 58%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 17 99% 58%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 1rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 236 16% 21%;
+    --sidebar-primary: 17 99% 58%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 0 0% 96.1%;
+    --sidebar-accent-foreground: 236 16% 21%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+
+    --lavander-disabled: hsla(241, 100%, 74%, 0.5);
+    --lavander-100: hsla(237, 77%, 95%, 1);
+    --lavander-200: hsla(237, 78%, 91%, 1);
+    --lavander-300: hsla(237, 79%, 85%, 1);
+    --lavander-400: hsla(237, 79%, 78%, 1);
+    --lavander-500: hsla(241, 100%, 74%, 1);
+    --lavander-600: hsla(252, 80%, 60%, 1);
+    --lavander-700: hsla(252, 62%, 44%, 1);
+    --lavander-800: hsla(252, 55%, 34%, 1);
+    --lavander-900: hsla(252, 41%, 21%, 1);
+
+    --blue-disabled: hsla(225, 100%, 60%, 0.5);
+    --blue-water: hsla(195, 33%, 91%, 1);
+    --blue-water-title: hsla(191, 100%, 24%, 1);
+    --blue-100: hsla(218, 80%, 96%, 1);
+    --blue-200: hsla(216, 80%, 86%, 1);
+    --blue-300: hsla(220, 90%, 80%, 1);
+    --blue-400: hsla(217, 90%, 72%, 1);
+    --blue-500: hsla(225, 100%, 60%, 1);
+    --blue-600: hsla(225, 88%, 48%, 1);
+    --blue-700: hsla(225, 92%, 39%, 1);
+    --blue-800: hsla(225, 91%, 27%, 1);
+    --blue-900: hsla(225, 86%, 17%, 1);
+
+    --grey-100: hsla(0, 0%, 96%, 1);
+    --grey-200: hsla(0, 0%, 93%, 1);
+    --grey-300: hsla(180, 2%, 90%, 1);
+    --grey-400: hsla(233, 10%, 64%, 1);
+    --grey-400-transparent: hsla(0, 35%, 42%, 0.6);
+    --grey-500: hsla(233, 8%, 54%, 1);
+    --grey-500-transparent: hsla(233, 8%, 54%, 0.6);
+    --grey-600: hsla(233, 8%, 43%, 1);
+    --grey-700: hsla(231, 9%, 32%, 1);
+    --grey-800: hsla(237, 16%, 25%, 1);
+    --grey-900: hsla(236, 16%, 21%, 1);
+    --grey-1000: hsla(236, 16%, 9%, 1);
+
+    --green-100: hsla(140, 60%, 96%, 1);
+    --green-200: hsla(103, 53%, 89%, 1);
+    --green-300: hsla(103, 53%, 80%, 1);
+    --green-400: hsla(104, 59%, 70%, 1);
+    --green-500: hsla(103, 53%, 60%, 1);
+    --green-600: hsla(103, 50%, 48%, 1);
+    --green-700: hsla(130, 63%, 30%, 1);
+    --green-800: hsla(139, 63%, 20%, 1);
+    --green-900: hsla(138, 65%, 10%, 1);
+
+    --yellow-100: hsla(39, 100%, 96%, 1);
+    --yellow-200: hsla(45, 93%, 88%, 1);
+    --yellow-300: hsla(44, 96%, 82%, 1);
+    --yellow-400: hsla(44, 95%, 70%, 1);
+    --yellow-500: hsla(44, 95%, 55%, 1);
+    --yellow-600: hsla(38, 87%, 46%, 1);
+    --yellow-700: hsla(33, 86%, 37%, 1);
+    --yellow-800: hsla(22, 92%, 24%, 1);
+    --yellow-900: hsla(22, 90%, 12%, 1);
+
+    --red-100: hsla(0, 60%, 96%, 1);
+    --red-200: hsla(1, 68%, 86%, 1);
+    --red-300: hsla(1, 70%, 79%, 1);
+    --red-400: hsla(1, 73%, 69%, 1);
+    --red-500: hsla(1, 73%, 57%, 1);
+    --red-600: hsla(0, 87%, 40%, 1);
+    --red-700: hsla(0, 87%, 32%, 1);
+    --red-800: hsla(0, 92%, 20%, 1);
+    --red-900: hsla(0, 61%, 10%, 1);
+
+    --pink-100: hsla(314, 62%, 96%, 1);
+    --pink-200: hsla(313, 63%, 92%, 1);
+    --pink-300: hsla(313, 71%, 85%, 1);
+    --pink-400: hsla(313, 73%, 80%, 1);
+    --pink-500: hsla(325, 72%, 65%, 1);
+    --pink-600: hsla(325, 70%, 50%, 1);
+    --pink-700: hsla(325, 70%, 40%, 1);
+    --pink-800: hsla(325, 70%, 30%, 1);
+    --pink-900: hsla(324, 71%, 15%, 1);
+
+    --orange-disabled: hsla(17, 99%, 58%, 0.4);
+    --orange-100: hsla(23, 92%, 95%, 1);
+    --orange-200: hsla(22, 96%, 91%, 1);
+    --orange-300: hsla(22, 95%, 86%, 1);
+    --orange-400: hsla(16, 97%, 77%, 1);
+    --orange-500: hsla(17, 96%, 69%, 1);
+    --orange-600: hsla(17, 99%, 58%, 1);
+    --orange-700: hsla(17, 66%, 44%, 1);
+    --orange-800: hsla(22, 92%, 24%, 1);
+    --orange-900: hsla(22, 90%, 12%, 1);
+
+    --surface-blank: hsla(210, 9%, 4%, 0);
+    --surface-dark-0: hsla(236, 15%, 8%, 1);
+    --surface-dark-1: hsla(230, 15%, 10%, 1);
+    --surface-dark-2: hsla(231, 14%, 15%, 1);
+
+    --white-50: hsla(0, 0%, 100%, 0.05);
+    --white-60: hsla(0, 0%, 100%, 0.06);
+    --white-100: hsla(0, 0%, 100%, 0.1);
+    --white-300: hsla(0, 0%, 100%, 0.2);
+    --white-400: hsla(0, 0%, 100%, 0.3);
+    --white-500: hsla(0, 0%, 100%, 0.4);
+    --white-600: hsla(0, 0%, 100%, 0.6);
+    --white-700: hsla(0, 0%, 100%, 0.8);
+    --white-800: hsla(0, 0%, 100%, 0.9);
+    --white-900: hsla(0, 0%, 100%, 1);
+  }
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 96%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 17 99% 58%;
+    --primary-foreground: 24.6 95% 96%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 17 99% 58%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
