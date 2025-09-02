@@ -42,14 +42,14 @@
   "scripts": {
     "build": "tsc",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
-    "dev": "tsc",
+    "dev": "pnpm with-env tsc",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint",
     "db:generate": "pnpm with-env drizzle-kit generate --name",
     "db:migrate": "pnpx supabase db push",
     "db:studio": "pnpm with-env drizzle-kit studio",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
-    "with-env": "dotenv -e ../../.env --",
+    "with-env": "infisical run --path='/db' --",
     "db:utils": "pnpm with-env pnpm dlx tsx ./src/utils.ts"
   },
   "type": "module",

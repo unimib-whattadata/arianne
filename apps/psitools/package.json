@@ -101,12 +101,13 @@
     "db:deploy": "prisma migrate deploy",
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
-    "dev": "next dev --turbopack",
+    "dev": "pnpm with-env next dev --turbopack",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "format:fix": "prettier --check --write . --ignore-path ../../.gitignore",
     "lint": "eslint",
     "start": "next start",
-    "ui": "pnpm dlx shadcn@latest"
+    "ui": "pnpm dlx shadcn@latest",
+    "with-env": "infisical run --path='/psitools' --"
   },
   "type": "module",
   "version": "1.0.0"
