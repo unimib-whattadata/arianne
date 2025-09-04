@@ -71,7 +71,7 @@ const wsClient = createWSClient({
       }
     }
 
-    throw new Error('>>> WSClient: No session found');
+    return { data: JSON.stringify({ data: { user: null }, error: null }) };
   },
 });
 
