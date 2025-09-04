@@ -18,6 +18,8 @@ import SuperJSON from 'superjson';
 import { createQueryClient } from './query-client';
 import { createClient } from '@arianne/supabase/client';
 import { env } from '@/env.mjs';
+import { verifyJWT } from '@arianne/supabase';
+import type { UserResponse } from '@arianne/supabase';
 
 let clientQueryClientSingleton: QueryClient | undefined = undefined;
 const getQueryClient = () => {
@@ -44,17 +46,32 @@ const getBaseUrl = (wss?: boolean) => {
 
 const wsClient = createWSClient({
   url: getBaseUrl(true),
+  retryDelayMs(attemptIndex) {
+    return Math.min(1000 * 2 ** attemptIndex, 30000);
+  },
   connectionParams: async () => {
     const supabase = createClient();
-    const { data, error } = await supabase.auth.getUser();
+
+    const { data, error } = await supabase.auth.getSession();
+
+    let userResponse: UserResponse;
     if (error) {
-      console.error('WebSocket connection error:', error);
-      return { error: error.message };
+      userResponse = { data: { user: null }, error };
+      return { data: JSON.stringify(userResponse) };
     }
-    console.log('WebSocket connection session:', data);
-    return {
-      session: JSON.stringify(data),
-    };
+
+    if (data?.session) {
+      try {
+        await verifyJWT(data.session.access_token);
+
+        userResponse = { data: { user: data.session.user }, error: null };
+        return { data: JSON.stringify(userResponse) };
+      } catch (error) {
+        console.error('>>> WSClient: JWT verification failed', error);
+      }
+    }
+
+    throw new Error('>>> WSClient: No session found');
   },
 });
 

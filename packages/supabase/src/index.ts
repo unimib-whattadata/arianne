@@ -4,9 +4,9 @@ import * as supabaseClient from "./client";
 import * as supabaseMiddleware from "./middleware";
 import * as supabaseServer from "./server";
 
-export type { UserResponse } from "@supabase/supabase-js";
+export type { UserResponse, User, AuthError } from "@supabase/supabase-js";
 
-const PROJECT_ID = process.env.PROJECT_ID;
+const PROJECT_ID = process.env.NEXT_PUBLIC_PROJECT_ID;
 const PROJECT_JWKS = createRemoteJWKSet(
   new URL(`https://${PROJECT_ID}.supabase.co/auth/v1/.well-known/jwks.json`),
 );

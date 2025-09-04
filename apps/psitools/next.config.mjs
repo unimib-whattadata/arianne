@@ -6,7 +6,12 @@
 
 /** @type {import("next").NextConfig} */
 const config = {
-  transpilePackages: ['@arianne/api', '@arianne/db', '@arianne/supabase'],
+  transpilePackages: [
+    '@arianne/api',
+    '@arianne/db',
+    '@arianne/supabase',
+    '@arianne/wss',
+  ],
   onDemandEntries: {
     maxInactiveAge: 15 * 60 * 1000,
     pagesBufferLength: 4,

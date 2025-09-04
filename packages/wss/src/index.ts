@@ -17,7 +17,18 @@ class WebSocketServerSingleton {
       const handler = applyWSSHandler({
         wss: WebSocketServerSingleton.instance,
         router: appRouter,
+        onError: (err) => {
+          console.error("WebSocket error:", err.error);
+        },
         createContext: (opts: CreateWSSContextFnOptions) => {
+          const { info } = opts;
+          const { connectionParams } = info;
+          if (!connectionParams?.data) {
+            throw new Error("No connectionParams provided");
+          }
+
+          const data = JSON.parse(connectionParams.data) as UserResponse;
+
           const heads = new Headers();
           for (const [key, value] of Object.entries(opts.req.headers)) {
             if (typeof value === "string") {
@@ -28,13 +39,9 @@ class WebSocketServerSingleton {
           }
           heads.set("x-trpc-source", "wss");
 
-          const userResponse = JSON.parse(
-            opts.info.connectionParams!.user!,
-          ) as UserResponse;
-
           return createTRPCContext({
             headers: heads,
-            user: userResponse,
+            user: data,
           });
         },
       });
@@ -48,6 +55,10 @@ class WebSocketServerSingleton {
             `➖➖ Connection (${WebSocketServerSingleton.instance.clients.size})`,
           );
         });
+      });
+
+      WebSocketServerSingleton.instance.on("error", (error) => {
+        console.error("WebSocket Server error:", error);
       });
 
       console.log(`✅ WebSocket Server listening on ws://localhost:${wssPort}`);
