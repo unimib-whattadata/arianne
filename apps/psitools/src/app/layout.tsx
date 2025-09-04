@@ -37,8 +37,8 @@ export default async function RootLayout({
 
   if (error || !data.user) {
     return (
-      <html lang="it">
-        <body className={`${rubik.variable} ${poppins.variable}`}>
+      <html lang="it" className={`${rubik.variable} ${poppins.variable}`}>
+        <body>
           <TRPCReactProvider>
             {children}
             <Toaster richColors position="top-center" />
@@ -49,8 +49,8 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang="it">
-      <body className={`${rubik.variable} ${poppins.variable}`}>
+    <html lang="it" className={`${rubik.variable} ${poppins.variable}`}>
+      <body>
         <TRPCReactProvider>
           <SidebarProvider className="flex flex-col" defaultOpen={defaultOpen}>
             <div className="flex flex-1">
