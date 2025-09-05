@@ -71,6 +71,7 @@ const wsClient = createWSClient({
       }
     }
 
+    // If there is no session or verification failed, return user as null tRPC will handle the error
     return { data: JSON.stringify({ data: { user: null }, error: null }) };
   },
 });

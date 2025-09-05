@@ -17,7 +17,6 @@ export async function updateSession(request: NextRequest) {
           return request.cookies.getAll();
         },
         setAll(cookiesToSet) {
-          console.log(">>> middleware setAll cookies", cookiesToSet);
           cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value),
           );

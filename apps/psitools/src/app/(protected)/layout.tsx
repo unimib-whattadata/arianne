@@ -7,6 +7,7 @@ import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { Toaster } from '@/components/ui/sonner';
 import { TRPCReactProvider } from '@/trpc/react';
 import { createClient } from '@arianne/supabase/server';
+import { redirect } from 'next/navigation';
 
 const rubik = Rubik({
   weight: ['500'],
@@ -36,16 +37,7 @@ export default async function RootLayout({
   const { data, error } = await supabase.auth.getUser();
 
   if (error || !data.user) {
-    return (
-      <html lang="it" className={`${rubik.variable} ${poppins.variable}`}>
-        <body>
-          <TRPCReactProvider>
-            {children}
-            <Toaster richColors position="top-center" />
-          </TRPCReactProvider>
-        </body>
-      </html>
-    );
+    return redirect('/auth/login');
   }
 
   return (

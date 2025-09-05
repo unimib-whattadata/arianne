@@ -71,7 +71,7 @@ export default function LoginPage() {
       return;
     }
 
-    redirect('/');
+    redirect('/'); // redirect to protected area on success
   };
 
   return (

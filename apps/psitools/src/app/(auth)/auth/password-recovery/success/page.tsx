@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { resetPassword } from '@/app/auth/password-recovery/actions';
+import { resetPassword } from '@/app/(auth)/auth/password-recovery/actions';
 import z from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
