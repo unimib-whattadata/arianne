@@ -34,7 +34,7 @@ export const HeroSection = () => {
           </p>
           <div className="flex w-full gap-4">
             <Button variant="secondary" asChild>
-              <Link href="#">Manda la tua candidatura</Link>
+              <Link href="/terapeuti/onboarding">Manda la tua candidatura</Link>
             </Button>
           </div>
         </div>
