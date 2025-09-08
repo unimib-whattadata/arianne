@@ -17,21 +17,28 @@ export const HeroSection = () => {
         </div>
 
         <div className="mb-16 grid max-w-prose items-center px-5 py-24 md:mb-0 md:place-self-center md:pl-16 lg:pl-24">
-          <h1 className="text-h2 mb-4 font-medium sm:text-4xl">
-            Porta la pratica online, in
+          <h1 className="text-h2 mb-6 font-bold sm:text-4xl">
+            Porta la <span className="text-primary">pratica online</span>,
             <br className="hidden lg:inline-block" />
-            modo semplice e sicuro
+            in modo semplice e sicuro
           </h1>
-          <p className="leading-relaxed">
-            Arianne è la piattaforma pensata per psicologi, psicoterapeuti e
-            psichiatri che vogliono offrire un servizio completo, sicuro e
-            digitale
+
+          <p className="text-muted-foreground mb-4 text-lg leading-relaxed">
+            <strong>Arianne</strong> è la piattaforma pensata per{" "}
+            <strong>psicologi</strong>, <strong>psicoterapeuti</strong> e{" "}
+            <strong>psichiatri</strong> che vogliono offrire un servizio{" "}
+            <strong>completo</strong>, <strong>sicuro</strong> e{" "}
+            <strong>digitale</strong>.
           </p>
-          <p className="mb-8 leading-relaxed">
-            Con pochi strumenti integrati puoi gestire appuntamenti, seguire i
-            pazienti online, raccogliere dati clinici e molto altro, tutto da un
-            unico spazio
+
+          <p className="text-muted-foreground mb-8 text-lg leading-relaxed">
+            Con pochi strumenti integrati puoi{" "}
+            <strong>gestire appuntamenti</strong>,
+            <strong> seguire i pazienti online</strong>, raccogliere{" "}
+            <strong>dati clinici</strong> e molto altro — tutto da{" "}
+            <strong>un unico spazio</strong>.
           </p>
+
           <div className="flex w-full gap-4">
             <Button variant="secondary" asChild>
               <Link href="#">Manda la tua candidatura</Link>
