@@ -3,6 +3,7 @@ import '@/styles/globals.css';
 import { Poppins, Rubik } from 'next/font/google';
 import { cookies } from 'next/headers';
 
+import type { Metadata } from 'next';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { Toaster } from '@/components/ui/sonner';
 import { TRPCReactProvider } from '@/trpc/react';
@@ -20,6 +21,12 @@ const poppins = Poppins({
   subsets: ['latin-ext'],
   variable: '--ff-poppins',
 });
+
+export const metadata: Metadata = {
+  title: 'Arianne',
+  description:
+    'Piattaforma per la gestione di studi di psicologia e psicoterapia',
+};
 
 export default async function RootLayout({
   children,

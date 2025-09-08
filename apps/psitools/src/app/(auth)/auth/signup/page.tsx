@@ -1,7 +1,7 @@
 'use client';
 
 import type { LucideProps } from 'lucide-react';
-import { Eye, EyeOff, GalleryVerticalEnd } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import {
   Card,
@@ -29,7 +29,7 @@ import {
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { useState } from 'react';
-import { $Enums } from '@arianne/db/enums';
+import { Logo } from '@/components/brand';
 
 const formSchema = z.object({
   account: z
@@ -52,7 +52,7 @@ const formSchema = z.object({
 });
 
 export default function SignupPage() {
-  console.log('Enums:', $Enums);
+  const [sending, setSending] = useState(false);
   const [showPassword, setShowPassword] = useState('password');
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => (prev === 'text' ? 'password' : 'text'));
@@ -81,6 +81,7 @@ export default function SignupPage() {
   });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    setSending(true);
     const formData = new FormData();
     formData.append('email', data.account.email);
     formData.append('password', data.account.password);
@@ -88,6 +89,8 @@ export default function SignupPage() {
     formData.append('lastName', data.profile.lastName);
 
     const error = await signup(formData);
+
+    setSending(false);
 
     if (error) {
       form.setError('root', {
@@ -103,12 +106,9 @@ export default function SignupPage() {
   return (
     <div className="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
       <div className="flex w-full max-w-sm flex-col gap-6">
-        <a href="#" className="flex items-center gap-2 self-center font-medium">
-          <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
-            <GalleryVerticalEnd className="size-4" />
-          </div>
-          Acme Inc.
-        </a>
+        <div className="flex items-center gap-2 self-center font-medium">
+          <Logo className="h-auto w-[16rem]" />
+        </div>
         <div className={cn('flex flex-col gap-6')}>
           <Card>
             <CardHeader className="text-center">
@@ -213,7 +213,12 @@ export default function SignupPage() {
                         )}
                       />
 
-                      <Button type="submit" className="w-full">
+                      <Button
+                        type="submit"
+                        className="w-full"
+                        hasSpinner
+                        disabled={sending}
+                      >
                         Iscriviti
                       </Button>
                     </div>

@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import '@/styles/globals.css';
 
 import { Poppins, Rubik } from 'next/font/google';
@@ -15,6 +16,12 @@ const poppins = Poppins({
   subsets: ['latin-ext'],
   variable: '--ff-poppins',
 });
+
+export const metadata: Metadata = {
+  title: 'Arianne',
+  description:
+    'Piattaforma per la gestione di studi di psicologia e psicoterapia',
+};
 
 // eslint-disable-next-line @typescript-eslint/require-await
 export default async function RootLayout({

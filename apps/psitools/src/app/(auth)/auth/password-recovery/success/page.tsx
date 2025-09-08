@@ -1,7 +1,7 @@
 'use client';
 
 import type { LucideProps } from 'lucide-react';
-import { Eye, EyeOff, GalleryVerticalEnd } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import {
   Card,
@@ -28,6 +28,7 @@ import {
 } from '@/components/ui/form';
 import Link from 'next/link';
 import { useState } from 'react';
+import { Logo } from '@/components/brand';
 
 interface ShowPasswordIconProps extends LucideProps {
   field: 'password' | 'confirmPassword';
@@ -48,6 +49,7 @@ const formSchema = z
   });
 
 export default function PasswordRecoveryPage() {
+  const [sending, setSending] = useState(false);
   const [showPassword, setShowPassword] = useState({
     password: 'password',
     confirmPassword: 'password',
@@ -75,7 +77,7 @@ export default function PasswordRecoveryPage() {
   });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    console.log('Form submitted:', data);
+    setSending(true);
 
     const formData = new FormData();
     formData.append('password', data.password);
@@ -88,25 +90,21 @@ export default function PasswordRecoveryPage() {
         message: error,
       });
     }
+
+    setSending(false);
   };
 
   return (
     <div className="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
       <div className="flex w-full max-w-sm flex-col gap-6">
-        <a href="#" className="flex items-center gap-2 self-center font-medium">
-          <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
-            <GalleryVerticalEnd className="size-4" />
-          </div>
-          Acme Inc.
-        </a>
+        <div className="flex items-center gap-2 self-center font-medium">
+          <Logo className="h-auto w-[16rem]" />
+        </div>
         <div className={cn('flex flex-col gap-6')}>
           <Card>
             <CardHeader className="text-center">
               <CardTitle className="text-xl">Bentornato/a</CardTitle>
-              <CardDescription>
-                Inserisci la email alla quale vuoi ricevere le istruzioni per il
-                recupero della password.
-              </CardDescription>
+              <CardDescription>Aggiorna la tua password.</CardDescription>
             </CardHeader>
             <CardContent>
               <Form {...form}>
@@ -119,15 +117,7 @@ export default function PasswordRecoveryPage() {
                       name="password"
                       render={({ field }) => (
                         <FormItem className="grid space-y-3">
-                          <div className="flex items-center">
-                            <FormLabel>Password</FormLabel>
-                            <Link
-                              href="#"
-                              className="ml-auto text-sm underline-offset-4 hover:underline"
-                            >
-                              Hai dimenticato la password?
-                            </Link>
-                          </div>
+                          <FormLabel>Password</FormLabel>
                           <div className="relative">
                             <FormControl>
                               <Input {...field} type={showPassword.password} />
@@ -150,15 +140,7 @@ export default function PasswordRecoveryPage() {
                       name="confirmPassword"
                       render={({ field }) => (
                         <FormItem className="grid space-y-3">
-                          <div className="flex items-center">
-                            <FormLabel>Password</FormLabel>
-                            <Link
-                              href="#"
-                              className="ml-auto text-sm underline-offset-4 hover:underline"
-                            >
-                              Hai dimenticato la password?
-                            </Link>
-                          </div>
+                          <FormLabel>Conferma password</FormLabel>
                           <div className="relative">
                             <FormControl>
                               <Input
@@ -179,7 +161,12 @@ export default function PasswordRecoveryPage() {
                       )}
                     />
 
-                    <Button type="submit" className="w-full">
+                    <Button
+                      type="submit"
+                      className="w-full"
+                      hasSpinner
+                      disabled={sending}
+                    >
                       Aggiorna la password
                     </Button>
                   </div>

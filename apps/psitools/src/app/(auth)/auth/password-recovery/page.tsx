@@ -1,6 +1,6 @@
 'use client';
 
-import { CheckCircle2, GalleryVerticalEnd } from 'lucide-react';
+import { CheckCircle2 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import {
   Card,
@@ -28,12 +28,15 @@ import {
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useState } from 'react';
+import { Logo } from '@/components/brand';
+import Link from 'next/link';
 
 const formSchema = z.object({
   email: z.string().email('Inserisci un indirizzo email valido'),
 });
 
 export default function PasswordRecoveryPage() {
+  const [sending, setSending] = useState(false);
   const [success, setSuccess] = useState({
     emailSent: false,
     emailAddress: '',
@@ -46,7 +49,7 @@ export default function PasswordRecoveryPage() {
   });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    console.log('Form submitted:', data);
+    setSending(true);
 
     const formData = new FormData();
     formData.append('email', data.email);
@@ -67,17 +70,16 @@ export default function PasswordRecoveryPage() {
     });
 
     form.reset();
+
+    setSending(false);
   };
 
   return (
     <div className="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
       <div className="flex w-full max-w-sm flex-col gap-6">
-        <a href="#" className="flex items-center gap-2 self-center font-medium">
-          <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
-            <GalleryVerticalEnd className="size-4" />
-          </div>
-          Acme Inc.
-        </a>
+        <div className="flex items-center gap-2 self-center font-medium">
+          <Logo className="h-auto w-[16rem]" />
+        </div>
         <div className={cn('flex flex-col gap-6')}>
           <Card>
             <CardHeader className="text-center">
@@ -87,7 +89,7 @@ export default function PasswordRecoveryPage() {
                 recupero della password.
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
                   <div className="grid gap-6">
@@ -127,12 +129,26 @@ export default function PasswordRecoveryPage() {
                       )}
                     />
 
-                    <Button type="submit" className="w-full">
+                    <Button
+                      type="submit"
+                      className="w-full"
+                      hasSpinner
+                      disabled={sending}
+                    >
                       Invia email di recupero
                     </Button>
                   </div>
                 </form>
               </Form>
+
+              <div className="text-muted-foreground text-center text-sm">
+                <Link
+                  href="/auth/login"
+                  className="text-primary font-medium underline-offset-4 hover:underline"
+                >
+                  Torna alla pagina di login
+                </Link>
+              </div>
             </CardContent>
           </Card>
         </div>
