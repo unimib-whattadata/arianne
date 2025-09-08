@@ -7,7 +7,7 @@
     "COOKIE_SECRET",
     "NEXT_PUBLIC_LANDING_URL",
     "NEXT_PUBLIC_APP_URL",
-    "PROJECT_ID",
+    "NEXT_PROJECT_PROJECT_ID",
     "REDIS"
   ],
   "globalPassThroughEnv": [

@@ -1,7 +1,7 @@
 'use client';
 
 import type { LucideProps } from 'lucide-react';
-import { Eye, EyeOff, GalleryVerticalEnd } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import {
   Card,
@@ -29,6 +29,7 @@ import {
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { useState } from 'react';
+import { Logo } from '@/components/brand';
 
 const formSchema = z.object({
   email: z.string().email('Inserisci un indirizzo email valido'),
@@ -37,6 +38,7 @@ const formSchema = z.object({
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState('password');
+  const [sending, setSending] = useState(false);
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => (prev === 'text' ? 'password' : 'text'));
   };
@@ -57,11 +59,14 @@ export default function LoginPage() {
   });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    setSending(true);
     const formData = new FormData();
     formData.append('email', data.email);
     formData.append('password', data.password);
 
     const error = await login(formData);
+
+    setSending(false);
 
     if (error) {
       form.setError('root', {
@@ -71,18 +76,15 @@ export default function LoginPage() {
       return;
     }
 
-    redirect('/');
+    redirect('/'); // redirect to protected area on success
   };
 
   return (
     <div className="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
       <div className="flex w-full max-w-sm flex-col gap-6">
-        <a href="#" className="flex items-center gap-2 self-center font-medium">
-          <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
-            <GalleryVerticalEnd className="size-4" />
-          </div>
-          Acme Inc.
-        </a>
+        <div className="flex items-center gap-2 self-center font-medium">
+          <Logo className="h-auto w-[16rem]" />
+        </div>
         <div className={cn('flex flex-col gap-6')}>
           <Card>
             <CardHeader className="text-center">
@@ -96,7 +98,7 @@ export default function LoginPage() {
                 <form onSubmit={form.handleSubmit(onSubmit)}>
                   <div className="grid gap-6">
                     <div className="flex flex-col gap-4">
-                      <Button variant="outline" className="w-full">
+                      <Button variant="outline" className="w-full" disabled>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 24 24"
@@ -108,7 +110,7 @@ export default function LoginPage() {
                         </svg>
                         Accedi con Apple
                       </Button>
-                      <Button variant="outline" className="w-full">
+                      <Button variant="outline" className="w-full" disabled>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 24 24"
@@ -175,7 +177,12 @@ export default function LoginPage() {
                         )}
                       />
 
-                      <Button type="submit" className="w-full">
+                      <Button
+                        type="submit"
+                        className="w-full"
+                        disabled={sending}
+                        hasSpinner
+                      >
                         Accedi
                       </Button>
                     </div>

@@ -7,7 +7,7 @@ import Redis from "ioredis";
 import { z } from "zod";
 
 import { cache, publisher } from "../redis";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export type Message = {
   sender: {
@@ -139,7 +139,7 @@ export const chatsRouter = createTRPCRouter({
       return chat;
     }),
 
-  addMessage: protectedProcedure
+  addMessage: publicProcedure
     .input(ChatsAddMessageSchema)
     .mutation(async ({ input, ctx }) => {
       const chat = await ctx.db.query.chats.findFirst({
@@ -177,7 +177,7 @@ export const chatsRouter = createTRPCRouter({
       // return message;
     }),
 
-  onAdd: protectedProcedure
+  onAdd: publicProcedure
     .input(z.object({ chatId: z.string() }))
     .subscription(({ input }) => {
       return createRedisSubscription<Message>(

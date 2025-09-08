@@ -3,10 +3,12 @@ import '@/styles/globals.css';
 import { Poppins, Rubik } from 'next/font/google';
 import { cookies } from 'next/headers';
 
+import type { Metadata } from 'next';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { Toaster } from '@/components/ui/sonner';
 import { TRPCReactProvider } from '@/trpc/react';
 import { createClient } from '@arianne/supabase/server';
+import { redirect } from 'next/navigation';
 
 const rubik = Rubik({
   weight: ['500'],
@@ -19,6 +21,12 @@ const poppins = Poppins({
   subsets: ['latin-ext'],
   variable: '--ff-poppins',
 });
+
+export const metadata: Metadata = {
+  title: 'Arianne',
+  description:
+    'Piattaforma per la gestione di studi di psicologia e psicoterapia',
+};
 
 export default async function RootLayout({
   children,
@@ -36,21 +44,12 @@ export default async function RootLayout({
   const { data, error } = await supabase.auth.getUser();
 
   if (error || !data.user) {
-    return (
-      <html lang="it">
-        <body className={`${rubik.variable} ${poppins.variable}`}>
-          <TRPCReactProvider>
-            {children}
-            <Toaster richColors position="top-center" />
-          </TRPCReactProvider>
-        </body>
-      </html>
-    );
+    return redirect('/auth/login');
   }
 
   return (
-    <html lang="it">
-      <body className={`${rubik.variable} ${poppins.variable}`}>
+    <html lang="it" className={`${rubik.variable} ${poppins.variable}`}>
+      <body>
         <TRPCReactProvider>
           <SidebarProvider className="flex flex-col" defaultOpen={defaultOpen}>
             <div className="flex flex-1">

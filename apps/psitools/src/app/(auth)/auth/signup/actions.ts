@@ -41,8 +41,6 @@ export async function signup(formData: FormData) {
     },
   };
 
-  console.log({ data: data.options.data });
-
   const { error } = await supabase.auth.signUp(data);
 
   console.log('Signup error:', error);

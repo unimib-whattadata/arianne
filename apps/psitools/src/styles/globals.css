@@ -2,6 +2,7 @@
 @import 'tw-animate-css';
 
 @theme {
+  --font-sans: var(--ff-poppins);
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
 
@@ -91,7 +92,7 @@
   --spacing-full-safe: calc(100svh - var(--header-height));
   --spacing-fill: fill-available;
   --spacing-webkit-fill: -webkit-fill-available;
-  --spacinf-moz-fill: -moz-available;
+  --spacing-moz-fill: -moz-available;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -214,6 +215,7 @@
 }
 
 @utility font-h1 {
+  font-family: var(--font-poppins);
   color: var(--color-primary);
   font-size: var(--fs-xl);
   font-weight: var(--font-weight-medium);
@@ -221,6 +223,7 @@
 }
 
 @utility font-h2 {
+  font-family: var(--ff-poppins);
   color: var(--color-primary);
   font-size: var(--fs-lg);
   font-weight: var(--font-weight-medium);
@@ -228,6 +231,7 @@
 }
 
 @utility font-h3 {
+  font-family: var(--ff-poppins);
   color: var(--color-foreground);
   font-size: 18px;
   font-weight: var(--font-weight-medium);
@@ -235,7 +239,7 @@
 }
 
 @utility font-default {
-  font-family: var(--font-poppins);
+  font-family: var(--ff-poppins);
   font-size: var(--fs-base);
   font-weight: var(--font-weight-normal);
   color: var(--color-foreground);

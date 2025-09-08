@@ -123,20 +123,6 @@ const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
     });
   }
 
-  // Verify the JWT token
-  // try {
-  //   await verifyJWT(ctx.session.access_token);
-  // } catch (_error) {
-  //   throw new TRPCError({
-  //     code: "UNAUTHORIZED",
-  //     cause: "Invalid JWT token",
-  //     message:
-  //       process.env.NODE_ENV === "production"
-  //         ? "Unauthorized access."
-  //         : "Your session has expired or is invalid. Please log in again.",
-  //   });
-  // }
-
   return next({
     ctx: {
       // infers the `user` as non-nullable
