@@ -35,7 +35,7 @@ export function CardOption({ option, completed }: CardOptionProps) {
           >
             {option.icon}
           </div>
-          <h3>{option.title}</h3>
+          <h3 className="font-medium text-slate-900">{option.title}</h3>
         </div>
 
         {completed ? (

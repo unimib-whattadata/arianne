@@ -64,8 +64,8 @@ export default function Personal() {
               Dati anagrafici e qualifiche professionali
             </h1>
             <p className="mb-6 text-sm leading-relaxed text-slate-700 sm:mb-8 sm:text-base">
-              Inserisci i tuoi dati anagrafici e le informazioni che attestano
-              la tua qualifica come psicoterapeuta abilitato.
+              Inizia inserendo i tuoi dati anagrafici e le informazioni che
+              attestano la tua qualifica come psicoterapeuta abilitato.
             </p>
 
             <h3 className="mt-10 mb-4 text-lg font-bold text-slate-900 sm:text-xl">
@@ -220,7 +220,9 @@ export default function Personal() {
                           <SelectItem value="nonBinario">
                             Non binario
                           </SelectItem>
-                          <SelectItem value="altro">Altro</SelectItem>
+                          <SelectItem value="altro">
+                            Preferisco non specificarlo
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                     </FormControl>

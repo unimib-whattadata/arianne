@@ -72,13 +72,13 @@ export default function Onboarding() {
               Compila il form e inviaci la tua candidatura
             </h2>
             <p className="mt-6 leading-relaxed text-slate-700">
-              Dopo aver valutato il suo profilo, la contatteremo via email per
-              comunicarle l&apos;esito. <br />
-              Se il profilo risulterà in linea con le nostre esigenze, la
+              Dopo aver valutato il tuo profilo, ti contatteremo via email per
+              comunicarti l&apos;esito. <br />
+              Se il profilo risulterà in linea con le nostre esigenze, ti
               inviteremo a un colloquio conoscitivo.
             </p>
 
-            <div className="mt-10 flex w-full flex-col gap-4 sm:flex-row">
+            <div className="mt-10 flex w-full flex-col gap-4">
               <FormField
                 control={form.control}
                 name="nome"
@@ -113,7 +113,7 @@ export default function Onboarding() {
               />
             </div>
 
-            <div className="mt-6 flex w-full flex-col gap-4 sm:flex-row">
+            <div className="mt-6 flex w-full flex-col gap-4">
               <FormField
                 control={form.control}
                 name="email"
@@ -121,7 +121,12 @@ export default function Onboarding() {
                   <FormItem className="w-full">
                     <p className="text-slate-900">Email</p>
                     <FormControl>
-                      <Input className="mt-2 w-full" type="email" {...field} />
+                      <Input
+                        className="mt-2 w-full"
+                        type="email"
+                        placeholder="email@example.com"
+                        {...field}
+                      />
                     </FormControl>
                   </FormItem>
                 )}
@@ -142,7 +147,7 @@ export default function Onboarding() {
               />
             </div>
 
-            <div className="mt-6 flex w-full flex-col gap-4 sm:flex-row">
+            <div className="mt-6 flex w-full flex-col gap-4">
               <FormField
                 control={form.control}
                 name="orientamentoTerapeutico"
@@ -219,7 +224,7 @@ export default function Onboarding() {
                         onValueChange={field.onChange}
                         value={field.value}
                       >
-                        <SelectTrigger className="w-full">
+                        <SelectTrigger className="mt-2 w-full">
                           <SelectValue placeholder="Seleziona" />
                         </SelectTrigger>
                         <SelectContent>
@@ -296,7 +301,6 @@ export default function Onboarding() {
               )}
             />
 
-            {/* Privacy */}
             <p className="mt-8 text-slate-700">
               Per completare la candidatura è necessario il consenso al
               trattamento dei dati personali secondo i nostri Termini e
@@ -327,12 +331,7 @@ export default function Onboarding() {
               )}
             />
 
-            {/* Submit */}
-            <Button
-              className="mt-10 w-full sm:w-auto"
-              variant="secondary"
-              type="submit"
-            >
+            <Button className="mt-10 w-full" variant="secondary" type="submit">
               <Link href="/terapeuti/onboarding/waiting">
                 Invia la tua candidatura
               </Link>

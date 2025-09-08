@@ -8,7 +8,7 @@ export const HeroSection = () => {
       <div className="grid place-items-start md:grid-cols-2">
         <div className="order-1 mb-16 grid max-w-prose items-center px-5 py-24 text-center md:order-0 md:mb-0 md:place-self-center md:pr-16 md:text-left lg:pr-24">
           <h1 className="text-h2 mb-4 font-medium sm:text-4xl">
-            un ecosistema digitale
+            Un ecosistema digitale
             <br className="hidden lg:inline-block" />
             per la salute mentale
           </h1>

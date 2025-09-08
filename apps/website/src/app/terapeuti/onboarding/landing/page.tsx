@@ -37,8 +37,10 @@ export default function Landing() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-10 p-10 py-36">
       <div className="w-full max-w-3xl">
-        <h1 className="text-h1 text-center text-slate-900">Ciao Chiara!</h1>
-        <h2 className="mt-2 text-center text-xl text-slate-700">
+        <h1 className="text-h1 text-center font-bold text-slate-900">
+          Ciao Chiara!
+        </h1>
+        <h2 className="mt-2 text-center text-xl font-medium text-slate-900">
           Completa gli ultimi step per attivare il tuo profilo
         </h2>
       </div>
