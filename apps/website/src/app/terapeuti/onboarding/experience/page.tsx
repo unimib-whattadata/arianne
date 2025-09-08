@@ -81,7 +81,7 @@ export default function Experience() {
                   </p>
                   <FormControl>
                     <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger className="mt-2 w-full">
+                      <SelectTrigger className="bg-secondary-light mt-2 w-full">
                         <SelectValue placeholder="Seleziona" />
                       </SelectTrigger>
                       <SelectContent>
@@ -146,7 +146,7 @@ export default function Experience() {
                           onValueChange={field.onChange}
                           value={field.value}
                         >
-                          <SelectTrigger className="mt-2 w-full">
+                          <SelectTrigger className="bg-secondary-light mt-2 w-full">
                             <SelectValue placeholder="Seleziona" />
                           </SelectTrigger>
                           <SelectContent>
@@ -215,7 +215,7 @@ export default function Experience() {
                   </p>
                   <FormControl>
                     <Textarea
-                      className="mt-2 w-full"
+                      className="bg-secondary-light mt-2 w-full"
                       placeholder="Descrizione"
                       {...field}
                     />
@@ -262,7 +262,7 @@ export default function Experience() {
                         onValueChange={field.onChange}
                         value={field.value}
                       >
-                        <SelectTrigger className="mt-2 w-full">
+                        <SelectTrigger className="bg-secondary-light mt-2 w-full">
                           <SelectValue placeholder="Seleziona" />
                         </SelectTrigger>
                         <SelectContent>
@@ -319,6 +319,7 @@ export default function Experience() {
                         placeholder="Seleziona fascia d'età"
                         variant="inverted"
                         maxCount={3}
+                        className="bg-secondary-light"
                       />
                     </FormControl>
                   </FormItem>
@@ -349,6 +350,7 @@ export default function Experience() {
                         placeholder="Seleziona categorie specifiche"
                         variant="inverted"
                         maxCount={3}
+                        className="bg-secondary-light"
                       />
                     </FormControl>
                   </FormItem>

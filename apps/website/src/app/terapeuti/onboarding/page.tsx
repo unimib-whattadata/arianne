@@ -199,7 +199,7 @@ export default function Onboarding() {
                   <p className="text-slate-900">Dove esercita?</p>
                   <FormControl>
                     <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger className="w-full">
+                      <SelectTrigger className="bg-secondary-light w-full">
                         <SelectValue placeholder="Seleziona" />
                       </SelectTrigger>
                       <SelectContent>
@@ -224,7 +224,7 @@ export default function Onboarding() {
                         onValueChange={field.onChange}
                         value={field.value}
                       >
-                        <SelectTrigger className="mt-2 w-full">
+                        <SelectTrigger className="bg-secondary-light mt-2 w-full">
                           <SelectValue placeholder="Seleziona" />
                         </SelectTrigger>
                         <SelectContent>
@@ -284,7 +284,7 @@ export default function Onboarding() {
                   <FormControl>
                     <label
                       htmlFor="cv-upload"
-                      className="hover:border-primary mt-2 flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-slate-300 transition-colors"
+                      className="bg-secondary-light hover:border-primary mt-2 flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-slate-300 transition-colors"
                     >
                       <p className="text-slate-500">Carica qui i tuoi file</p>
                       <CloudUpload className="mt-2 h-[40px] w-[40px] text-slate-400" />
