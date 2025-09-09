@@ -3,7 +3,7 @@ import "~/styles/globals.css";
 import { type Metadata } from "next";
 import { Poppins } from "next/font/google";
 
-import { TRPCReactProvider } from "~/trpc/react";
+// import { TRPCReactProvider } from "~/trpc/react";
 import { cn } from "~/lib/utils";
 
 export const metadata: Metadata = {
@@ -31,11 +31,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={cn("scroll-smooth", poppins.variable)}>
       <body>
-        <TRPCReactProvider>
-          {header}
-          {children}
-          {footer}
-        </TRPCReactProvider>
+        {/* <TRPCReactProvider> */}
+        {header}
+        {children}
+        {footer}
+        {/* </TRPCReactProvider> */}
       </body>
     </html>
   );
