@@ -17,7 +17,7 @@ RUN \
 # Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
-COPY --from=deps /apps/website/node_modules ./node_modules
+COPY --from=deps /app/apps/website/node_modules ./node_modules
 COPY . .
 
 # Set environment variables for build
