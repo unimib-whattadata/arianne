@@ -21,7 +21,7 @@ export const FeaturesSection = () => {
             width={375}
             height={220}
             sizes="(max-width: 55rem) 100vw, 48rem"
-            className="w-full object-cover pb-12"
+            className="w-full object-cover pb-10"
           />
         </div>
       </div>

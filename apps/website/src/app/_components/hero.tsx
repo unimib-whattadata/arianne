@@ -7,25 +7,30 @@ export const HeroSection = () => {
     <section>
       <div className="grid place-items-start md:grid-cols-2">
         <div className="order-1 mb-16 grid max-w-prose items-center px-5 py-24 text-center md:order-0 md:mb-0 md:place-self-center md:pr-16 md:text-left lg:pr-24">
-          <h1 className="text-h2 mb-4 font-medium sm:text-4xl">
-            un ecosistema digitale
+          <h1 className="text-h2 mb-4 font-bold sm:text-4xl">
+            <strong>Un ecosistema digitale</strong>
             <br className="hidden lg:inline-block" />
-            per la salute mentale
+            per la <span className="text-primary">salute mentale</span>
           </h1>
-          <p className="mb-8 leading-relaxed">
-            La piattaforma digitale che unisce ricerca clinica e innovazione
-            tecnologica per rendere la psicoterapia online efficace, accessibile
-            e centrata sui bisogni di pazienti e terapeuti
+
+          <p className="mb-6 text-lg leading-relaxed">
+            La piattaforma digitale che unisce <strong>ricerca clinica</strong>{" "}
+            e <strong>innovazione tecnologica</strong> per rendere la{" "}
+            <strong>psicoterapia online</strong> efficace, accessibile
+            <br className="hidden md:inline-block" /> e centrata sui bisogni di{" "}
+            <strong>pazienti</strong> e <strong>terapeuti</strong>
           </p>
+
           <div className="flex w-full justify-center gap-4 md:justify-start">
             <Button asChild>
-              <Link href="/pazienti">Per i pazienti</Link>
+              <Link href="/pazienti"> Per i pazienti</Link>
             </Button>
             <Button variant="secondary" asChild>
-              <Link href="/terapeuti">Per i terapeuti</Link>
+              <Link href="/terapeuti"> Per i terapeuti</Link>
             </Button>
           </div>
         </div>
+
         <div className="order-0 flex w-full items-start justify-end md:order-1 lg:pb-24">
           <Image
             src="/images/home-hero.png"
