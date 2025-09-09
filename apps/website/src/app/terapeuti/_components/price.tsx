@@ -19,13 +19,13 @@ export const PriceSection = () => {
         </div>
 
         <div className="mx-auto grid max-w-4xl gap-6 md:grid-cols-2">
-          <Card className="border border-slate-200 bg-white p-6">
-            <CardContent className="p-0">
+          <Card className="flex flex-col border border-slate-200 bg-white p-6">
+            <CardContent className="flex flex-1 flex-col p-0">
               <h3 className="mb-3 text-xl font-semibold text-slate-900">
                 Prova gratuita
               </h3>
               <p className="mb-4 text-slate-600">14 giorni per testare tutto</p>
-              <ul className="mb-6 space-y-2">
+              <ul className="mb-6 flex-1 space-y-2">
                 <li className="flex items-center gap-2 text-sm text-slate-700">
                   <Check className="h-4 w-4 text-green-600" />
                   <span>Accesso completo</span>
@@ -39,20 +39,20 @@ export const PriceSection = () => {
                   <span>Disdici senza nessun conto</span>
                 </li>
               </ul>
-              <Button variant="secondary" className="w-full">
+              <Button variant="secondary" className="mt-auto w-full">
                 Inizia gratis
               </Button>
             </CardContent>
           </Card>
 
-          <Card className="bg-secondary p-6 text-white">
-            <CardContent className="p-0">
+          <Card className="bg-secondary flex flex-col p-6 text-white">
+            <CardContent className="flex flex-1 flex-col p-0">
               <h3 className="mb-3 text-xl font-semibold">Piano mensile</h3>
               <div className="mb-4">
                 <span className="text-3xl font-bold">15€</span>
                 <span className="ml-1 text-blue-100">al mese</span>
               </div>
-              <ul className="mb-6 space-y-2">
+              <ul className="mb-6 flex-1 space-y-2">
                 <li className="flex items-center gap-2 text-sm">
                   <Check className="h-4 w-4" />
                   <span>Pazienti illimitati</span>
@@ -62,7 +62,7 @@ export const PriceSection = () => {
                   <span>Disdici quando vuoi</span>
                 </li>
               </ul>
-              <Button variant="default" className="w-full">
+              <Button variant="default" className="mt-auto w-full">
                 Scegli questo piano
               </Button>
             </CardContent>
