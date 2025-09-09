@@ -27,7 +27,7 @@
   "prettier": "@arianne/prettier-config",
   "private": true,
   "scripts": {
-    "build": "pnpm with-env tsc",
+    "build": "tsc",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
     "dev": "pnpm with-env tsc",
     "format": "prettier --check . --ignore-path ../../.gitignore",

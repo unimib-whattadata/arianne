@@ -5,13 +5,17 @@ RUN apk update
 RUN apk add --no-cache libc6-compat
 # Set working directory
 WORKDIR /app
+
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
 # Replace <your-major-version> with the major version installed in your repository. For example:
-RUN pnpm add -g turbo@^2.5.5
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm add -g turbo@^2.5.5
 COPY . .
 
 # Generate a partial monorepo with a pruned lockfile for a target workspace.
 # Assuming "web" is the name entered in the project's package.json: { name: "web" }
-RUN turbo prune website --docker
+RUN turbo prune @arianne/website --docker
 
 # Add lockfile and package.json's of isolated subworkspace
 FROM base AS installer
@@ -19,13 +23,20 @@ RUN apk update
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+
 # First install the dependencies (as they change less often)
 COPY --from=builder /app/out/json/ .
-RUN pnpm install --frozen-lockfile
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm add -g turbo@^2.5.5
+
+ENV DATABASE_URL="https://placeholder.it"
 # Build the project
 COPY --from=builder /app/out/full/ .
-RUN pnpm turbo run build
+RUN --mount=type=cache,id=pnpm,target=/pnpm/storepnpm turbo run -F @arianne/website build
 
 FROM base AS runner
 WORKDIR /app
