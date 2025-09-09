@@ -23,20 +23,20 @@ export const HeroSection = () => {
             in modo semplice e sicuro
           </h1>
 
-          <p className="text-muted-foreground mb-4 text-lg leading-relaxed">
+          <p className="mb-4 text-lg leading-relaxed">
             <strong>Arianne</strong> è la piattaforma pensata per{" "}
             <strong>psicologi</strong>, <strong>psicoterapeuti</strong> e{" "}
             <strong>psichiatri</strong> che vogliono offrire un servizio{" "}
             <strong>completo</strong>, <strong>sicuro</strong> e{" "}
-            <strong>digitale</strong>.
+            <strong>digitale</strong>
           </p>
 
-          <p className="text-muted-foreground mb-8 text-lg leading-relaxed">
+          <p className="mb-8 text-lg leading-relaxed">
             Con pochi strumenti integrati puoi{" "}
             <strong>gestire appuntamenti</strong>,
             <strong> seguire i pazienti online</strong>, raccogliere{" "}
             <strong>dati clinici</strong> e molto altro — tutto da{" "}
-            <strong>un unico spazio</strong>.
+            <strong>un unico spazio</strong>
           </p>
 
           <div className="flex w-full gap-4">

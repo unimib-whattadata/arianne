@@ -13,12 +13,12 @@ export const HeroSection = () => {
             per la <span className="text-primary">salute mentale</span>
           </h1>
 
-          <p className="text-muted-foreground mb-6 text-lg leading-relaxed">
+          <p className="mb-6 text-lg leading-relaxed">
             La piattaforma digitale che unisce <strong>ricerca clinica</strong>{" "}
             e <strong>innovazione tecnologica</strong> per rendere la{" "}
             <strong>psicoterapia online</strong> efficace, accessibile
             <br className="hidden md:inline-block" /> e centrata sui bisogni di{" "}
-            <strong>pazienti</strong> e <strong>terapeuti</strong>.
+            <strong>pazienti</strong> e <strong>terapeuti</strong>
           </p>
 
           <div className="flex w-full justify-center gap-4 md:justify-start">

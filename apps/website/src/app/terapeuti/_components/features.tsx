@@ -57,7 +57,7 @@ export const FeaturesSection = () => {
         <h2 className="text-h2 text-center font-bold text-balance">
           Tutti gli strumenti, in{" "}
           <span className="bg-secondary text-secondary-foreground rounded-lg px-2">
-            un' unica piattaforma
+            un&apos; unica piattaforma
           </span>{" "}
         </h2>
 
@@ -75,9 +75,7 @@ export const FeaturesSection = () => {
               </CardHeader>
 
               <CardContent className="p-0">
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  {item.description}
-                </p>
+                <p className="text-sm leading-relaxed">{item.description}</p>
               </CardContent>
             </Card>
           ))}

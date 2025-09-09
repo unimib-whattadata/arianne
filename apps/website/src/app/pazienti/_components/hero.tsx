@@ -6,7 +6,6 @@ export const HeroSection = () => {
   return (
     <section>
       <div className="grid place-items-start md:grid-cols-2">
-        {/* Immagine */}
         <div className="flex w-full items-start lg:pb-24">
           <Image
             src="/images/paziente-hero.png"
@@ -24,18 +23,17 @@ export const HeroSection = () => {
             <span className="text-primary">per aiutarti davvero</span>
           </h1>
 
-          <p className="text-muted-foreground mb-4 text-lg leading-relaxed">
+          <p className="mb-4 text-lg leading-relaxed">
             Con <strong>Arianne</strong> hai a disposizione uno{" "}
             <strong>spazio sicuro</strong> dove comunicare con il tuo
             <strong> terapeuta</strong>, monitorare come stai e accedere
-            facilmente agli <strong>strumenti utili</strong> per il tuo
-            percorso.
+            facilmente agli <strong>strumenti utili</strong> per il tuo percorso
           </p>
 
-          <p className="text-muted-foreground mb-8 text-lg leading-relaxed">
+          <p className="mb-8 text-lg leading-relaxed">
             Puoi <strong>registrare sintomi</strong>, compilare{" "}
             <strong>questionari</strong> e ricevere{" "}
-            <strong>indicazioni su misura</strong>.
+            <strong>indicazioni su misura</strong>
           </p>
 
           <div className="flex w-full gap-4">
