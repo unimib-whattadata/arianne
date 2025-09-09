@@ -9,8 +9,11 @@ export const EfficacySection = () => {
       <div className="container mx-auto grid place-content-center gap-16 px-4 md:grid-cols-2 lg:grid-cols-3">
         <div className="grid place-content-center lg:col-span-2">
           <h2 className="text-h2 mb-6 font-bold">
-            Ma il supporto di <span className="text-primary">Arianne</span> è
-            davvero efficace?
+            Ma il supporto di{" "}
+            <span className="bg-primary text-secondary-foreground rounded-lg px-2">
+              Arianne
+            </span>{" "}
+            è davvero efficace?
           </h2>
 
           <p className="mb-4 text-lg leading-relaxed text-slate-900">

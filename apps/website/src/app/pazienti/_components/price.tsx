@@ -1,67 +1,78 @@
 "use client";
 
 import { Button } from "~/components/ui/button";
-import { Card, CardContent, CardHeader } from "~/components/ui/card";
+import { Card, CardContent } from "~/components/ui/card";
+import { Check } from "lucide-react";
 
 export const PriceSection = () => {
   return (
-    <section id="price" className="scroll-mt-8 px-4 py-12 md:py-24">
-      <div className="container mx-auto">
-        <h2 className="text-h2 text-center font-semibold text-balance">
-          Benessere mentale alla portata di chiunque
-        </h2>
-        <div className="mx-auto mt-8 grid w-full gap-10 md:mt-16 md:grid-cols-2 lg:grid-cols-3">
-          <Card className="group gap-3 border-0 p-0 shadow-none md:max-lg:col-span-2">
-            <CardContent className="p-0">
-              <p>
-                Con Arianne puoi iniziare un percorso di supporto psicologico
-                online, accessibile e flessibile
-              </p>
+    <section id="price" className="scroll-mt-8 bg-slate-50 px-4 py-16 md:py-24">
+      <div className="container mx-auto max-w-5xl">
+        <div className="mb-12 text-center">
+          <h2 className="mb-4 text-3xl font-bold text-slate-900 md:text-4xl">
+            Benessere mentale alla portata di{" "}
+            <strong className="text-primary">chiunque</strong>
+          </h2>
+          <p className="mx-auto max-w-2xl text-lg text-slate-600">
+            Con Arianne puoi iniziare un percorso di supporto psicologico
+            online,{" "}
+            <strong className="text-secondary">accessibile e flessibile</strong>
+          </p>
+        </div>
 
-              <p>
-                Il primo colloquio è gratuito, senza impegno, e puoi
-                interrompere in qualsiasi momento
-              </p>
-
-              <p>
-                Se decidi di continuare, ogni seduta ha un costo di soli 25 euro
-                per il primo anno
-              </p>
-              <Button className="mt-6">Registrati</Button>
-            </CardContent>
-          </Card>
-
-          <Card className="group bg-primary-light place-content-center gap-3 border-0 p-6 shadow-none">
-            <CardHeader className="p-0">
-              <h3 className="text-h3 font-medium">Gratis</h3>
-            </CardHeader>
-
-            <CardContent className="p-0">
-              <p>Il primo colloquio</p>
-              <ul className="list-disc pl-5">
-                <li>
-                  Conosci il professionista assegnatoti in base al questionario
-                </li>
-                <li>Capisci come funziona</li>
-                <li>Decidi poi se continuare</li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          <Card className="group bg-primary-light place-content-center gap-3 border-0 p-6 shadow-none">
-            <CardHeader className="p-0">
-              <h3 className="text-h3 font-medium">
-                <span className="text-base font-normal">da</span> 35 euro
+        <div className="mx-auto grid max-w-4xl gap-6 md:grid-cols-2">
+          <Card className="flex flex-col border border-slate-200 bg-white p-6">
+            <CardContent className="flex flex-1 flex-col p-0">
+              <h3 className="mb-3 text-xl font-semibold text-slate-900">
+                Primo colloquio gratuito
               </h3>
-            </CardHeader>
-
-            <CardContent className="p-0">
-              <p>Tutte le sedute successive</p>
-              <ul className="list-disc pl-5">
-                <li>Conosci te stesso e lavora insieme al terapeuta</li>
-                <li>Monitora i progressi tramite questionari</li>
-                <li>Interrompi quando vuoi</li>
+              <p className="mb-4 text-slate-600">
+                Senza impegno, per conoscerci
+              </p>
+              <ul className="mb-6 flex-1 space-y-2">
+                <li className="flex items-center gap-2 text-sm text-slate-700">
+                  <Check className="h-4 w-4 text-green-600" />
+                  <span>Conosci il professionista assegnatoti</span>
+                </li>
+                <li className="flex items-center gap-2 text-sm text-slate-700">
+                  <Check className="h-4 w-4 text-green-600" />
+                  <span>Capisci come funziona</span>
+                </li>
+                <li className="flex items-center gap-2 text-sm text-slate-700">
+                  <Check className="h-4 w-4 text-green-600" />
+                  <span>Decidi poi se continuare</span>
+                </li>
               </ul>
+              <Button variant="secondary" className="mt-auto w-full">
+                Prenota colloquio gratuito
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-secondary flex flex-col p-6 text-white">
+            <CardContent className="flex flex-1 flex-col p-0">
+              <h3 className="mb-3 text-xl font-semibold">Sedute successive</h3>
+              <div className="mb-4">
+                <span className="text-3xl font-bold">35€</span>
+                <span className="ml-1 text-blue-100">a seduta</span>
+              </div>
+              <ul className="mb-6 flex-1 space-y-2">
+                <li className="flex items-center gap-2 text-sm">
+                  <Check className="h-4 w-4" />
+                  <span>Lavora insieme al terapeuta</span>
+                </li>
+                <li className="flex items-center gap-2 text-sm">
+                  <Check className="h-4 w-4" />
+                  <span>Monitora i progressi</span>
+                </li>
+                <li className="flex items-center gap-2 text-sm">
+                  <Check className="h-4 w-4" />
+                  <span>Interrompi quando vuoi</span>
+                </li>
+              </ul>
+              <Button variant="default" className="mt-auto w-full">
+                Inizia il percorso
+              </Button>
             </CardContent>
           </Card>
         </div>

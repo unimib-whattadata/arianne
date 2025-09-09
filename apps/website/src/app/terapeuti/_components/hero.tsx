@@ -35,7 +35,7 @@ export const HeroSection = () => {
             Con pochi strumenti integrati puoi{" "}
             <strong>gestire appuntamenti</strong>,
             <strong> seguire i pazienti online</strong>, raccogliere{" "}
-            <strong>dati clinici</strong> e molto altro — tutto da{" "}
+            <strong>dati clinici</strong> e molto altro tutto da{" "}
             <strong>un unico spazio</strong>
           </p>
 

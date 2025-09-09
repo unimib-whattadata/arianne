@@ -5,11 +5,11 @@ import Image from "next/image";
 import { useState } from "react";
 
 import { cn } from "~/lib/utils";
-import { Users, Stethoscope, ArrowRight, CheckCircle } from "lucide-react";
+import { Users, Stethoscope, ArrowRight } from "lucide-react";
 
 const CAPTION_TEXT = {
   patients:
-    "Arianne offre un supporto personalizzato e continuo, facilitando il percorso terapeutico con un monitoraggio attento, utile a mantenere il benessere nel tempo. La terapia è accessibile ovunque e in qualsiasi momento, per un'esperienza più flessibile ed efficace.",
+    "Arianne offre un supporto personalizzato e continuo, facilitando il percorso terapeutico con un monitoraggio attento, utile a mantenere il benessere nel tempo. La terapia è accessibile ovunque e in qualsiasi momento, per un'esperienza più flessibile ed efficace",
   therapists:
     "La piattaforma offre la possibilità di una terapia più efficiente e organizzata, consentendo il monitoraggio dei pazienti in tempo reale per interventi più mirati e contribuendo così alla riduzione delle ospedalizzazioni e dei costi sanitari",
 };
@@ -89,26 +89,25 @@ export const BenefitsSection = () => {
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <div className="relative">
             <div className="relative overflow-hidden rounded-2xl shadow-2xl">
-              <Image
-                src={
-                  selectedTab === "patients"
-                    ? "/images/benefici-pazienti.png"
-                    : "/images/benefici-pazienti.png"
-                }
-                alt={
-                  selectedTab === "patients"
-                    ? "Benefici per i Pazienti"
-                    : "Benefici per i Terapeuti"
-                }
-                width={600}
-                height={400}
-                className="h-auto w-full transition-all duration-500"
-              />
+              <div className="aspect-[3/2] w-full">
+                <Image
+                  src={
+                    selectedTab === "patients"
+                      ? "/images/benefici-pazienti.png"
+                      : "/images/benefici-terapeuta.png"
+                  }
+                  alt={
+                    selectedTab === "patients"
+                      ? "Benefici per i Pazienti"
+                      : "Benefici per i Terapeuti"
+                  }
+                  width={600}
+                  height={400}
+                  className="h-full w-full object-cover transition-opacity duration-500"
+                />
+              </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
             </div>
-
-            <div className="absolute -top-4 -right-4 h-24 w-24 rounded-full bg-blue-100 opacity-60" />
-            <div className="absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-purple-100 opacity-40" />
           </div>
 
           <div className="space-y-8">
@@ -129,8 +128,7 @@ export const BenefitsSection = () => {
                     key={index}
                     className="flex items-center gap-3 rounded-lg border border-gray-100 bg-white p-3 shadow-sm"
                   >
-                    <CheckCircle className="h-5 w-5 flex-shrink-0 text-green-500" />
-                    <span className="font-medium text-gray-700">{benefit}</span>
+                    <span className="font-medium">{benefit}</span>
                   </div>
                 ))}
               </div>
@@ -139,10 +137,7 @@ export const BenefitsSection = () => {
         </div>
 
         <div className="mt-12 flex justify-center">
-          <Button
-            size="lg"
-            className="group bg-primary hover:bg-primary/80 rounded-full px-8 py-3 text-white shadow-lg transition-all duration-300 hover:shadow-xl"
-          >
+          <Button size="lg" variant={"default"}>
             Scopri cosa ti offre
             <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Button>
