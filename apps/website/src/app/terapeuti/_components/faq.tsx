@@ -59,7 +59,7 @@ export const FaqSection = () => {
           </p>
         </div>
 
-        <div className="mx-auto grid max-w-6xl items-start gap-12 lg:grid-cols-2">
+        <div className="mx-auto grid max-w-6xl items-start gap-6 lg:grid-cols-2">
           {/* FAQ Section */}
           <div className="space-y-6">
             <Accordion type="single" collapsible className="space-y-4">
@@ -71,7 +71,7 @@ export const FaqSection = () => {
                     value={String(index)}
                     className="rounded-xl border border-gray-200 bg-white shadow-sm transition-shadow duration-200 hover:shadow-md"
                   >
-                    <AccordionTrigger className="group px-6 py-4 hover:no-underline">
+                    <AccordionTrigger className="group items-center px-6 py-4 hover:no-underline">
                       <div className="flex items-center gap-4 text-left">
                         <div className="rounded-lg bg-blue-50 p-2 transition-colors group-hover:bg-blue-100">
                           <IconComponent className="text-secondary size-5" />
@@ -97,10 +97,6 @@ export const FaqSection = () => {
           {/* CTA Card */}
           <div className="lg:sticky lg:top-8">
             <Card className="bg-secondary relative overflow-hidden border-0 text-white shadow-xl">
-              {/* Background decoration */}
-              <div className="absolute top-0 right-0 h-32 w-32 translate-x-8 -translate-y-8 rounded-full bg-white/10"></div>
-              <div className="absolute bottom-0 left-0 h-24 w-24 -translate-x-4 translate-y-4 rounded-full bg-white/5"></div>
-
               <CardHeader className="relative z-10 pb-4">
                 <div className="mb-2 flex items-center gap-3">
                   <Badge

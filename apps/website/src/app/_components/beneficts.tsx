@@ -47,7 +47,10 @@ export const BenefitsSection = () => {
       <div className="mx-auto max-w-7xl px-4 py-16 md:py-24">
         <div className="mb-16 text-center">
           <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">
-            I Benefici di <span className="text-primary">Arianne</span>
+            I Benefici di{" "}
+            <strong className="bg-primary text-secondary-foreground rounded-lg px-2">
+              Arianne
+            </strong>
           </h2>
           <p className="mx-auto max-w-2xl text-lg text-gray-600">
             Scopri come la nostra piattaforma trasforma l&apos;esperienza

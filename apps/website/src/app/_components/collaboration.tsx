@@ -21,17 +21,20 @@ export const CollaborationSection = () => {
       className="bg-secondary-light relative scroll-mt-8 py-12 lg:py-24"
     >
       <div className="container mx-auto grid max-w-prose px-4 text-center">
-        <h2 className="text-h2 mb-4 font-medium">
-          Un progetto costruito insieme
-        </h2>
+        <h1 className="text-h2 mb-4 font-bold sm:text-4xl">
+          Un progetto costruito{" "}
+          <strong className="bg-secondary text-secondary-foreground rounded-lg px-2">
+            insieme
+          </strong>
+        </h1>
 
-        <p>
+        <p className="mb-6 text-lg leading-relaxed">
           Arianne è il risultato di un lavoro condiviso tra l’
           <strong>Università di Padova</strong>, l’
           <strong>Università degli Studi di Milano-Bicocca</strong> e{" "}
           <strong>Whattadata</strong>.
         </p>
-        <p>
+        <p className="mb-6 text-lg leading-relaxed">
           Un percorso di collaborazione che unisce <strong>ricerca</strong> e{" "}
           <strong>innovazione</strong> con l’obiettivo di rendere la terapia più
           accessibile ed efficace.

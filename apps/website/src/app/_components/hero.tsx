@@ -10,7 +10,10 @@ export const HeroSection = () => {
           <h1 className="text-h2 mb-4 font-bold sm:text-4xl">
             <strong>Un ecosistema digitale</strong>
             <br className="hidden lg:inline-block" />
-            per la <span className="text-primary">salute mentale</span>
+            per la{" "}
+            <strong className="bg-primary text-secondary-foreground rounded-lg px-2">
+              salute mentale
+            </strong>
           </h1>
 
           <p className="mb-6 text-lg leading-relaxed">
