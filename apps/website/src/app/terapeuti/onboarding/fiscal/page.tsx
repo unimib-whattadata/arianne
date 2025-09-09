@@ -101,7 +101,7 @@ export default function Fiscal() {
                   </p>
                   <FormControl>
                     <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger className="mt-2 w-full">
+                      <SelectTrigger className="bg-secondary-light mt-2 w-full">
                         <SelectValue placeholder="Seleziona" />
                       </SelectTrigger>
                       <SelectContent>
@@ -305,7 +305,7 @@ export default function Fiscal() {
                     <p className="text-slate-900 sm:text-base">
                       Fasce orarie disponibili
                     </p>
-                    <FormControl>
+                    <FormControl className="bg-secondary-light">
                       <MultiSelect
                         options={[
                           { value: "mattina", label: "Mattina" },
