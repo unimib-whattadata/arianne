@@ -1,4 +1,6 @@
-import type { Event } from '@prisma/client';
+import type { RouterOutputs } from '@arianne/api';
+
+type Events = RouterOutputs['events']['getAllForPatients'];
 
 export type DayName =
   | 'lunedì'
@@ -30,7 +32,7 @@ export interface Day {
   dayIndex: number; // Range -> 0 (Monday) to 6 (Sunday)
   abbr: DayAbbr;
   date: Date;
-  appointments: Event[];
+  appointments: Events;
 }
 
 export interface Week {
@@ -46,16 +48,6 @@ export interface Month {
   monthSpan: number;
   monthNumber: number; // 1-12
   year: number;
-}
-
-export interface EventWithTherapist extends Event {
-  therapist: {
-    user: {
-      id: string;
-      firstName: string;
-      lastName: string;
-    };
-  };
 }
 
 export type CalendarView = 'week' | 'month';

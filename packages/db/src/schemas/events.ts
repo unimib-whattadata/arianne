@@ -83,12 +83,6 @@ export const EventsDeleteSchema = z.object({
   id: z.string(),
 });
 
-export const EventsGetAllSchema = z
-  .object({
-    who: z.enum(["patient", "therapist"]),
-  })
-  .optional();
-
 export const participants = createTable(
   "participants",
   (d) => ({

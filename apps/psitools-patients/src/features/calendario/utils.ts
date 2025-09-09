@@ -1,6 +1,7 @@
-import type { Event } from '@prisma/client';
-
+import type { RouterOutputs } from '@arianne/api';
 import type { Day, Month, Week } from '@/features/calendario/types';
+
+type Events = RouterOutputs['events']['getAll'];
 
 export const daysOfWeek: {
   name: Day['name'];
@@ -59,7 +60,7 @@ export const getISOWeekNumber = (date: Date): number => {
   );
 };
 
-export const checkEvent = (events: Event[], date: Date): Event[] => {
+export const checkEvent = (events: Events, date: Date): Events => {
   return events.filter((event) => {
     const eventDate = new Date(event.date);
     return (

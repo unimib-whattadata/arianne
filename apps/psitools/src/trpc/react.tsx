@@ -36,7 +36,7 @@ export const { useTRPC, TRPCProvider, useTRPCClient } =
   createTRPCContext<AppRouter>();
 
 const getBaseUrl = (wss?: boolean) => {
-  if (wss) return 'ws://localhost:3005';
+  if (wss) return env.NEXT_PUBLIC_WSS_URL;
   if (typeof window !== 'undefined') return window.location.origin;
 
   return env.NEXT_PUBLIC_APP_URL;

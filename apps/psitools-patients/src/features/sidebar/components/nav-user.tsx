@@ -1,8 +1,5 @@
 'use client';
 
-import type { Session } from '@arianne/supabase';
-import { clientConfig } from '@arianne/supabase';
-import { useQuery } from '@tanstack/react-query';
 import {
   Bell,
   ChevronsUpDown,
@@ -12,7 +9,6 @@ import {
 } from 'lucide-react';
 import { redirect } from 'next/navigation';
 
-import { authClient } from '@/auth/client';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -30,29 +26,30 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { env } from '@/env.mjs';
-import { useTRPC } from '@/trpc/react';
 
-export function NavUser({ user }: { user: Session['user'] }) {
+import type { RouterOutputs } from '@arianne/api';
+import { createClient } from '@arianne/supabase/client';
+
+const supabase = createClient();
+
+export function NavUser({
+  user,
+}: {
+  user: NonNullable<RouterOutputs['profiles']['get']>;
+}) {
   const { isMobile } = useSidebar();
-  const api = useTRPC();
-  const { data: account } = useQuery(
-    api.user.getAccount.queryOptions({ userId: user.id }),
-  );
 
   const avatar = <HeartIcon className="fill-slate-300 stroke-0" />;
 
   const signOut = async () => {
-    const searchParams = new URLSearchParams();
-    searchParams.set('post_logout_redirect_uri', env.NEXT_PUBLIC_LANDING_URL);
-    searchParams.set('id_token_hint', account?.idToken || '');
+    const { error } = await supabase.auth.signOut();
 
-    await authClient.signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          redirect(`${clientConfig.logoutUrl}?${searchParams.toString()}`);
-        },
-      },
-    });
+    if (error) {
+      console.error('Error signing out:', error.message);
+      return;
+    }
+
+    redirect(env.NEXT_PUBLIC_LANDING_URL);
   };
 
   return (

@@ -3,8 +3,12 @@
 import { cookies } from 'next/headers';
 
 import { createClient } from '@arianne/supabase/server';
-import type { AuthError } from '@supabase/auth-js';
+import type {
+  AuthError,
+  SignUpWithPasswordCredentials,
+} from '@arianne/supabase';
 import { $Enums } from '@arianne/db/enums';
+import { env } from '@/env.mjs';
 
 const getErrorMessage = (error: AuthError) => {
   switch (error.code) {
@@ -33,13 +37,14 @@ export async function signup(formData: FormData) {
     email: formData.get('email') as string,
     password: formData.get('password') as string,
     options: {
+      emailRedirectTo: `${env.NEXT_PUBLIC_APP_URL}/auth/confirm`,
       data: {
         first_name: formData.get('firstName') as string,
         last_name: formData.get('lastName') as string,
         role: $Enums.role.therapist,
       },
     },
-  };
+  } satisfies SignUpWithPasswordCredentials;
 
   const { error } = await supabase.auth.signUp(data);
 

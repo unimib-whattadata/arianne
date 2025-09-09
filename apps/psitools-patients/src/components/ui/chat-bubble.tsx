@@ -45,7 +45,8 @@ const ChatBubble = React.forwardRef<HTMLDivElement, ChatBubbleProps>(
     >
       {React.Children.map(children, (child) =>
         React.isValidElement(child) && typeof child.type !== 'string'
-          ? React.cloneElement(child, {
+          ? // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+            React.cloneElement(child, {
               variant,
               layout,
             } as React.ComponentProps<typeof child.type>)
@@ -110,7 +111,7 @@ const ChatBubbleMessage = React.forwardRef<
     <div
       className={cn(
         chatBubbleMessageVariants({ variant, layout, className }),
-        'max-w-xl whitespace-pre-wrap break-words',
+        'max-w-xl break-words whitespace-pre-wrap',
       )}
       ref={ref}
       {...props}

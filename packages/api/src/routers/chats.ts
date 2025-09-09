@@ -103,8 +103,6 @@ export const chatsRouter = createTRPCRouter({
   getOrCreate: protectedProcedure
     .input(ChatsGetOrCreateSchema)
     .query(async ({ input, ctx }) => {
-      const therapistId = ctx.user.id;
-
       const chat = await ctx.db.query.chats.findFirst({
         where: (chats, { eq }) => eq(chats.id, input.patientId),
         with: {
@@ -120,7 +118,7 @@ export const chatsRouter = createTRPCRouter({
           .values({
             id: input.patientId,
             patientId: input.patientId,
-            therapistId,
+            therapistId: input.therapistId,
             lastIndex: 0,
           })
           .returning()

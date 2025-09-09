@@ -4,7 +4,13 @@ import * as supabaseClient from "./client";
 import * as supabaseMiddleware from "./middleware";
 import * as supabaseServer from "./server";
 
-export type { UserResponse, User, AuthError } from "@supabase/supabase-js";
+export type {
+  UserResponse,
+  User,
+  AuthError,
+  Session,
+  SignUpWithPasswordCredentials,
+} from "@supabase/supabase-js";
 
 const PROJECT_ID = process.env.NEXT_PUBLIC_PROJECT_ID;
 const PROJECT_JWKS = createRemoteJWKSet(

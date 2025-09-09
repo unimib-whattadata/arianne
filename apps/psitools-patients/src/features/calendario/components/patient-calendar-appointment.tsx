@@ -1,4 +1,4 @@
-import type { Event } from '@prisma/client';
+import type { RouterOutputs } from '@arianne/api';
 import { MapPin, Sofa, User, Video } from 'lucide-react';
 
 import {
@@ -7,7 +7,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import type { EventWithTherapist } from '@/features/calendario/types';
+
+type Event = RouterOutputs['events']['getAllForPatients'][number];
 
 interface PatientCalendarAppointment {
   event: Event;
@@ -17,7 +18,6 @@ export const PatientCalendarAppointment = (
   props: PatientCalendarAppointment,
 ) => {
   const { event } = props;
-  const eventWithTherapist = event as EventWithTherapist;
   return (
     <Accordion
       type="single"
@@ -31,39 +31,39 @@ export const PatientCalendarAppointment = (
               <Sofa />
             </div>
             <div className="flex flex-col items-start">
-              <span>{eventWithTherapist.name}</span>
+              <span>{event.therapist.profile.name}</span>
               <span className="text-base font-thin">
-                {eventWithTherapist.startTime} - {eventWithTherapist.endTime}
+                {event.startTime} - {event.endTime}
               </span>
             </div>
           </div>
         </AccordionTrigger>
-        <AccordionContent className="flex flex-col gap-4 text-balance px-4 py-2">
+        <AccordionContent className="flex flex-col gap-4 px-4 py-2 text-balance">
           <div className="flex flex-col gap-2 p-2">
             <div className="flex flex-row items-center gap-6">
               <User />{' '}
               <span>
-                {eventWithTherapist.therapist.user.firstName}{' '}
-                {eventWithTherapist.therapist.user.lastName}, Tu
+                {event.therapist.profile.firstName}{' '}
+                {event.therapist.profile.lastName}, Tu
               </span>
             </div>
           </div>
-          {eventWithTherapist.location && (
+          {event.location && (
             <div className="flex flex-col gap-2 p-2">
               <div className="flex flex-row items-center gap-6">
-                <MapPin /> <span>{eventWithTherapist.location}</span>
+                <MapPin /> <span>{event.location}</span>
               </div>
             </div>
           )}
-          {eventWithTherapist.meetingLink && (
+          {event.meetingLink && (
             <div className="flex flex-col gap-2 p-2">
               <a
-                href={eventWithTherapist.meetingLink}
+                href={event.meetingLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex flex-row items-center gap-6 hover:underline"
               >
-                <Video /> <span>{eventWithTherapist.meetingLink}</span>
+                <Video /> <span>{event.meetingLink}</span>
               </a>
             </div>
           )}

@@ -49,7 +49,7 @@ export interface SibebarMenuItems {
 export function NavMain({ name, items }: SibebarMenuItems) {
   const pathname = usePathname();
   const pathSegments = pathname.split('/').filter(Boolean);
-  console.log('NavMain', { pathname, pathSegments });
+
   const isActive = (url: string) => {
     if (url === '/' && pathSegments.length === 0) return true;
     const urlSegment = url.split('/').at(-1) ?? '';
@@ -108,7 +108,7 @@ export function NavMain({ name, items }: SibebarMenuItems) {
                 <>
                   <CollapsibleTrigger asChild>
                     <SidebarMenuAction
-                      className="z-10 text-foreground data-[state=open]:rotate-90"
+                      className="text-foreground z-10 data-[state=open]:rotate-90"
                       disabled={item.disabled}
                     >
                       <ChevronRight />

@@ -18,7 +18,7 @@ export const assignmentsRouter = createTRPCRouter({
 
       const assignments = await ctx.db.query.assignments.findMany({
         where: (assignments, { eq }) => {
-          if (input.where.id) {
+          if (input?.where.id) {
             return eq(assignments.patientId, input.where.id);
           }
           return eq(assignments.patientId, userId);

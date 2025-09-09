@@ -1,5 +1,5 @@
 'use client';
-import type { Event } from '@prisma/client';
+
 import { useState } from 'react';
 
 import { PatientCalendarAppointments } from '@/features/calendario/components/patient-calendar-appointments';
@@ -18,8 +18,12 @@ import {
   getWeek,
 } from '@/features/calendario/utils';
 
+import type { RouterOutputs } from '@arianne/api';
+
+type Events = RouterOutputs['events']['getAllForPatients'];
+
 interface PatientCalendarProps {
-  events: Event[];
+  events: Events;
 }
 
 export const PatientCalendar = (props: PatientCalendarProps) => {

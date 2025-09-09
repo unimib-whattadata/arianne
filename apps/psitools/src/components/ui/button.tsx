@@ -58,8 +58,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         type={props.type || 'button'}
         {...props}
       >
-        {showSpinner && <Loader2 className="h-4 w-4 animate-spin" />}
-        {props.children}
+        <>
+          {showSpinner && <Loader2 className="h-4 w-4 animate-spin" />}
+          {props.children}
+        </>
       </Comp>
     );
   },

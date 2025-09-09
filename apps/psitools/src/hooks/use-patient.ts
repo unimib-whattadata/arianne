@@ -1,5 +1,4 @@
 'use client';
-import '@arianne/db/types';
 
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';

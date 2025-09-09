@@ -83,6 +83,7 @@ export const messagesRelations = relations(messages, ({ one }) => ({
 
 export const ChatsGetOrCreateSchema = z.object({
   patientId: z.string(),
+  therapistId: z.string(),
 });
 
 export const ChatsAddMessageSchema = z.object({

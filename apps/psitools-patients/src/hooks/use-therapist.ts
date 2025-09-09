@@ -2,13 +2,11 @@ import { useQuery } from '@tanstack/react-query';
 
 import { useTRPC } from '@/trpc/react';
 
-export const useTherapist = (therapistId: string) => {
+export const useTherapist = () => {
   const api = useTRPC();
   const { data: user, ...rest } = useQuery(
-    api.therapist.therapistById.queryOptions({
-      therapistId: therapistId,
-    }),
+    api.therapists.findUnique.queryOptions(),
   );
 
-  return { user, userInfo: user?.user, ...rest };
+  return { user, profile: user?.profile, ...rest };
 };

@@ -172,11 +172,13 @@ export const AssignmentsUpdateSchema = z.object({
   data: assignmentSchema,
 });
 
-export const AssignmentsFindUniqueSchema = z.object({
-  where: z.object({
-    id: z.string().optional(),
-  }),
-});
+export const AssignmentsFindUniqueSchema = z
+  .object({
+    where: z.object({
+      id: z.string(),
+    }),
+  })
+  .optional();
 
 export const AssignmentsDeleteSchema = z.object({
   where: z.object({
