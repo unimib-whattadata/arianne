@@ -1,0 +1,44 @@
+{
+  "name": "@arianne/supabase",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./middleware": "./src/middleware.ts",
+    "./client": "./src/client.ts",
+    "./server": "./src/server.ts"
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "dev": "pnpm with-env tsc",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
+    "with-env": "infisical run --path='/supabase' --"
+  },
+  "devDependencies": {
+    "@arianne/eslint-config": "workspace:*",
+    "@arianne/prettier-config": "workspace:*",
+    "@arianne/tsconfig": "workspace:*",
+    "dotenv-cli": "^8.0.0",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "typescript": "catalog:"
+  },
+  "prettier": "@arianne/prettier-config",
+  "dependencies": {
+    "@supabase/ssr": "^0.6.1",
+    "@supabase/supabase-js": "^2.52.0",
+    "@types/react": "catalog:",
+    "jose": "catalog:",
+    "next": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  }
+}

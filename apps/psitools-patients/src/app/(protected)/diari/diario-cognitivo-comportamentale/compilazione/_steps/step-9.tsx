@@ -1,0 +1,93 @@
+import { useFormContext } from 'react-hook-form';
+
+import type { FormData } from '@/app/(protected)/diari/diario-cognitivo-comportamentale/compilazione/layout';
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from '@/components/ui/form';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Textarea } from '@/components/ui/textarea';
+
+export default function Step9() {
+  const { control } = useFormContext<FormData>();
+
+  const bodyEmotionOptions = ['Si', 'No'] as const;
+
+  return (
+    <div className="space-y-10 p-4">
+      <FormField
+        control={control}
+        name="bodyEmotion"
+        render={({ field }) => (
+          <FormItem>
+            <div className="bg-card grid grid-cols-2 gap-10 rounded-sm px-4 py-6">
+              <FormLabel className="text-base font-normal text-gray-900">
+                Hai provato qualche sensazione corporea?
+              </FormLabel>
+              <FormControl>
+                <RadioGroup
+                  value={field.value ?? ''}
+                  onValueChange={(value) => field.onChange(value)}
+                  className="flex flex-col gap-4"
+                >
+                  {bodyEmotionOptions.map((label) => (
+                    <FormItem
+                      key={label}
+                      className={`relative cursor-pointer rounded-lg border px-4 py-3 text-sm ${
+                        field.value === label
+                          ? 'bg-primary-100 border-primary text-primary'
+                          : 'border-gray-300 text-gray-700'
+                      }`}
+                    >
+                      <FormControl>
+                        <>
+                          <RadioGroupItem
+                            value={label}
+                            id={`bodyEmotion-${label}`}
+                            className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                          />
+                          <FormLabel
+                            htmlFor={`bodyEmotion-${label}`}
+                            className="w-full cursor-pointer"
+                          >
+                            {label}
+                          </FormLabel>
+                        </>
+                      </FormControl>
+                    </FormItem>
+                  ))}
+                </RadioGroup>
+              </FormControl>
+            </div>
+          </FormItem>
+        )}
+      />
+
+      {control._formValues.bodyEmotion === 'Si' && (
+        <FormField
+          control={control}
+          name="bodyFeeling"
+          render={({ field }) => (
+            <FormItem>
+              <div className="bg-card grid grid-cols-2 items-center gap-10 rounded-sm px-4 py-6">
+                <FormLabel className="text-base font-normal text-gray-900">
+                  Quale sensazione corporea hai provato?
+                </FormLabel>
+                <FormControl>
+                  <Textarea
+                    {...field}
+                    onChange={(e) => field.onChange(e.target.value)}
+                    placeholder="Scrivi qui il tuo testo"
+                    className="w-full resize-none rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-orange-500"
+                  />
+                </FormControl>
+              </div>
+            </FormItem>
+          )}
+        />
+      )}
+    </div>
+  );
+}

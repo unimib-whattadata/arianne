@@ -1,0 +1,37 @@
+{
+  "dependencies": {
+    "@arianne/api": "workspace:*",
+    "ws": "catalog:"
+  },
+  "devDependencies": {
+    "@arianne/eslint-config": "workspace:*",
+    "@arianne/prettier-config": "workspace:*",
+    "@arianne/tsconfig": "workspace:*",
+    "@types/ws": "catalog:",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "typescript": "catalog:"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "license": "MIT",
+  "name": "@arianne/wss",
+  "optionalDependencies": {
+    "bufferutil": "^4.0.9",
+    "utf-8-validate": "^6.0.5"
+  },
+  "prettier": "@arianne/prettier-config",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "dev": "pnpm with-env pnpm dlx tsx ./src/index.ts",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
+    "with-env": "infisical run --path='/wss' --"
+  },
+  "type": "module",
+  "version": "0.1.0"
+}
