@@ -58,7 +58,7 @@ const menu = [
 
 export default function HeaderSlot() {
   return (
-    <header className="fixed top-0 z-50 w-full p-4">
+    <header className="fixed top-2 z-50 w-full p-4">
       <div className="bg-background container mx-auto rounded-full border px-4 py-2">
         <nav className="hidden items-center justify-between lg:flex">
           <div className="flex items-center gap-6">
@@ -75,8 +75,18 @@ export default function HeaderSlot() {
             </div>
           </div>
           <div className="flex gap-2">
-            <Button variant="ghost">Accedi</Button>
-            <Button>Registrati</Button>
+            <Button
+              className="group relative w-40 overflow-hidden bg-gray-200 text-gray-400"
+              variant="ghost"
+            >
+              <span className="absolute inset-0 flex items-center justify-center transition-transform duration-500 group-hover:-translate-x-full">
+                Registrati
+              </span>
+
+              <span className="text-secondary absolute inset-0 flex translate-x-full items-center justify-center transition-transform duration-500 group-hover:translate-x-0">
+                Coming soon!
+              </span>
+            </Button>
           </div>
         </nav>
 
@@ -110,10 +120,10 @@ export default function HeaderSlot() {
                   </Accordion>
 
                   <div className="flex flex-col gap-3">
-                    <Button variant="ghost" className="mr-2">
+                    {/* <Button variant="ghost" className="mr-2">
                       Accedi
                     </Button>
-                    <Button>Registrati</Button>
+                    <Button>Registrati</Button> */}
                   </div>
                 </div>
               </SheetContent>
