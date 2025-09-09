@@ -11,26 +11,31 @@ export const HeroSection = () => {
             src="/images/paziente-hero.png"
             width={719}
             height={804}
-            alt="Immagine di un terapeuta"
+            alt="Immagine di un paziente"
             sizes="(max-width: 55rem) 100vw, 48rem"
           />
         </div>
 
         <div className="mb-16 grid max-w-prose items-center px-5 py-24 md:mb-0 md:place-self-center md:pl-16 lg:pl-24">
-          <h1 className="text-h2 mb-4 font-medium sm:text-4xl">
+          <h1 className="text-h2 mb-4 font-bold sm:text-4xl">
             Ogni funzione è pensata
-            <br className="hidden lg:inline-block" />
-            per aiutarti davvero
+            <br />
+            <span className="text-primary">per aiutarti davvero</span>
           </h1>
-          <p className="leading-relaxed">
-            Con Arianne hai a disposizione uno spazio sicuro dove comunicare con
-            il tuo terapeuta, monitorare come stai e accedere facilmente agli
-            strumenti utili per il tuo percorso
+
+          <p className="mb-4 text-lg leading-relaxed">
+            Con <strong>Arianne</strong> hai a disposizione uno{" "}
+            <strong>spazio sicuro</strong> dove comunicare con il tuo
+            <strong> terapeuta</strong>, monitorare come stai e accedere
+            facilmente agli <strong>strumenti utili</strong> per il tuo percorso
           </p>
-          <p className="mb-8 leading-relaxed">
-            Puoi registrare sintomi, compilare questionari e ricevere
-            indicazioni su misura
+
+          <p className="mb-8 text-lg leading-relaxed">
+            Puoi <strong>registrare sintomi</strong>, compilare{" "}
+            <strong>questionari</strong> e ricevere{" "}
+            <strong>indicazioni su misura</strong>
           </p>
+
           <div className="flex w-full gap-4">
             <Button asChild>
               <Link href="#">Scopri Arianne</Link>
