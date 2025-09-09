@@ -16,8 +16,8 @@ RUN \
 
 # Rebuild the source code only when needed
 FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+WORKDIR /apps
+COPY --from=deps /apps/node_modules ./node_modules
 COPY . .
 
 # Set environment variables for build
@@ -25,11 +25,11 @@ ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
 # Build the application using turbo
-RUN npx run -F @arianne/website build
+RUN npx turbo run -F @arianne/website build
 
 # Production image, copy all the files and run next
 FROM base AS runner
-WORKDIR /app
+WORKDIR /apps
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
@@ -38,7 +38,7 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 # Copy built application
-COPY --from=builder /app ./
+COPY --from=builder /apps ./
 
 USER nextjs
 
