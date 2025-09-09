@@ -93,7 +93,7 @@
   "name": "@arianne/psitools-patients",
   "private": true,
   "scripts": {
-    "build": "next build",
+    "build": "pnpm with-env next build",
     "clean": "git clean -xdf .cache .turbo .next node_modules",
     "db:deploy": "prisma migrate deploy",
     "db:migrate": "prisma migrate dev",

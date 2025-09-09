@@ -52,7 +52,7 @@
   "packageManager": "pnpm@9.15.1",
   "private": true,
   "scripts": {
-    "build": "next build",
+    "build": "pnpm with-env next build",
     "check": "next lint && tsc --noEmit",
     "clean": "git clean -xdf .cache .turbo .next node_modules",
     "db:generate": "drizzle-kit generate",
