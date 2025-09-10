@@ -125,7 +125,7 @@ export const Header = () => {
   );
 };
 
-export const renderMenuItem = (item: MenuItem) => {
+const renderMenuItem = (item: MenuItem) => {
   if (item.items) {
     return (
       <NavigationMenuItem key={item.title}>
@@ -153,7 +153,7 @@ export const renderMenuItem = (item: MenuItem) => {
   );
 };
 
-export const renderMobileMenuItem = (item: MenuItem) => {
+const renderMobileMenuItem = (item: MenuItem) => {
   if (item.items) {
     return (
       <AccordionItem key={item.title} value={item.title} className="border-b-0">

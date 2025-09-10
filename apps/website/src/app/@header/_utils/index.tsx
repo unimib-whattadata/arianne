@@ -1,7 +1,9 @@
+"use client";
+
 import { Menu } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Logo } from "~/components/logo";
-
 import {
   Accordion,
   AccordionContent,
@@ -24,59 +26,70 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "~/components/ui/sheet";
+import { cn } from "~/lib/utils";
 
-interface MenuItem {
+export interface MenuItem {
   title: string;
   url: string;
   description?: string;
   icon?: React.ReactNode;
+  active?: boolean;
   items?: MenuItem[];
 }
 
-const menu = [
-  {
-    title: "Overview",
-    url: "#features",
-  },
-  {
-    title: "Benefici",
-    url: "#benefits",
-  },
-  {
-    title: "Pazienti",
-    url: "/pazienti",
-  },
-  {
-    title: "Terapeuti",
-    url: "/terapeuti",
-  },
-  {
-    title: "Contatti",
-    url: "#contacts",
-  },
-] satisfies MenuItem[];
+interface HeaderMenuProps {
+  items: MenuItem[];
+}
 
-export const Header = () => {
+export const HeaderMenu = ({ items }: HeaderMenuProps) => {
+  const pathname = usePathname();
+  const isActive = (id: string) => {
+    return pathname === id;
+  };
+
+  const defaultMenu: MenuItem[] = [
+    {
+      title: "Pazienti",
+      url: "/pazienti",
+      active: isActive("/pazienti"),
+    },
+    {
+      title: "Terapeuti",
+      url: "/terapeuti",
+      active: isActive("/terapeuti"),
+    },
+  ];
+
   return (
     <header className="fixed top-0 z-50 w-full p-4">
       <div className="bg-background container mx-auto rounded-full border px-4 py-2">
         <nav className="hidden items-center justify-between lg:flex">
           <div className="flex items-center gap-6">
-            {/* Logo */}
             <Link href="/">
               <Logo className="text-primary h-6" />
             </Link>
             <div className="flex items-center">
               <NavigationMenu>
                 <NavigationMenuList>
-                  {menu.map((item) => renderMenuItem(item))}
+                  {defaultMenu.map((item) => renderMenuItem(item))}|
+                  {items.map((item) => renderMenuItem(item))}
                 </NavigationMenuList>
               </NavigationMenu>
             </div>
           </div>
           <div className="flex gap-2">
-            <Button variant="ghost">Accedi</Button>
-            <Button>Registrati</Button>
+            <Button
+              className="group relative w-40 overflow-hidden bg-gray-200 text-gray-400"
+              variant="ghost"
+            >
+              <span className="absolute inset-0 flex items-center justify-center transition-transform duration-500 group-hover:-translate-x-full">
+                Registrati
+              </span>
+
+              <span className="text-secondary absolute inset-0 flex translate-x-full items-center justify-center transition-transform duration-500 group-hover:translate-x-0">
+                Coming soon!
+              </span>
+            </Button>
           </div>
         </nav>
 
@@ -106,14 +119,14 @@ export const Header = () => {
                     collapsible
                     className="flex w-full flex-col gap-4"
                   >
-                    {menu.map((item) => renderMobileMenuItem(item))}
+                    {items.map((item) => renderMobileMenuItem(item))}
                   </Accordion>
 
                   <div className="flex flex-col gap-3">
-                    <Button variant="ghost" className="mr-2">
+                    {/* <Button variant="ghost" className="mr-2">
                       Accedi
                     </Button>
-                    <Button>Registrati</Button>
+                    <Button>Registrati</Button> */}
                   </div>
                 </div>
               </SheetContent>
@@ -145,7 +158,10 @@ export const renderMenuItem = (item: MenuItem) => {
     <NavigationMenuItem key={item.title}>
       <NavigationMenuLink
         href={item.url}
-        className="group bg-background hover:bg-muted hover:text-accent-foreground inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors"
+        className={cn(
+          "group bg-background hover:bg-muted hover:text-accent-foreground inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors",
+          item.active && "text-primary",
+        )}
       >
         {item.title}
       </NavigationMenuLink>
@@ -170,7 +186,11 @@ export const renderMobileMenuItem = (item: MenuItem) => {
   }
 
   return (
-    <Link key={item.title} href={item.url} className="text-md font-medium">
+    <Link
+      key={item.title}
+      href={item.url}
+      className={cn("text-md font-medium", item.active && "text-primary")}
+    >
       {item.title}
     </Link>
   );
@@ -179,10 +199,12 @@ export const renderMobileMenuItem = (item: MenuItem) => {
 const SubMenuLink = ({ item }: { item: MenuItem }) => {
   return (
     <Link
-      className="hover:bg-muted hover:text-accent-foreground flex flex-row gap-4 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none"
+      className={cn(
+        "hover:bg-muted hover:text-accent-foreground flex flex-row gap-4 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none",
+      )}
       href={item.url}
     >
-      <div className="text-foreground">{item.icon}</div>
+      {item.icon && <div className="text-foreground">{item.icon}</div>}
       <div>
         <div className="text-sm font-medium">{item.title}</div>
         {item.description && (

@@ -5,6 +5,7 @@ import { Poppins } from "next/font/google";
 
 // import { TRPCReactProvider } from "~/trpc/react";
 import { cn } from "~/lib/utils";
+import { InViewObserverProvider } from "./_context/in-view-observer";
 
 export const metadata: Metadata = {
   title: "Arianne",
@@ -32,9 +33,11 @@ export default function RootLayout({
     <html lang="en" className={cn("scroll-smooth", poppins.variable)}>
       <body>
         {/* <TRPCReactProvider> */}
-        {header}
-        {children}
-        {footer}
+        <InViewObserverProvider>
+          {header}
+          {children}
+          {footer}
+        </InViewObserverProvider>
         {/* </TRPCReactProvider> */}
       </body>
     </html>

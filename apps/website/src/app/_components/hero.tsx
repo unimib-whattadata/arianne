@@ -5,8 +5,8 @@ import Image from "next/image";
 export const HeroSection = () => {
   return (
     <section>
-      <div className="grid place-items-start md:grid-cols-2">
-        <div className="order-1 mb-16 grid max-w-prose items-center px-5 py-24 text-center md:order-0 md:mb-0 md:place-self-center md:pr-16 md:text-left lg:pr-24">
+      <div className="grid w-full place-items-start md:grid-cols-2">
+        <div className="order-1 mb-16 grid w-full max-w-prose items-center px-5 py-24 text-center md:order-0 md:mb-0 md:place-self-center md:pr-16 md:text-left lg:pr-24">
           <h1 className="text-h2 mb-4 font-bold sm:text-4xl">
             <strong>Un ecosistema digitale</strong>
             <br className="hidden lg:inline-block" />
@@ -24,11 +24,11 @@ export const HeroSection = () => {
             <strong>pazienti</strong> e <strong>terapeuti</strong>
           </p>
 
-          <div className="flex w-full justify-center gap-4 md:justify-start">
-            <Button asChild>
+          <div className="w-full justify-center gap-4 space-y-2 md:flex md:justify-start">
+            <Button asChild className="w-full md:w-auto">
               <Link href="/pazienti"> Per i pazienti</Link>
             </Button>
-            <Button variant="secondary" asChild>
+            <Button variant="secondary" asChild className="w-full md:w-auto">
               <Link href="/terapeuti"> Per i terapeuti</Link>
             </Button>
           </div>
