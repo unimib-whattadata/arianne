@@ -53,7 +53,9 @@ export const PriceSection = () => {
             <CardContent className="flex flex-1 flex-col p-0">
               <h3 className="mb-3 text-xl font-semibold">Sedute successive</h3>
               <div className="mb-4">
-                <span className="text-3xl font-bold">35€</span>
+                <span className="text-3xl font-bold">
+                  da 50€<sup>*</sup>
+                </span>
                 <span className="ml-1 text-blue-100">a seduta</span>
               </div>
               <ul className="mb-6 flex-1 space-y-2">
@@ -70,7 +72,13 @@ export const PriceSection = () => {
                   <span>Interrompi quando vuoi</span>
                 </li>
               </ul>
-              <Button variant="default" className="mt-auto w-full">
+
+              <p className="mt-2 text-xs text-blue-100">
+                *Il prezzo effettivo sarà stabilito dal terapeuta in base al
+                percorso.
+              </p>
+
+              <Button variant="default" className="mt-4 w-full">
                 Inizia il percorso
               </Button>
             </CardContent>

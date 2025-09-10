@@ -9,9 +9,9 @@ import { Users, Stethoscope, ArrowRight } from "lucide-react";
 
 const CAPTION_TEXT = {
   patients:
-    "Arianne offre un supporto personalizzato e continuo, facilitando il percorso terapeutico con un monitoraggio attento, utile a mantenere il benessere nel tempo. La terapia è accessibile ovunque e in qualsiasi momento, per un'esperienza più flessibile ed efficace",
+    "Arianne offre un supporto personalizzato e continuo, con un monitoraggio attento che accompagna il percorso terapeutico. La terapia diventa accessibile in ogni momento e luogo, offrendo un’esperienza più flessibile e sempre efficace",
   therapists:
-    "La piattaforma offre la possibilità di una terapia più efficiente e organizzata, consentendo il monitoraggio dei pazienti in tempo reale per interventi più mirati e contribuendo così alla riduzione delle ospedalizzazioni e dei costi sanitari",
+    "Arianne permette una gestione più efficiente e organizzata, con il monitoraggio dei pazienti in tempo reale. Questo consente interventi mirati e tempestivi, riducendo il rischio di ospedalizzazioni e i costi complessivi della terapia",
 };
 
 const BENEFITS = {

@@ -49,8 +49,9 @@ export const PriceSection = () => {
             <CardContent className="flex flex-1 flex-col p-0">
               <h3 className="mb-3 text-xl font-semibold">Piano mensile</h3>
               <div className="mb-4">
-                <span className="text-3xl font-bold">15€</span>
-                <span className="ml-1 text-blue-100">al mese</span>
+                <span className="bg-primary text-secondary-foreground rounded-full px-2 py-1 text-sm font-medium">
+                  Coming soon
+                </span>
               </div>
               <ul className="mb-6 flex-1 space-y-2">
                 <li className="flex items-center gap-2 text-sm">
