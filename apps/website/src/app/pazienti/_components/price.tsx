@@ -44,7 +44,7 @@ export const PriceSection = () => {
                 </li>
               </ul>
               <Button variant="secondary" className="mt-auto w-full">
-                Prenota colloquio gratuito
+                Prenota un colloquio
               </Button>
             </CardContent>
           </Card>

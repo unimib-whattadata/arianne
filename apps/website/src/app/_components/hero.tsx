@@ -11,7 +11,7 @@ export const HeroSection = () => {
             <strong>Un ecosistema digitale</strong>
             <br className="hidden lg:inline-block" />
             per la{" "}
-            <strong className="bg-primary text-secondary-foreground rounded-lg px-2">
+            <strong className="bg-primary text-secondary-foreground rounded-lg px-2 leading-relaxed">
               salute mentale
             </strong>
           </h1>
@@ -44,11 +44,22 @@ export const HeroSection = () => {
           />
         </div>
       </div>
-      <div className="bg-primary flex items-center justify-center py-2 text-center text-sm text-white">
-        <p>
-          <strong>Coming soon!</strong> Il lancio della piattaforma è previsto
-          per <strong>inizio 2026!</strong>
-        </p>
+      <div className="bg-primary text-secondary-foreground text- relative overflow-hidden py-4 text-center">
+        <div className="animate-marquee whitespace-nowrap">
+          <span className="mx-16">
+            <strong>Coming soon!</strong> Il lancio della piattaforma è previsto
+            per <strong>inizio 2026!</strong>
+          </span>
+          <span className="mx-16">
+            <strong>Coming soon!</strong> Il lancio della piattaforma è previsto
+            per <strong>inizio 2026!</strong>
+          </span>
+
+          <span className="mx-16">
+            <strong>Coming soon!</strong> Il lancio della piattaforma è previsto
+            per <strong>inizio 2026!</strong>
+          </span>
+        </div>
       </div>
     </section>
   );

@@ -20,26 +20,26 @@ export const EfficacySection = () => {
             <strong>Arianne</strong> nasce da un lavoro congiunto tra{" "}
             <strong>clinici</strong> e <strong>tecnologi</strong>, per offrire
             un supporto psicologico <strong>affidabile</strong>,{" "}
-            <strong>accessibile</strong> e <strong>personalizzato</strong>.
+            <strong>accessibile</strong> e <strong>personalizzato</strong>
           </p>
 
           <p className="mb-4 text-lg leading-relaxed text-slate-900">
             Grazie a un <strong>percorso terapeutico guidato</strong> passo dopo
             passo e a <strong>strumenti digitali validati</strong>, Arianne
             rende la terapia <strong>efficace</strong> e vicina alle{" "}
-            <strong>esigenze reali</strong> dei pazienti.
+            <strong>esigenze reali</strong> dei pazienti
           </p>
 
           <p className="mb-4 text-lg leading-relaxed text-slate-900">
             I professionisti che usano Arianne sono <strong>formati</strong> per
             offrire supporto qualificato anche da remoto e i{" "}
             <strong>dati raccolti</strong> aiutano a rendere ogni intervento più
-            mirato.
+            mirato
           </p>
 
           <p className="text-lg leading-relaxed text-slate-900">
             Le <strong>esperienze dei nostri utenti</strong> confermano ogni
-            giorno il valore di questa scelta.
+            giorno il valore di questa scelta
           </p>
         </div>
 

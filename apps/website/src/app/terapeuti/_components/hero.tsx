@@ -18,7 +18,7 @@ export const HeroSection = () => {
 
         <div className="mb-16 grid max-w-prose items-center px-5 py-24 md:mb-0 md:place-self-center md:pl-16 lg:pl-24">
           <h1 className="text-h2 mb-6 font-bold sm:text-4xl">
-            Porta la <span className="text-primary">pratica online</span>,
+            Porta la <span className="text-secondary">pratica online</span>,
             <br className="hidden lg:inline-block" />
             in modo semplice e sicuro
           </h1>

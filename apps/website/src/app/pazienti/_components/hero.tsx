@@ -1,5 +1,3 @@
-import Link from "next/link";
-import { Button } from "~/components/ui/button";
 import Image from "next/image";
 
 export const HeroSection = () => {
@@ -35,12 +33,6 @@ export const HeroSection = () => {
             <strong>questionari</strong> e ricevere{" "}
             <strong>indicazioni su misura</strong>
           </p>
-
-          <div className="flex w-full gap-4">
-            <Button asChild>
-              <Link href="#">Scopri Arianne</Link>
-            </Button>
-          </div>
         </div>
       </div>
     </section>

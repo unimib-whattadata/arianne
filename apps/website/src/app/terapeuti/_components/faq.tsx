@@ -1,4 +1,4 @@
-import { MoveRight, CheckCircle, Users, Globe, Headphones } from "lucide-react";
+import { CheckCircle, Users, Globe, Headphones } from "lucide-react";
 import {
   Accordion,
   AccordionTrigger,
@@ -136,7 +136,6 @@ export const FaqSection = () => {
               <CardFooter className="relative z-10 pt-2">
                 <Button variant={"outline"} className="w-full justify-center">
                   Iscriviti ora
-                  <MoveRight className="ml-2 size-5" />
                 </Button>
               </CardFooter>
             </Card>

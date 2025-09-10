@@ -16,7 +16,7 @@ export const FeaturesSection = () => {
         </h2>
         <div className="max-h-80 w-full max-w-3xl overflow-clip">
           <Image
-            src="/images/esempio-piattaforma.png"
+            src="/images/esempio-piattaforma.webp"
             alt="Piattaforma Arianne"
             width={375}
             height={220}

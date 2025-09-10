@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { ArrowBigRight, ArrowRight, ExternalLink } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 
 export const CollaborationSection = () => {
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
@@ -32,12 +32,12 @@ export const CollaborationSection = () => {
           Arianne è il risultato di un lavoro condiviso tra l’
           <strong>Università di Padova</strong>, l’
           <strong>Università degli Studi di Milano-Bicocca</strong> e{" "}
-          <strong>Whattadata</strong>.
+          <strong>Whattadata</strong>
         </p>
         <p className="mb-6 text-lg leading-relaxed">
           Un percorso di collaborazione che unisce <strong>ricerca</strong> e{" "}
           <strong>innovazione</strong> con l’obiettivo di rendere la terapia più
-          accessibile ed efficace.
+          accessibile ed efficace
         </p>
       </div>
 

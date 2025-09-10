@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 import { cn } from "~/lib/utils";
-import { Users, Stethoscope, ArrowRight } from "lucide-react";
+import { Users, Stethoscope } from "lucide-react";
 
 const CAPTION_TEXT = {
   patients:
@@ -71,7 +71,7 @@ export const BenefitsSection = () => {
                 )}
               >
                 <Users className="h-4 w-4" />
-                Per i Pazienti
+                Per i pazienti
               </button>
               <button
                 onClick={() => handleTabChange("therapists")}
@@ -83,7 +83,7 @@ export const BenefitsSection = () => {
                 )}
               >
                 <Stethoscope className="h-4 w-4" />
-                Per i Terapeuti
+                Per i terapeuti
               </button>
             </div>
           </div>
@@ -101,8 +101,8 @@ export const BenefitsSection = () => {
                   }
                   alt={
                     selectedTab === "patients"
-                      ? "Benefici per i Pazienti"
-                      : "Benefici per i Terapeuti"
+                      ? "Benefici per i pazienti"
+                      : "Benefici per i terapeuti"
                   }
                   width={1116}
                   height={800}
@@ -117,8 +117,8 @@ export const BenefitsSection = () => {
             <div className="space-y-6">
               <h3 className="text-2xl font-bold text-gray-900">
                 {selectedTab === "patients"
-                  ? "Vantaggi per i Pazienti"
-                  : "Vantaggi per i Terapeuti"}
+                  ? "Vantaggi per i pazienti"
+                  : "Vantaggi per i terapeuti"}
               </h3>
 
               <p className="text-lg leading-relaxed text-gray-600">
@@ -142,7 +142,6 @@ export const BenefitsSection = () => {
         <div className="mt-12 flex justify-center">
           <Button size="lg" variant={"default"}>
             Scopri cosa ti offre
-            <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Button>
         </div>
       </div>
