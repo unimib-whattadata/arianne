@@ -96,16 +96,16 @@ export const BenefitsSection = () => {
                 <Image
                   src={
                     selectedTab === "patients"
-                      ? "/images/benefici-pazienti.png"
-                      : "/images/benefici-terapeuta.png"
+                      ? "/images/benefici-pazienti.webp"
+                      : "/images/benefici-terapeuta.webp"
                   }
                   alt={
                     selectedTab === "patients"
                       ? "Benefici per i Pazienti"
                       : "Benefici per i Terapeuti"
                   }
-                  width={558}
-                  height={400}
+                  width={1116}
+                  height={800}
                   className="h-full w-full transition-opacity duration-500"
                 />
               </div>
