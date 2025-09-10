@@ -30,7 +30,7 @@ export const CollaborationSection = () => {
           <div className="container mx-auto grid max-w-prose px-4 text-center">
             <h1 className="text-h2 mb-4 font-bold sm:text-4xl">
               Un progetto costruito{" "}
-              <strong className="bg-secondary text-secondary-foreground rounded-lg px-2">
+              <strong className="bg-secondary text-secondary-foreground rounded-lg px-2 leading-relaxed">
                 insieme
               </strong>
             </h1>
