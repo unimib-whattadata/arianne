@@ -44,7 +44,7 @@ export const HeroSection = () => {
           />
         </div>
       </div>
-      <div className="bg-primary flex items-center justify-center py-2 text-sm text-white">
+      <div className="bg-primary flex items-center justify-center py-2 text-center text-sm text-white">
         <p>
           <strong>Coming soon!</strong> Il lancio della piattaforma è previsto
           per <strong>inizio 2026!</strong>

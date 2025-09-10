@@ -106,7 +106,7 @@ export const BenefitsSection = () => {
                   }
                   width={600}
                   height={400}
-                  className="h-full w-full object-cover transition-opacity duration-500"
+                  className="h-full w-full transition-opacity duration-500"
                 />
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
