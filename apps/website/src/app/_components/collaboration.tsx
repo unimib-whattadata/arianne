@@ -36,42 +36,62 @@ export const CollaborationSection = () => {
             </h1>
 
             <p className="mb-6 text-lg leading-relaxed">
-              Arianne è il risultato di un lavoro condiviso tra l&apos;
+              Arianne è un prodotto di <strong>Whattadata</strong>, spin-off
+              dell&apos; Università degli Studi di Milano-Bicocca, realizzato in
+              collaborazione con l&apos;
               <strong>Università di Padova</strong>, l&apos;
               <strong>Università degli Studi di Milano-Bicocca</strong> e{" "}
-              <strong>Whattadata</strong>
+              <strong>Aton IT</strong>.
             </p>
+
             <p className="mb-6 text-lg leading-relaxed">
               Un percorso di collaborazione che unisce <strong>ricerca</strong>{" "}
               e <strong>innovazione</strong> con l&apos;obiettivo di rendere la
               terapia più accessibile ed efficace
             </p>
 
-            <div className="mt-8 flex justify-center gap-8 md:gap-16">
-              <LogoLink
-                href="https://www.unipd.it/"
-                imgSrc="/images/Logo_Università_Padova.png"
-                alt="Logo Università di Padova"
-                width={180}
-                height={180}
-                setShowCursor={setShowCursor}
-              />
-              <LogoLink
-                href="https://www.unimib.it/"
-                imgSrc="/images/logo_bicocca.svg"
-                alt="Logo Università degli Studi di Milano-Bicocca"
-                width={167}
-                height={180}
-                setShowCursor={setShowCursor}
-              />
-              <LogoLink
-                href="https://whattadata.it/"
-                imgSrc="/images/whattadata.svg"
-                alt="Logo Whattadata"
-                width={148}
-                height={180}
-                setShowCursor={setShowCursor}
-              />
+            <div className="mt-8 flex flex-col items-center gap-10">
+              <div className="flex justify-center">
+                <LogoLink
+                  href="https://whattadata.it/"
+                  imgSrc="/images/whattadata.svg"
+                  alt="Logo Whattadata"
+                  width={200}
+                  height={240}
+                  setShowCursor={setShowCursor}
+                  className="h-28 md:h-32 lg:h-36"
+                />
+              </div>
+
+              <div className="flex justify-center gap-8 md:gap-16">
+                <LogoLink
+                  href="https://www.unipd.it/"
+                  imgSrc="/images/Logo_Università_Padova.png"
+                  alt="Logo Università di Padova"
+                  width={140}
+                  height={140}
+                  setShowCursor={setShowCursor}
+                  className="h-16 md:h-20 lg:h-24"
+                />
+                <LogoLink
+                  href="https://www.unimib.it/"
+                  imgSrc="/images/logo_bicocca.svg"
+                  alt="Logo Università degli Studi di Milano-Bicocca"
+                  width={130}
+                  height={140}
+                  setShowCursor={setShowCursor}
+                  className="h-16 md:h-20 lg:h-24"
+                />
+                <LogoLink
+                  href="#"
+                  imgSrc="/images/logo-aton.webp"
+                  alt="Logo Aton"
+                  width={140}
+                  height={140}
+                  setShowCursor={setShowCursor}
+                  className="h-16 md:h-20 lg:h-24"
+                />
+              </div>
             </div>
 
             {showCursor && (
@@ -99,6 +119,7 @@ const LogoLink = ({
   width,
   height,
   setShowCursor,
+  className = "",
 }: {
   href: string;
   imgSrc: string;
@@ -106,6 +127,7 @@ const LogoLink = ({
   width: number;
   height: number;
   setShowCursor: (show: boolean) => void;
+  className?: string;
 }) => (
   <a
     href={href}
@@ -120,7 +142,7 @@ const LogoLink = ({
       alt={alt}
       width={width}
       height={height}
-      className="h-16 object-contain md:h-20 lg:h-auto"
+      className={`object-contain ${className}`}
     />
   </a>
 );

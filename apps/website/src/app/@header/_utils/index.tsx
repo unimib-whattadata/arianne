@@ -71,7 +71,7 @@ export const HeaderMenu = ({ items }: HeaderMenuProps) => {
             <div className="flex items-center">
               <NavigationMenu>
                 <NavigationMenuList>
-                  {defaultMenu.map((item) => renderMenuItem(item))}|
+                  {defaultMenu.map((item) => renderMenuItem(item))}
                   {items.map((item) => renderMenuItem(item))}
                 </NavigationMenuList>
               </NavigationMenu>
@@ -119,6 +119,7 @@ export const HeaderMenu = ({ items }: HeaderMenuProps) => {
                     collapsible
                     className="flex w-full flex-col gap-4"
                   >
+                    {defaultMenu.map((item) => renderMobileMenuItem(item))}
                     {items.map((item) => renderMobileMenuItem(item))}
                   </Accordion>
 
