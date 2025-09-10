@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import Image from "next/image";
+import { Marquee, MarqueeContent, MarqueeItem } from "~/components/ui/marquee";
 
 export const HeroSection = () => {
   return (
@@ -44,23 +45,18 @@ export const HeroSection = () => {
           />
         </div>
       </div>
-      <div className="bg-primary text-secondary-foreground text- relative overflow-hidden py-4 text-center">
-        <div className="animate-marquee whitespace-nowrap">
-          <span className="mx-16">
+      <Marquee>
+        <MarqueeContent
+          className="bg-primary text-secondary-foreground py-4"
+          pauseOnHover={false}
+          speed={100}
+        >
+          <MarqueeItem className="mx-32">
             <strong>Coming soon!</strong> Il lancio della piattaforma è previsto
             per <strong>inizio 2026!</strong>
-          </span>
-          <span className="mx-16">
-            <strong>Coming soon!</strong> Il lancio della piattaforma è previsto
-            per <strong>inizio 2026!</strong>
-          </span>
-
-          <span className="mx-16">
-            <strong>Coming soon!</strong> Il lancio della piattaforma è previsto
-            per <strong>inizio 2026!</strong>
-          </span>
-        </div>
-      </div>
+          </MarqueeItem>
+        </MarqueeContent>
+      </Marquee>
     </section>
   );
 };
