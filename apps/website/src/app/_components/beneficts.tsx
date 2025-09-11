@@ -44,7 +44,7 @@ export const BenefitsSection = () => {
   const { setInView } = useInViewObserver();
 
   return (
-    <InView threshold={1} onChange={setInView} key="beneficts">
+    <InView threshold={0.8} onChange={setInView} key="beneficts">
       {({ ref }) => (
         <section
           ref={ref}
