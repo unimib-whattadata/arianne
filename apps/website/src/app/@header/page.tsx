@@ -18,8 +18,8 @@ export default function Header() {
     },
     {
       title: "Benefici",
-      url: "#benefits",
-      active: isActive("benefits"),
+      url: "#beneficts",
+      active: isActive("beneficts"),
     },
     {
       title: "Collaborazioni",

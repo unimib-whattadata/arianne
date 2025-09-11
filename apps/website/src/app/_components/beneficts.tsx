@@ -48,7 +48,7 @@ export const BenefitsSection = () => {
       {({ ref }) => (
         <section
           ref={ref}
-          id="benefits"
+          id="beneficts"
           className="scroll-mt-8 bg-gradient-to-br from-slate-50 to-blue-50/30"
         >
           <div className="mx-auto max-w-7xl px-4 py-16 md:py-24">

@@ -40,7 +40,7 @@ const menu = [
   },
   {
     title: "Benefici",
-    url: "#benefits",
+    url: "#beneficts",
   },
   {
     title: "Pazienti",
