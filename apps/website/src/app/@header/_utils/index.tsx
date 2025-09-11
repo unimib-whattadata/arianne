@@ -71,7 +71,7 @@ export const HeaderMenu = ({ items }: HeaderMenuProps) => {
             <div className="flex items-center">
               <NavigationMenu>
                 <NavigationMenuList>
-                  {defaultMenu.map((item) => renderMenuItem(item))}
+                  {defaultMenu.map((item) => renderMenuItem(item))}|
                   {items.map((item) => renderMenuItem(item))}
                 </NavigationMenuList>
               </NavigationMenu>
