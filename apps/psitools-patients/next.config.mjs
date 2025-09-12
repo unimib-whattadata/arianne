@@ -6,6 +6,9 @@
 
 /** @type {import("next").NextConfig} */
 const config = {
+  devIndicators: {
+    position: 'bottom-right',
+  },
   transpilePackages: [
     '@arianne/api',
     '@arianne/supabase',
