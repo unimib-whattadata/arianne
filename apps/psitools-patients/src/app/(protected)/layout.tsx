@@ -6,6 +6,10 @@ import React from 'react';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { Toaster } from '@/components/ui/toaster';
 import { TRPCReactProvider } from '@/trpc/react';
+import { createClient } from '@arianne/supabase/server';
+import { api } from '@/trpc/server';
+import { redirect } from 'next/navigation';
+import { env } from '@/env.mjs';
 
 export default async function RootLayout({
   children,
@@ -18,6 +22,20 @@ export default async function RootLayout({
 }) {
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get('sidebar_state')?.value === 'true';
+
+  const supabase = await createClient(cookies());
+  const { data, error } = await supabase.auth.getUser();
+  const role = await api.profiles.role();
+
+  // If there is no user, redirect to login
+  if (error || !data.user) {
+    return redirect('/auth/login');
+  }
+
+  // If the user is not a patient, redirect to the therapist app
+  if (!role || role !== 'patient') {
+    return redirect(env.NEXT_PUBLIC_THERAPIST_URL);
+  }
 
   return (
     <html lang="it">

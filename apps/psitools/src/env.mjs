@@ -23,6 +23,7 @@ const client = z.object({
   //NEXT_PUBLIC_KEYCLOAK_LOGOUT_URL: z.string().url(),
   NEXT_PUBLIC_TRPC_LOGGER_ENABLED: z.enum(['true', 'false']).optional(),
   NEXT_PUBLIC_APP_URL: z.string().url(),
+  NEXT_PUBLIC_PATIENT_URL: z.string().url(),
   NEXT_PUBLIC_LANDING_URL: z.string().url(),
   NEXT_PUBLIC_WSS_URL: z.string().url(),
   NEXT_PUBLIC_MIROTALK_URL: z.string().url(),
@@ -43,6 +44,7 @@ const processEnv = {
   DATABASE_URL: process.env.DATABASE_URL,
   COOKIE_SECRET: process.env.COOKIE_SECRET,
   NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+  NEXT_PUBLIC_PATIENT_URL: process.env.NEXT_PUBLIC_PATIENT_URL,
   NEXT_PUBLIC_LANDING_URL: process.env.NEXT_PUBLIC_LANDING_URL,
   NEXT_PUBLIC_WSS_URL: process.env.NEXT_PUBLIC_WSS_URL,
 

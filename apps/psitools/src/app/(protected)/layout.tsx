@@ -9,6 +9,8 @@ import { Toaster } from '@/components/ui/sonner';
 import { TRPCReactProvider } from '@/trpc/react';
 import { createClient } from '@arianne/supabase/server';
 import { redirect } from 'next/navigation';
+import { api } from '@/trpc/server';
+import { env } from '@/env.mjs';
 
 const rubik = Rubik({
   weight: ['500'],
@@ -42,9 +44,16 @@ export default async function RootLayout({
 
   const supabase = await createClient(cookies());
   const { data, error } = await supabase.auth.getUser();
+  const role = await api.profiles.role();
 
+  // If there is no user, redirect to login
   if (error || !data.user) {
     return redirect('/auth/login');
+  }
+
+  // If the user is not a therapist, redirect to the patient app
+  if (!role || role !== 'therapist') {
+    return redirect(env.NEXT_PUBLIC_PATIENT_URL);
   }
 
   return (
