@@ -16,7 +16,7 @@ export default function PasswordPage() {
   const [submitting, setSubmitting] = useState(false);
 
   const restPassword = /* async */ () => {
-    if (submitting || !data?.user) return;
+    if (submitting || !data?.profile) return;
     setSubmitting(true);
     // TODO: modifica password
     setSubmitting(false);

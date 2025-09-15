@@ -2,12 +2,15 @@ import {
   chats,
   ChatsAddMessageSchema,
   ChatsGetOrCreateSchema,
+  messages,
 } from "@arianne/db/schemas/chats";
+import { TRPCError } from "@trpc/server";
+import { eq } from "drizzle-orm";
 import Redis from "ioredis";
 import { z } from "zod";
 
 import { cache, publisher } from "../redis";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export type Message = {
   sender: {
@@ -48,7 +51,23 @@ async function* createRedisSubscription<T>(
   channel: string,
   parser: (rawMessage: string) => T,
 ) {
-  const subscriber = new Redis(process.env.REDIS!);
+  if (!process.env.REDIS) {
+    throw new TRPCError({
+      message: `Error creating Redis subscription: REDIS env var not set`,
+      code: "INTERNAL_SERVER_ERROR",
+    });
+  }
+
+  const subscriber = new Redis(process.env.REDIS);
+
+  subscriber.on("error", (err) => {
+    throw new TRPCError({
+      message: `Error with Redis subscription: ${err.message}`,
+      code: "INTERNAL_SERVER_ERROR",
+      cause: err,
+    });
+  });
+
   let resolveNext: ((value: T | PromiseLike<T>) => void) | null = null;
   let nextPromise = new Promise<T>((resolve) => {
     resolveNext = resolve;
@@ -137,7 +156,7 @@ export const chatsRouter = createTRPCRouter({
       return chat;
     }),
 
-  addMessage: publicProcedure
+  addMessage: protectedProcedure
     .input(ChatsAddMessageSchema)
     .mutation(async ({ input, ctx }) => {
       const chat = await ctx.db.query.chats.findFirst({
@@ -148,34 +167,36 @@ export const chatsRouter = createTRPCRouter({
         throw new Error("Chat not found");
       }
 
-      // const newIndex = chat.lastIndex + 1;
-      // const senderName =
-      //   (ctx.session?.user?.firstName?.[0] ?? "").toUpperCase() +
-      //   (ctx.session?.user?.lastName?.[0] ?? "").toUpperCase();
-      // const message = await ctx.prisma.message.create({
-      //   data: {
-      //     content: input.content,
-      //     chatId: input.chatId,
-      //     senderId: ctx.session.user.id,
-      //     senderType: input.senderType,
-      //     index: newIndex,
-      //     initials: senderName,
-      //   },
-      //   include: {
-      //     sender: true,
-      //   },
-      // });
+      const newIndex = chat.lastIndex + 1;
+      const senderName =
+        ctx.user.firstName.at(0)!.toUpperCase() +
+        ctx.user.lastName.at(0)!.toUpperCase();
 
-      // await ctx.prisma.chat.update({
-      //   where: { id: input.chatId },
-      //   data: { lastIndex: newIndex },
-      // });
-      // await publisher.publish(`chat:${input.chatId}`, JSON.stringify(message));
+      const message = await ctx.db
+        .insert(messages)
+        .values({
+          chatId: input.chatId,
+          content: input.content,
+          senderId: ctx.user.id,
+          senderType: input.senderType,
+          index: newIndex,
+          initials: senderName,
+        })
+        .returning();
 
-      // return message;
+      await ctx.db
+        .update(chats)
+        .set({ lastIndex: newIndex })
+        .where(eq(chats.id, input.chatId));
+
+      const publisher = new Redis(process.env.REDIS!);
+
+      await publisher.publish(`chat:${input.chatId}`, JSON.stringify(message));
+
+      return message;
     }),
 
-  onAdd: publicProcedure
+  onAdd: protectedProcedure
     .input(z.object({ chatId: z.string() }))
     .subscription(({ input }) => {
       return createRedisSubscription<Message>(

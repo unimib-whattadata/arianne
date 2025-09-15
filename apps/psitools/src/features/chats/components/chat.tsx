@@ -22,7 +22,6 @@ interface ChatProps {
 
 export const Chat = async (props: ChatProps) => {
   const { chatId } = props;
-
   const patient = await api.patients.findUnique({
     where: { id: chatId },
   });
@@ -35,13 +34,12 @@ export const Chat = async (props: ChatProps) => {
     therapistId: patient.therapistId,
   });
 
+  console.log('Chat data:', { chatId, patient: patient.id });
+
   return (
     <>
       {patient?.profile && (
-        <ChatHeader
-          patientId={chatId}
-          fullName={`${patient.profile.firstName} ${patient.profile.lastName}`}
-        />
+        <ChatHeader patientId={chatId} fullName={patient.profile.name} />
       )}
       {chat && <ChatMessages chatMessages={chat.messages} chatId={chatId} />}
       {!chat && <Loader2 className="text-primary h-8 w-8 animate-spin" />}

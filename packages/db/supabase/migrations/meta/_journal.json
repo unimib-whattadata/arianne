@@ -50,6 +50,13 @@
       "when": 1756832162091,
       "tag": "0006_remove_patient_ids",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1757927704319,
+      "tag": "0007_fix_chat_id",
+      "breakpoints": true
     }
   ]
 }

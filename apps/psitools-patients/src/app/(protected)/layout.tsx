@@ -23,16 +23,15 @@ export default async function RootLayout({
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get('sidebar_state')?.value === 'true';
 
+  // If there is no user, redirect to login
   const supabase = await createClient(cookies());
   const { data, error } = await supabase.auth.getUser();
-  const role = await api.profiles.role();
-
-  // If there is no user, redirect to login
   if (error || !data.user) {
     return redirect('/auth/login');
   }
 
   // If the user is not a patient, redirect to the therapist app
+  const role = await api.profiles.role();
   if (!role || role !== 'patient') {
     return redirect(env.NEXT_PUBLIC_THERAPIST_URL);
   }
