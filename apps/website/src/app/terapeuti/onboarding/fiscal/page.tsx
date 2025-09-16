@@ -2,7 +2,6 @@
 
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
-import { MultiSelect } from "~/components/ui/multi-select";
 import Link from "next/link";
 import { Wallet } from "lucide-react";
 import {
@@ -25,8 +24,6 @@ interface FiscalFormData {
   SDI: string;
   tariffa: string;
   tariffaOraria?: string;
-  giorniDisponibili: string[];
-  fasceOrarie: string[];
   numeroPazienti: number;
 }
 
@@ -41,35 +38,37 @@ export default function Fiscal() {
       SDI: "",
       tariffa: "",
       tariffaOraria: "",
-      giorniDisponibili: [],
-      fasceOrarie: [],
       numeroPazienti: 1,
     },
   });
 
-  const onSubmit: SubmitHandler<FiscalFormData> = (data) => {
-    console.log("Form data:", data);
-  };
-
-  const daysOfWeek = [
-    { value: "lunedi", label: "Lunedi" },
-    { value: "martedi", label: "Martedi" },
-    { value: "mercoledi", label: "Mercoledi" },
-    { value: "giovedi", label: "Giovedi" },
-    { value: "venerdi", label: "Ven" },
-    { value: "sabato", label: "Sabato" },
-    { value: "domenica", label: "Domenica" },
-  ];
-
-  const toggleDay = (day: string, currentValues: string[]) => {
-    if (currentValues.includes(day)) {
-      return currentValues.filter((d) => d !== day);
-    } else {
-      return [...currentValues, day];
-    }
-  };
-
   const situazioneFiscale = form.watch("situazioneFiscale");
+
+  const onSubmit: SubmitHandler<FiscalFormData> = (data) => {
+    const errors: Record<string, string> = {};
+
+    if (!data.situazioneFiscale)
+      errors.situazioneFiscale = "Selezionare la situazione fiscale";
+    if (data.situazioneFiscale === "iva" && !data.piva)
+      errors.piva = "La partita IVA è obbligatoria";
+    if (data.situazioneFiscale === "acconto" && !data.regimeFiscale)
+      errors.regimeFiscale = "Il regime fiscale è obbligatorio";
+    if (!data.iban) errors.iban = "L'IBAN è obbligatorio";
+    if (!data.PEC) errors.PEC = "La PEC è obbligatoria";
+    if (!data.SDI) errors.SDI = "Il codice SDI è obbligatorio";
+    if (!data.tariffa) errors.tariffa = "La tariffa è obbligatoria";
+    if (!data.numeroPazienti)
+      errors.numeroPazienti = "Il numero massimo di pazienti è obbligatorio";
+
+    if (Object.keys(errors).length > 0) {
+      Object.entries(errors).forEach(([key, msg]) => {
+        form.setError(key as keyof FiscalFormData, { message: msg });
+      });
+      return;
+    }
+
+    console.log("Form valido:", data);
+  };
 
   return (
     <main className="min-h-safe px-6 py-36 sm:px-8 lg:px-12 lg:py-36">
@@ -78,23 +77,18 @@ export default function Fiscal() {
           <div className="mx-auto flex max-w-3xl flex-col items-start">
             <Wallet className="text-primary mb-4 h-10 w-10 sm:h-12 sm:w-12" />
             <h1 className="mb-4 text-2xl font-medium text-slate-900 sm:text-3xl lg:text-4xl">
-              Dati fiscali e disponibilità
+              Dati fiscali e numero pazienti
             </h1>
             <p className="mb-6 text-sm leading-relaxed text-slate-700 sm:mb-8 sm:text-base">
-              Fornisci i tuoi dati fiscali e imposta le tue disponibilità:
-              questo ci permetterà di inserirti nel sistema di abbinamento con i
-              pazienti.
+              Fornisci i tuoi dati fiscali e imposta il numero massimo di
+              pazienti gestibili.
             </p>
 
-            <h3 className="mt-10 mb-4 text-lg font-bold text-slate-900 sm:text-xl">
-              Dati Fiscali
-            </h3>
-
+            {/* Situazione Fiscale */}
             <FormField
               control={form.control}
               name="situazioneFiscale"
-              rules={{ required: "Selezionare la situazione fiscale" }}
-              render={({ field }) => (
+              render={({ field, formState }) => (
                 <FormItem className="mt-4 w-full">
                   <p className="text-slate-900 sm:text-base">
                     Situazione Fiscale
@@ -112,16 +106,21 @@ export default function Fiscal() {
                       </SelectContent>
                     </Select>
                   </FormControl>
+                  {formState.errors.situazioneFiscale && (
+                    <p className="mt-1 text-sm text-red-500">
+                      {formState.errors.situazioneFiscale.message}
+                    </p>
+                  )}
                 </FormItem>
               )}
             />
 
+            {/* Partita IVA / Ritenuta d'acconto */}
             {situazioneFiscale === "iva" && (
               <FormField
                 control={form.control}
                 name="piva"
-                rules={{ required: "La partita IVA è obbligatoria" }}
-                render={({ field }) => (
+                render={({ field, formState }) => (
                   <FormItem className="mt-4 w-full">
                     <p className="text-slate-900 sm:text-base">Partita IVA</p>
                     <FormControl>
@@ -131,6 +130,11 @@ export default function Fiscal() {
                         {...field}
                       />
                     </FormControl>
+                    {formState.errors.piva && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {formState.errors.piva.message}
+                      </p>
+                    )}
                   </FormItem>
                 )}
               />
@@ -139,8 +143,7 @@ export default function Fiscal() {
               <FormField
                 control={form.control}
                 name="regimeFiscale"
-                rules={{ required: "Il regime fiscale è obbligatorio" }}
-                render={({ field }) => (
+                render={({ field, formState }) => (
                   <FormItem className="mt-4 w-full">
                     <p className="text-slate-900 sm:text-base">
                       Ritenuta d&apos;acconto
@@ -152,17 +155,22 @@ export default function Fiscal() {
                         {...field}
                       />
                     </FormControl>
+                    {formState.errors.regimeFiscale && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {formState.errors.regimeFiscale.message}
+                      </p>
+                    )}
                   </FormItem>
                 )}
               />
             )}
 
+            {/* IBAN, PEC, SDI */}
             <div className="mt-6 flex w-full flex-col gap-4 sm:flex-row">
               <FormField
                 control={form.control}
                 name="iban"
-                rules={{ required: "L'IBAN è obbligatorio" }}
-                render={({ field }) => (
+                render={({ field, formState }) => (
                   <FormItem className="w-full sm:flex-1">
                     <p className="text-slate-900 sm:text-base">IBAN</p>
                     <FormControl>
@@ -172,19 +180,18 @@ export default function Fiscal() {
                         {...field}
                       />
                     </FormControl>
+                    {formState.errors.iban && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {formState.errors.iban.message}
+                      </p>
+                    )}
                   </FormItem>
                 )}
               />
               <FormField
                 control={form.control}
                 name="PEC"
-                rules={{
-                  pattern: {
-                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: "Indirizzo email non valido",
-                  },
-                }}
-                render={({ field }) => (
+                render={({ field, formState }) => (
                   <FormItem className="w-full sm:flex-1">
                     <p className="text-slate-900 sm:text-base">PEC</p>
                     <FormControl>
@@ -195,14 +202,18 @@ export default function Fiscal() {
                         {...field}
                       />
                     </FormControl>
+                    {formState.errors.PEC && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {formState.errors.PEC.message}
+                      </p>
+                    )}
                   </FormItem>
                 )}
               />
               <FormField
                 control={form.control}
                 name="SDI"
-                rules={{ required: "Il codice SDI è obbligatorio" }}
-                render={({ field }) => (
+                render={({ field, formState }) => (
                   <FormItem className="w-full sm:flex-1">
                     <p className="text-slate-900 sm:text-base">Codice SDI</p>
                     <FormControl>
@@ -212,17 +223,22 @@ export default function Fiscal() {
                         {...field}
                       />
                     </FormControl>
+                    {formState.errors.SDI && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {formState.errors.SDI.message}
+                      </p>
+                    )}
                   </FormItem>
                 )}
               />
             </div>
 
+            {/* Tariffa */}
             <div className="mt-6 flex w-full flex-col gap-4 sm:flex-row">
               <FormField
                 control={form.control}
                 name="tariffa"
-                rules={{ required: "La tariffa è obbligatoria" }}
-                render={({ field }) => (
+                render={({ field, formState }) => (
                   <FormItem className="w-full sm:flex-1">
                     <p className="text-slate-900 sm:text-base">
                       Tariffa base per seduta
@@ -234,6 +250,11 @@ export default function Fiscal() {
                         {...field}
                       />
                     </FormControl>
+                    {formState.errors.tariffa && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {formState.errors.tariffa.message}
+                      </p>
+                    )}
                   </FormItem>
                 )}
               />
@@ -257,91 +278,31 @@ export default function Fiscal() {
               />
             </div>
 
-            <h3 className="mt-10 mb-4 text-lg font-bold text-slate-900 sm:text-xl">
-              Disponibilità
-            </h3>
-            <p className="mt-2 text-slate-900 sm:text-base">
-              Giorni Disponibili
-            </p>
+            {/* Numero pazienti */}
             <FormField
               control={form.control}
-              name="giorniDisponibili"
-              rules={{ required: "Selezionare almeno un giorno" }}
-              render={({ field }) => (
-                <FormItem className="mt-2 w-full">
+              name="numeroPazienti"
+              render={({ field, formState }) => (
+                <FormItem className="mt-6 w-full sm:flex-1">
+                  <p className="text-slate-900 sm:text-base">
+                    Numero massimo pazienti
+                  </p>
                   <FormControl>
-                    <div className="flex flex-wrap gap-2 sm:gap-3">
-                      {daysOfWeek.map((day) => (
-                        <button
-                          key={day.value}
-                          type="button"
-                          onClick={() =>
-                            field.onChange(
-                              toggleDay(day.value, field.value || []),
-                            )
-                          }
-                          className={`flex-1 rounded-full border px-3 py-1 text-sm transition-colors duration-200 sm:text-base ${
-                            (field.value || []).includes(day.value)
-                              ? "bg-secondary border-secondary text-secondary-foreground"
-                              : "bg-secondary-light border-secondary text-secondary hover:bg-secondary/10"
-                          }`}
-                        >
-                          {day.label}
-                        </button>
-                      ))}
-                    </div>
+                    <Input
+                      type="number"
+                      className="mt-2 w-full"
+                      placeholder="Numero massimo pazienti"
+                      {...field}
+                    />
                   </FormControl>
+                  {formState.errors.numeroPazienti && (
+                    <p className="mt-1 text-sm text-red-500">
+                      {formState.errors.numeroPazienti.message}
+                    </p>
+                  )}
                 </FormItem>
               )}
             />
-
-            <div className="mt-6 flex w-full flex-col gap-4 sm:flex-row">
-              <FormField
-                control={form.control}
-                name="fasceOrarie"
-                rules={{ required: "Selezionare almeno una fascia oraria" }}
-                render={({ field }) => (
-                  <FormItem className="w-full sm:flex-1">
-                    <p className="text-slate-900 sm:text-base">
-                      Fasce orarie disponibili
-                    </p>
-                    <FormControl className="bg-secondary-light">
-                      <MultiSelect
-                        options={[
-                          { value: "mattina", label: "Mattina" },
-                          { value: "pomeriggio", label: "Pomeriggio" },
-                          { value: "sera", label: "Sera" },
-                        ]}
-                        onValueChange={field.onChange}
-                        value={field.value}
-                        placeholder="Seleziona fascia oraria"
-                        variant="inverted"
-                        maxCount={3}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="numeroPazienti"
-                render={({ field }) => (
-                  <FormItem className="w-full sm:flex-1">
-                    <p className="text-slate-900 sm:text-base">
-                      Numero massimo pazienti
-                    </p>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        className="mt-2 w-full"
-                        placeholder="Numero massimo pazienti"
-                        {...field}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </div>
 
             <div className="mt-10 flex w-full flex-col gap-3 sm:flex-row sm:gap-4">
               <Button className="w-full sm:flex-1" variant="outline">
@@ -357,12 +318,9 @@ export default function Fiscal() {
                 variant="secondary"
                 type="submit"
               >
-                <Link
-                  href="/terapeuti/onboarding/privacy"
-                  className="w-full text-center"
-                >
+                <span className="w-full text-center">
                   Passa al prossimo step
-                </Link>
+                </span>
               </Button>
             </div>
           </div>

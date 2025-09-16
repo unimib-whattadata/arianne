@@ -21,14 +21,14 @@ interface PersonalFormData {
   data: string;
   luogo: string;
   email: string;
-  telefono: number;
+  telefono: string;
   genere: string;
   codicefiscale: string;
   titoloStudio: string;
   specializzazione: string;
   numeroIscrizione: string;
   provincia: string;
-  anno: number;
+  anno: string;
 }
 
 export default function Personal() {
@@ -39,14 +39,14 @@ export default function Personal() {
       data: "",
       luogo: "",
       email: "",
-      telefono: 0,
+      telefono: "",
       genere: "",
       codicefiscale: "",
       titoloStudio: "",
       numeroIscrizione: "",
       specializzazione: "",
       provincia: "",
-      anno: 2025,
+      anno: "",
     },
   });
 
@@ -72,14 +72,15 @@ export default function Personal() {
               Dati anagrafici
             </h3>
 
+            {/* Nome e Cognome */}
             <div className="flex w-full flex-col gap-4 sm:flex-row sm:gap-4">
               <FormField
                 control={form.control}
                 name="nome"
                 rules={{ required: "Il nome è obbligatorio" }}
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem className="w-full sm:flex-1">
-                    <p className="text-slate-900 sm:text-base">Nome</p>
+                    <p className="text-slate-900">Nome</p>
                     <FormControl>
                       <Input
                         className="mt-2 w-full"
@@ -87,6 +88,11 @@ export default function Personal() {
                         {...field}
                       />
                     </FormControl>
+                    {fieldState.error && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {fieldState.error.message}
+                      </p>
+                    )}
                   </FormItem>
                 )}
               />
@@ -94,9 +100,9 @@ export default function Personal() {
                 control={form.control}
                 name="cognome"
                 rules={{ required: "Il cognome è obbligatorio" }}
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem className="w-full sm:flex-1">
-                    <p className="text-slate-900 sm:text-base">Cognome</p>
+                    <p className="text-slate-900">Cognome</p>
                     <FormControl>
                       <Input
                         className="mt-2 w-full"
@@ -104,29 +110,33 @@ export default function Personal() {
                         {...field}
                       />
                     </FormControl>
+                    {fieldState.error && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {fieldState.error.message}
+                      </p>
+                    )}
                   </FormItem>
                 )}
               />
             </div>
 
+            {/* Data e Luogo */}
             <div className="mt-4 flex w-full flex-col gap-4 sm:mt-6 sm:flex-row sm:gap-4">
               <FormField
                 control={form.control}
                 name="data"
                 rules={{ required: "La data di nascita è obbligatoria" }}
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem className="w-full sm:flex-1">
-                    <p className="text-slate-900 sm:text-base">
-                      Data di nascita
-                    </p>
+                    <p className="text-slate-900">Data di nascita</p>
                     <FormControl>
-                      <Input
-                        type="date"
-                        className="mt-2 w-full"
-                        placeholder="gg/mm/aaaa"
-                        {...field}
-                      />
+                      <Input type="date" className="mt-2 w-full" {...field} />
                     </FormControl>
+                    {fieldState.error && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {fieldState.error.message}
+                      </p>
+                    )}
                   </FormItem>
                 )}
               />
@@ -134,11 +144,9 @@ export default function Personal() {
                 control={form.control}
                 name="luogo"
                 rules={{ required: "Il luogo di nascita è obbligatorio" }}
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem className="w-full sm:flex-1">
-                    <p className="text-slate-900 sm:text-base">
-                      Luogo di nascita
-                    </p>
+                    <p className="text-slate-900">Luogo di nascita</p>
                     <FormControl>
                       <Input
                         className="mt-2 w-full"
@@ -146,11 +154,17 @@ export default function Personal() {
                         {...field}
                       />
                     </FormControl>
+                    {fieldState.error && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {fieldState.error.message}
+                      </p>
+                    )}
                   </FormItem>
                 )}
               />
             </div>
 
+            {/* Email e Telefono */}
             <div className="mt-4 flex w-full flex-col gap-4 sm:mt-6 sm:flex-row sm:gap-4">
               <FormField
                 control={form.control}
@@ -162,9 +176,9 @@ export default function Personal() {
                     message: "Indirizzo email non valido",
                   },
                 }}
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem className="w-full sm:flex-1">
-                    <p className="text-slate-900 sm:text-base">Email</p>
+                    <p className="text-slate-900">Email</p>
                     <FormControl>
                       <Input
                         className="mt-2 w-full"
@@ -173,18 +187,27 @@ export default function Personal() {
                         {...field}
                       />
                     </FormControl>
+                    {fieldState.error && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {fieldState.error.message}
+                      </p>
+                    )}
                   </FormItem>
                 )}
               />
               <FormField
                 control={form.control}
                 name="telefono"
-                rules={{ required: "Il numero di telefono è obbligatorio" }}
-                render={({ field }) => (
+                rules={{
+                  required: "Il numero di telefono è obbligatorio",
+                  pattern: {
+                    value: /^[0-9]{6,15}$/,
+                    message: "Inserisci un numero valido (solo cifre)",
+                  },
+                }}
+                render={({ field, fieldState }) => (
                   <FormItem className="w-full sm:flex-1">
-                    <p className="text-slate-900 sm:text-base">
-                      Numero di telefono
-                    </p>
+                    <p className="text-slate-900">Numero di telefono</p>
                     <FormControl>
                       <Input
                         className="mt-2 w-full"
@@ -193,19 +216,25 @@ export default function Personal() {
                         {...field}
                       />
                     </FormControl>
+                    {fieldState.error && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {fieldState.error.message}
+                      </p>
+                    )}
                   </FormItem>
                 )}
               />
             </div>
 
+            {/* Genere e Codice Fiscale */}
             <div className="mt-4 flex w-full flex-col gap-4 sm:mt-6 sm:flex-row sm:gap-4">
               <FormField
                 control={form.control}
                 name="genere"
                 rules={{ required: "Selezionare il genere" }}
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem className="w-full sm:flex-1">
-                    <p className="text-slate-900 sm:text-base">Genere</p>
+                    <p className="text-slate-900">Genere</p>
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
@@ -226,6 +255,11 @@ export default function Personal() {
                         </SelectContent>
                       </Select>
                     </FormControl>
+                    {fieldState.error && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {fieldState.error.message}
+                      </p>
+                    )}
                   </FormItem>
                 )}
               />
@@ -233,11 +267,9 @@ export default function Personal() {
                 control={form.control}
                 name="codicefiscale"
                 rules={{ required: "Il codice fiscale è obbligatorio" }}
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem className="w-full sm:flex-1">
-                    <p className="text-slate-900 sm:text-base">
-                      Codice Fiscale
-                    </p>
+                    <p className="text-slate-900">Codice Fiscale</p>
                     <FormControl>
                       <Input
                         className="mt-2 w-full"
@@ -245,11 +277,17 @@ export default function Personal() {
                         {...field}
                       />
                     </FormControl>
+                    {fieldState.error && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {fieldState.error.message}
+                      </p>
+                    )}
                   </FormItem>
                 )}
               />
             </div>
 
+            {/* Titolo di studio */}
             <h3 className="mt-10 mb-4 text-lg font-bold text-slate-900 sm:text-xl">
               Qualifiche professionali
             </h3>
@@ -258,11 +296,9 @@ export default function Personal() {
               control={form.control}
               name="titoloStudio"
               rules={{ required: "Il titolo di studio è obbligatorio" }}
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem className="w-full">
-                  <p className="text-slate-900 sm:text-base">
-                    Titolo di studio
-                  </p>
+                  <p className="text-slate-900">Titolo di studio</p>
                   <FormControl>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <SelectTrigger className="bg-secondary-light mt-2 w-full">
@@ -278,19 +314,23 @@ export default function Personal() {
                       </SelectContent>
                     </Select>
                   </FormControl>
+                  {fieldState.error && (
+                    <p className="mt-1 text-sm text-red-500">
+                      {fieldState.error.message}
+                    </p>
+                  )}
                 </FormItem>
               )}
             />
 
+            {/* Specializzazione */}
             <FormField
               control={form.control}
               name="specializzazione"
               rules={{ required: "La specializzazione è obbligatoria" }}
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem className="mt-4 w-full">
-                  <p className="text-slate-900 sm:text-base">
-                    Scuola di Specializzazione
-                  </p>
+                  <p className="text-slate-900">Scuola di Specializzazione</p>
                   <FormControl>
                     <Input
                       className="mt-2 w-full"
@@ -298,18 +338,24 @@ export default function Personal() {
                       {...field}
                     />
                   </FormControl>
+                  {fieldState.error && (
+                    <p className="mt-1 text-sm text-red-500">
+                      {fieldState.error.message}
+                    </p>
+                  )}
                 </FormItem>
               )}
             />
 
+            {/* Numero iscrizione, provincia e anno */}
             <div className="mt-4 flex w-full flex-col gap-4 sm:mt-6 lg:flex-row lg:gap-4">
               <FormField
                 control={form.control}
                 name="numeroIscrizione"
                 rules={{ required: "Il numero di iscrizione è obbligatorio" }}
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem className="w-full lg:flex-2">
-                    <p className="text-slate-900 sm:text-base">
+                    <p className="text-slate-900">
                       Numero di iscrizione all&apos;Albo
                     </p>
                     <FormControl>
@@ -319,6 +365,11 @@ export default function Personal() {
                         {...field}
                       />
                     </FormControl>
+                    {fieldState.error && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {fieldState.error.message}
+                      </p>
+                    )}
                   </FormItem>
                 )}
               />
@@ -327,9 +378,9 @@ export default function Personal() {
                   control={form.control}
                   name="provincia"
                   rules={{ required: "Selezionare la provincia" }}
-                  render={({ field }) => (
+                  render={({ field, fieldState }) => (
                     <FormItem className="w-full lg:min-w-[120px]">
-                      <p className="text-slate-900 sm:text-base">Provincia</p>
+                      <p className="text-slate-900">Provincia</p>
                       <FormControl>
                         <Select
                           onValueChange={field.onChange}
@@ -343,17 +394,21 @@ export default function Personal() {
                           </SelectContent>
                         </Select>
                       </FormControl>
+                      {fieldState.error && (
+                        <p className="mt-1 text-sm text-red-500">
+                          {fieldState.error.message}
+                        </p>
+                      )}
                     </FormItem>
                   )}
                 />
-
                 <FormField
                   control={form.control}
                   name="anno"
-                  rules={{ required: "L'anno di iscrizione è obbligatorio" }}
-                  render={({ field }) => (
+                  rules={{ required: "L'anno è obbligatorio" }}
+                  render={({ field, fieldState }) => (
                     <FormItem className="w-full lg:min-w-[100px]">
-                      <p className="text-slate-900 sm:text-base">Anno</p>
+                      <p className="text-slate-900">Anno</p>
                       <FormControl>
                         <Input
                           className="mt-2 w-full"
@@ -361,12 +416,18 @@ export default function Personal() {
                           {...field}
                         />
                       </FormControl>
+                      {fieldState.error && (
+                        <p className="mt-1 text-sm text-red-500">
+                          {fieldState.error.message}
+                        </p>
+                      )}
                     </FormItem>
                   )}
                 />
               </div>
             </div>
 
+            {/* Bottoni */}
             <div className="mt-10 flex w-full flex-col gap-3 sm:flex-row sm:gap-4">
               <Button className="w-full sm:flex-1" variant="outline">
                 <Link
@@ -381,12 +442,7 @@ export default function Personal() {
                 variant="secondary"
                 type="submit"
               >
-                <Link
-                  href="/terapeuti/onboarding/experience"
-                  className="w-full text-center"
-                >
-                  Passa al prossimo step
-                </Link>
+                Passa al prossimo step
               </Button>
             </div>
           </div>

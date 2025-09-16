@@ -82,7 +82,8 @@ export default function Onboarding() {
               <FormField
                 control={form.control}
                 name="nome"
-                render={({ field }) => (
+                rules={{ required: "Il nome è obbligatorio" }}
+                render={({ field, fieldState }) => (
                   <FormItem className="w-full">
                     <p className="text-slate-900">Nome</p>
                     <FormControl>
@@ -92,13 +93,19 @@ export default function Onboarding() {
                         {...field}
                       />
                     </FormControl>
+                    {fieldState.error && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {fieldState.error.message}
+                      </p>
+                    )}
                   </FormItem>
                 )}
               />
               <FormField
                 control={form.control}
                 name="cognome"
-                render={({ field }) => (
+                rules={{ required: "Il cognome è obbligatorio" }}
+                render={({ field, fieldState }) => (
                   <FormItem className="w-full">
                     <p className="text-slate-900">Cognome</p>
                     <FormControl>
@@ -108,6 +115,11 @@ export default function Onboarding() {
                         {...field}
                       />
                     </FormControl>
+                    {fieldState.error && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {fieldState.error.message}
+                      </p>
+                    )}
                   </FormItem>
                 )}
               />
@@ -117,7 +129,8 @@ export default function Onboarding() {
               <FormField
                 control={form.control}
                 name="email"
-                render={({ field }) => (
+                rules={{ required: "L'email è obbligatoria" }}
+                render={({ field, fieldState }) => (
                   <FormItem className="w-full">
                     <p className="text-slate-900">Email</p>
                     <FormControl>
@@ -128,13 +141,19 @@ export default function Onboarding() {
                         {...field}
                       />
                     </FormControl>
+                    {fieldState.error && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {fieldState.error.message}
+                      </p>
+                    )}
                   </FormItem>
                 )}
               />
               <FormField
                 control={form.control}
                 name="numeroIscrizione"
-                render={({ field }) => (
+                rules={{ required: "Il numero di iscrizione è obbligatorio" }}
+                render={({ field, fieldState }) => (
                   <FormItem className="w-full">
                     <p className="text-slate-900">
                       Numero di iscrizione all&apos;Albo
@@ -142,6 +161,11 @@ export default function Onboarding() {
                     <FormControl>
                       <Input className="mt-2 w-full" {...field} />
                     </FormControl>
+                    {fieldState.error && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {fieldState.error.message}
+                      </p>
+                    )}
                   </FormItem>
                 )}
               />
@@ -151,31 +175,46 @@ export default function Onboarding() {
               <FormField
                 control={form.control}
                 name="orientamentoTerapeutico"
-                render={({ field }) => (
+                rules={{ required: "Questo campo è obbligatorio" }}
+                render={({ field, fieldState }) => (
                   <FormItem className="w-full">
                     <p className="text-slate-900">Orientamento terapeutico</p>
                     <FormControl>
                       <Input className="mt-2 w-full" {...field} />
                     </FormControl>
+                    {fieldState.error && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {fieldState.error.message}
+                      </p>
+                    )}
                   </FormItem>
                 )}
               />
               <FormField
                 control={form.control}
                 name="specializzazione"
-                render={({ field }) => (
+                rules={{ required: "Questo campo è obbligatorio" }}
+                render={({ field, fieldState }) => (
                   <FormItem className="w-full">
                     <p className="text-slate-900">Specializzazione</p>
                     <FormControl>
                       <Input className="mt-2 w-full" {...field} />
                     </FormControl>
+                    {fieldState.error && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {fieldState.error.message}
+                      </p>
+                    )}
                   </FormItem>
                 )}
               />
               <FormField
                 control={form.control}
                 name="anniEsperienza"
-                render={({ field }) => (
+                rules={{
+                  required: "Inserisci il numero di anni di esperienza",
+                }}
+                render={({ field, fieldState }) => (
                   <FormItem className="w-full">
                     <p className="text-slate-900">Anni di esperienza</p>
                     <FormControl>
@@ -186,6 +225,11 @@ export default function Onboarding() {
                         {...field}
                       />
                     </FormControl>
+                    {fieldState.error && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {fieldState.error.message}
+                      </p>
+                    )}
                   </FormItem>
                 )}
               />
@@ -194,7 +238,8 @@ export default function Onboarding() {
             <FormField
               control={form.control}
               name="doveEsercita"
-              render={({ field }) => (
+              rules={{ required: "Seleziona dove eserciti" }}
+              render={({ field, fieldState }) => (
                 <FormItem className="mt-6 w-full">
                   <p className="text-slate-900">Dove esercita?</p>
                   <FormControl>
@@ -208,6 +253,11 @@ export default function Onboarding() {
                       </SelectContent>
                     </Select>
                   </FormControl>
+                  {fieldState.error && (
+                    <p className="mt-1 text-sm text-red-500">
+                      {fieldState.error.message}
+                    </p>
+                  )}
                 </FormItem>
               )}
             />
@@ -216,7 +266,8 @@ export default function Onboarding() {
               <FormField
                 control={form.control}
                 name="paese"
-                render={({ field }) => (
+                rules={{ required: "Seleziona un paese" }}
+                render={({ field, fieldState }) => (
                   <FormItem className="w-full">
                     <p className="text-slate-900">Paese</p>
                     <FormControl>
@@ -232,42 +283,65 @@ export default function Onboarding() {
                         </SelectContent>
                       </Select>
                     </FormControl>
+                    {fieldState.error && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {fieldState.error.message}
+                      </p>
+                    )}
                   </FormItem>
                 )}
               />
               <FormField
                 control={form.control}
                 name="citta"
-                render={({ field }) => (
+                rules={{ required: "La città è obbligatoria" }}
+                render={({ field, fieldState }) => (
                   <FormItem className="w-full">
                     <p className="text-slate-900">Città</p>
                     <FormControl>
                       <Input className="mt-2 w-full" {...field} />
                     </FormControl>
+                    {fieldState.error && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {fieldState.error.message}
+                      </p>
+                    )}
                   </FormItem>
                 )}
               />
               <FormField
                 control={form.control}
                 name="provincia"
-                render={({ field }) => (
+                rules={{ required: "La provincia è obbligatoria" }}
+                render={({ field, fieldState }) => (
                   <FormItem className="w-full">
                     <p className="text-slate-900">Provincia</p>
                     <FormControl>
                       <Input className="mt-2 w-full" {...field} />
                     </FormControl>
+                    {fieldState.error && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {fieldState.error.message}
+                      </p>
+                    )}
                   </FormItem>
                 )}
               />
               <FormField
                 control={form.control}
                 name="cap"
-                render={({ field }) => (
+                rules={{ required: "Il CAP è obbligatorio" }}
+                render={({ field, fieldState }) => (
                   <FormItem className="w-full">
                     <p className="text-slate-900">CAP</p>
                     <FormControl>
                       <Input className="mt-2 w-full" {...field} />
                     </FormControl>
+                    {fieldState.error && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {fieldState.error.message}
+                      </p>
+                    )}
                   </FormItem>
                 )}
               />
@@ -276,7 +350,8 @@ export default function Onboarding() {
             <FormField
               control={form.control}
               name="cv"
-              render={({ field: { onChange } }) => (
+              rules={{ required: "Il caricamento del CV è obbligatorio" }}
+              render={({ field: { onChange }, fieldState }) => (
                 <FormItem className="mt-6 w-full">
                   <p className="text-slate-900">
                     Carica il tuo CV in formato PDF
@@ -297,6 +372,11 @@ export default function Onboarding() {
                       />
                     </label>
                   </FormControl>
+                  {fieldState.error && (
+                    <p className="mt-1 text-sm text-red-500">
+                      {fieldState.error.message}
+                    </p>
+                  )}
                 </FormItem>
               )}
             />
@@ -309,7 +389,8 @@ export default function Onboarding() {
             <FormField
               control={form.control}
               name="terminiAccettati"
-              render={({ field }) => (
+              rules={{ required: "Devi accettare i termini" }}
+              render={({ field, fieldState }) => (
                 <FormItem className="mt-4 flex items-start gap-2 text-slate-900">
                   <FormControl>
                     <Checkbox
@@ -327,6 +408,11 @@ export default function Onboarding() {
                     </span>
                     * di Arianne
                   </label>
+                  {fieldState.error && (
+                    <p className="mt-1 text-sm text-red-500">
+                      {fieldState.error.message}
+                    </p>
+                  )}
                 </FormItem>
               )}
             />

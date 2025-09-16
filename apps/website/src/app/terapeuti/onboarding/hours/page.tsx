@@ -2,7 +2,7 @@
 
 import { Button } from "~/components/ui/button";
 import Link from "next/link";
-import { Plus, Users, Trash } from "lucide-react";
+import { Plus, Users, Trash, Moon } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -10,23 +10,172 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import type { SubmitHandler } from "react-hook-form";
-import { useForm } from "react-hook-form";
-import { Form } from "~/components/ui/form";
+import type { SubmitHandler, UseFormReturn } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
+import { Form, FormControl, FormField, FormItem } from "~/components/ui/form";
 import { Switch } from "~/components/ui/switch";
+import { useRouter } from "next/navigation";
 
-interface HoursFormData {}
+import { Toaster, toast } from "sonner";
 
-export default function Personal() {
-  const form = useForm<HoursFormData>({
-    defaultValues: {},
+interface Slot {
+  from: string;
+  to: string;
+}
+
+interface DayAvailability {
+  enabled: boolean;
+  slots: Slot[];
+}
+
+interface HoursFormData {
+  availability: Record<string, DayAvailability>;
+}
+
+function DayAvailabilityRow({
+  day,
+  form,
+  hours,
+}: {
+  day: string;
+  form: UseFormReturn<HoursFormData>;
+  hours: string[];
+}) {
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: `availability.${day}.slots`,
   });
 
-  const onSubmit: SubmitHandler<HoursFormData> = (data) => {
-    console.log("Form data:", data);
-  };
+  const dayEnabled = form.watch(`availability.${day}.enabled`);
 
-  // Array dei giorni della settimana
+  return (
+    <div className="flex flex-col rounded-lg border p-4 sm:flex-row sm:items-center">
+      <FormField
+        control={form.control}
+        name={`availability.${day}.enabled`}
+        render={({ field }) => (
+          <FormItem className="mb-3 flex w-full items-center gap-2 sm:mb-0 sm:w-40 sm:justify-start">
+            <FormControl>
+              <Switch checked={field.value} onCheckedChange={field.onChange} />
+            </FormControl>
+            <span className="font-medium">{day}</span>
+          </FormItem>
+        )}
+      />
+
+      <div className="flex flex-1 flex-col gap-3 sm:justify-center">
+        {dayEnabled ? (
+          fields.map((slot, index) => (
+            <div
+              key={slot.id}
+              className="flex flex-col gap-2 sm:flex-row sm:items-center"
+            >
+              <div className="flex flex-1 flex-col gap-2 sm:flex-row sm:items-center sm:gap-2">
+                <FormField
+                  control={form.control}
+                  name={`availability.${day}.slots.${index}.from`}
+                  render={({ field }) => (
+                    <FormItem className="flex-1 sm:w-32">
+                      <FormControl>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
+                          <SelectTrigger className="bg-secondary-light w-full">
+                            <SelectValue placeholder="Da" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {hours.map((h) => (
+                              <SelectItem key={h} value={h}>
+                                {h}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+
+                <span className="w-full text-center font-medium text-slate-500 sm:w-6 sm:flex-none">
+                  -
+                </span>
+
+                <FormField
+                  control={form.control}
+                  name={`availability.${day}.slots.${index}.to`}
+                  render={({ field }) => (
+                    <FormItem className="flex-1 sm:w-32">
+                      <FormControl>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
+                          <SelectTrigger className="bg-secondary-light w-full">
+                            <SelectValue placeholder="A" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {hours.map((h) => (
+                              <SelectItem key={h} value={h}>
+                                {h}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="mt-4 flex items-center justify-end gap-3 sm:mt-0 sm:w-20 sm:justify-end">
+                <Plus
+                  className="text-secondary h-5 w-5 cursor-pointer"
+                  onClick={() => append({ from: "", to: "" })}
+                />
+                <Trash
+                  className="h-5 w-5 cursor-pointer text-red-500"
+                  onClick={() => remove(index)}
+                />
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="flex items-center gap-2">
+            <div className="flex flex-1 items-center justify-center rounded-md bg-slate-100 py-4">
+              <div className="flex items-center gap-2 text-slate-400">
+                <Moon className="h-3 w-3" />
+                <span className="text-sm">Nessuna disponibilità</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 sm:w-20 sm:justify-end">
+              <Plus
+                className="text-secondary h-5 w-5 cursor-pointer"
+                onClick={() => append({ from: "", to: "" })}
+              />
+            </div>
+          </div>
+        )}
+
+        {dayEnabled && fields.length === 0 && (
+          <div className="flex items-center gap-2">
+            <div className="flex-1"></div>
+            <div className="flex items-center gap-3 sm:w-20 sm:justify-end">
+              <Plus
+                className="text-secondary h-5 w-5 cursor-pointer"
+                onClick={() => append({ from: "", to: "" })}
+              />
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default function Personal() {
+  const router = useRouter();
+
   const daysOfWeek = [
     "Lunedì",
     "Martedì",
@@ -37,14 +186,65 @@ export default function Personal() {
     "Domenica",
   ];
 
-  // Array delle ore disponibili (08:00 - 20:00)
   const hours = Array.from({ length: 13 }, (_, i) => {
     const hour = 8 + i;
     return hour.toString().padStart(2, "0") + ":00";
   });
 
+  const form = useForm<HoursFormData>({
+    defaultValues: {
+      availability: daysOfWeek.reduce(
+        (acc, day) => ({
+          ...acc,
+          [day]: {
+            enabled: false,
+            slots: [{ from: "", to: "" }],
+          },
+        }),
+        {} as Record<string, DayAvailability>,
+      ),
+    },
+  });
+
+  const onSubmit: SubmitHandler<HoursFormData> = (data) => {
+    const hasValidAvailability = Object.entries(data.availability).some(
+      ([_, day]) =>
+        day.enabled &&
+        day.slots &&
+        day.slots.length > 0 &&
+        day.slots.some((slot) => slot.from && slot.to),
+    );
+
+    if (!hasValidAvailability) {
+      toast.error("Seleziona almeno una fascia oraria per almeno un giorno");
+      return;
+    }
+
+    const invalidDays = Object.entries(data.availability).filter(
+      ([_, day]) =>
+        day.enabled &&
+        (!day.slots ||
+          day.slots.length === 0 ||
+          day.slots.every((s) => !s.from || !s.to)),
+    );
+
+    if (invalidDays.length > 0) {
+      toast.error(
+        `Seleziona almeno una fascia oraria per: ${invalidDays
+          .map(([day]) => day)
+          .join(", ")}`,
+      );
+      return;
+    }
+
+    console.log("Form data:", data);
+    // Naviga solo se la validazione passa
+    router.push("/terapeuti/onboarding/fiscal");
+  };
+
   return (
     <main className="min-h-safe px-6 py-36 sm:px-8 lg:px-12 lg:py-36">
+      <Toaster position="top-right" />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="mx-auto flex max-w-3xl flex-col items-start">
@@ -59,69 +259,18 @@ export default function Personal() {
 
             <div className="flex w-full flex-col gap-4">
               {daysOfWeek.map((day) => (
-                <div
+                <DayAvailabilityRow
                   key={day}
-                  className="flex flex-col rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between"
-                >
-                  {/* Switch + Giorno - Prima riga su mobile */}
-                  <div className="mb-3 flex w-full items-center gap-2 sm:mb-0 sm:w-40">
-                    <Switch />
-                    <span className="font-medium">{day}</span>
-                  </div>
-
-                  {/* Orari - Seconda riga su mobile, centrati su desktop */}
-                  <div className="mb-3 flex flex-1 flex-col items-start gap-2 sm:mb-0 sm:flex-row sm:items-center sm:justify-center">
-                    <div className="w-full sm:w-32">
-                      <Select>
-                        <SelectTrigger className="bg-secondary-light w-full">
-                          <SelectValue placeholder="Da" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {hours.map((h) => (
-                            <SelectItem key={h} value={h}>
-                              {h}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <span className="w-6 self-center text-center font-medium text-slate-500 sm:self-auto">
-                      -
-                    </span>
-
-                    <div className="w-full sm:w-32">
-                      <Select>
-                        <SelectTrigger className="bg-secondary-light w-full">
-                          <SelectValue placeholder="A" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {hours.map((h) => (
-                            <SelectItem key={h} value={h}>
-                              {h}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-
-                  {/* Azioni - Terza riga su mobile, allineata a destra su desktop */}
-                  <div className="flex w-full items-center justify-end gap-3 sm:w-20">
-                    <Plus className="text-secondary h-5 w-5 cursor-pointer" />
-                    <Trash className="h-5 w-5 cursor-pointer text-red-500" />
-                  </div>
-                </div>
+                  day={day}
+                  form={form}
+                  hours={hours}
+                />
               ))}
             </div>
 
-            {/* Bottoni di navigazione */}
             <div className="mt-10 flex w-full flex-col gap-3 sm:flex-row sm:gap-4">
-              <Button className="w-full sm:flex-1" variant="outline">
-                <Link
-                  href="/terapeuti/onboarding/landing"
-                  className="w-full text-center"
-                >
+              <Button asChild className="w-full sm:flex-1" variant="outline">
+                <Link href="/terapeuti/onboarding/fiscal">
                   Torna alla lista degli step
                 </Link>
               </Button>
@@ -130,12 +279,7 @@ export default function Personal() {
                 variant="secondary"
                 type="submit"
               >
-                <Link
-                  href="/terapeuti/onboarding/fiscal"
-                  className="w-full text-center"
-                >
-                  Passa al prossimo step
-                </Link>
+                Passa al prossimo step
               </Button>
             </div>
           </div>

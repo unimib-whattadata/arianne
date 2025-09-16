@@ -373,7 +373,7 @@ export default function Experience() {
                 type="submit"
               >
                 <Link
-                  href="/terapeuti/onboarding/fiscal"
+                  href="/terapeuti/onboarding/hours"
                   className="w-full text-center"
                 >
                   Passa al prossimo step
