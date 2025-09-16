@@ -18,6 +18,12 @@ const OPTIONS: CardOptionType[] = [
     route: "/terapeuti/onboarding/experience",
   },
   {
+    value: "hours",
+    title: "Disponibilità e fascia oraria",
+    icon: <Wallet className="h-6 w-6" />,
+    route: "/terapeuti/onboarding/hours",
+  },
+  {
     value: "fiscal",
     title: "Dati Fiscali e disponibilità",
     icon: <Wallet className="h-6 w-6" />,
