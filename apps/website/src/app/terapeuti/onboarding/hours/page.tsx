@@ -238,7 +238,7 @@ export default function Personal() {
     }
 
     console.log("Form data:", data);
-    // Naviga solo se la validazione passa
+
     router.push("/terapeuti/onboarding/fiscal");
   };
 
