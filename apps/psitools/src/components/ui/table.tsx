@@ -49,7 +49,7 @@ const TableFooter = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <tfoot
     ref={ref}
-    className={cn('bg-primary font-medium text-primary-foreground', className)}
+    className={cn('bg-primary text-primary-foreground font-medium', className)}
     {...props}
   />
 ));
@@ -104,7 +104,7 @@ const TableCell = React.forwardRef<
   <td
     ref={ref}
     className={cn(
-      'whitespace-nowrap p-4 align-middle [&:has([role=checkbox])]:pr-0',
+      'p-4 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0',
       className,
     )}
     {...props}
@@ -118,7 +118,7 @@ const TableCaption = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <caption
     ref={ref}
-    className={cn('mt-4 text-sm text-muted-foreground', className)}
+    className={cn('text-muted-foreground mt-4 text-sm', className)}
     {...props}
   />
 ));
@@ -142,6 +142,8 @@ interface DataTablePaginationProps<TData>
   rowSelection?: boolean;
   perPage?: boolean;
   side?: 'top' | 'bottom' | 'right' | 'left';
+  hideSelector?: boolean;
+  defaultPageSize?: number;
 }
 
 export function TablePagination<TData>({
@@ -151,7 +153,14 @@ export function TablePagination<TData>({
   side = 'top',
   rowSelection = false,
   perPage = true,
+  defaultPageSize,
 }: DataTablePaginationProps<TData>) {
+  React.useEffect(() => {
+    if (defaultPageSize) {
+      table.setPageSize(defaultPageSize);
+    }
+  }, [defaultPageSize, table]);
+
   return (
     <div
       className={cn(
@@ -161,7 +170,7 @@ export function TablePagination<TData>({
       )}
     >
       {rowSelection && (
-        <div className="flex-1 text-sm text-muted-foreground">
+        <div className="text-muted-foreground flex-1 text-sm">
           {table.getFilteredSelectedRowModel().rows.length} di{' '}
           {table.getFilteredRowModel().rows.length} {subject} selezionati.
         </div>
