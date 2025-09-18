@@ -1,3 +1,5 @@
+import React from 'react';
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -16,11 +18,7 @@ export default function BreadcrumbSlot() {
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbLink href="/impostazioni">Impostazioni</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbPage>Account e Password</BreadcrumbPage>
+          <BreadcrumbPage>Liste d'attesa</BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>

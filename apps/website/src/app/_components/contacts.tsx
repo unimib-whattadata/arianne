@@ -1,5 +1,3 @@
-import { Button } from "~/components/ui/button";
-
 export const ContactsSection = () => {
   return (
     <section id="contacts" className="relative scroll-mt-8 py-12 lg:py-24">

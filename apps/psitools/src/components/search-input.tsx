@@ -15,18 +15,18 @@ const SearchInput = React.forwardRef<
   return (
     <div className={cn('group relative flex w-min items-center', className)}>
       <Input
-        className="peer w-10 border-primary transition-[color,width] focus-within:w-80 focus-within:pr-9 focus:w-80 focus:pr-9 active:w-80 group-hover:w-80 group-hover:pr-9 not-placeholder-shown:w-80 not-placeholder-shown:pr-9"
+        className="peer border-primary w-10 transition-[color,width] not-placeholder-shown:w-80 not-placeholder-shown:pr-9 group-hover:w-80 group-hover:pr-9 focus-within:w-80 focus-within:pr-9 focus:w-80 focus:pr-9 active:w-80"
         ref={ref}
         {...props}
       />
-      <Search className="absolute right-2.5 top-2 h-5 w-5 bg-background text-primary peer-not-placeholder-shown:hidden" />
+      <Search className="bg-background text-primary absolute top-2 right-2.5 h-5 w-5 peer-not-placeholder-shown:hidden" />
       <X
-        className="absolute right-2.5 top-2 h-5 w-5 cursor-pointer bg-background text-primary peer-placeholder-shown:hidden"
+        className="bg-background text-primary absolute top-2 right-2.5 h-5 w-5 cursor-pointer peer-placeholder-shown:hidden"
         onClick={() => cleanFn()}
       />
     </div>
   );
 });
-Input.displayName = 'SearchInput';
+SearchInput.displayName = 'SearchInput';
 
 export { SearchInput };
