@@ -1,6 +1,6 @@
 {
-  "id": "c9e3b872-cbbd-4e01-9894-77461cde949f",
-  "prevId": "26c1bb50-39b3-4b38-ac0b-d82968a21beb",
+  "id": "4d9ab06d-97e3-4366-9674-fcd307634cf6",
+  "prevId": "c9e3b872-cbbd-4e01-9894-77461cde949f",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -350,15 +350,7 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "arianne_chats_patient_profile_id_unique": {
-          "name": "arianne_chats_patient_profile_id_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "patient_profile_id"
-          ]
-        }
-      },
+      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": true
@@ -1434,6 +1426,13 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "completed_onboarding": {
+          "name": "completed_onboarding",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
         }
       },
       "indexes": {},

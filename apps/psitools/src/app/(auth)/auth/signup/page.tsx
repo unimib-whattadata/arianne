@@ -216,9 +216,11 @@ export default function SignupPage() {
                       <Button
                         type="submit"
                         className="w-full"
-                        hasSpinner
                         disabled={sending}
                       >
+                        {sending && (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        )}
                         Iscriviti
                       </Button>
                     </div>

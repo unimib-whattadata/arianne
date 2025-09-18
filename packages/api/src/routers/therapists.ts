@@ -1,6 +1,6 @@
 import { therapists } from "@arianne/db/schemas/therapists";
 import { TRPCError } from "@trpc/server";
-import { eq, sql } from "drizzle-orm";
+import { eq, or, sql } from "drizzle-orm";
 import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
@@ -10,7 +10,7 @@ export const therapistsRouter = createTRPCRouter({
     .input(z.object({ id: z.string() }))
     .query(async ({ input, ctx }) => {
       const therapist = await ctx.db.query.therapists.findFirst({
-        where: (t, { eq }) => eq(t.id, input.id),
+        where: (t, { eq }) => or(eq(t.id, input.id), eq(t.profileId, input.id)),
         with: {
           profile: {
             extras: (fields) => {

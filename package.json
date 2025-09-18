@@ -26,6 +26,7 @@
     "db:studio": "turbo -F @arianne/db db:studio",
     "db:generate": "turbo -F @arianne/db db:generate --",
     "db:migrate": "turbo -F @arianne/db db:migrate --",
+    "db": "turbo -F @arianne/db db --",
     "db:utils": "turbo -F @arianne/db db:utils --",
     "dev": "turbo watch dev --continue",
     "format": "turbo run format --continue -- --cache --cache-location .cache/.prettiercache",

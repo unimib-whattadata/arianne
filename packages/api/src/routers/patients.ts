@@ -12,6 +12,21 @@ export const patientsRouter = createTRPCRouter({
   get: protectedProcedure.query(async ({ ctx }) => {
     const patient = await ctx.db.query.patients.findFirst({
       where: (t, { eq }) => eq(t.profileId, ctx.user.id),
+      with: {
+        therapist: {
+          with: {
+            profile: {
+              extras: (fields) => {
+                return {
+                  name: sql<string>`concat(${fields.firstName}, ' ', ${fields.lastName})`.as(
+                    "full_name",
+                  ),
+                };
+              },
+            },
+          },
+        },
+      },
     });
 
     return patient;
@@ -25,6 +40,19 @@ export const patientsRouter = createTRPCRouter({
       const patient = await ctx.db.query.patients.findFirst({
         where: (t, { eq, or }) => or(eq(t.id, id), eq(t.profileId, id)),
         with: {
+          therapist: {
+            with: {
+              profile: {
+                extras: (fields) => {
+                  return {
+                    name: sql<string>`concat(${fields.firstName}, ' ', ${fields.lastName})`.as(
+                      "full_name",
+                    ),
+                  };
+                },
+              },
+            },
+          },
           profile: {
             extras: (fields) => {
               return {

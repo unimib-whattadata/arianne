@@ -16,6 +16,7 @@ export const therapists = createTable(
     profileId: d
       .uuid("profile_id")
       .notNull()
+      .unique()
       .references(() => profiles.id),
 
     recentPatients: d.uuid("recent_patients").array().notNull().default([]),

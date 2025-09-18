@@ -61,8 +61,15 @@
     {
       "idx": 8,
       "version": "7",
-      "when": 1758201916654,
-      "tag": "0008_add-onborading",
+      "when": 1758105088377,
+      "tag": "0008_fixFKChat",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1758206806752,
+      "tag": "0009_onboarding",
       "breakpoints": true
     }
   ]

@@ -47,6 +47,7 @@
     "lint": "eslint",
     "db:generate": "pnpm with-env drizzle-kit generate --name",
     "db:migrate": "pnpx supabase db push",
+    "db": "pnpx supabase",
     "db:studio": "pnpm with-env drizzle-kit studio",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
     "with-env": "infisical run --path='/db' --",
