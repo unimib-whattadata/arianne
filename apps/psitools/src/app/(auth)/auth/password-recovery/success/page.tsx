@@ -1,7 +1,7 @@
 'use client';
 
 import type { LucideProps } from 'lucide-react';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import {
   Card,
@@ -89,9 +89,8 @@ export default function PasswordRecoveryPage() {
         type: 'value',
         message: error,
       });
+      setSending(false);
     }
-
-    setSending(false);
   };
 
   return (
@@ -161,12 +160,8 @@ export default function PasswordRecoveryPage() {
                       )}
                     />
 
-                    <Button
-                      type="submit"
-                      className="w-full"
-                      hasSpinner
-                      disabled={sending}
-                    >
+                    <Button type="submit" className="w-full" disabled={sending}>
+                      {sending && <Loader2 className="h-4 w-4 animate-spin" />}
                       Aggiorna la password
                     </Button>
                   </div>

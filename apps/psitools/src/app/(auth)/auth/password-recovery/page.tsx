@@ -1,6 +1,6 @@
 'use client';
 
-import { CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, Loader2 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import {
   Card,
@@ -61,6 +61,7 @@ export default function PasswordRecoveryPage() {
         type: 'value',
         message: error,
       });
+      setSending(false);
       return;
     }
 
@@ -70,8 +71,6 @@ export default function PasswordRecoveryPage() {
     });
 
     form.reset();
-
-    setSending(false);
   };
 
   return (
@@ -129,12 +128,8 @@ export default function PasswordRecoveryPage() {
                       )}
                     />
 
-                    <Button
-                      type="submit"
-                      className="w-full"
-                      hasSpinner
-                      disabled={sending}
-                    >
+                    <Button type="submit" className="w-full" disabled={sending}>
+                      {sending && <Loader2 className="h-4 w-4 animate-spin" />}
                       Invia email di recupero
                     </Button>
                   </div>
