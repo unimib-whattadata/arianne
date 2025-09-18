@@ -11,11 +11,10 @@ import { useTRPC } from '@/trpc/react';
 interface ChatHeaderProps {
   fullName?: string;
   therapistId: string;
-  chatId: string;
 }
 
 export const ChatHeader = (props: ChatHeaderProps) => {
-  const { therapistId, chatId } = props;
+  const { therapistId } = props;
   const { user } = useTherapist(therapistId);
   const queryClient = useQueryClient();
   const api = useTRPC();
@@ -27,8 +26,7 @@ export const ChatHeader = (props: ChatHeaderProps) => {
 
   const { data } = useQuery(
     api.chats.isUserOnline.queryOptions({
-      chatId: chatId,
-      userId: therapistId,
+      userId: user?.profileId ?? '',
     }),
   );
 
@@ -50,7 +48,6 @@ export const ChatHeader = (props: ChatHeaderProps) => {
       queryClient
         .invalidateQueries({
           queryKey: api.chats.isUserOnline.queryKey({
-            chatId: chatId,
             userId: therapistId,
           }),
         })
@@ -64,8 +61,7 @@ export const ChatHeader = (props: ChatHeaderProps) => {
   useSubscription(
     api.chats.onUserStatus.subscriptionOptions(undefined, {
       onData: (data) => {
-        if (data.userId === therapistId && data.chatId === chatId)
-          setIsTherapistOnline(data.status);
+        if (data.userId === user?.profileId) setIsTherapistOnline(data.status);
       },
     }),
   );

@@ -12,8 +12,8 @@ import { useTRPC } from '@/trpc/react';
 import type { Message } from './chat';
 
 interface ChatMessagesProps {
-  chatId: string;
-  therapistId: string;
+  patientProfileId: string;
+  therapistProfileId: string;
   chatMessages: Message[];
 }
 
@@ -37,16 +37,16 @@ function formatMessageDate(date: Date): string {
 }
 
 export const ChatMessages = (props: ChatMessagesProps) => {
-  const { chatMessages, chatId, therapistId } = props;
+  const { chatMessages, patientProfileId, therapistProfileId } = props;
   const messagesRef = useRef<HTMLDivElement>(null);
   const api = useTRPC();
-  const { user } = useTherapist(therapistId);
+  const { user } = useTherapist(therapistProfileId);
   const [messages, setMessages] = useState<Message[]>(chatMessages);
   const [isTyping, setIsTyping] = useState<boolean>(false);
 
   useSubscription(
     api.chats.onAdd.subscriptionOptions(
-      { chatId: chatId },
+      { patientProfileId, therapistProfileId },
       {
         onData: (newMessage) => {
           setIsTyping(false);
@@ -59,7 +59,10 @@ export const ChatMessages = (props: ChatMessagesProps) => {
   useSubscription(
     api.chats.onUserStatus.subscriptionOptions(undefined, {
       onData: (data) => {
-        if (data.userId === therapistId && data.chatId === chatId)
+        if (
+          data.chatId === `${patientProfileId}:${therapistProfileId}` &&
+          data.userId === therapistProfileId
+        )
           setIsTyping(data.status === 'isTyping');
       },
     }),
