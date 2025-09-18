@@ -20,10 +20,10 @@ export const patientsRouter = createTRPCRouter({
   findUnique: protectedProcedure
     .input(PatientsFindUniqueSchema)
     .query(async ({ input, ctx }) => {
-      const profileId = input.where.id;
+      const id = input.where.id;
 
       const patient = await ctx.db.query.patients.findFirst({
-        where: (t, { eq }) => eq(t.profileId, profileId),
+        where: (t, { eq, or }) => or(eq(t.id, id), eq(t.profileId, id)),
         with: {
           profile: {
             extras: (fields) => {

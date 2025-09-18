@@ -1,17 +1,18 @@
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import Image from "next/image";
+import { Marquee, MarqueeContent, MarqueeItem } from "~/components/ui/marquee";
 
 export const HeroSection = () => {
   return (
     <section>
-      <div className="grid place-items-start md:grid-cols-2">
-        <div className="order-1 mb-16 grid max-w-prose items-center px-5 py-24 text-center md:order-0 md:mb-0 md:place-self-center md:pr-16 md:text-left lg:pr-24">
+      <div className="grid w-full place-items-start md:grid-cols-2">
+        <div className="order-1 mb-16 grid w-full max-w-prose items-center px-5 py-24 text-center md:order-0 md:mb-0 md:place-self-center md:pr-16 md:text-left lg:pr-24">
           <h1 className="text-h2 mb-4 font-bold sm:text-4xl">
             <strong>Un ecosistema digitale</strong>
             <br className="hidden lg:inline-block" />
             per la{" "}
-            <strong className="bg-primary text-secondary-foreground rounded-lg px-2">
+            <strong className="bg-primary text-secondary-foreground rounded-lg px-2 leading-relaxed">
               salute mentale
             </strong>
           </h1>
@@ -24,11 +25,11 @@ export const HeroSection = () => {
             <strong>pazienti</strong> e <strong>terapeuti</strong>
           </p>
 
-          <div className="flex w-full justify-center gap-4 md:justify-start">
-            <Button asChild>
+          <div className="w-full justify-center gap-4 space-y-2 md:flex md:justify-start">
+            <Button asChild className="w-full md:w-auto">
               <Link href="/pazienti"> Per i pazienti</Link>
             </Button>
-            <Button variant="secondary" asChild>
+            <Button variant="secondary" asChild className="w-full md:w-auto">
               <Link href="/terapeuti"> Per i terapeuti</Link>
             </Button>
           </div>
@@ -44,12 +45,18 @@ export const HeroSection = () => {
           />
         </div>
       </div>
-      <div className="bg-primary flex items-center justify-center py-2 text-sm text-white">
-        <p>
-          <strong>Coming soon!</strong> Il lancio della piattaforma è previsto
-          per <strong>inizio 2026!</strong>
-        </p>
-      </div>
+      <Marquee>
+        <MarqueeContent
+          className="bg-primary text-secondary-foreground py-4"
+          pauseOnHover={false}
+          speed={100}
+        >
+          <MarqueeItem className="mx-32">
+            <strong>Coming soon!</strong> Il lancio della piattaforma è previsto
+            per <strong>inizio 2026!</strong>
+          </MarqueeItem>
+        </MarqueeContent>
+      </Marquee>
     </section>
   );
 };

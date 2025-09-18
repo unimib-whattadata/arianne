@@ -26,7 +26,6 @@ export const Chat = async (props: ChatProps) => {
   const patient = await api.patients.findUnique({
     where: { id: chatId },
   });
-  console.log('Rendering Chat component for chatId:', { patient });
 
   if (!patient) return null;
   if (!patient.therapistId) return null;
@@ -35,6 +34,8 @@ export const Chat = async (props: ChatProps) => {
     patientId: patient.id,
     therapistId: patient.therapistId,
   });
+
+  console.log('Chat:', { chat });
 
   return (
     <>

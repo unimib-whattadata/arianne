@@ -36,6 +36,7 @@ function formatMessageDate(date: Date): string {
 
 export const ChatMessages = (props: ChatMessagesProps) => {
   const { chatId, chatMessages } = props;
+
   const messagesRef = useRef<HTMLDivElement>(null);
   const api = useTRPC();
   const { patient } = usePatient({ id: chatId });

@@ -1,3 +1,5 @@
+"use client";
+
 import {
   BrainCircuit,
   ChartSpline,
@@ -6,6 +8,8 @@ import {
   SquareActivity,
   Users,
 } from "lucide-react";
+import { InView } from "react-intersection-observer";
+import { useInViewObserver } from "~/app/_context/in-view-observer";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
 
 const content = [
@@ -48,41 +52,48 @@ const content = [
 ];
 
 export const FeaturesSection = () => {
+  const { setInView } = useInViewObserver();
+
   return (
-    <section
-      id="features"
-      className="bg-primary-light scroll-mt-8 px-4 py-12 md:py-24"
-    >
-      <div className="container mx-auto max-w-5xl">
-        <h2 className="text-h2 text-center font-bold text-balance">
-          Funzionalità{" "}
-          <span className="bg-primary text-secondary-foreground rounded-lg px-2">
-            pensate per te
-          </span>{" "}
-        </h2>
+    <InView threshold={1} onChange={setInView} key="features">
+      {({ ref }) => (
+        <section
+          ref={ref}
+          id="features"
+          className="bg-primary-light scroll-mt-8 px-4 py-12 md:py-24"
+        >
+          <div className="container mx-auto max-w-5xl">
+            <h2 className="text-h2 text-center font-bold text-balance">
+              Funzionalità{" "}
+              <span className="bg-primary text-secondary-foreground rounded-lg px-2">
+                pensate per te
+              </span>{" "}
+            </h2>
 
-        <div className="mx-auto mt-12 grid w-full gap-10 md:mt-16 md:grid-cols-2 lg:grid-cols-3">
-          {content.map((item, index) => (
-            <Card
-              key={index}
-              className="group bg-primary-light flex flex-col gap-4 border-0 shadow-none transition hover:scale-[1.02]"
-            >
-              <CardHeader className="flex flex-row items-center gap-3 p-0">
-                <div className="bg-primary flex size-10 items-center justify-center rounded-xl text-white">
-                  <item.icon className="size-5" aria-hidden />
-                </div>
-                <h3 className="text-lg font-semibold">{item.title}</h3>
-              </CardHeader>
+            <div className="mx-auto mt-12 grid w-full gap-10 md:mt-16 md:grid-cols-2 lg:grid-cols-3">
+              {content.map((item, index) => (
+                <Card
+                  key={index}
+                  className="group bg-primary-light flex flex-col gap-4 border-0 shadow-none transition hover:scale-[1.02]"
+                >
+                  <CardHeader className="flex flex-row items-center gap-3 p-0">
+                    <div className="bg-primary flex size-10 items-center justify-center rounded-xl text-white">
+                      <item.icon className="size-5" aria-hidden />
+                    </div>
+                    <h3 className="text-lg font-semibold">{item.title}</h3>
+                  </CardHeader>
 
-              <CardContent className="p-0">
-                <p className="text-sm leading-relaxed text-slate-900">
-                  {item.description}
-                </p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-    </section>
+                  <CardContent className="p-0">
+                    <p className="text-sm leading-relaxed text-slate-900">
+                      {item.description}
+                    </p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+    </InView>
   );
 };

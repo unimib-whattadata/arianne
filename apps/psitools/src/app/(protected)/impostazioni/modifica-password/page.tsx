@@ -2,6 +2,7 @@
 
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
+import Image from 'next/image';
 
 import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
@@ -126,7 +127,7 @@ export default function PasswordPage() {
   }
 
   const restPassword = /* async */ () => {
-    if (submitting || !data?.id) return;
+    if (submitting || !data?.profile) return;
     setSubmitting(true);
     // TODO: modifica password
     setSubmitting(false);
@@ -379,8 +380,10 @@ export default function PasswordPage() {
             </CardHeader>
             <CardContent className="grid grid-cols-2 gap-4">
               <div className="col-span-2 flex w-full gap-2">
-                <img
-                  src={testTherapist.avatar}
+                <Image
+                  src={testTherapist.avatar!}
+                  width={300}
+                  height={300}
                   alt="Avatar"
                   className="bg-primary h-24 w-24 rounded-md"
                 />

@@ -6,8 +6,10 @@ import "./src/env.js";
 
 /** @type {import("next").NextConfig} */
 const config = {
+  devIndicators: {
+    position: "bottom-right",
+  },
   output: "standalone",
-  transpilePackages: ["@dipps/api"],
 };
 
 export default config;

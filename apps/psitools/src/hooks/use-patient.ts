@@ -9,13 +9,15 @@ export const usePatient = ({ id }: { id?: string } = {}) => {
   const { userId } = useParams<{ userId: string }>();
   const api = useTRPC();
 
+  const patientId = id ?? userId;
+
   const { data, ...rest } = useQuery(
     api.patients.findUnique.queryOptions(
       {
-        where: id ? { id } : { id: userId },
+        where: { id: patientId },
       },
       {
-        enabled: !!userId || !!id,
+        enabled: !!patientId,
       },
     ),
   );
