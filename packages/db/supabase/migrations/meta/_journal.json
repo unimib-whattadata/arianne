@@ -71,6 +71,13 @@
       "when": 1758206806752,
       "tag": "0009_onboarding",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1758210778664,
+      "tag": "0010_fix-diaries-content-type",
+      "breakpoints": true
     }
   ]
 }
