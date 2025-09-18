@@ -42,7 +42,7 @@ export default function SleepEvening() {
 
   const dailyDiaries = React.useMemo(() => {
     if (!diaries || !date) return [];
-    const dateString = format(date, 'yyyy-M-d');
+    const dateString = format(date, 'yyyy-MM-dd');
     return diaries.filter((diary) => diary.date === dateString);
   }, [diaries, date]);
 
@@ -59,7 +59,7 @@ export default function SleepEvening() {
   React.useEffect(() => {
     if (!date || selectedDiaryId) return;
 
-    const formatted = format(date, 'yyyy-M-d');
+    const formatted = format(date, 'yyyy-MM-dd');
     const diaryForSelectedDay = dailyDiaries.find((d) => d.date === formatted);
 
     if (diaryForSelectedDay) {

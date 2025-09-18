@@ -42,7 +42,7 @@ export default function Food() {
 
   const dailyDiaries = React.useMemo(() => {
     if (!diaries || !date) return [];
-    const dateString = format(date, 'yyyy-M-d');
+    const dateString = format(date, 'yyyy-MM-dd');
     return diaries.filter((diary) => diary.date === dateString);
   }, [diaries, date]);
 
@@ -59,7 +59,7 @@ export default function Food() {
   React.useEffect(() => {
     if (!date || selectedDiaryId) return;
 
-    const formatted = format(date, 'yyyy-M-d');
+    const formatted = format(date, 'yyyy-MM-dd');
     const diaryForSelectedDay = dailyDiaries.find((d) => d.date === formatted);
 
     if (diaryForSelectedDay) {
@@ -70,6 +70,7 @@ export default function Food() {
   }, [date, dailyDiaries, selectedDiaryId]);
 
   const handleDiaryClick = (diaryId: string) => {
+    console.log('Diary clicked:', diaryId);
     setSelectedDiaryId(diaryId);
   };
 
@@ -103,6 +104,12 @@ export default function Food() {
       content: {},
     });
   };
+
+  console.log(
+    'test:',
+
+    !selectedDiaryId || dailyDiaries.length === 0,
+  );
 
   return (
     <>
@@ -199,30 +206,7 @@ export default function Food() {
               type="food"
               compilationTime={format(new Date(data.updatedAt), 'HH:mm')}
               content={
-                data.content as {
-                  timeConsumation: string;
-                  typeConsumation: string;
-                  momentDay: string;
-                  placeConsumption: string;
-                  place: string;
-                  company: string;
-                  companyPerson: string;
-                  activitycompany: string;
-                  whatActivitycompany: string;
-                  mealConsideration: string;
-                  excessiveQuantity: string;
-                  relevanceConsumption: string;
-                  bodilysensation: string;
-                  influenceConsumption: string;
-                  reasonInfluence: string;
-                  PostConsumerBehaviors: string;
-                  physicalActivity: string;
-                  PostConsumerEmotions: string;
-                  durationPhysicalActivity: string;
-                  typeActivityPhysics: string;
-                  intensity: number;
-                  note: string;
-                }
+                data.content as Record<string, string | number | boolean>
               }
             />
           ) : null}

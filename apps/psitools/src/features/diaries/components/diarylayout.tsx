@@ -99,7 +99,7 @@ const Diarylayout: React.FC<DiarylayoutProps> = ({
   return (
     <div className="w-full max-w-4xl px-4 pb-4">
       <div className="fixed bg-white py-4">
-        <h2 className="text-[20px] font-semibold text-space-gray">
+        <h2 className="text-space-gray text-[20px] font-semibold">
           Compilazione delle {compilationTime}
         </h2>
       </div>
@@ -125,12 +125,12 @@ const EntryField: React.FC<{ label: string; value: string }> = ({
 }) => (
   <div className="flex h-full flex-col justify-between pb-3">
     <div className="mb-1">
-      <label className="text-[14px] font-medium text-muted-foreground">
+      <label className="text-muted-foreground text-[14px] font-medium">
         {label}
       </label>
     </div>
     <div
-      className="break-words text-base"
+      className="text-base break-words"
       dangerouslySetInnerHTML={{ __html: value }}
     />
   </div>

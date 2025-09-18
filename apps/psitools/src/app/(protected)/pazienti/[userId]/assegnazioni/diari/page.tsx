@@ -43,7 +43,7 @@ export default function DiariesPagese() {
   return (
     <div className="flex flex-col gap-2 p-4 pt-0">
       <DiaryCard
-        diaryType="cognitive_beahvioral"
+        diaryType="cognitive_behavioral"
         numOfDiaries={cognitiveStats.numOfDiaries}
         lastDiary={cognitiveStats.lastDiary}
         diary="cognitivo-comportamentale"

@@ -232,7 +232,7 @@ export function FormLayout<T extends FieldValues>(props: FormLayoutProps<T>) {
               <div
                 style={{ width: `${(currentStep / props.steps) * 100}%` }}
                 suppressHydrationWarning
-                className="bg-forest-green-700 absolute top-0 left-0 h-full rounded-full transition-all"
+                className="bg-primary absolute top-0 left-0 h-full rounded-full transition-all"
               />
             </div>
           </div>

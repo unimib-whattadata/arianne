@@ -26,7 +26,7 @@ export default function CognitiveBeahvioral() {
 
   const { data, refetch } = useQuery(
     api.diaries.find.queryOptions({
-      type: 'cognitive_beahvioral',
+      type: 'cognitive_behavioral',
       patientId: patient?.id,
       date: date,
       id: selectedDiaryId,
@@ -35,14 +35,14 @@ export default function CognitiveBeahvioral() {
 
   const { data: diaries } = useQuery(
     api.diaries.getAll.queryOptions({
-      type: 'cognitive_beahvioral',
+      type: 'cognitive_behavioral',
       patientId: patient?.id,
     }),
   );
 
   const dailyDiaries = React.useMemo(() => {
     if (!diaries || !date) return [];
-    const dateString = format(date, 'yyyy-M-d');
+    const dateString = format(date, 'yyyy-MM-d');
     return diaries.filter((diary) => diary.date === dateString);
   }, [diaries, date]);
 
@@ -59,7 +59,7 @@ export default function CognitiveBeahvioral() {
   React.useEffect(() => {
     if (!date || selectedDiaryId) return;
 
-    const formatted = format(date, 'yyyy-M-d');
+    const formatted = format(date, 'yyyy-MM-dd');
     const diaryForSelectedDay = dailyDiaries.find((d) => d.date === formatted);
 
     if (diaryForSelectedDay) {
@@ -79,7 +79,7 @@ export default function CognitiveBeahvioral() {
         queryClient
           .invalidateQueries({
             queryKey: api.diaries.getAll.queryKey({
-              type: 'cognitive_beahvioral',
+              type: 'cognitive_behavioral',
               patientId: patient?.id,
             }),
           })
@@ -89,7 +89,7 @@ export default function CognitiveBeahvioral() {
 
         const expires = new Date();
         expires.setHours(23, 59, 59, 0);
-        document.cookie = `cognitive_beahvioral=1; path=/; expires=${expires.toUTCString()}`;
+        document.cookie = `cognitive_behavioral=1; path=/; expires=${expires.toUTCString()}`;
 
         router.push(`${pathname}/assegnazione/compilazione?id=${data.id}`);
       },
@@ -98,7 +98,7 @@ export default function CognitiveBeahvioral() {
 
   const handleCreateNewDiary = () => {
     createDiary.mutate({
-      type: 'cognitive_beahvioral',
+      type: 'cognitive_behavioral',
       patientId: patient?.id,
       content: {},
     });

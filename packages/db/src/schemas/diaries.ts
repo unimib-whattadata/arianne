@@ -26,7 +26,7 @@ export const diaries = createTable(
     id: d.uuid().primaryKey().notNull().defaultRandom(),
     date: d.date("date").notNull(),
     type: diariesTypeEnum(),
-    content: d.text("content").notNull(),
+    content: d.jsonb("content").notNull(),
     updatedAt: d.timestamp("updated_at").notNull().defaultNow(),
     state: d.boolean("state").default(false),
 

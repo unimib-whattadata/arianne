@@ -16,7 +16,7 @@ import { useTRPC } from '@/trpc/react';
 import { getCookieValue } from '@/utils/get-cookie-value';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const defaultStep = getCookieValue('cognitive_beahvioral');
+  const defaultStep = getCookieValue('cognitive_behavioral');
   const searchParams = useSearchParams();
   const diaryId = searchParams.get('id');
 
@@ -33,7 +33,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             queryFn: async () => {
               const allDiaries = await queryClient.fetchQuery(
                 api.diaries.getAll.queryOptions({
-                  type: 'cognitive_beahvioral',
+                  type: 'cognitive_behavioral',
                 }),
               );
 
@@ -59,7 +59,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <FormLayout
-      type="cognitive_beahvioral"
+      type="cognitive_behavioral"
       steps={12}
       methods={methods}
       defaultStep={defaultStep}

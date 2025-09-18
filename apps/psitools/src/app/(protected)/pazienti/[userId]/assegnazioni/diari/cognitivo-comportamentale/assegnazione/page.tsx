@@ -26,6 +26,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { usePatient } from '@/hooks/use-patient';
 import { useTRPC } from '@/trpc/react';
+import { $Enums } from '@arianne/db/enums';
 
 const formatDate = (dateString: string) => {
   const [year, month, day] = dateString.split('-');
@@ -66,28 +67,19 @@ export default function Page() {
 
   const { data: allDiaries, isLoading: isLoadingAllDiaries } = useQuery(
     api.diaries.getAll.queryOptions({
-      type: 'cognitive_beahvioral',
+      type: 'cognitive_behavioral',
       patientId: patient?.id,
     }),
   );
 
   const createDiary = useMutation(
     api.diaries.create.mutationOptions({
-      onSuccess: (data) => {
-        queryClient
-          .invalidateQueries({
-            queryKey: api.diaries.getAll.queryKey({
-              type: 'cognitive_beahvioral',
-              patientId: patient?.id,
-            }),
-          })
-          .catch((error) => {
-            console.error('Error invalidating queries:', error);
-          });
+      onSuccess: async (data) => {
+        await queryClient.invalidateQueries(api.diaries.getAll.pathFilter());
 
         const expires = new Date();
         expires.setHours(23, 59, 59, 0);
-        document.cookie = `cognitive_beahvioral=1; path=/; expires=${expires.toUTCString()}`;
+        document.cookie = `cognitive_behavioral=1; path=/; expires=${expires.toUTCString()}`;
 
         window.open(`${pathname}/compilazione?id=${data.id}`, '_blank');
       },
@@ -116,10 +108,8 @@ export default function Page() {
 
   const handleCreateNewDiary = () => {
     createDiary.mutate({
-      type: 'cognitive_beahvioral',
-
+      type: $Enums.DiariesTypes.cognitive_behavioral,
       patientId: patient?.id,
-
       content: {},
     });
   };
@@ -256,12 +246,12 @@ export default function Page() {
                           const currentCookie = document.cookie
                             .split('; ')
                             .find((row) =>
-                              row.startsWith('cognitive_beahvioral='),
+                              row.startsWith('cognitive_behavioral='),
                             );
                           if (!currentCookie) {
                             const expires = new Date();
                             expires.setHours(23, 59, 59, 0);
-                            document.cookie = `cognitive_beahvioral=1; path=/; expires=${expires.toUTCString()}`;
+                            document.cookie = `cognitive_behavioral=1; path=/; expires=${expires.toUTCString()}`;
                           }
                           router.push(
                             `${pathname}/compilazione?id=${diary.id}`,
