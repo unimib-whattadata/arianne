@@ -1,5 +1,5 @@
 {
-  "id": "9f8728b5-948d-43bb-8974-88c894d92113",
+  "id": "c9e3b872-cbbd-4e01-9894-77461cde949f",
   "prevId": "26c1bb50-39b3-4b38-ac0b-d82968a21beb",
   "version": "7",
   "dialect": "postgresql",
@@ -291,14 +291,14 @@
           "notNull": true,
           "default": "now()"
         },
-        "patient_id": {
-          "name": "patient_id",
+        "patient_profile_id": {
+          "name": "patient_profile_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
-        "therapist_id": {
-          "name": "therapist_id",
+        "therapist_profile_id": {
+          "name": "therapist_profile_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
@@ -322,35 +322,43 @@
         }
       },
       "foreignKeys": {
-        "arianne_chats_patient_id_arianne_patients_id_fk": {
-          "name": "arianne_chats_patient_id_arianne_patients_id_fk",
+        "arianne_chats_patient_profile_id_arianne_patients_profile_id_fk": {
+          "name": "arianne_chats_patient_profile_id_arianne_patients_profile_id_fk",
           "tableFrom": "arianne_chats",
           "tableTo": "arianne_patients",
           "columnsFrom": [
-            "patient_id"
+            "patient_profile_id"
           ],
           "columnsTo": [
-            "id"
+            "profile_id"
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "arianne_chats_therapist_id_arianne_therapists_id_fk": {
-          "name": "arianne_chats_therapist_id_arianne_therapists_id_fk",
+        "arianne_chats_therapist_profile_id_arianne_therapists_profile_id_fk": {
+          "name": "arianne_chats_therapist_profile_id_arianne_therapists_profile_id_fk",
           "tableFrom": "arianne_chats",
           "tableTo": "arianne_therapists",
           "columnsFrom": [
-            "therapist_id"
+            "therapist_profile_id"
           ],
           "columnsTo": [
-            "id"
+            "profile_id"
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "arianne_chats_patient_profile_id_unique": {
+          "name": "arianne_chats_patient_profile_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "patient_profile_id"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": true
@@ -1299,7 +1307,15 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "arianne_patients_profile_id_unique": {
+          "name": "arianne_patients_profile_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "profile_id"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": true
@@ -1418,13 +1434,6 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
-        },
-        "completed_onboarding": {
-          "name": "completed_onboarding",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": false
         }
       },
       "indexes": {},
@@ -1508,7 +1517,15 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "arianne_therapists_profile_id_unique": {
+          "name": "arianne_therapists_profile_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "profile_id"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": true

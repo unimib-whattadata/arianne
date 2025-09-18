@@ -8,21 +8,24 @@ import { Textarea } from '@/components/ui/textarea';
 import { useTRPC } from '@/trpc/react';
 
 interface ChatInputProps {
-  chatId: string;
+  patientProfileId: string;
+  therapistProfileId: string;
 }
 
 export const ChatInput = (props: ChatInputProps) => {
-  const { chatId } = props;
+  const { patientProfileId, therapistProfileId } = props;
   const formRef = useRef<HTMLFormElement>(null);
   const [text, setText] = useState<string>('');
   const api = useTRPC();
+
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const { mutate } = useMutation(api.chats.addMessage.mutationOptions());
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     mutate({
-      chatId: chatId,
+      patientProfileId: patientProfileId,
+      therapistProfileId: therapistProfileId,
       content: text,
       senderType: 'therapist',
     });
@@ -30,14 +33,7 @@ export const ChatInput = (props: ChatInputProps) => {
   };
 
   const { mutate: setTyping } = useMutation(
-    api.chats.setUserTyping.mutationOptions({
-      onSuccess: () => {
-        console.log('User typing status updated successfully.');
-      },
-      onError: (error) => {
-        console.error('Error updating user typing status:', error);
-      },
-    }),
+    api.chats.setUserTyping.mutationOptions(),
   );
 
   const handleTextChange = useCallback((e: { target: { value: string } }) => {
@@ -53,14 +49,18 @@ export const ChatInput = (props: ChatInputProps) => {
     if (isActuallyTyping) {
       console.log('User is typing...');
       setTyping({
-        chatId: chatId,
+        patientProfileId: patientProfileId,
+        therapistProfileId: therapistProfileId,
+        sender: 'therapist',
         typingStatus: 'isTyping',
       });
 
       typingTimeoutRef.current = setTimeout(() => {
         console.log('User stopped typing.');
         setTyping({
-          chatId: chatId,
+          patientProfileId: patientProfileId,
+          therapistProfileId: therapistProfileId,
+          sender: 'therapist',
           typingStatus: 'stoppedTyping',
         });
         typingTimeoutRef.current = null;
@@ -68,7 +68,9 @@ export const ChatInput = (props: ChatInputProps) => {
     } else {
       console.log('User is not typing (input cleared or empty).');
       setTyping({
-        chatId: chatId,
+        patientProfileId: patientProfileId,
+        therapistProfileId: therapistProfileId,
+        sender: 'therapist',
         typingStatus: 'stoppedTyping',
       });
       if (typingTimeoutRef.current) {

@@ -5,7 +5,7 @@ import {
   messages,
 } from "@arianne/db/schemas/chats";
 import { TRPCError } from "@trpc/server";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import Redis from "ioredis";
 import { z } from "zod";
 
@@ -41,9 +41,10 @@ export type Message = {
 
 export interface Status {
   userId: string;
-  chatId: string;
+  chatId?: string;
   status: "online" | "offline" | "isTyping";
 }
+
 const STATUS_CHANNEL = "user:presence";
 const ONLINE_USERS_KEY = "online_users";
 
@@ -123,7 +124,11 @@ export const chatsRouter = createTRPCRouter({
     .input(ChatsGetOrCreateSchema)
     .query(async ({ input, ctx }) => {
       const chat = await ctx.db.query.chats.findFirst({
-        where: (chats, { eq }) => eq(chats.id, input.patientId),
+        where: (chats, { eq }) =>
+          and(
+            eq(chats.patientProfileId, input.patientProfileId),
+            eq(chats.therapistProfileId, input.therapistProfileId),
+          ),
         with: {
           messages: {
             orderBy: (messages, { asc }) => asc(messages.index),
@@ -135,9 +140,8 @@ export const chatsRouter = createTRPCRouter({
         const newChat = await ctx.db
           .insert(chats)
           .values({
-            id: input.patientId,
-            patientId: input.patientId,
-            therapistId: input.therapistId,
+            patientProfileId: input.patientProfileId,
+            therapistProfileId: input.therapistProfileId,
             lastIndex: 0,
           })
           .returning()
@@ -160,11 +164,15 @@ export const chatsRouter = createTRPCRouter({
     .input(ChatsAddMessageSchema)
     .mutation(async ({ input, ctx }) => {
       const chat = await ctx.db.query.chats.findFirst({
-        where: (chats, { eq }) => eq(chats.id, input.chatId),
+        where: (chats, { eq }) =>
+          and(
+            eq(chats.patientProfileId, input.patientProfileId),
+            eq(chats.therapistProfileId, input.therapistProfileId),
+          ),
       });
 
       if (!chat) {
-        throw new Error("Chat not found");
+        throw new TRPCError({ message: "Chat Not Found", code: "NOT_FOUND" });
       }
 
       const newIndex = chat.lastIndex + 1;
@@ -175,86 +183,84 @@ export const chatsRouter = createTRPCRouter({
       const message = await ctx.db
         .insert(messages)
         .values({
-          chatId: input.chatId,
+          chatId: chat.id,
           content: input.content,
           senderId: ctx.user.id,
           senderType: input.senderType,
           index: newIndex,
           initials: senderName,
         })
-        .returning();
+        .returning()
+        .then((res) => res[0]!);
 
       await ctx.db
         .update(chats)
         .set({ lastIndex: newIndex })
-        .where(eq(chats.id, input.chatId));
+        .where(eq(chats.id, chat.id));
 
       const publisher = new Redis(process.env.REDIS!);
 
-      await publisher.publish(`chat:${input.chatId}`, JSON.stringify(message));
+      await publisher.publish(
+        `chat:${input.patientProfileId}:${input.therapistProfileId}`,
+        JSON.stringify(message),
+      );
 
       return message;
     }),
 
   onAdd: protectedProcedure
-    .input(z.object({ chatId: z.string() }))
+    .input(ChatsGetOrCreateSchema)
     .subscription(({ input }) => {
       return createRedisSubscription<Message>(
-        `chat:${input.chatId}`,
-        (rawMessage) => JSON.parse(rawMessage) as Message,
+        `chat:${input.patientProfileId}:${input.therapistProfileId}`,
+        (rawMessage) => {
+          return JSON.parse(rawMessage) as Message;
+        },
       );
     }),
 
-  setUserOnline: protectedProcedure
-    .input(z.string().optional())
-    .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user.id;
-      if (!userId) {
-        throw new Error("User not authenticated");
-      }
+  setUserOnline: protectedProcedure.mutation(async ({ ctx }) => {
+    const userId = ctx.user.id;
+    if (!userId) {
+      throw new Error("User not authenticated");
+    }
 
-      const chatId = input ?? ctx.user.id;
-      const userChatKey = `${userId}:${chatId}`;
-      await cache.sadd(ONLINE_USERS_KEY, userChatKey);
+    const userChatKey = `${ctx.user.id}`;
+    await cache.sadd(ONLINE_USERS_KEY, userChatKey);
 
-      const status: Status = {
-        userId: userId,
-        chatId: chatId,
-        status: "online",
-      };
+    const status: Status = {
+      userId: ctx.user.id,
+      status: "online",
+    };
 
-      await publisher.publish(STATUS_CHANNEL, JSON.stringify(status));
+    await publisher.publish(STATUS_CHANNEL, JSON.stringify(status));
 
-      return { success: true };
-    }),
+    return { success: true };
+  }),
 
-  setUserOffline: protectedProcedure
-    .input(z.string().optional())
-    .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user.id;
-      if (!userId) {
-        throw new Error("User not authenticated");
-      }
+  setUserOffline: protectedProcedure.mutation(async ({ ctx }) => {
+    const userId = ctx.user.id;
+    if (!userId) {
+      throw new Error("User not authenticated");
+    }
 
-      const chatId = input ?? ctx.user.id;
-      const userChatKey = `${userId}:${chatId}`;
-      await cache.srem(ONLINE_USERS_KEY, userChatKey);
+    const userChatKey = `${ctx.user.id}`;
+    await cache.srem(ONLINE_USERS_KEY, userChatKey);
 
-      const status: Status = {
-        userId: userId,
-        chatId: chatId,
-        status: "offline",
-      };
+    const status: Status = {
+      userId: userId,
+      status: "offline",
+    };
 
-      await publisher.publish(STATUS_CHANNEL, JSON.stringify(status));
+    await publisher.publish(STATUS_CHANNEL, JSON.stringify(status));
 
-      return { success: true };
-    }),
+    return { success: true };
+  }),
 
   isUserOnline: protectedProcedure
-    .input(z.object({ chatId: z.string(), userId: z.string() }))
+    .input(z.object({ userId: z.string() }))
     .query(async ({ input }) => {
-      const userChatKey = `${input.userId}:${input.chatId}`;
+      const userChatKey = `${input.userId}`;
       const isOnline = await cache.sismember(ONLINE_USERS_KEY, userChatKey);
 
       return isOnline === 1;
@@ -264,7 +270,9 @@ export const chatsRouter = createTRPCRouter({
     .input(
       z.object({
         typingStatus: z.enum(["isTyping", "stoppedTyping"]),
-        chatId: z.string().optional(),
+        patientProfileId: z.string(),
+        therapistProfileId: z.string(),
+        sender: z.enum(["patient", "therapist"]),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -274,8 +282,11 @@ export const chatsRouter = createTRPCRouter({
       }
 
       const status: Status = {
-        userId: userId,
-        chatId: input.chatId ?? userId,
+        userId:
+          input.sender === "patient"
+            ? input.patientProfileId
+            : input.therapistProfileId,
+        chatId: `${input.patientProfileId}:${input.therapistProfileId}`,
         status: input.typingStatus === "isTyping" ? "isTyping" : "online",
       };
 
