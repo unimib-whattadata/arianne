@@ -121,7 +121,7 @@ export const UpdateFormSchema = z.object({
     .string()
     .max(500, "La bio deve essere di massimo 500 caratteri")
     .optional(),
-  avatar: z.string().url("L'URL dell'avatar non è valido").optional(),
+  avatar: z.string().url("L'URL dell'avatar non è valido"),
   weekDays: z
     .array(
       z.enum([
