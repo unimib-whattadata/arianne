@@ -37,8 +37,8 @@ export default async function RootLayout({
   }
 
   const profile = await api.profiles.get();
-  if (!profile?.completedOnboarding) {
-    redirect('/onboarding');
+  if (profile?.completedOnboarding) {
+    return redirect('/');
   }
 
   return (
