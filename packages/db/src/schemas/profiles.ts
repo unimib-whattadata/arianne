@@ -23,6 +23,11 @@ export const profiles = createTable(
     address: d.text(),
     avatarUrl: d.text("avatar_url"),
     role: d.text("role").$type<(typeof roles)[number]>().notNull(),
+
+    completedOnboarding: d
+      .boolean("completed_onboarding")
+      .notNull()
+      .default(false),
   }),
   (table) => [
     foreignKey({

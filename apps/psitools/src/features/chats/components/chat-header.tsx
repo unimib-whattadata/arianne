@@ -6,15 +6,16 @@ import { useEffect, useState } from 'react';
 
 import { useTRPC } from '@/trpc/react';
 import { cn } from '@/utils/cn';
+import { useParams } from 'next/navigation';
 
 interface ChatHeaderProps {
   fullName: string;
-  patientId: string;
 }
 
 export const ChatHeader = (props: ChatHeaderProps) => {
-  const { fullName, patientId } = props;
+  const { fullName } = props;
   const api = useTRPC();
+  const { profileId } = useParams<{ profileId: string }>();
   const queryClient = useQueryClient();
   const setUserOnline = useMutation(api.chats.setUserOnline.mutationOptions());
   const setUserOffline = useMutation(
@@ -22,8 +23,7 @@ export const ChatHeader = (props: ChatHeaderProps) => {
   );
   const { data } = useQuery(
     api.chats.isUserOnline.queryOptions({
-      chatId: patientId,
-      userId: patientId,
+      userId: profileId,
     }),
   );
 
@@ -38,15 +38,14 @@ export const ChatHeader = (props: ChatHeaderProps) => {
   }, [data]);
 
   useEffect(() => {
-    setUserOnline.mutate(patientId);
+    setUserOnline.mutate();
 
     return () => {
-      setUserOffline.mutate(patientId);
+      setUserOffline.mutate();
       queryClient
         .invalidateQueries({
           queryKey: api.chats.isUserOnline.queryKey({
-            chatId: patientId,
-            userId: patientId,
+            userId: profileId,
           }),
         })
         .catch((error) => {
@@ -59,8 +58,7 @@ export const ChatHeader = (props: ChatHeaderProps) => {
   useSubscription(
     api.chats.onUserStatus.subscriptionOptions(undefined, {
       onData: (data) => {
-        if (data.userId === patientId && data.chatId === patientId)
-          setIsPatientOnline(data.status);
+        if (data.userId === profileId) setIsPatientOnline(data.status);
       },
     }),
   );

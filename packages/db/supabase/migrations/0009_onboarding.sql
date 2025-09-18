@@ -1,0 +1,1 @@
+ALTER TABLE "arianne_profiles" ADD COLUMN "completed_onboarding" boolean DEFAULT false NOT NULL;

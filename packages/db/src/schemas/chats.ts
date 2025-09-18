@@ -18,25 +18,25 @@ export const chats = createTable(
     createdAt: d.date("created_at").notNull().defaultNow(),
     updatedAt: d.date("updated_at").notNull().defaultNow(),
 
-    patientId: d
-      .uuid("patient_id")
+    patientProfileId: d
+      .uuid("patient_profile_id")
       .notNull()
-      .references(() => patients.id),
-    therapistId: d
-      .uuid("therapist_id")
+      .references(() => patients.profileId),
+    therapistProfileId: d
+      .uuid("therapist_profile_id")
       .notNull()
-      .references(() => therapists.id),
+      .references(() => therapists.profileId),
   }),
   (t) => [index("chat_id").on(t.id)],
 ).enableRLS();
 
 export const chatsRelations = relations(chats, ({ one, many }) => ({
   patient: one(patients, {
-    fields: [chats.patientId],
+    fields: [chats.patientProfileId],
     references: [patients.id],
   }),
   therapist: one(therapists, {
-    fields: [chats.therapistId],
+    fields: [chats.therapistProfileId],
     references: [therapists.id],
   }),
   messages: many(messages),
@@ -82,12 +82,13 @@ export const messagesRelations = relations(messages, ({ one }) => ({
 }));
 
 export const ChatsGetOrCreateSchema = z.object({
-  patientId: z.string(),
-  therapistId: z.string(),
+  patientProfileId: z.string(),
+  therapistProfileId: z.string(),
 });
 
-export const ChatsAddMessageSchema = z.object({
-  chatId: z.string(),
-  content: z.string(),
-  senderType: z.enum(["patient", "therapist"]),
-});
+export const ChatsAddMessageSchema = z
+  .object({
+    content: z.string(),
+    senderType: z.enum(["patient", "therapist"]),
+  })
+  .merge(ChatsGetOrCreateSchema);

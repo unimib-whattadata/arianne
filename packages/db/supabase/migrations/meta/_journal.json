@@ -57,6 +57,20 @@
       "when": 1757927704319,
       "tag": "0007_fix_chat_id",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1758105088377,
+      "tag": "0008_fixFKChat",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1758206806752,
+      "tag": "0009_onboarding",
+      "breakpoints": true
     }
   ]
 }
