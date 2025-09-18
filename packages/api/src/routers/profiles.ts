@@ -20,4 +20,17 @@ export const profileRouter = createTRPCRouter({
       });
       return profile;
     }),
+  role: protectedProcedure
+    .input(z.object({ id: z.string().uuid() }).optional())
+    .query(async ({ ctx, input }) => {
+      const profileId = input?.id ?? ctx.user.id;
+      const profile = await ctx.db.query.profiles.findFirst({
+        where: (t, { eq }) => eq(t.id, profileId),
+        columns: {
+          role: true,
+        },
+      });
+
+      return profile?.role;
+    }),
 });

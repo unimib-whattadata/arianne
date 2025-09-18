@@ -3,11 +3,13 @@
   "globalEnv": [
     "DATABASE_URL",
     "NEXT_PUBLIC_TRPC_LOGGER_ENABLED",
-    "NEXT_PUBLIC_APP_URL",
     "COOKIE_SECRET",
-    "NEXT_PUBLIC_LANDING_URL",
     "NEXT_PUBLIC_APP_URL",
+    "NEXT_PUBLIC_PATIENT_URL",
+    "NEXT_PUBLIC_THERAPIST_URL",
+    "NEXT_PUBLIC_LANDING_URL",
     "NEXT_PROJECT_PROJECT_ID",
+    "NEXT_PUBLIC_WSS_URL",
     "REDIS"
   ],
   "globalPassThroughEnv": [
@@ -23,9 +25,6 @@
       "cache": false
     },
     "build": {
-      "dependsOn": [
-        "^build"
-      ],
       "outputs": [
         ".cache/tsbuildinfo.json",
         "dist/**"
@@ -40,9 +39,6 @@
     },
     "dev": {
       "cache": false,
-      "dependsOn": [
-        "^dev"
-      ],
       "interactive": true,
       "persistent": false
     },

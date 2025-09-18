@@ -46,6 +46,13 @@ class WebSocketServerSingleton {
         },
       });
 
+      // Gestione della chiusura del server
+      process.on("SIGTERM", () => {
+        handler.broadcastReconnectNotification();
+        WebSocketServerSingleton.instance.close();
+        console.log("❌ WebSocket Server closed.");
+      });
+
       WebSocketServerSingleton.instance.on("connection", (ws) => {
         console.log(
           `➕➕ Connection (${WebSocketServerSingleton.instance.clients.size})`,
@@ -62,13 +69,6 @@ class WebSocketServerSingleton {
       });
 
       console.log(`✅ WebSocket Server listening on ws://localhost:${wssPort}`);
-
-      // Gestione della chiusura del server
-      process.on("SIGTERM", () => {
-        handler.broadcastReconnectNotification();
-        WebSocketServerSingleton.instance.close();
-        console.log("❌ WebSocket Server closed.");
-      });
     }
 
     return WebSocketServerSingleton.instance;

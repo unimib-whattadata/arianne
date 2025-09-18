@@ -45,7 +45,7 @@ export const ChatMessages = (props: ChatMessagesProps) => {
   const [isTyping, setIsTyping] = useState<boolean>(false);
 
   useSubscription(
-    api.chat.onAdd.subscriptionOptions(
+    api.chats.onAdd.subscriptionOptions(
       { chatId: chatId },
       {
         onData: (newMessage) => {
@@ -57,7 +57,7 @@ export const ChatMessages = (props: ChatMessagesProps) => {
   );
 
   useSubscription(
-    api.chat.onUserStatus.subscriptionOptions(undefined, {
+    api.chats.onUserStatus.subscriptionOptions(undefined, {
       onData: (data) => {
         if (data.userId === therapistId && data.chatId === chatId)
           setIsTyping(data.status === 'isTyping');
@@ -122,9 +122,9 @@ export const ChatMessages = (props: ChatMessagesProps) => {
           <ChatBubble className="w-full max-w-full" variant={'received'}>
             <Avatar>
               <AvatarFallback className="text-xs">
-                {user?.user?.firstName[0].toUpperCase() ?? ''}
+                {user?.profile?.firstName[0].toUpperCase() ?? ''}
                 {''}
-                {user?.user?.lastName[0].toUpperCase() ?? ''}
+                {user?.profile?.lastName[0].toUpperCase() ?? ''}
               </AvatarFallback>
             </Avatar>
             <ChatBubbleMessage

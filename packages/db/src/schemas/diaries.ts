@@ -4,6 +4,7 @@ import z from "zod";
 
 import { medicalRecords, patients } from "../schema";
 import { createTable } from "../table";
+import { mapEnumValues } from "../utils";
 
 export const diariesTypeEnum = pgEnum("diary_type", [
   "sleep_morning",
@@ -11,6 +12,10 @@ export const diariesTypeEnum = pgEnum("diary_type", [
   "cognitive_behavioral",
   "food",
 ]);
+
+export const diariesEnum = {
+  DiariesTypes: mapEnumValues(diariesTypeEnum.enumValues),
+};
 
 /**
  * Diaries Schema and its relations.

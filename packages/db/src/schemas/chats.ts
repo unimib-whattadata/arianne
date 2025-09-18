@@ -50,7 +50,7 @@ export const messageSenderTypeEnum = pgEnum("message_sender_type_enum", [
 export const messages = createTable(
   "messages",
   (d) => ({
-    id: d.uuid().primaryKey().notNull(),
+    id: d.uuid().primaryKey().notNull().defaultRandom(),
     content: d.text("content").notNull(),
     senderType: messageSenderTypeEnum().notNull(),
     index: d.integer("index").notNull(),
@@ -83,6 +83,7 @@ export const messagesRelations = relations(messages, ({ one }) => ({
 
 export const ChatsGetOrCreateSchema = z.object({
   patientId: z.string(),
+  therapistId: z.string(),
 });
 
 export const ChatsAddMessageSchema = z.object({

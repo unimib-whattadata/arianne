@@ -20,7 +20,7 @@ export default function BreadcrumbSlot() {
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbPage>Modifica Password</BreadcrumbPage>
+          <BreadcrumbPage>Account e Password</BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>

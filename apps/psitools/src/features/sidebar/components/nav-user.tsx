@@ -29,13 +29,14 @@ import { env } from '@/env.mjs';
 import { createClient } from '@arianne/supabase/client';
 import type { RouterOutputs } from '@arianne/api';
 
+const supabase = createClient();
+
 export function NavUser({
   user,
 }: {
   user: NonNullable<RouterOutputs['profiles']['get']>;
 }) {
   const { isMobile } = useSidebar();
-  const supabase = createClient();
 
   const avatar = <HeartIcon className="fill-slate-300 stroke-0" />;
 

@@ -1,5 +1,4 @@
 import type { ReactQueryOptions } from '@arianne/api';
-import type { Prisma } from '@prisma/client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import type { FieldValues, SubmitHandler } from 'react-hook-form';
@@ -8,12 +7,11 @@ import { toast } from 'sonner';
 import { useAdministrationContext } from '@/features/questionnaires/context/administration';
 import type { available } from '@/features/questionnaires/settings';
 import { useTRPC } from '@/trpc/react';
+import { $Enums } from '@arianne/db/enums';
 
 interface Props<FormValues extends FieldValues> {
-  mutationOptions?: ReactQueryOptions['administration']['create'];
-  formatRecords: (
-    data: FormValues,
-  ) => Prisma.NullTypes.JsonNull | Prisma.InputJsonValue;
+  mutationOptions?: ReactQueryOptions['administrations']['create'];
+  formatRecords: (data: FormValues) => Record<string, unknown>;
   type: (typeof available)[number];
 }
 
@@ -23,12 +21,14 @@ export const useAdministrationSubmit = <FormValues extends FieldValues>(
   const api = useTRPC();
   const queryClient = useQueryClient();
   const router = useRouter();
-  const { data: patient, isLoading } = useQuery(api.patient.get.queryOptions());
+  const { data: patient, isLoading } = useQuery(
+    api.patients.get.queryOptions(),
+  );
   const { dispatch } = useAdministrationContext();
 
   const { mutationOptions, formatRecords, type } = props;
 
-  const deafultOptions: ReactQueryOptions['administration']['create'] = {
+  const deafultOptions: ReactQueryOptions['administrations']['create'] = {
     onSuccess: async (data) => {
       toast.success('Somministrazione caricata con successo');
       dispatch({
@@ -58,7 +58,7 @@ export const useAdministrationSubmit = <FormValues extends FieldValues>(
   };
 
   const administration = useMutation(
-    api.administration.create.mutationOptions({
+    api.administrations.create.mutationOptions({
       ...deafultOptions,
       ...mutationOptions,
     }),
@@ -77,32 +77,20 @@ export const useAdministrationSubmit = <FormValues extends FieldValues>(
     const records = formatRecords(data);
 
     const therapist = await queryClient.fetchQuery(
-      api.therapist.get.queryOptions({
+      api.therapists.get.queryOptions({
         id: patient.therapistId!,
       }),
     );
 
     await administration.mutateAsync({
-      data: {
-        therapistName: therapist.user!.firstName,
-        therapistLastname: therapist.user!.lastName,
-        modality: 'autonoma_presenza',
-        createdAt: new Date(),
-        date: new Date(),
-        patientId: patient.id,
-        records,
-        type,
-        medicalRecord: {
-          connectOrCreate: {
-            where: {
-              patientId: patient.id,
-            },
-            create: {
-              patientId: patient.id,
-            },
-          },
-        },
-      },
+      patientId: patient.id,
+      records,
+      therapistName: therapist.profile.firstName,
+      therapistLastname: therapist.profile.lastName,
+      createdAt: new Date().toISOString(),
+      modality: $Enums.AssignmentModality.autonoma_presenza,
+
+      type,
     });
   };
 

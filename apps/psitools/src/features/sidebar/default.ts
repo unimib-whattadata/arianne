@@ -8,6 +8,7 @@ import {
   FilePlus,
   LayoutDashboard,
   MessageCircle,
+  NotepadText,
   Settings,
   UserRound,
 } from 'lucide-react';
@@ -48,6 +49,12 @@ export const useMenu = (active?: string) => {
       title: 'Chats',
       url: '/chats',
       icon: MessageCircle,
+      disabled: false,
+    },
+    {
+      title: "Lista d'attesa",
+      url: '/lista-attesa',
+      icon: NotepadText,
       disabled: false,
     },
   ] satisfies SibebarMenuItems['items'];

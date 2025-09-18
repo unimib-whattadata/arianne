@@ -25,14 +25,12 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
+import type { RouterOutputs } from '@arianne/api';
 
 export function NavUser({
   user,
 }: {
-  user: {
-    name: string;
-    email: string;
-  };
+  user: NonNullable<RouterOutputs['profiles']['get']>;
 }) {
   const { isMobile } = useSidebar();
 

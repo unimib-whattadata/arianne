@@ -20,11 +20,13 @@ export const ChatHeader = (props: ChatHeaderProps) => {
   const queryClient = useQueryClient();
   const api = useTRPC();
 
-  const setUserOnline = useMutation(api.chat.setUserOnline.mutationOptions());
-  const setUserOffline = useMutation(api.chat.setUserOffline.mutationOptions());
+  const setUserOnline = useMutation(api.chats.setUserOnline.mutationOptions());
+  const setUserOffline = useMutation(
+    api.chats.setUserOffline.mutationOptions(),
+  );
 
   const { data } = useQuery(
-    api.chat.isUserOnline.queryOptions({
+    api.chats.isUserOnline.queryOptions({
       chatId: chatId,
       userId: therapistId,
     }),
@@ -47,7 +49,7 @@ export const ChatHeader = (props: ChatHeaderProps) => {
       setUserOffline.mutate();
       queryClient
         .invalidateQueries({
-          queryKey: api.chat.isUserOnline.queryKey({
+          queryKey: api.chats.isUserOnline.queryKey({
             chatId: chatId,
             userId: therapistId,
           }),
@@ -56,10 +58,11 @@ export const ChatHeader = (props: ChatHeaderProps) => {
           console.error('Error invalidating queries:', error);
         });
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useSubscription(
-    api.chat.onUserStatus.subscriptionOptions(undefined, {
+    api.chats.onUserStatus.subscriptionOptions(undefined, {
       onData: (data) => {
         if (data.userId === therapistId && data.chatId === chatId)
           setIsTherapistOnline(data.status);
@@ -69,8 +72,8 @@ export const ChatHeader = (props: ChatHeaderProps) => {
 
   return (
     <div className="flex w-full flex-col justify-center px-4 pb-2">
-      {user?.user ? (
-        <p className="text-lg font-semibold">{`${user.user.firstName} ${user.user.lastName}`}</p>
+      {user?.profile ? (
+        <p className="text-lg font-semibold">{`${user.profile.firstName} ${user.profile.lastName}`}</p>
       ) : (
         'Undefined'
       )}

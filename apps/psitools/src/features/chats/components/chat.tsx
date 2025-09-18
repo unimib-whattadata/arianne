@@ -1,12 +1,8 @@
-'use client';
-
-import { useQuery } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 
 import { ChatHeader } from '@/features/chats/components/chat-header';
 import { ChatMessages } from '@/features/chats/components/chat-messages';
-import { usePatient } from '@/hooks/use-patient';
-import { useTRPC } from '@/trpc/react';
+import { api } from '@/trpc/server';
 
 export interface Message {
   chatId: string;
@@ -24,25 +20,29 @@ interface ChatProps {
   chatId: string;
 }
 
-export const Chat = (props: ChatProps) => {
+export const Chat = async (props: ChatProps) => {
   const { chatId } = props;
-  const api = useTRPC();
-  const { data } = useQuery(
-    api.chats.getOrCreate.queryOptions({
-      patientId: chatId,
-    }),
-  );
-  const { patient } = usePatient({ id: chatId });
+  const patient = await api.patients.findUnique({
+    where: { id: chatId },
+  });
+
+  if (!patient) return null;
+  if (!patient.therapistId) return null;
+
+  const chat = await api.chats.getOrCreate({
+    patientId: patient.id,
+    therapistId: patient.therapistId,
+  });
+
+  console.log('Chat data:', { chatId, patient: patient.id });
+
   return (
     <>
       {patient?.profile && (
-        <ChatHeader
-          patientId={chatId}
-          fullName={`${patient.profile.firstName} ${patient.profile.lastName}`}
-        />
+        <ChatHeader patientId={chatId} fullName={patient.profile.name} />
       )}
-      {data && <ChatMessages chatMessages={data.messages} chatId={chatId} />}
-      {!data && <Loader2 className="text-primary h-8 w-8 animate-spin" />}
+      {chat && <ChatMessages chatMessages={chat.messages} chatId={chatId} />}
+      {!chat && <Loader2 className="text-primary h-8 w-8 animate-spin" />}
     </>
   );
 };

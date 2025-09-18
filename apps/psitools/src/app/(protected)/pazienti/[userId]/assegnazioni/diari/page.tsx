@@ -2,17 +2,15 @@
 
 import { useQuery } from '@tanstack/react-query';
 
+import type { diariesTypeEnum } from '@arianne/db/schemas/diaries';
 import { DiaryCard } from '@/features/diaries/components/diarycard';
 import { usePatient } from '@/hooks/use-patient';
 import { useTRPC } from '@/trpc/react';
 
-type DiaryType =
-  | 'sleep_morning'
-  | 'sleep_evening'
-  | 'cognitive_beahvioral'
-  | 'food';
-
-const useDiaryStats = (diaryType: DiaryType, patientId?: string) => {
+const useDiaryStats = (
+  diaryType: (typeof diariesTypeEnum.enumValues)[number],
+  patientId?: string,
+) => {
   const api = useTRPC();
 
   const { data: diaries } = useQuery(
@@ -36,7 +34,7 @@ const useDiaryStats = (diaryType: DiaryType, patientId?: string) => {
 export default function DiariesPagese() {
   const { patient } = usePatient();
 
-  const cognitiveStats = useDiaryStats('cognitive_beahvioral', patient?.id);
+  const cognitiveStats = useDiaryStats('cognitive_behavioral', patient?.id);
   const foodStats = useDiaryStats('food', patient?.id);
   const eveningStats = useDiaryStats('sleep_evening', patient?.id);
   const morningStats = useDiaryStats('sleep_morning', patient?.id);

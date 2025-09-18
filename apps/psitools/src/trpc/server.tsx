@@ -9,13 +9,12 @@ import { cache } from 'react';
 import { createQueryClient } from './query-client';
 import { createClient } from '@arianne/supabase/server';
 
-const supabase = await createClient(cookies());
-
 /**
  * This wraps the `createTRPCContext` helper and provides the required context for the tRPC API when
  * handling a tRPC call from a React Server Component.
  */
 const createContext = cache(async () => {
+  const supabase = await createClient(cookies());
   const heads = new Headers(await headers());
   heads.set('x-trpc-source', 'rsc');
 

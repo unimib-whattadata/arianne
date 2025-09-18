@@ -11,7 +11,7 @@ const server = z.object({
   // WAZUH_RSYSLOG: z.string(),
   // SYSLOG_PORT: z.string().regex(/^\d+$/).transform(Number),
   // REMOTELOGGER: z.string(),
-  CLIENT_SECRET: z.string(),
+  DATABASE_URL: z.string(),
   COOKIE_SECRET: z.string(),
 });
 
@@ -22,11 +22,13 @@ const server = z.object({
 const client = z.object({
   //NEXT_PUBLIC_KEYCLOAK_LOGOUT_URL: z.string().url(),
   NEXT_PUBLIC_TRPC_LOGGER_ENABLED: z.enum(['true', 'false']).optional(),
-  NEXT_PUBLIC_KEYCLOAK_FRONTEND_URL: z.string().url(),
-  NEXT_PUBLIC_KEYCLOAK_REALM: z.string(),
-  NEXT_PUBLIC_KEYCLOAK_CLIENT_ID: z.string(),
   NEXT_PUBLIC_APP_URL: z.string().url(),
+  NEXT_PUBLIC_THERAPIST_URL: z.string().url(),
   NEXT_PUBLIC_LANDING_URL: z.string().url(),
+  NEXT_PUBLIC_WSS_URL: z.string().url(),
+
+  NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1),
   // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
 });
 
@@ -38,20 +40,17 @@ const client = z.object({
  */
 const processEnv = {
   NODE_ENV: process.env.NODE_ENV,
-  CLIENT_SECRET: process.env.CLIENT_SECRET,
+  DATABASE_URL: process.env.DATABASE_URL,
   COOKIE_SECRET: process.env.COOKIE_SECRET,
-  NEXT_PUBLIC_KEYCLOAK_CLIENT_ID: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID,
-  NEXT_PUBLIC_KEYCLOAK_REALM: process.env.NEXT_PUBLIC_KEYCLOAK_REALM,
-  NEXT_PUBLIC_KEYCLOAK_FRONTEND_URL:
-    process.env.NEXT_PUBLIC_KEYCLOAK_FRONTEND_URL,
   NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+  NEXT_PUBLIC_THERAPIST_URL: process.env.NEXT_PUBLIC_THERAPIST_URL,
   NEXT_PUBLIC_LANDING_URL: process.env.NEXT_PUBLIC_LANDING_URL,
-  //NEXT_PUBLIC_KEYCLOAK_LOGOUT_URL: process.env.NEXT_PUBLIC_KEYCLOAK_LOGOUT_URL,
+  NEXT_PUBLIC_WSS_URL: process.env.NEXT_PUBLIC_WSS_URL,
+
   NEXT_PUBLIC_TRPC_LOGGER_ENABLED: process.env.NEXT_PUBLIC_TRPC_LOGGER_ENABLED,
-  /* REMOTELOGGER: process.env.REMOTELOGGER,
-  WAZUH_RSYSLOG: process.env.WAZUH_RSYSLOG,
-  SYSLOG_PORT: process.env.SYSLOG_PORT, */
-  // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
+
+  NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
 };
 
 // Don't touch the part below

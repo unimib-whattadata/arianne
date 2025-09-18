@@ -6,7 +6,15 @@
 
 /** @type {import("next").NextConfig} */
 const config = {
-  transpilePackages: ['@arianne/api', '@arianne/supabase', '@arianne/db'],
+  devIndicators: {
+    position: 'bottom-right',
+  },
+  transpilePackages: [
+    '@arianne/api',
+    '@arianne/supabase',
+    '@arianne/db',
+    '@arianne/wss',
+  ],
   output: 'standalone',
   outputFileTracingRoot: '../../',
   reactStrictMode: true,

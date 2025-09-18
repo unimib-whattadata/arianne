@@ -6,18 +6,20 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import {
   createTRPCClient,
   createWSClient,
+  httpBatchStreamLink,
   loggerLink,
   splitLink,
-  unstable_httpBatchStreamLink,
   wsLink,
 } from '@trpc/client';
 import { createTRPCContext } from '@trpc/tanstack-react-query';
 import { useState } from 'react';
 import SuperJSON from 'superjson';
 
-import { authClient } from '@/auth/client';
-
 import { createQueryClient } from './query-client';
+import { createClient } from '@arianne/supabase/client';
+import { env } from '@/env.mjs';
+import { verifyJWT } from '@arianne/supabase';
+import type { UserResponse } from '@arianne/supabase';
 
 let clientQueryClientSingleton: QueryClient | undefined = undefined;
 const getQueryClient = () => {
@@ -34,25 +36,43 @@ export const { useTRPC, TRPCProvider, useTRPCClient } =
   createTRPCContext<AppRouter>();
 
 const getBaseUrl = (wss?: boolean) => {
-  if (wss) return 'ws://localhost:3005';
+  if (wss) return env.NEXT_PUBLIC_WSS_URL;
   if (typeof window !== 'undefined') return window.location.origin;
 
-  // eslint-disable-next-line no-restricted-properties
-  return `http://localhost:${process.env.PORT ?? 3001}`;
+  return env.NEXT_PUBLIC_APP_URL;
+
+  //return `http://localhost:${process.env.PORT ?? 3000}`;
 };
 
 const wsClient = createWSClient({
   url: getBaseUrl(true),
+  retryDelayMs(attemptIndex) {
+    return Math.min(1000 * 2 ** attemptIndex, 30000);
+  },
   connectionParams: async () => {
-    const { data, error } = await authClient.getSession();
+    const supabase = createClient();
+
+    const { data, error } = await supabase.auth.getSession();
+
+    let userResponse: UserResponse;
     if (error) {
-      console.error('WebSocket connection error:', error);
-      return { error: error.message };
+      userResponse = { data: { user: null }, error };
+      return { data: JSON.stringify(userResponse) };
     }
-    console.log('WebSocket connection session:', data);
-    return {
-      session: JSON.stringify(data),
-    };
+
+    if (data?.session) {
+      try {
+        await verifyJWT(data.session.access_token);
+
+        userResponse = { data: { user: data.session.user }, error: null };
+        return { data: JSON.stringify(userResponse) };
+      } catch (error) {
+        console.error('>>> WSClient: JWT verification failed', error);
+      }
+    }
+
+    // If there is no session or verification failed, return user as null tRPC will handle the error
+    return { data: JSON.stringify({ data: { user: null }, error: null }) };
   },
 });
 
@@ -75,7 +95,7 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
             transformer: SuperJSON,
             client: wsClient,
           }),
-          false: unstable_httpBatchStreamLink({
+          false: httpBatchStreamLink({
             transformer: SuperJSON,
             url: getBaseUrl() + '/api/trpc',
             headers() {
@@ -84,15 +104,6 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
               return headers;
             },
           }),
-        }),
-        unstable_httpBatchStreamLink({
-          transformer: SuperJSON,
-          url: getBaseUrl() + '/api/trpc',
-          headers() {
-            const headers = new Headers();
-            headers.set('x-trpc-source', 'nextjs-react');
-            return headers;
-          },
         }),
       ],
     }),

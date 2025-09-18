@@ -180,7 +180,7 @@
 
   --radius: 0.5rem;
 
-  --sidebar-background: oklch(100% 0.00011 271.152);
+  --sidebar: oklch(100% 0.00011 271.152);
   --sidebar-foreground: oklch(20.768% 0.03985 265.767);
   --sidebar-primary: oklch(52.071% 0.13096 145.154);
   --sidebar-primary-foreground: oklch(96.941% 0.01515 12.013);

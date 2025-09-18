@@ -2,7 +2,6 @@ import {
   events,
   EventsCreateSchema,
   EventsDeleteSchema,
-  EventsGetAllSchema,
   EventsUpdateSchema,
 } from "@arianne/db/schemas/events";
 import { eq, sql } from "drizzle-orm";
@@ -53,58 +52,70 @@ export const eventRouter = createTRPCRouter({
       return event;
     }),
 
-  getAll: protectedProcedure
-    .input(EventsGetAllSchema)
-    .query(async ({ input, ctx }) => {
-      const who = input?.who ? input.who : "therapist";
-      const userId = ctx.user.id;
+  getAll: protectedProcedure.query(async ({ ctx }) => {
+    const userId = ctx.user.id;
 
-      if (who === "therapist") {
-        return await ctx.db.query.events.findMany({
-          where: (t, { eq }) => eq(t.therapistId, userId),
+    return await ctx.db.query.events.findMany({
+      where: (t, { eq }) => eq(t.therapistId, userId),
+      with: {
+        participants: {
           with: {
-            participants: {
+            patients: {
               with: {
-                patients: {
-                  with: {
-                    profile: {
-                      extras: (fields) => {
-                        return {
-                          name: sql<string>`concat(${fields.firstName}, ' ', ${fields.lastName})`.as(
-                            "full_name",
-                          ),
-                        };
-                      },
-                    },
+                profile: {
+                  extras: (fields) => {
+                    return {
+                      name: sql<string>`concat(${fields.firstName}, ' ', ${fields.lastName})`.as(
+                        "full_name",
+                      ),
+                    };
                   },
                 },
               },
             },
           },
-        });
-      } else {
-        return await ctx.db.query.events.findMany({
+        },
+      },
+    });
+  }),
+
+  getAllForPatients: protectedProcedure.query(async ({ ctx }) => {
+    const userId = ctx.user.id;
+
+    return await ctx.db.query.events.findMany({
+      with: {
+        therapist: {
           with: {
-            participants: {
-              where: (fields, { eq }) => eq(fields.id, userId),
+            profile: {
+              extras: (fields) => {
+                return {
+                  name: sql<string>`concat(${fields.firstName}, ' ', ${fields.lastName})`.as(
+                    "full_name",
+                  ),
+                };
+              },
+            },
+          },
+        },
+        participants: {
+          where: (fields, { eq }) => eq(fields.id, userId),
+          with: {
+            patients: {
               with: {
-                patients: {
-                  with: {
-                    profile: {
-                      extras: (fields) => {
-                        return {
-                          name: sql<string>`concat(${fields.firstName}, ' ', ${fields.lastName})`.as(
-                            "full_name",
-                          ),
-                        };
-                      },
-                    },
+                profile: {
+                  extras: (fields) => {
+                    return {
+                      name: sql<string>`concat(${fields.firstName}, ' ', ${fields.lastName})`.as(
+                        "full_name",
+                      ),
+                    };
                   },
                 },
               },
             },
           },
-        });
-      }
-    }),
+        },
+      },
+    });
+  }),
 });
