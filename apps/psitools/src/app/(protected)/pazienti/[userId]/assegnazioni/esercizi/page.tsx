@@ -2,6 +2,8 @@
 
 import { ExerciseCard } from '@/features/exercises/components/exercises-card';
 
+import { lessons } from '@/features/exercises/_lessions';
+
 export default function ExercisesPage() {
   return (
     <div className="h-full-safe relative grid grid-rows-[repeat(2,min-content)] overflow-auto p-4 pt-0">
@@ -20,7 +22,7 @@ export default function ExercisesPage() {
         <ExerciseCard
           id="psicoeducazione"
           title="Psicoeducazione"
-          count={22}
+          count={lessons.length}
           lastView="Mai"
           isAssigned={false}
           onToggleAssign={() => console.log('toggle psicoeducazione')}

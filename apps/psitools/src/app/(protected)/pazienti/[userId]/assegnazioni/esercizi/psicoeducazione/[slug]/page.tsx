@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { lessons } from './_lessions';
+import { lessons } from '@/features/exercises/_lessions';
 import Link from 'next/link';
 import { FileUp } from 'lucide-react';
 
