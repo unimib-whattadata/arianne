@@ -13,8 +13,8 @@ export default function SettingsPage() {
             variant="ghost"
             className="h-full w-full justify-between bg-white p-4 text-base"
           >
-            <p>Account</p>
-            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+            <p>Dati personali</p>
+            <ChevronRight className="text-muted-foreground h-4 w-4" />
           </Button>
         </Link>
         <Link href="/impostazioni/modifica-password">
@@ -22,8 +22,8 @@ export default function SettingsPage() {
             variant="ghost"
             className="h-full w-full justify-between bg-white p-4 text-base"
           >
-            <p>Modifica Password</p>
-            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+            <p>Account e Password</p>
+            <ChevronRight className="text-muted-foreground h-4 w-4" />
           </Button>
         </Link>
         <Link href="/impostazioni/notifiche">
@@ -32,7 +32,7 @@ export default function SettingsPage() {
             className="h-full w-full justify-between bg-white p-4 text-base"
           >
             <p>Preferenze e notifiche</p>
-            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+            <ChevronRight className="text-muted-foreground h-4 w-4" />
           </Button>
         </Link>
       </div>

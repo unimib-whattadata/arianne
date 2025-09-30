@@ -1,7 +1,7 @@
 'use client';
 
 import type { LucideProps } from 'lucide-react';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import {
   Card,
@@ -90,13 +90,12 @@ export default function SignupPage() {
 
     const error = await signup(formData);
 
-    setSending(false);
-
     if (error) {
       form.setError('root', {
         type: 'value',
         message: error,
       });
+      setSending(false);
       return;
     }
 
@@ -216,9 +215,11 @@ export default function SignupPage() {
                       <Button
                         type="submit"
                         className="w-full"
-                        hasSpinner
                         disabled={sending}
                       >
+                        {sending && (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        )}
                         Iscriviti
                       </Button>
                     </div>

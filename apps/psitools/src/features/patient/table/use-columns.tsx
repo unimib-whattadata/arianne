@@ -85,7 +85,7 @@ export const useColumns = () => {
       {
         id: 'tag',
         header: 'Tag',
-        accessorKey: 'medicalRecord.tags',
+        accessorKey: 'medicalRecords.tags',
         cell(props) {
           const { getValue } = props;
           const tags = getValue() as Tag[];
@@ -108,7 +108,7 @@ export const useColumns = () => {
 
           return <StateBadge state={state} />;
         },
-        accessorKey: 'medicalRecord.state',
+        accessorKey: 'medicalRecords.state',
       },
       {
         id: 'actions',

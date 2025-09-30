@@ -1,7 +1,7 @@
 'use client';
 
 import type { LucideProps } from 'lucide-react';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import {
   Card,
@@ -66,13 +66,12 @@ export default function LoginPage() {
 
     const error = await login(formData);
 
-    setSending(false);
-
     if (error) {
       form.setError('root', {
         type: 'value',
         message: error,
       });
+      setSending(false);
       return;
     }
 
@@ -181,8 +180,10 @@ export default function LoginPage() {
                         type="submit"
                         className="w-full"
                         disabled={sending}
-                        hasSpinner
                       >
+                        {sending && (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        )}
                         Accedi
                       </Button>
                     </div>
