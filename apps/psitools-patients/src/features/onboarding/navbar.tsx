@@ -1,9 +1,26 @@
+'use client';
 import { Logo } from '@/components/logo';
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
+import { redirect } from 'next/navigation';
+import { createClient } from '@arianne/supabase/client';
+import { env } from '@/env.mjs';
+
+const supabase = createClient();
 
 export const Navbar = () => {
+  const signOut = async () => {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      console.error('Error signing out:', error.message);
+      return;
+    }
+
+    redirect(env.NEXT_PUBLIC_LANDING_URL);
+  };
+
   return (
     <header className="fixed top-0 left-0 z-50 w-full p-4">
       <div className="bg-background border-secondary container mx-auto rounded-full border px-4 py-2">
@@ -24,7 +41,9 @@ export const Navbar = () => {
               <Logo className="text-primary h-6" />
             </Link>
 
-            <Button className="rounded-full">Esci</Button>
+            <Button className="rounded-full" onClick={() => signOut()}>
+              Esci
+            </Button>
           </div>
         </div>
       </div>
