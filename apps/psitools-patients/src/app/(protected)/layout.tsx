@@ -36,10 +36,10 @@ export default async function RootLayout({
     return redirect(env.NEXT_PUBLIC_THERAPIST_URL);
   }
 
-  const profile = await api.profiles.get();
-  if (!profile?.completedOnboarding) {
-    redirect('/onboarding');
-  }
+  // const profile = await api.profiles.get();
+  // if (!profile?.completedOnboarding) {
+  //   redirect('/onboarding');
+  // }
 
   return (
     <html lang="it">

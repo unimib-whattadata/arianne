@@ -288,7 +288,7 @@ importers:
         specifier: 'catalog:'
         version: 15.4.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       next-themes:
-        specifier: ^0.4.4
+        specifier: ^0.4.6
         version: 0.4.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       pdf-merger-js:
         specifier: ^5.1.2
@@ -312,7 +312,7 @@ importers:
         specifier: ^2.15.0
         version: 2.15.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       sonner:
-        specifier: ^2.0.1
+        specifier: ^2.0.6
         version: 2.0.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       superjson:
         specifier: 'catalog:'
@@ -547,7 +547,7 @@ importers:
         specifier: 'catalog:'
         version: 15.4.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       next-themes:
-        specifier: ^0.4.4
+        specifier: ^0.4.6
         version: 0.4.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       quill:
         specifier: ^2.0.3
@@ -574,7 +574,7 @@ importers:
         specifier: ^4.0.1
         version: 4.0.1
       sonner:
-        specifier: ^2.0.1
+        specifier: ^2.0.6
         version: 2.0.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       superjson:
         specifier: 'catalog:'
