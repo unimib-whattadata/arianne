@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-  "id": "303999ca-9d09-499d-8694-8df0f6720470",
-=======
   "id": "5899fd1e-6552-4321-accb-c1faf7c21d04",
->>>>>>> dev
   "prevId": "9c0ed8c3-d259-41a8-b2a0-3a8ff4685c0f",
   "version": "7",
   "dialect": "postgresql",
@@ -397,22 +393,14 @@
         },
         "created_at": {
           "name": "created_at",
-<<<<<<< HEAD
-          "type": "date",
-=======
           "type": "timestamp",
->>>>>>> dev
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
         },
         "updated_at": {
           "name": "updated_at",
-<<<<<<< HEAD
-          "type": "date",
-=======
           "type": "timestamp",
->>>>>>> dev
           "primaryKey": false,
           "notNull": true,
           "default": "now()"

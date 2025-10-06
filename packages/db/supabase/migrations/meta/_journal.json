@@ -82,20 +82,8 @@
     {
       "idx": 11,
       "version": "7",
-<<<<<<< HEAD
-      "when": 1759577378255,
-      "tag": "0011_add-personal-info",
-      "breakpoints": true
-    },
-    {
-      "idx": 12,
-      "version": "7",
-      "when": 1759578939509,
-      "tag": "0012_add-personal-info-fix",
-=======
       "when": 1759245761388,
       "tag": "0011_add_timestamp",
->>>>>>> dev
       "breakpoints": true
     }
   ]
