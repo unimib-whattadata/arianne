@@ -55,8 +55,14 @@ export const messages = createTable(
     senderType: messageSenderTypeEnum().notNull(),
     index: d.integer("index").notNull(),
     initials: d.text("initials").notNull(),
-    createdAt: d.date("created_at", { mode: "date" }).notNull().defaultNow(),
-    updatedAt: d.date("updated_at", { mode: "date" }).notNull().defaultNow(),
+    createdAt: d
+      .timestamp("created_at", { mode: "date" })
+      .notNull()
+      .defaultNow(),
+    updatedAt: d
+      .timestamp("updated_at", { mode: "date" })
+      .notNull()
+      .defaultNow(),
 
     senderId: d
       .uuid("sender")
