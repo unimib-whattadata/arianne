@@ -351,7 +351,7 @@ export default function Onboarding() {
               control={form.control}
               name="cv"
               rules={{ required: 'Il caricamento del CV è obbligatorio' }}
-              render={({ field: { onChange }, fieldState }) => (
+              render={({ field: { onChange, value }, fieldState }) => (
                 <FormItem className="mt-6 w-full">
                   <p className="text-slate-900">
                     Carica il tuo CV in formato PDF
@@ -361,8 +361,23 @@ export default function Onboarding() {
                       htmlFor="cv-upload"
                       className="bg-secondary-light hover:border-primary mt-2 flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-slate-300 transition-colors"
                     >
-                      <p className="text-slate-500">Carica qui i tuoi file</p>
-                      <CloudUpload className="mt-2 h-[40px] w-[40px] text-slate-400" />
+                      {value && value.length > 0 ? (
+                        <>
+                          <p className="font-medium text-slate-700">
+                            File caricato:
+                          </p>
+                          <p className="text-primary mt-1 text-sm">
+                            {value[0].name}
+                          </p>
+                        </>
+                      ) : (
+                        <>
+                          <p className="text-slate-500">
+                            Carica qui i tuoi file
+                          </p>
+                          <CloudUpload className="mt-2 h-[40px] w-[40px] text-slate-400" />
+                        </>
+                      )}
                       <Input
                         id="cv-upload"
                         type="file"
@@ -380,7 +395,6 @@ export default function Onboarding() {
                 </FormItem>
               )}
             />
-
             <p className="mt-8 text-slate-700">
               Per completare la candidatura è necessario il consenso al
               trattamento dei dati personali secondo i nostri Termini e
