@@ -26,6 +26,6 @@ export const medicalRecordsRouter = createTRPCRouter({
       return await ctx.db
         .update(medicalRecords)
         .set(input.data)
-        .where(eq(medicalRecords.id, input.where.patientId));
+        .where(eq(medicalRecords.id, input.where.id));
     }),
 });
