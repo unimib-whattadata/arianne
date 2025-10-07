@@ -19,23 +19,24 @@ export default function DrugsPage() {
   const [openSheet, setOpenSheet] = useState(false);
 
   const { data: assignments } = useQuery(
-    api.assignments.get.queryOptions(patient?.id, {
-      enabled: !!patient,
-      select: (data) =>
-        data
-          .filter((assignments) => assignments.type === 'drugs')
-          .map((assignment) => {
-            return {
-              id: assignment.id,
-              name: assignment.name,
-              createdAt: assignment.createdAt,
-              recurrence: assignment.recurrence,
-            };
-          }),
-    }),
+    api.assignments.get.queryOptions(
+      { where: { id: patient!.id } },
+      {
+        enabled: !!patient,
+        select: (data) =>
+          data
+            .filter((assignments) => assignments.type === 'drugs')
+            .map((assignment) => {
+              return {
+                id: assignment.id,
+                name: assignment.name,
+                createdAt: assignment.createdAt,
+                recurrence: assignment.recurrence,
+              };
+            }),
+      },
+    ),
   );
-
-  console.log('Assignments:', assignments);
 
   const { mutate: unassign } = useMutation(
     api.assignments.delete.mutationOptions({
@@ -53,7 +54,7 @@ export default function DrugsPage() {
       action: {
         label: 'Conferma',
         onClick: () => {
-          unassign(assignmentId);
+          unassign({ where: { id: assignmentId } });
         },
       },
       cancel: {
@@ -85,7 +86,7 @@ export default function DrugsPage() {
 
       {isLoading && <p>Caricamento...</p>}
       {!isLoading && assignments?.length === 0 && (
-        <p className="text-sm text-muted-foreground">Nessuna assegnazione</p>
+        <p className="text-muted-foreground text-sm">Nessuna assegnazione</p>
       )}
 
       {assignments?.map((assignment) => (
@@ -96,10 +97,10 @@ export default function DrugsPage() {
           <div className="flex items-center gap-4">
             <div>
               <h3 className="text-base font-semibold">{assignment.name}</h3>
-              <div className="space-y-1 text-sm text-muted-foreground">
+              <div className="text-muted-foreground space-y-1 text-sm">
                 <p>
                   Prima assunzione:{' '}
-                  <span className="font-medium text-primary">
+                  <span className="text-primary font-medium">
                     {assignment.createdAt
                       ? format(new Date(assignment.createdAt), 'dd MMMM yyyy', {
                           locale: it,
@@ -109,7 +110,7 @@ export default function DrugsPage() {
                 </p>
                 <p>
                   Ripetizione:{' '}
-                  <span className="font-medium text-primary">
+                  <span className="text-primary font-medium">
                     {recurrenceLabels[assignment.recurrence] || 'Nessuna'}
                   </span>
                 </p>

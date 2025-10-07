@@ -22,7 +22,7 @@ export default function DrivePage() {
 
   const { data: assignments, isLoading } = useQuery(
     api.assignments.get.queryOptions(
-      { where: { id: patient?.id } },
+      { where: { id: patient!.id } },
       {
         enabled: !!patient,
         select: (data) => {

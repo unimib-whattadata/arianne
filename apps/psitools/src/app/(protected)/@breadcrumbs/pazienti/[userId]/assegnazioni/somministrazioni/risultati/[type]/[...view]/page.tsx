@@ -17,7 +17,7 @@ export default async function BreadcrumbSlot({
   searchParams: Promise<{ comparison?: [string, string] }>;
 }) {
   const { userId, type, view } = await params;
-  const user = await api.profiles.get({ where: { id: userId } });
+  const user = await api.profiles.get({ id: userId });
 
   let ViewType = <></>;
   if (view[0] === 'administration') {
