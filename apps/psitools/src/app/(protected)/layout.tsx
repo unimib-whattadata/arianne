@@ -56,6 +56,12 @@ export default async function RootLayout({
     return redirect(env.NEXT_PUBLIC_PATIENT_URL);
   }
 
+  // If the user has not completed onboarding, redirect to onboarding
+  const profile = await api.profiles.get();
+  if (!profile?.completedOnboarding) {
+    redirect('/onboarding');
+  }
+
   return (
     <html lang="it" className={`${rubik.variable} ${poppins.variable}`}>
       <body>

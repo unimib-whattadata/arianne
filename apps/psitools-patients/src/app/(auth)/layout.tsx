@@ -1,9 +1,9 @@
-import type { Metadata } from 'next';
 import '@/styles/globals.css';
 
-import { Poppins, Rubik } from 'next/font/google';
 import { TRPCReactProvider } from '@/trpc/react';
 import { Toaster } from 'sonner';
+import { Poppins, Rubik } from 'next/font/google';
+import { cn } from '@/utils/cn';
 
 const rubik = Rubik({
   weight: ['500'],
@@ -17,12 +17,6 @@ const poppins = Poppins({
   variable: '--ff-poppins',
 });
 
-export const metadata: Metadata = {
-  title: 'Arianne',
-  description:
-    'Piattaforma per la gestione di studi di psicologia e psicoterapia',
-};
-
 // eslint-disable-next-line @typescript-eslint/require-await
 export default async function RootLayout({
   children,
@@ -30,7 +24,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="it" className={`${rubik.variable} ${poppins.variable}`}>
+    <html lang="it" className={cn('scroll-smooth', poppins.variable)}>
       <body>
         <TRPCReactProvider>
           {children}

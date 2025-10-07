@@ -20,6 +20,10 @@ export const patients = createTable(
       .unique()
       .references(() => profiles.id),
     therapistId: d.uuid("therapist_id").references(() => therapists.id),
+    personalInfoAdded: d
+      .boolean("personal_info_added")
+      .notNull()
+      .default(false),
 
     medicalRecordsId: d.uuid("medical_records_id").notNull(),
   }),
