@@ -2,6 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
+import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
 
@@ -42,8 +43,9 @@ export default function Food() {
 
   const dailyDiaries = React.useMemo(() => {
     if (!diaries || !date) return [];
-    const dateString = format(date, 'yyyy-M-d');
-    return diaries.filter((diary) => diary.date === dateString);
+    return diaries.filter((diary) => {
+      return diary.date.toDateString() === date.toDateString();
+    });
   }, [diaries, date]);
 
   const diaryDates = diaries?.map((diary) => new Date(diary.date));
@@ -59,8 +61,9 @@ export default function Food() {
   React.useEffect(() => {
     if (!date || selectedDiaryId) return;
 
-    const formatted = format(date, 'yyyy-M-d');
-    const diaryForSelectedDay = dailyDiaries.find((d) => d.date === formatted);
+    const diaryForSelectedDay = dailyDiaries.find(
+      (d) => d.date.toDateString() === date.toDateString(),
+    );
 
     if (diaryForSelectedDay) {
       setSelectedDiaryId(diaryForSelectedDay.id);
@@ -123,6 +126,7 @@ export default function Food() {
             mode="single"
             selected={date}
             onSelect={(newDate) => {
+              newDate?.setHours(0, 0, 0, 0);
               setDate(newDate);
               setSelectedDiaryId(undefined);
             }}
@@ -194,37 +198,56 @@ export default function Food() {
           data?.content &&
           typeof data.content === 'object' &&
           !Array.isArray(data.content) ? (
-            <Diarylayout
-              key={selectedDiaryId}
-              type="food"
-              compilationTime={format(new Date(data.updatedAt), 'HH:mm')}
-              content={
-                data.content as {
-                  timeConsumation: string;
-                  typeConsumation: string;
-                  momentDay: string;
-                  placeConsumption: string;
-                  place: string;
-                  company: string;
-                  companyPerson: string;
-                  activitycompany: string;
-                  whatActivitycompany: string;
-                  mealConsideration: string;
-                  excessiveQuantity: string;
-                  relevanceConsumption: string;
-                  bodilysensation: string;
-                  influenceConsumption: string;
-                  reasonInfluence: string;
-                  PostConsumerBehaviors: string;
-                  physicalActivity: string;
-                  PostConsumerEmotions: string;
-                  durationPhysicalActivity: string;
-                  typeActivityPhysics: string;
-                  intensity: number;
-                  note: string;
+            <>
+              <div className="sticky top-0 flex w-full items-center justify-between bg-white p-4">
+                <h2 className="text-space-gray text-[20px] font-semibold">
+                  Compilazione delle {format(new Date(data.updatedAt), 'HH:mm')}
+                </h2>
+                {data?.state ? (
+                  <span className="text-sm text-green-600">
+                    Diario Completo
+                  </span>
+                ) : (
+                  <Button size="sm" variant="outline" asChild>
+                    <Link
+                      href={`${pathname}/assegnazione/compilazione?id=${selectedDiaryId}`}
+                    >
+                      Riprendi compilazione
+                    </Link>
+                  </Button>
+                )}
+              </div>
+              <Diarylayout
+                key={selectedDiaryId}
+                type="food"
+                content={
+                  data.content as {
+                    timeConsumation: string;
+                    typeConsumation: string;
+                    momentDay: string;
+                    placeConsumption: string;
+                    place: string;
+                    company: string;
+                    companyPerson: string;
+                    activitycompany: string;
+                    whatActivitycompany: string;
+                    mealConsideration: string;
+                    excessiveQuantity: string;
+                    relevanceConsumption: string;
+                    bodilysensation: string;
+                    influenceConsumption: string;
+                    reasonInfluence: string;
+                    PostConsumerBehaviors: string;
+                    physicalActivity: string;
+                    PostConsumerEmotions: string;
+                    durationPhysicalActivity: string;
+                    typeActivityPhysics: string;
+                    intensity: number;
+                    note: string;
+                  }
                 }
-              }
-            />
+              />
+            </>
           ) : null}
         </div>
       </div>

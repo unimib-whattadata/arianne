@@ -3,29 +3,20 @@
 import type { diariesTypeEnum } from '@arianne/db/schema';
 import { useMutation } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
-import type { DeepPartial, FieldValues, useForm } from 'react-hook-form';
+import { useEffect, useRef } from 'react';
+import type { FieldValues, SubmitHandler } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
-import { Form } from '@/components/ui/form';
-import { useTRPCClient } from '@/trpc/react';
+import { useSteps } from '@/features/diaries/context/step-context';
+import { useTRPC } from '@/trpc/react';
 import { debounce } from '@/utils/debounce';
 
-interface FormLayoutProps<T extends FieldValues> {
+interface FormLayoutProps {
   children: React.ReactNode;
   type: (typeof diariesTypeEnum.enumValues)[number];
-  steps: number;
-  methods: ReturnType<typeof useForm<T>>;
-  defaultStep?: string;
-  diaryId?: string | null;
+  diaryId: string;
 }
 
 enum Title {
@@ -35,113 +26,50 @@ enum Title {
   sleep_evening = 'Diario del sonno (sera)',
 }
 
-interface StepContextType {
-  steps: number;
-  currentStep: number;
-  setCurrentStep: (value: number | ((value: number) => number)) => void;
-  direction: 1 | -1;
-  diaryId?: string | null;
-}
-
-export const StepsContext = createContext<StepContextType>(
-  {} as StepContextType,
-);
-
-export const useSteps = () => useContext(StepsContext);
-
-export function FormLayout<T extends FieldValues>(props: FormLayoutProps<T>) {
-  const client = useTRPCClient();
+export function FormLayout<T extends FieldValues>(props: FormLayoutProps) {
+  const api = useTRPC();
   const searchParams = useSearchParams();
+
+  const form = useFormContext<T>();
 
   const isInNewTab = searchParams.get('hideUI') === 'true';
 
-  const [diaryId, setDiaryId] = useState<string | undefined>(
-    props.diaryId as string | undefined,
+  const updateDiary = useMutation(
+    api.diaries.update.mutationOptions({
+      onSuccess: () => {
+        console.log('Diario aggiornato');
+      },
+      onError: (error) => {
+        console.error("C'è un errore", error);
+      },
+    }),
   );
 
-  useEffect(() => {
-    const fetchDiary = async () => {
-      if (props.diaryId) {
-        setDiaryId(props.diaryId);
-        return;
-      }
-
-      const diary = await client.diaries.find.query({ type: props.type });
-
-      if (diary) {
-        setDiaryId(diary.id);
-      } else {
-        const newDiary = await client.diaries.create.mutate({
-          type: props.type,
-          content: {},
-        });
-        setDiaryId(newDiary.id);
-      }
-    };
-
-    if (!diaryId) {
-      void fetchDiary();
-    }
-  }, [client, props.type, props.diaryId, diaryId]);
-
-  const autoSaveData = debounce(async (data: DeepPartial<T>) => {
-    if (diaryId) {
-      await client.diaries.update.mutate({ id: diaryId, content: data });
-    }
-  }, 3000);
-
-  const { watch, getValues } = props.methods;
+  const autoSaveData = debounce((data: T) => {
+    updateDiary.mutate({ id: props.diaryId, content: data });
+  }, 1000);
 
   useEffect(() => {
-    const subscription = watch((data) => {
-      if (!data) return;
-      void autoSaveData(data);
+    const { subscribe } = form;
+
+    const subscription = subscribe({
+      formState: {
+        values: true,
+      },
+      callback: (data) => {
+        if (!data) return;
+        void autoSaveData(data.values);
+      },
     });
 
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [watch, autoSaveData]);
+    return () => subscription();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const [direction, setDirection] = useState<1 | -1>(1);
-
-  const defaultStep = props.defaultStep ? +props.defaultStep : 1;
-  const [currentStep, _setCurrentStep] = useState(defaultStep);
-  const setCurrentStep = useCallback(
-    (value: number | ((value: number) => number)) => {
-      const currentStepState =
-        typeof value === 'function' ? value(currentStep) : value;
-
-      _setCurrentStep(currentStepState);
-
-      const expires = new Date();
-      expires.setHours(23, 59, 59, 0);
-      document.cookie = `${props.type}=${currentStepState}; path=/; expires=${expires.toUTCString()}`;
-    },
-    [currentStep, props.type],
-  );
-
-  const handleBack = () => {
-    if (currentStep === 1) return null;
-
-    setDirection(-1);
-
-    setCurrentStep((prev) => {
-      if (prev - 1 > 0) return prev - 1;
-      return prev;
-    });
-  };
-
-  const handleNext = () => {
-    setDirection(1);
-    setCurrentStep((prev) => {
-      if (prev + 1 <= props.steps) return prev + 1;
-      return prev;
-    });
-  };
+  const { currentStep, handleNext, handleBack, steps } = useSteps();
 
   const openInNewTab = () => {
-    if (!diaryId) return;
+    if (!props.diaryId) return;
 
     const currentUrl = window.location.href;
 
@@ -152,41 +80,26 @@ export function FormLayout<T extends FieldValues>(props: FormLayoutProps<T>) {
     window.open(newUrl.toString(), '_blank');
   };
 
-  const updateDiary = useMutation({
-    mutationFn: async () => {
-      if (diaryId) {
-        return await client.diaries.update.mutate({
-          id: diaryId,
-          content: getValues(),
-          state: true,
-        });
-      } else {
-        throw new Error('Errore: ID del diario non disponibile');
-      }
-    },
-    onSuccess: () => {
-      console.log('Diario completato');
-      setCurrentStep((prev) => prev + 1);
-    },
-    onError: (error) => {
-      console.error("C'è un errore", error);
-    },
-  });
+  const handleSave: SubmitHandler<T> = async (data) => {
+    await updateDiary.mutateAsync({
+      id: props.diaryId,
+      content: data,
+      state: true,
+    });
 
-  const handleSave = () => {
-    updateDiary.mutate();
+    handleNext();
   };
 
   const bar = useRef<HTMLDivElement>(null);
 
-  const isPenultimateStep = currentStep === props.steps - 1;
+  const isPenultimateStep = currentStep === steps - 1;
 
   return (
     <>
       <div className="flex items-center justify-between p-4">
         <div>
           {currentStep === 1 ? null : (
-            <Button onClick={handleBack} variant="ghost" className="px-0">
+            <Button onClick={handleBack} variant="outline">
               Indietro
             </Button>
           )}
@@ -194,16 +107,19 @@ export function FormLayout<T extends FieldValues>(props: FormLayoutProps<T>) {
 
         <div>
           {isPenultimateStep ? (
-            <Button onClick={handleSave} disabled={updateDiary.isPending}>
+            <Button
+              onClick={form.handleSubmit(handleSave)}
+              disabled={updateDiary.isPending}
+            >
               {updateDiary.isPending ? 'Salvando...' : 'Salva'}
             </Button>
-          ) : currentStep < props.steps - 1 ? (
+          ) : currentStep < steps - 1 ? (
             <div className="flex gap-2">
               {!isInNewTab && (
                 <Button
                   variant="outline"
                   onClick={openInNewTab}
-                  disabled={!diaryId}
+                  disabled={!props.diaryId}
                 >
                   Apri in una nuova scheda
                 </Button>
@@ -220,7 +136,9 @@ export function FormLayout<T extends FieldValues>(props: FormLayoutProps<T>) {
               <div className="flex items-center gap-2">
                 <div className="flex flex-col gap-2">
                   <h2 className="text-xs">Nuova Compilazione</h2>
-                  <h2 className="text-lg font-semibold">{Title[props.type]}</h2>
+                  <h2 className="text-lg font-semibold">
+                    {Title[String(props.type) as keyof typeof Title]}
+                  </h2>
                 </div>
               </div>
             </nav>
@@ -230,25 +148,15 @@ export function FormLayout<T extends FieldValues>(props: FormLayoutProps<T>) {
               className="bg-card relative mt-2 h-2 w-full rounded-full"
             >
               <div
-                style={{ width: `${(currentStep / props.steps) * 100}%` }}
+                style={{ width: `${(currentStep / steps) * 100}%` }}
                 suppressHydrationWarning
-                className="bg-forest-green-700 absolute top-0 left-0 h-full rounded-full transition-all"
+                className="bg-primary absolute top-0 left-0 h-full rounded-full transition-all"
               />
             </div>
           </div>
         </header>
 
-        <StepsContext.Provider
-          value={{
-            steps: props.steps,
-            currentStep,
-            setCurrentStep,
-            direction,
-            diaryId,
-          }}
-        >
-          <Form {...props.methods}>{props.children}</Form>
-        </StepsContext.Provider>
+        <div className="px-4">{props.children}</div>
       </section>
     </>
   );

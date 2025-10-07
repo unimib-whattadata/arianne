@@ -29,7 +29,7 @@ export default function Step3() {
               <FormControl>
                 <div className="flex flex-col gap-4">
                   <RadioGroup
-                    value={field.value ?? ''}
+                    value={field.value}
                     onValueChange={field.onChange}
                     className="flex flex-col gap-4"
                   >

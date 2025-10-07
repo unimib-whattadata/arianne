@@ -24,10 +24,13 @@ export const diaries = createTable(
   "diaries",
   (d) => ({
     id: d.uuid().primaryKey().notNull().defaultRandom(),
-    date: d.date("date").notNull(),
+    date: d.date("date", { mode: "date" }).notNull(),
     type: diariesTypeEnum(),
-    content: d.text("content").notNull(),
-    updatedAt: d.timestamp("updated_at").notNull().defaultNow(),
+    content: d.json("content").notNull(),
+    updatedAt: d
+      .timestamp("updated_at", { mode: "date" })
+      .notNull()
+      .defaultNow(),
     state: d.boolean("state").default(false),
 
     medicalRecordId: d

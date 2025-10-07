@@ -17,7 +17,6 @@ export default function Step1() {
 
   return (
     <div className="space-y-4">
-      {' '}
       <FormField
         control={control}
         name="nap"

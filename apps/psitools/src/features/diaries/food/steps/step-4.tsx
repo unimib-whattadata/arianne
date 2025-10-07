@@ -17,7 +17,6 @@ export default function Step3() {
 
   return (
     <div className="space-y-4">
-      {' '}
       <FormField
         control={control}
         name="activitycompany"
