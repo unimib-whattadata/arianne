@@ -2,6 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
+import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
 
@@ -14,6 +15,7 @@ import { useTRPC } from '@/trpc/react';
 export default function CognitiveBeahvioral() {
   const api = useTRPC();
   const { patient } = usePatient();
+
   const router = useRouter();
   const queryClient = useQueryClient();
   const pathname = usePathname();
@@ -26,7 +28,7 @@ export default function CognitiveBeahvioral() {
 
   const { data, refetch } = useQuery(
     api.diaries.find.queryOptions({
-      type: 'cognitive_beahvioral',
+      type: 'cognitive_behavioral',
       patientId: patient?.id,
       date: date,
       id: selectedDiaryId,
@@ -35,15 +37,17 @@ export default function CognitiveBeahvioral() {
 
   const { data: diaries } = useQuery(
     api.diaries.getAll.queryOptions({
-      type: 'cognitive_beahvioral',
+      type: 'cognitive_behavioral',
       patientId: patient?.id,
     }),
   );
 
   const dailyDiaries = React.useMemo(() => {
     if (!diaries || !date) return [];
-    const dateString = format(date, 'yyyy-M-d');
-    return diaries.filter((diary) => diary.date === dateString);
+
+    return diaries.filter((diary) => {
+      return diary.date.toDateString() === date.toDateString();
+    });
   }, [diaries, date]);
 
   const diaryDates = diaries?.map((diary) => new Date(diary.date));
@@ -59,8 +63,9 @@ export default function CognitiveBeahvioral() {
   React.useEffect(() => {
     if (!date || selectedDiaryId) return;
 
-    const formatted = format(date, 'yyyy-M-d');
-    const diaryForSelectedDay = dailyDiaries.find((d) => d.date === formatted);
+    const diaryForSelectedDay = dailyDiaries.find(
+      (d) => d.date.toDateString() === date.toDateString(),
+    );
 
     if (diaryForSelectedDay) {
       setSelectedDiaryId(diaryForSelectedDay.id);
@@ -77,12 +82,7 @@ export default function CognitiveBeahvioral() {
     api.diaries.create.mutationOptions({
       onSuccess: (data) => {
         queryClient
-          .invalidateQueries({
-            queryKey: api.diaries.getAll.queryKey({
-              type: 'cognitive_beahvioral',
-              patientId: patient?.id,
-            }),
-          })
+          .invalidateQueries(api.diaries.getAll.queryFilter())
           .catch((error) => {
             console.error('Error invalidating queries:', error);
           });
@@ -98,7 +98,7 @@ export default function CognitiveBeahvioral() {
 
   const handleCreateNewDiary = () => {
     createDiary.mutate({
-      type: 'cognitive_beahvioral',
+      type: 'cognitive_behavioral',
       patientId: patient?.id,
       content: {},
     });
@@ -125,6 +125,7 @@ export default function CognitiveBeahvioral() {
             mode="single"
             selected={date}
             onSelect={(newDate) => {
+              newDate?.setHours(0, 0, 0, 0);
               setDate(newDate);
               setSelectedDiaryId(undefined);
             }}
@@ -145,6 +146,7 @@ export default function CognitiveBeahvioral() {
               {dailyDiaries.length > 0 ? (
                 dailyDiaries.map((diary) => {
                   const lastUpdate = new Date(diary.updatedAt);
+
                   const timeString = format(lastUpdate, 'HH:mm');
 
                   return (
@@ -181,42 +183,55 @@ export default function CognitiveBeahvioral() {
           </div>
         </div>
         <div
-          className={`scrollbar-blue h-[70vh] overflow-y-auto rounded-[4px] bg-white ${
-            !data?.content ||
-            typeof data.content !== 'object' ||
-            Array.isArray(data.content) ||
-            !selectedDiaryId ||
-            dailyDiaries.length === 0
-              ? 'hidden'
-              : ''
+          className={`scrollbar-blue relative h-[70vh] overflow-y-auto rounded-[4px] bg-white ${
+            !data?.content || dailyDiaries.length === 0 ? 'hidden' : ''
           }`}
         >
           {dailyDiaries.length > 0 &&
           data?.content &&
           typeof data.content === 'object' &&
           !Array.isArray(data.content) ? (
-            <Diarylayout
-              key={selectedDiaryId}
-              type="cognitive_behavioral"
-              compilationTime={format(new Date(data.updatedAt), 'HH:mm')}
-              content={
-                data.content as {
-                  momentDay: string;
-                  description: string;
-                  place: string;
-                  company: string;
-                  companyPerson: string;
-                  context: string;
-                  unpleasant: string;
-                  bheavior: string;
-                  emotion: string;
-                  intensity: number;
-                  bodyFeeling: string;
-                  thought: string;
-                  note: string;
+            <>
+              <div className="sticky top-0 flex w-full items-center justify-between bg-white p-4">
+                <h2 className="text-space-gray text-[20px] font-semibold">
+                  Compilazione delle {format(new Date(data.updatedAt), 'HH:mm')}
+                </h2>
+                {data?.state ? (
+                  <span className="text-sm text-green-600">
+                    Diario Completo
+                  </span>
+                ) : (
+                  <Button size="sm" variant="outline" asChild>
+                    <Link
+                      href={`${pathname}/assegnazione/compilazione?id=${selectedDiaryId}`}
+                    >
+                      Riprendi compilazione
+                    </Link>
+                  </Button>
+                )}
+              </div>
+              <Diarylayout
+                key={selectedDiaryId}
+                type="cognitive_behavioral"
+                content={
+                  data.content as {
+                    momentDay: string;
+                    description: string;
+                    place: string;
+                    company: string;
+                    companyPerson: string;
+                    context: string;
+                    unpleasant: string;
+                    bheavior: string;
+                    emotion: string;
+                    intensity: number;
+                    bodyFeeling: string;
+                    thought: string;
+                    note: string;
+                  }
                 }
-              }
-            />
+              />
+            </>
           ) : null}
         </div>
       </div>

@@ -188,7 +188,7 @@ export const AssignmentsUpdateSchema = z.object({
 export const AssignmentsFindUniqueSchema = z
   .object({
     where: z.object({
-      id: z.string(),
+      id: z.string().optional(),
     }),
   })
   .optional();

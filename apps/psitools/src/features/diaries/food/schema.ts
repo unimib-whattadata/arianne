@@ -46,7 +46,7 @@ export const defaultValues = {
   physicalActivity: '',
   durationPhysicalActivity: '',
   typeActivityPhysics: '',
-  intensity: 0,
+  intensity: 5,
   note: '',
 };
 

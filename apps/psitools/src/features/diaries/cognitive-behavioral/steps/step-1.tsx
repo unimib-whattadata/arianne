@@ -21,7 +21,7 @@ export default function Step1() {
   ];
 
   return (
-    <div className="space-y-4">
+    <div>
       {' '}
       <FormField
         control={control}

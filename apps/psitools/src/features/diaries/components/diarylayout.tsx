@@ -3,7 +3,6 @@ import React from 'react';
 interface DiarylayoutProps {
   type: 'cognitive_behavioral' | 'food' | 'sleep_morning' | 'sleep_evening';
   content: Record<string, string | number | boolean>;
-  compilationTime: string;
 }
 
 const labelMappings: Record<string, Record<string, string>> = {
@@ -43,7 +42,7 @@ const labelMappings: Record<string, Record<string, string>> = {
     PostConsumerEmotions: 'Provato emozioni post consumo',
     durationPhysicalActivity: 'Durata attività fisica',
     typeActivityPhysics: 'Tipo di attività fisica',
-    intenisty: 'Intensità',
+    intensity: 'Intensità',
     note: 'Note',
   },
   sleep_evening: {
@@ -85,11 +84,7 @@ const labelMappings: Record<string, Record<string, string>> = {
   },
 };
 
-const Diarylayout: React.FC<DiarylayoutProps> = ({
-  type,
-  content,
-  compilationTime,
-}) => {
+const Diarylayout: React.FC<DiarylayoutProps> = ({ type, content }) => {
   const labels = labelMappings[type];
 
   const mainContent = Object.fromEntries(
@@ -97,24 +92,14 @@ const Diarylayout: React.FC<DiarylayoutProps> = ({
   );
 
   return (
-    <div className="w-full max-w-4xl px-4 pb-4">
-      <div className="fixed bg-white py-4">
-        <h2 className="text-[20px] font-semibold text-space-gray">
-          Compilazione delle {compilationTime}
-        </h2>
-      </div>
+    <div className="scrollbar-blue w-full px-4 pb-4">
+      {Object.entries(mainContent).map(([key, value]) =>
+        labels[key] && value ? (
+          <EntryField key={key} label={labels[key]} value={String(value)} />
+        ) : null,
+      )}
 
-      <div className="pt-16">
-        {Object.entries(mainContent).map(([key, value]) =>
-          labels[key] && value ? (
-            <EntryField key={key} label={labels[key]} value={String(value)} />
-          ) : null,
-        )}
-
-        {content.note && (
-          <EntryField label="Note" value={String(content.note)} />
-        )}
-      </div>
+      {content.note && <EntryField label="Note" value={String(content.note)} />}
     </div>
   );
 };

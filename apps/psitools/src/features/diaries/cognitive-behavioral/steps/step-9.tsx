@@ -17,7 +17,6 @@ export default function Step9() {
 
   return (
     <div className="space-y-4">
-      {' '}
       <FormField
         control={control}
         name="bodyEmotion"
@@ -29,7 +28,7 @@ export default function Step9() {
               </FormLabel>
               <FormControl>
                 <RadioGroup
-                  value={field.value ?? ''}
+                  value={field.value}
                   onValueChange={(value) => field.onChange(value)}
                   className="flex flex-col gap-4"
                 >

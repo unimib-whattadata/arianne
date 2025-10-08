@@ -7,9 +7,10 @@ import {
   FormLabel,
 } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
+import type { FormData } from '@/features/diaries/cognitive-behavioral/schema';
 
 export default function Step7() {
-  const { control } = useFormContext();
+  const { control } = useFormContext<FormData>();
 
   return (
     <div className="space-y-4">

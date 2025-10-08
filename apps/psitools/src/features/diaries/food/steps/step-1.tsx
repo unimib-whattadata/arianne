@@ -1,3 +1,5 @@
+'use client';
+
 import { useFormContext } from 'react-hook-form';
 
 import {
@@ -33,11 +35,7 @@ export default function Step1() {
                 l'hai effettuata?
               </FormLabel>
               <FormControl>
-                <Textarea
-                  value={field.value || ''}
-                  onChange={(e) => field.onChange(e.target.value)}
-                  placeholder="Scrivi qui il tuo testo"
-                />
+                <Textarea placeholder="Scrivi qui il tuo testo" {...field} />
               </FormControl>
             </div>
           </FormItem>
@@ -55,11 +53,7 @@ export default function Step1() {
                 accaduto?
               </FormLabel>
               <FormControl>
-                <RadioGroup
-                  value={field.value ?? ''}
-                  onValueChange={(value) => field.onChange(value)}
-                  className="flex flex-col gap-4"
-                >
+                <RadioGroup className="flex flex-col gap-4" {...field}>
                   {moments.map(({ label }) => (
                     <FormItem
                       key={label}

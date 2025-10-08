@@ -46,7 +46,7 @@ export const DiaryCard = (props: Props) => {
 
   const { data: assignments } = useQuery(
     api.assignments.get.queryOptions(
-      { where: { id: patient!.id } },
+      { where: { id: patient?.id } },
       {
         enabled: !!patient,
         select: (data) =>
@@ -106,7 +106,7 @@ export const DiaryCard = (props: Props) => {
       <div className="flex items-center justify-center gap-4">
         <Badge
           className={cn(
-            'bg-forest-green-700 flex h-8 w-8 items-center justify-center text-white',
+            'bg-primary flex h-8 w-8 items-center justify-center text-white',
             numOfDiaries !== 0 ? 'bg-primary' : 'bg-primary-300',
           )}
         >

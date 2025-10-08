@@ -27,11 +27,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { usePatient } from '@/hooks/use-patient';
 import { useTRPC } from '@/trpc/react';
 
-const formatDate = (dateString: string) => {
-  const [year, month, day] = dateString.split('-');
-  return `${day}/${month}/${year}`;
-};
-
 export default function Page() {
   const { patient } = usePatient();
   const router = useRouter();
@@ -74,12 +69,7 @@ export default function Page() {
     api.diaries.create.mutationOptions({
       onSuccess: (data) => {
         queryClient
-          .invalidateQueries({
-            queryKey: api.diaries.getAll.queryKey({
-              type: 'food',
-              patientId: patient?.id,
-            }),
-          })
+          .invalidateQueries(api.diaries.getAll.queryFilter())
           .catch((error) => {
             console.error('Error invalidating queries:', error);
           });
@@ -116,9 +106,7 @@ export default function Page() {
   const handleCreateNewDiary = () => {
     createDiary.mutate({
       type: 'food',
-
       patientId: patient?.id,
-
       content: {},
     });
   };
@@ -126,17 +114,14 @@ export default function Page() {
   const hasDiary = (date: Date) => {
     if (!allDiaries) return false;
 
-    const dateStr = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-    return allDiaries.some((diary) => diary.date === dateStr);
-  };
-
-  const getFormattedDateString = (date: Date) => {
-    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+    return allDiaries.some(
+      (diary) => diary.date.toDateString() === date.toDateString(),
+    );
   };
 
   const selectedDateDiaries = allDiaries
     ? allDiaries.filter(
-        (diary) => diary.date === getFormattedDateString(selectedDate),
+        (diary) => diary.date.toDateString() === selectedDate.toDateString(),
       )
     : [];
 
@@ -238,7 +223,8 @@ export default function Page() {
                     <CardContent className="pt-4">
                       <div className="space-y-2">
                         <p>
-                          <strong>Data:</strong> {formatDate(diary.date)}
+                          <strong>Data:</strong>{' '}
+                          {format(diary.date, 'dd/MM/yyyy')}
                         </p>
                         <p>
                           <strong>Ultimo aggiornamento:</strong>{' '}
@@ -298,7 +284,8 @@ export default function Page() {
                   <CardContent className="pt-4">
                     <div className="space-y-2">
                       <p>
-                        <strong>Data:</strong> {formatDate(diary.date)}
+                        <strong>Data:</strong>{' '}
+                        {format(diary.date, 'dd/MM/yyyy')}
                       </p>
                       <p>
                         <strong>Completato il:</strong>{' '}

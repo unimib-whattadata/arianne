@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { usePatient } from '@/hooks/use-patient';
 import { useTRPC } from '@/trpc/react';
+import { format } from 'date-fns';
 
 const fieldLabels: Record<string, string> = {
   nap: 'Hai fatto un pisolino?',
@@ -59,11 +60,6 @@ export default function ViewDiary() {
 
   const diary = allDiaries?.find((d) => d.id === diaryId);
 
-  const formatDate = (dateString: string) => {
-    const [year, month, day] = dateString.split('-');
-    return `${day}/${month}/${year}`;
-  };
-
   const handleBack = () => {
     router.push(`/pazienti/${userId}/diari/sonno-mattina/assegnazione`);
   };
@@ -98,35 +94,35 @@ export default function ViewDiary() {
   }
 
   interface DiaryContent {
-    nap: string;
-    napDuration: string;
-    tense: number;
-    exercise: string;
-    caffeine: string;
-    caffeineQuantity: string;
-    caffeineTime: string;
-    alcohol: string;
-    alcoholQuantity: string;
-    alcoholTime: string;
-    sleepMedications: string;
-    sleepMedicationsQuantity: string;
-    sleepMedicationsTime: string;
-    bedtime: string;
-    lightsOffTime: string;
-    sleepLatency: string;
-    wakeUpPlanned: string;
-    wakeUpTime: string;
-    finalNap: string;
-    outBed: string;
-    awakening: string;
-    nightawake: string;
-    timetoWake: string;
-    disturbe: number;
-    qualitySleep: number;
-    rest: number;
-    tired: number;
-    drowsiness: number;
-    note: string;
+    nap?: string;
+    napDuration?: string;
+    tense?: number;
+    exercise?: string;
+    caffeine?: string;
+    caffeineQuantity?: string;
+    caffeineTime?: string;
+    alcohol?: string;
+    alcoholQuantity?: string;
+    alcoholTime?: string;
+    sleepMedications?: string;
+    sleepMedicationsQuantity?: string;
+    sleepMedicationsTime?: string;
+    bedtime?: string;
+    lightsOffTime?: string;
+    sleepLatency?: string;
+    wakeUpPlanned?: string;
+    wakeUpTime?: string;
+    finalNap?: string;
+    outBed?: string;
+    awakening?: string;
+    nightawake?: string;
+    timetoWake?: string;
+    disturbe?: number;
+    qualitySleep?: number;
+    rest?: number;
+    tired?: number;
+    drowsiness?: number;
+    note?: string;
   }
 
   const content = diary.content as DiaryContent;
@@ -151,7 +147,7 @@ export default function ViewDiary() {
         </CardHeader>
         <CardContent className="pt-4">
           <p>
-            <strong>Data:</strong> {formatDate(diary.date)}
+            <strong>Data:</strong> {format(diary.date, 'dd/MM/yyyy')}
           </p>
           <p>
             <strong>Completato il:</strong>{' '}
