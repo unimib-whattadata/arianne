@@ -1,14 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
 import {
   Bell,
-  BetweenHorizontalStart,
+  BookCheck,
   BookHeart,
   Calendar1,
-  // CircleHelp,
-  FilePlus,
+  Folder,
   LayoutDashboard,
   MessageCircle,
+  NotebookPen,
   NotepadText,
+  Pill,
   Settings,
   UserRound,
 } from 'lucide-react';
@@ -118,12 +119,12 @@ export const usePatientMenu = ({
       {
         title: 'Cartella clinica',
         url: `/pazienti/${userId}/cartella-clinica`,
-        icon: LayoutDashboard,
+        icon: Folder,
       },
       {
         title: 'Assegnazioni',
         url: `/pazienti/${userId}/assegnazioni`,
-        icon: UserRound,
+        icon: BookCheck,
         isActive:
           active === 'assegnazioni' ||
           active === 'diari' ||
@@ -133,49 +134,28 @@ export const usePatientMenu = ({
           {
             title: 'Diari',
             url: `/diari`,
-            icon: UserRound,
+            icon: BookHeart,
             isActive: active === 'diari',
           },
           {
             title: 'Somministrazioni',
             url: `/somministrazioni`,
             isActive: active === 'somministrazioni',
-            icon: UserRound,
+            icon: NotepadText,
           },
           {
             title: 'Farmaci',
             url: `/farmaci`,
             isActive: active === 'farmaci',
-            icon: UserRound,
+            icon: Pill,
           },
         ],
       },
       {
         title: 'Note',
         url: `/pazienti/${userId}/note`,
-        icon: UserRound,
+        icon: NotebookPen,
         isActive: active === 'note',
-      },
-      {
-        title: 'Referti',
-        url: `/pazienti/${userId}/referti`,
-        icon: BookHeart,
-        isActive:
-          active === 'referti' || active === 'modelli' || active === 'builder',
-        items: [
-          {
-            title: 'Modelli',
-            url: `/modelli`,
-            icon: FilePlus,
-            isActive: active === 'modelli',
-          },
-          {
-            title: 'Builder',
-            url: `/builder/nuovo`,
-            icon: BetweenHorizontalStart,
-            isActive: active === 'builder',
-          },
-        ],
       },
     ];
   }, [userId, active]);
