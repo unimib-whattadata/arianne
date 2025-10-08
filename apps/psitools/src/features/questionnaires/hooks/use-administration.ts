@@ -6,16 +6,24 @@ import { useParams, useSearchParams } from 'next/navigation';
 
 import { useTRPC } from '@/trpc/react';
 import type { TView } from '@/types/view-types';
+import type { RouterOutputs } from '@arianne/api';
 
-interface TAdministration<FormValues> {
-  T: number;
+type TAdministration<FormValues> = Omit<
+  RouterOutputs['administrations']['findUnique'],
+  'records'
+> & {
   records: FormValues;
-  id: string;
-  patientId: string;
-  date: Date;
-  type: string;
-  medicalRecordId: string;
-}
+};
+
+// interface TAdministration<FormValues> {
+//   T: number;
+//   records: FormValues;
+//   id: string;
+//   patientId: string;
+//   date: Date;
+//   type: string;
+//   medicalRecordId: string;
+// }
 
 interface TAdministrationReturn<FormValues> {
   isLoading: boolean;
@@ -82,7 +90,7 @@ export function useAdministration<FormValues>(props?: {
   const searchParams = useSearchParams();
   const comparison = searchParams.getAll('comparison');
   const [_, id] = view;
-  const [tA, tB] = comparison ?? [];
+  const [tA, tB] = comparison;
 
   const api = useTRPC();
 
@@ -93,9 +101,8 @@ export function useAdministration<FormValues>(props?: {
         enabled: !!id && !isComparison,
         select: (data) => {
           return {
-            ...data.administration,
-            T: data.administration.T,
-            records: data.administration.records as FormValues,
+            ...data,
+            records: data.records as FormValues,
           };
         },
       },
@@ -116,11 +123,10 @@ export function useAdministration<FormValues>(props?: {
         },
       },
       {
-        enabled: !!comparison || !!tA || !!tB,
+        enabled: !!tA && !!tB,
         select: (data) => {
           return data.map((item) => ({
             ...item,
-            T: item.T,
             records: item.records as FormValues,
           }));
         },
@@ -133,7 +139,7 @@ export function useAdministration<FormValues>(props?: {
       {
         where: {
           id:
-            singleData!.medicalRecordId ?? comparisonData?.[0]!.medicalRecordId,
+            singleData?.medicalRecordId ?? comparisonData?.[0].medicalRecordId,
         },
         columns: {
           sex: true,

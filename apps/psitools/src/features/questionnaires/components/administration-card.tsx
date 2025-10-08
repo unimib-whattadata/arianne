@@ -1,6 +1,5 @@
 'use client';
 
-import type { Administration } from '@prisma/client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Info, Star } from 'lucide-react';
 import Link from 'next/link';
@@ -32,13 +31,16 @@ import { usePatient } from '@/hooks/use-patient';
 import { useTRPC } from '@/trpc/react';
 
 import { AdministrationResultsTable } from './table/table';
+import type { RouterOutputs } from '@arianne/api';
+
+type Administrations = RouterOutputs['administrations']['findMany'];
 
 export interface Props {
   administrationType: string;
   numOfAdministrations: number;
   lastAdministration: string;
   administrationId: (typeof available)[number];
-  administrations: Administration[];
+  administrations: Administrations;
   disorder: string;
   informations: string;
 }
@@ -96,15 +98,18 @@ export const AdministrationCard = (props: Props) => {
   };
 
   const { data: assignments } = useQuery(
-    api.assignments.get.queryOptions(patient?.id, {
-      enabled: !!patient,
-      select: (data) =>
-        data
-          .filter((assignments) => assignments.type === 'administration')
-          .map((assignment) => {
-            return { id: assignment.id, name: assignment.name };
-          }),
-    }),
+    api.assignments.get.queryOptions(
+      { where: { id: patient!.id } },
+      {
+        enabled: !!patient,
+        select: (data) =>
+          data
+            .filter((assignments) => assignments.type === 'administration')
+            .map((assignment) => {
+              return { id: assignment.id, name: assignment.name };
+            }),
+      },
+    ),
   );
 
   const { mutate: unassign } = useMutation(
@@ -132,7 +137,7 @@ export const AdministrationCard = (props: Props) => {
         action: {
           label: 'Conferma',
           onClick: () => {
-            unassign(assignment.id);
+            unassign({ where: { id: assignment.id } });
           },
         },
         cancel: {
@@ -188,7 +193,7 @@ export const AdministrationCard = (props: Props) => {
 
               <div className="flex flex-col">
                 <div className="flex items-center gap-2">
-                  <p className="font-h2 line-clamp-1 break-all pr-1 text-left text-base">
+                  <p className="font-h2 line-clamp-1 pr-1 text-left text-base break-all">
                     {administrationType}
                   </p>
                   <Tooltip>
@@ -203,7 +208,7 @@ export const AdministrationCard = (props: Props) => {
 
                 <p className="text-sm">
                   Ultima somministrazione:
-                  <span className="pl-2 text-primary">
+                  <span className="text-primary pl-2">
                     {lastAdministration}
                   </span>
                 </p>
@@ -218,7 +223,7 @@ export const AdministrationCard = (props: Props) => {
                 onClick={(e) => {
                   e.stopPropagation();
                 }}
-                className="h-8 w-10 border border-primary text-base text-primary hover:bg-primary/5 [&>svg]:data-[state=on]:fill-primary [&>svg]:data-[state=on]:stroke-white"
+                className="border-primary text-primary hover:bg-primary/5 [&>svg]:data-[state=on]:fill-primary h-8 w-10 border text-base [&>svg]:data-[state=on]:stroke-white"
                 asChild
               >
                 <Star className="h-5 w-5" />

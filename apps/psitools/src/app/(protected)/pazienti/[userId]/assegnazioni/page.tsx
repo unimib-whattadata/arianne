@@ -16,7 +16,7 @@ import { assignmentTypeEnum } from '@arianne/db/schema';
 
 type Assignments = RouterOutputs['assignments']['get'];
 
-export default function DrivePage() {
+export default function AssignmentsPage() {
   const { patient } = usePatient();
   const api = useTRPC();
 
