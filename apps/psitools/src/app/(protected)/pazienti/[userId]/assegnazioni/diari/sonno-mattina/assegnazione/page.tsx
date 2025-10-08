@@ -184,7 +184,7 @@ export default function Page() {
               onClick={() => handleDateSelect(day)}
               className={`flex flex-col items-center justify-center rounded-lg p-2 ${
                 isSameDay(selectedDate, day)
-                  ? 'bg-forest-green-700 text-primary-foreground'
+                  ? 'bg-primary text-primary-foreground'
                   : 'hover:bg-muted'
               }`}
             >
@@ -193,7 +193,7 @@ export default function Page() {
               </span>
               <span className="text-lg font-semibold">{format(day, 'd')}</span>
               {hasDiary(day) && (
-                <span className="bg-forest-green-400 mt-1 h-1 w-1 rounded-full"></span>
+                <span className="bg-primary mt-1 h-1 w-1 rounded-full"></span>
               )}
             </button>
           ))}

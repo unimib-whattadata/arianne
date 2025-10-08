@@ -34,19 +34,31 @@ export function FormLayout<T extends FieldValues>(props: FormLayoutProps) {
 
   const isInNewTab = searchParams.get('hideUI') === 'true';
 
-  const updateDiary = useMutation(
+  // Mutation separata per l'auto-save
+  const autoSaveMutation = useMutation(
     api.diaries.update.mutationOptions({
       onSuccess: () => {
-        console.log('Diario aggiornato');
+        console.log('Auto-save completato');
       },
       onError: (error) => {
-        console.error("C'è un errore", error);
+        console.error("Errore nell'auto-save", error);
+      },
+    }),
+  );
+
+  const finalSaveMutation = useMutation(
+    api.diaries.update.mutationOptions({
+      onSuccess: () => {
+        console.log('Diario salvato con successo');
+      },
+      onError: (error) => {
+        console.error('Errore nel salvataggio finale', error);
       },
     }),
   );
 
   const autoSaveData = debounce((data: T) => {
-    updateDiary.mutate({ id: props.diaryId, content: data });
+    autoSaveMutation.mutate({ id: props.diaryId, content: data });
   }, 1000);
 
   useEffect(() => {
@@ -81,7 +93,7 @@ export function FormLayout<T extends FieldValues>(props: FormLayoutProps) {
   };
 
   const handleSave: SubmitHandler<T> = async (data) => {
-    await updateDiary.mutateAsync({
+    await finalSaveMutation.mutateAsync({
       id: props.diaryId,
       content: data,
       state: true,
@@ -109,9 +121,9 @@ export function FormLayout<T extends FieldValues>(props: FormLayoutProps) {
           {isPenultimateStep ? (
             <Button
               onClick={form.handleSubmit(handleSave)}
-              disabled={updateDiary.isPending}
+              disabled={finalSaveMutation.isPending}
             >
-              {updateDiary.isPending ? 'Salvando...' : 'Salva'}
+              {finalSaveMutation.isPending ? 'Salvando...' : 'Salva'}
             </Button>
           ) : currentStep < steps - 1 ? (
             <div className="flex gap-2">

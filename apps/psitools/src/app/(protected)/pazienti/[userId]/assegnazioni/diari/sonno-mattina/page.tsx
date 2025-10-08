@@ -133,7 +133,7 @@ export default function SleepMorning() {
             modifiers={{ hasDiary: diaryDates || [] }}
             modifiersClassNames={{
               hasDiary:
-                'relative after:content-[""] after:absolute after:bottom-1 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:rounded-full after:bg-forest-green-300',
+                'relative after:content-[""] after:absolute after:bottom-1 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:rounded-full after:bg-primary',
             }}
           />
 

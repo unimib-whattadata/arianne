@@ -45,15 +45,18 @@ export const DiaryCard = (props: Props) => {
   const queryClient = useQueryClient();
 
   const { data: assignments } = useQuery(
-    api.assignments.get.queryOptions(patient?.id, {
-      enabled: !!patient,
-      select: (data) =>
-        data
-          .filter((assignments) => assignments.type === 'diary')
-          .map((assignment) => {
-            return { id: assignment.id, name: assignment.name };
-          }),
-    }),
+    api.assignments.get.queryOptions(
+      patient ? { where: { id: patient.id } } : undefined,
+      {
+        enabled: !!patient,
+        select: (data) =>
+          data
+            .filter((assignments) => assignments.type === 'diary')
+            .map((assignment) => {
+              return { id: assignment.id, name: assignment.name };
+            }),
+      },
+    ),
   );
 
   const { mutate: unassign } = useMutation(
@@ -81,7 +84,7 @@ export const DiaryCard = (props: Props) => {
         action: {
           label: 'Conferma',
           onClick: () => {
-            unassign(assignment.id);
+            unassign({ where: { id: assignment.id } });
           },
         },
         cancel: {
