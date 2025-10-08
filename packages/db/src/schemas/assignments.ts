@@ -68,8 +68,14 @@ export const assignments = createTable(
     createdAt: d.timestamp("created_at").defaultNow(),
     updatedAt: d.timestamp("updated_at").defaultNow(),
 
-    patientId: d.uuid("patient_id").references(() => patients.id),
-    therapistId: d.uuid("therapist_id").references(() => therapists.id),
+    patientId: d
+      .uuid("patient_id")
+      .references(() => patients.id)
+      .notNull(),
+    therapistId: d
+      .uuid("therapist_id")
+      .references(() => therapists.id)
+      .notNull(),
   }),
   (t) => [index("assignment_id").on(t.id)],
 ).enableRLS();
@@ -154,6 +160,13 @@ export const assignmentSchema = z.discriminatedUnion("recurrence", [
   DailyRecurrenceSchema,
   WeeklyRecurrenceSchema,
   MonthlyRecurrenceSchema,
+]);
+
+export const formAssignmentSchema = z.discriminatedUnion("recurrence", [
+  NoneRecurrenceSchema.omit({ patientId: true }),
+  DailyRecurrenceSchema.omit({ patientId: true }),
+  WeeklyRecurrenceSchema.omit({ patientId: true }),
+  MonthlyRecurrenceSchema.omit({ patientId: true }),
 ]);
 
 export const UpdateSchema = z.object({
