@@ -19,6 +19,8 @@ const Textarea = React.forwardRef<HTMLDivElement, TextareaProps>(
   ({ className, onChange, value, placeholder, disabled, ...props }, ref) => {
     const [isMounted, setIsMounted] = React.useState(false);
 
+    console.log({ value });
+
     const { quill, quillRef } = useQuill({
       modules: {
         toolbar: [
@@ -27,6 +29,7 @@ const Textarea = React.forwardRef<HTMLDivElement, TextareaProps>(
           [{ list: 'ordered' }, { list: 'bullet' }],
           ['clean'],
         ],
+        clipboard: {},
       },
       placeholder: placeholder || 'Scrivi qui il tuo testo',
     });
@@ -49,6 +52,12 @@ const Textarea = React.forwardRef<HTMLDivElement, TextareaProps>(
       if (quill) {
         quill.on('text-change', () => {
           if (onChange) {
+            const value = quill.root.innerHTML;
+            if (value === '<p><br></p>') {
+              onChange({ target: { value: '' } });
+              return;
+            }
+            // If the content is different, update the state
             onChange({ target: { value: quill.root.innerHTML } });
           }
         });
@@ -65,7 +74,7 @@ const Textarea = React.forwardRef<HTMLDivElement, TextareaProps>(
       return (
         <div
           className={cn(
-            'flex min-h-[60px] w-full rounded-md border border-input bg-transparent text-base placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
+            'border-input placeholder:text-muted-foreground focus-visible:ring-ring flex min-h-[60px] w-full rounded-md border bg-transparent text-base focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
             className,
           )}
         />
@@ -75,7 +84,7 @@ const Textarea = React.forwardRef<HTMLDivElement, TextareaProps>(
     return (
       <div
         className={cn(
-          'flex min-h-[60px] w-full rounded-md border border-input bg-transparent text-base placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
+          'border-input placeholder:text-muted-foreground focus-visible:ring-ring flex min-h-[60px] w-full rounded-md border bg-transparent text-base focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
           className,
         )}
       >

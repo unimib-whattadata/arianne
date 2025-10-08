@@ -26,9 +26,7 @@ const NextEventBanner = () => {
   const { user, isLoading } = useTherapist();
   const router = useRouter();
   const api = useTRPC();
-  const { data: patients } = useQuery(
-    api.therapists.getAllPatients.queryOptions(),
-  );
+
   const { data: events, isLoading: loadingEvents } = useQuery(
     api.events.getAll.queryOptions(),
   );
@@ -55,7 +53,7 @@ const NextEventBanner = () => {
       <Card className="h-full-safe w-full overflow-auto">
         <CardHeader className="sticky top-0 z-10 flex w-full flex-row items-center justify-between bg-white">
           <CardTitle className="text-base font-semibold">
-            Prossimi eventi{' '}
+            Prossimi eventi
           </CardTitle>
           <Link
             className="text-primary px-0 text-[14px] hover:underline"
@@ -119,24 +117,14 @@ const NextEventBanner = () => {
               ? event.startTime
               : '';
 
-          const patientsName =
-            patients
-              ?.filter((patient) => {
-                event.participants.find(
-                  (participant) => participant.id === patient.id,
-                );
-              })
-              .map((p) => p.profile.name) || [];
+          const patientsName = event.participants
+            .filter((p) => p.patientId)
+            .map((p) => p.patient.profile.name);
 
           const title =
             patientsName.length > 1
               ? `${event.name} (${patientsName.join(', ')})`
               : patientsName[0] || event.name;
-
-          const safeDescription = title
-            .replace(/<\/?[^>]+(>|$)/g, '')
-            .replace(/\n/g, ' ')
-            .trim();
 
           const showButton = Boolean(event.meetingLink);
 
@@ -153,15 +141,21 @@ const NextEventBanner = () => {
             >
               <CardHeader className="flex w-full flex-row items-center justify-between space-y-0 p-3">
                 <CardTitle className="text-base font-normal">{title}</CardTitle>
-                <Badge className="text-primary text-xs" variant="default">
+                <Badge className="text-primary px-0 text-xs" variant="default">
                   {time ? `${label}, ${time}` : label}
                 </Badge>
               </CardHeader>
-              <CardContent className="w-full px-3 pb-3">
-                <p
-                  className="mb-2 block truncate overflow-hidden text-xs text-ellipsis"
-                  dangerouslySetInnerHTML={{ __html: safeDescription }}
-                />
+              <CardContent
+                className={cn('w-full p-0 px-3', showButton && 'pb-3')}
+              >
+                {event.description && (
+                  <div
+                    className="mb-3 block truncate text-xs text-ellipsis"
+                    dangerouslySetInnerHTML={{
+                      __html: event.description,
+                    }}
+                  />
+                )}
                 {showButton && (
                   <Button
                     variant={index === 0 ? 'default' : 'outline'}
