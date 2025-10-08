@@ -33,7 +33,8 @@ const PatientsTable = () => {
     const pastEvents = events
       .filter(
         (e) =>
-          e.participants[0].id === patientId && new Date(e.date) < new Date(),
+          e.participants.some((p) => p.patientId === patientId) &&
+          new Date(e.date) < new Date(),
       )
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
