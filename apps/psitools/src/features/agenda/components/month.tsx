@@ -186,14 +186,9 @@ const Month: React.FC = () => {
     const lowerSearch = searchValue.toLowerCase();
 
     const results = eventList.filter((event) => {
-      const patientsName =
-        therapist.data
-          ?.filter((patient) => {
-            event.participants.find(
-              (participant) => participant.id === patient.id,
-            );
-          })
-          .map((p) => p.profile.name.toLowerCase()) || [];
+      const patientsName = event.participants.map((p) =>
+        p.patient.profile.name.toLowerCase(),
+      );
 
       return (
         event.name.toLowerCase().includes(lowerSearch) ||
@@ -1043,7 +1038,10 @@ const Month: React.FC = () => {
           isOpen={isModalOpen}
           onClose={closeModal}
           onSave={(event) => {
-            createEvent.mutate(event);
+            createEvent.mutate({
+              ...event,
+              participants: event.participants.map((p) => p.id),
+            });
             setIsEventDetailsOpen(false);
           }}
           selectedDate={selectedCell}

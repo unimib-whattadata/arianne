@@ -23,7 +23,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetTitle,
+} from '@/components/ui/sheet';
 import { Textarea } from '@/components/ui/textarea';
 import { generateMeetingLink } from '@/features/agenda/utils/generate-meeting-link';
 import { useTRPC } from '@/trpc/react';
@@ -58,8 +63,8 @@ const EventDetails: React.FC<EventViewProps> = ({
   isEditingModeTrigger,
 }) => {
   const [eventName, setEventName] = useState(event.name);
-  const [patient, setPatient] = useState(
-    event.participants[0]?.patientId || '',
+  const [participants, setParticipants] = useState(
+    event.participants.map((p) => p.patientId) ?? [],
   );
   const [eventDate, setEventDate] = useState(event.date);
   const [startTime, setStartTime] = useState(event.startTime);
@@ -78,8 +83,6 @@ const EventDetails: React.FC<EventViewProps> = ({
     string[]
   >([]);
 
-  const [selected, setSelected] = useState<string[]>([]);
-  const [_selectedString, setSelectedString] = useState<string>('');
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [repeat, setRepeat] = useState<RepeatType>('never');
 
@@ -101,7 +104,7 @@ const EventDetails: React.FC<EventViewProps> = ({
   useEffect(() => {
     if (event) {
       setEventName(event.name || '');
-      setPatient(event.participants[0]?.patientId || '');
+      setParticipants(event.participants.map((p) => p.patientId) ?? []);
       setMeetingLink(event.meetingLink || '');
       setLocation(event.location || '');
       setLabelColor(event.labelColor || defaultColors[0]);
@@ -117,26 +120,8 @@ const EventDetails: React.FC<EventViewProps> = ({
       setEventEndDate(event.endDate || new Date());
       setAdditionalParticipants(event.otherParticipants || []);
     }
-    if (event.participants[0]?.patientId) {
-      setSelected([event.participants[0]?.patientId]);
-    } else {
-      setSelected([]);
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [event]);
-
-  useEffect(() => {
-    if (event?.participants[0]?.patientId && therapist.data) {
-      const selectedPatient = therapist.data.find(
-        (p) => p.id === event.participants[0]?.patientId,
-      );
-      if (selectedPatient) {
-        setSelected([selectedPatient.id]);
-        setSelectedString(selectedPatient.profile?.name ?? '');
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [event?.participants[0]?.patientId, therapist.data]);
 
   const options = therapist.data?.map((patient) => {
     return { label: patient.profile?.name ?? '', value: patient.id ?? '' };
@@ -196,13 +181,13 @@ const EventDetails: React.FC<EventViewProps> = ({
 
     const eventData = {
       name: eventName,
-      patientId: patient || undefined,
+      participants: participants ?? [],
       date: eventDate,
-      meetingLink: meetingLink,
-      location: location,
+      meetingLink: meetingLink ?? undefined,
+      location: location ?? undefined,
       labelColor: labelColor,
-      startTime: startTime,
-      endTime: endTime,
+      startTime: startTime ?? undefined,
+      endTime: endTime ?? undefined,
       isAllDay: isAllDay,
       otherParticipants: [...additionalParticipants],
       recurring: repeat,
@@ -269,13 +254,6 @@ const EventDetails: React.FC<EventViewProps> = ({
   useEffect(() => {
     setIsEditingMode(isEditingModeTrigger);
   }, [isEditingModeTrigger]);
-
-  const patientName =
-    therapist.data
-      ?.filter((patient) => {
-        event.participants.find((participant) => participant.id === patient.id);
-      })
-      .map((p) => p.profile.name) || [];
 
   const [isEditingMode, setIsEditingMode] = useState(false);
 
@@ -378,20 +356,13 @@ const EventDetails: React.FC<EventViewProps> = ({
               <MultiSelect
                 id="state"
                 searchable={false}
-                defaultValue={selected}
-                value={selected}
+                defaultValue={participants}
+                value={participants}
                 onValueChange={(value) => {
                   if (value.length === 0) {
-                    return setSelected([]);
+                    return setParticipants([]);
                   }
-                  setSelected(value);
-                  const selectedPatient = options.find(
-                    (option) => option.value === value[0],
-                  );
-                  if (selectedPatient) {
-                    setPatient(selectedPatient.value);
-                    setSelectedString(selectedPatient.label);
-                  }
+                  setParticipants(value);
                 }}
                 options={options}
                 placeholder="Seleziona il paziente"
@@ -676,6 +647,9 @@ const EventDetails: React.FC<EventViewProps> = ({
           </>
         ) : (
           <>
+            <SheetDescription className="sr-only">
+              Dettagli e modifica dell'evento
+            </SheetDescription>
             <div className="sticky top-0 z-10 flex items-end justify-between bg-white py-4">
               <SheetTitle>{event.name}</SheetTitle>
             </div>
@@ -704,12 +678,16 @@ const EventDetails: React.FC<EventViewProps> = ({
               )}
             </div>
 
-            {event.participants[0] && (
+            {event.participants.length > 0 && (
               <div className="mb-4">
                 <label className="py-2 text-[14px] text-[#64748B]">
                   Paziente
                 </label>
-                <p>{patientName[0]}</p>
+                <p>
+                  {event.participants
+                    .map((p) => p.patient.profile.name)
+                    .join(', ')}
+                </p>
               </div>
             )}
 

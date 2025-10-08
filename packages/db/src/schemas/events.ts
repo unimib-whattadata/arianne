@@ -50,16 +50,17 @@ export const EventsCreateSchema = z.object({
   name: z.string().min(1).max(100),
   labelColor: z.string(),
   date: z.date(),
-  endDate: z.date().nullable(),
-  startTime: z.string().nullable(),
-  endTime: z.string().nullable(),
+  endDate: z.date().nullish(),
+  startTime: z.string().nullish(),
+  endTime: z.string().nullish(),
   isAllDay: z.boolean(),
-  description: z.string().nullable(),
-  location: z.string().nullable(),
-  meetingLink: z.string().nullable(),
-  notification: z.string().nullable(),
-  recurring: z.string().nullable(),
-  otherParticipants: z.string().array(),
+  description: z.string().nullish(),
+  location: z.string().nullish(),
+  meetingLink: z.string().nullish(),
+  notification: z.string().nullish(),
+  recurring: z.string().nullish(),
+  participants: z.array(z.string()).optional(),
+  otherParticipants: z.string().array().optional(),
 });
 
 export const EventsUpdateSchema = z.object({
@@ -76,6 +77,7 @@ export const EventsUpdateSchema = z.object({
   meetingLink: z.string().optional(),
   notification: z.string().optional(),
   recurring: z.string().optional(),
+  participants: z.array(z.string()).optional(),
   otherParticipants: z.string().array().optional(),
 });
 
@@ -100,7 +102,7 @@ export const participants = createTable(
 ).enableRLS();
 
 export const participantsRelation = relations(participants, ({ one }) => ({
-  patients: one(patients, {
+  patient: one(patients, {
     fields: [participants.patientId],
     references: [patients.id],
   }),
