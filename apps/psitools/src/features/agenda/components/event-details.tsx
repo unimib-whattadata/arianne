@@ -179,10 +179,19 @@ const EventDetails: React.FC<EventViewProps> = ({
       return;
     }
 
+    const eventDateCorrected = new Date(
+      eventDate.getTime() - eventDate.getTimezoneOffset() * 60 * 1000,
+    );
+
+    const eventEndDateCorrected = new Date(
+      eventEndDate.getTime() - eventEndDate.getTimezoneOffset() * 60 * 1000,
+    );
+
     const eventData = {
       name: eventName,
       participants: participants ?? [],
-      date: eventDate,
+      date: eventDateCorrected,
+      endDate: eventEndDateCorrected,
       meetingLink: meetingLink ?? undefined,
       location: location ?? undefined,
       labelColor: labelColor,
@@ -193,7 +202,6 @@ const EventDetails: React.FC<EventViewProps> = ({
       recurring: repeat,
       notification: notificationLabel,
       description: eventDescription,
-      endDate: eventEndDate,
     };
 
     if (event.id) {
