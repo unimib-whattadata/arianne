@@ -11,6 +11,7 @@ export interface CardOptionType {
   text: string;
   icon: React.ReactNode;
   route: string;
+  completed?: boolean;
 }
 
 interface CardOptionProps {

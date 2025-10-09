@@ -34,6 +34,7 @@ export const patientsPersonalRouter = createTRPCRouter({
   save: protectedProcedure
     .input(PersonalDataCreateSchema)
     .mutation(async ({ input, ctx }) => {
+      console.log("SAVE", ctx.user.id);
       const newPatientPersonalData = await ctx.db
         .insert(personalData)
         .values({

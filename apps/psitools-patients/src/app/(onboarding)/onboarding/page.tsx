@@ -1,46 +1,49 @@
-'use client';
-
 import { UserRound, Wallet, BookHeart, UserRoundSearch } from 'lucide-react';
 import { CardOption } from '@/features/onboarding/card';
 import type { CardOptionType } from '@/features//onboarding/card';
-
-const OPTIONS: CardOptionType[] = [
-  {
-    value: 'personal',
-    title: 'Dati anagrafici',
-    text: 'Inserisci i tuoi dati',
-    icon: <UserRound className="h-6 w-6" />,
-    route: '/personal',
-  },
-  {
-    value: 'questionnaire',
-    title: 'Rispondi al questionario ',
-    text: 'Qui puoi dirci di cosa hai bisogno ',
-
-    icon: <BookHeart className="h-6 w-6" />,
-    route: '/questionnaire',
-  },
-  {
-    value: 'match',
-    title: 'Seleziona il tuo terapeuta',
-    text: 'Scegli tra quelli proposti il più adatto per te ',
-
-    icon: <UserRoundSearch className="h-6 w-6" />,
-    route: '/match',
-  },
-  {
-    value: 'fiscal',
-    title: 'Imposta il metodo di pagamento',
-    text: 'Definisci i dati di fatturazione ',
-
-    icon: <Wallet className="h-6 w-6" />,
-    route: '/fiscal',
-  },
-];
+import { api } from '@/trpc/server';
 
 const COMPLETED = [''];
 
-export default function OnboardingPage() {
+export default async function OnboardingPage() {
+  const patient = await api.patients.get();
+
+  const OPTIONS: CardOptionType[] = [
+    {
+      value: 'personal',
+      title: 'Dati anagrafici',
+      text: 'Inserisci i tuoi dati',
+      icon: <UserRound className="h-6 w-6" />,
+      route: '/personal',
+      completed: patient?.personalInfoAdded ?? false,
+    },
+    {
+      value: 'questionnaire',
+      title: 'Rispondi al questionario ',
+      text: 'Qui puoi dirci di cosa hai bisogno ',
+
+      icon: <BookHeart className="h-6 w-6" />,
+      route: '/questionnaire',
+    },
+    {
+      value: 'match',
+      title: 'Seleziona il tuo terapeuta',
+      text: 'Scegli tra quelli proposti il più adatto per te ',
+
+      icon: <UserRoundSearch className="h-6 w-6" />,
+      route: '/match',
+    },
+    {
+      value: 'fiscal',
+      title: 'Imposta il metodo di pagamento',
+      text: 'Definisci i dati di fatturazione ',
+
+      icon: <Wallet className="h-6 w-6" />,
+      route: '/fiscal',
+    },
+  ];
+
+  console.log('PATIENT', patient);
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-10">
       <div className="mt-8 flex w-full flex-1 flex-col gap-4 p-4 pt-12 md:mt-0 md:p-10 md:pt-28">
@@ -58,7 +61,7 @@ export default function OnboardingPage() {
             <CardOption
               key={option.value}
               option={option}
-              completed={COMPLETED.includes(option.value)}
+              completed={option.completed} //{COMPLETED.includes(option.value)}
             />
           ))}
         </div>

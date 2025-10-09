@@ -18,8 +18,21 @@ import { getDefaultFormValues } from '@/app/(onboarding)/questionnaire/_lib/get-
 import FullSchema from '@/app/(onboarding)/questionnaire/_schema/therapy-form-schema';
 import CurvedProgressBar from '@/app/(onboarding)/questionnaire/_components/progressBar';
 import { toast } from 'sonner';
+import { useTRPC } from '@/trpc/react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export default function QuestionnairePage() {
+  const api = useTRPC();
+  const questionnaireOnboardingSave = useMutation(
+    api.questionnaireOnboardingRouter.save.mutationOptions({
+      onSuccess: (data) => {
+        console.log(data);
+      },
+      onError: () => {
+        console.log('ERROR');
+      },
+    }),
+  );
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [submittedData, setSubmittedData] = useState<z.infer<
     typeof FullSchema
@@ -30,9 +43,12 @@ export default function QuestionnairePage() {
     mode: 'onChange',
     defaultValues: getDefaultFormValues('individual'),
   });
-  console.log({ formValues: form.getValues() });
-  console.log({ currentStepIndex, flow: getStepFlow(form.getValues()) });
-  console.log({
+  console.log('FORM VALUES', { formValues: form.getValues() });
+  console.log('CURRENT STEP INDEX', {
+    currentStepIndex,
+    flow: getStepFlow(form.getValues()),
+  });
+  console.log('CURRENT STEP', {
     currentStepKey: getStepFlow(form.getValues())[currentStepIndex],
   });
 
@@ -55,6 +71,8 @@ export default function QuestionnairePage() {
         toast.error('Per favore seleziona una risposta prima di proseguire');
         return;
       }
+      console.log('SUBMITTED FORM VALUES', formValues, currentStepIndex);
+      questionnaireOnboardingSave.mutate(formValues);
     }
 
     setCurrentStepIndex((prev) =>
