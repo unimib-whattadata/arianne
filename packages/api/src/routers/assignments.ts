@@ -65,9 +65,11 @@ export const assignmentsRouter = createTRPCRouter({
   create: protectedProcedure
     .input(AssignmentsCreateSchema)
     .mutation(async ({ input, ctx }) => {
+      const therapistId = ctx.user.id;
+
       const assignment = await ctx.db
         .insert(assignments)
-        .values(input)
+        .values({ ...input, therapistId })
         .returning()
         .then((res) => res[0]!);
 

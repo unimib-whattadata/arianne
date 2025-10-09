@@ -68,6 +68,10 @@
       "cache": false,
       "interactive": true
     },
+    "db": {
+      "cache": false,
+      "interactive": true
+    },
     "db:studio": {
       "cache": false,
       "persistent": true

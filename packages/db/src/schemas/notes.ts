@@ -41,13 +41,13 @@ export const notesRelations = relations(notes, ({ one }) => ({
 
 export const NotesFindManySchema = z.object({
   where: z.object({
-    patientId: z.string().uuid(),
+    patientId: z.string().uuid().optional(),
   }),
 });
 
 export const NoteFindUniqueSchema = z.object({
   where: z.object({
-    id: z.string().uuid(),
+    id: z.string().uuid().optional(),
   }),
 });
 

@@ -105,7 +105,7 @@ export default function CartellaClinica() {
     }
 
     return await mutateAsync({
-      where: { patientId: patient?.id },
+      where: { id: patient?.medicalRecordsId },
       data: {
         ...data.medicalRecords,
       },

@@ -7,13 +7,23 @@ import { Card } from '@/components/ui/card';
 import { AdministrationCard } from '@/features/questionnaires/components/administration-card';
 import { useSearchBar } from '@/features/questionnaires/hooks/use-searchbar';
 import { usePatient } from '@/hooks/use-patient';
+import { useQuery } from '@tanstack/react-query';
+import { useTRPC } from '@/trpc/react';
 
 export default function AdministrationsPage() {
-  const { patient, isLoading } = usePatient();
+  const { patient } = usePatient();
   const { filteredAdministrationList, SearchBar } = useSearchBar();
 
+  const api = useTRPC();
+
+  const { data: administrations, isLoading } = useQuery(
+    api.administrations.findMany.queryOptions(
+      { where: { patientId: patient?.id } },
+      { enabled: !!patient },
+    ),
+  );
+
   if (isLoading || !patient) return null;
-  const administrations = patient.medicalRecords?.administrations;
 
   return (
     <div className="h-full-safe relative grid grid-rows-[repeat(2,min-content)] overflow-auto p-4 pt-0">

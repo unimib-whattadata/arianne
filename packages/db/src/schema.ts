@@ -13,6 +13,7 @@ export * from "./schemas/medical-records";
 export * from "./schemas/notes";
 export * from "./schemas/notifications";
 export * from "./schemas/patients";
+export * from "./schemas/patients-personal";
 export * from "./schemas/preferences";
 export * from "./schemas/profiles";
 export * from "./schemas/therapists";

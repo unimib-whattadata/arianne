@@ -14,7 +14,6 @@ export default async function BreadcrumbSlot({
   params: Promise<{ userId: string }>;
 }) {
   const { userId } = await params;
-
   const user = await api.profiles.get({ id: userId });
 
   return (

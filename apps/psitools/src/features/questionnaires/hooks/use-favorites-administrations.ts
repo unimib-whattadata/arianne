@@ -4,23 +4,35 @@ import { usePatient } from '@/hooks/use-patient';
 import { useTRPC } from '@/trpc/react';
 
 export const useFavoritesAdministrations = () => {
-  const { patient, isLoading: isPatientLoading } = usePatient();
+  const { patient } = usePatient();
 
   const api = useTRPC();
   const queryClient = useQueryClient();
 
   const { data: favorites, isLoading } = useQuery(
-    api.preferences.getByPatientId.queryOptions(
-      { patientId: patient!.id },
+    api.preferences.get.queryOptions(
       {
-        enabled: !!patient && !isPatientLoading,
-        select: (data) => data?.favoriteAdministrations,
+        key: 'favoritesAdministrations',
+        patientId: patient?.id,
+      },
+      {
+        enabled: !!patient,
+        select: (data) => {
+          const value = data?.value as {
+            patientId: string;
+            data: string[];
+          } | null;
+          return value?.data ?? [];
+        },
       },
     ),
   );
 
   const setFavoritesMutation = useMutation(
     api.preferences.set.mutationOptions({
+      onError: (error) => {
+        console.error('Error updating favorite administrations:', error);
+      },
       onSettled: async () => {
         await queryClient.invalidateQueries(api.preferences.get.queryFilter());
       },
@@ -29,10 +41,10 @@ export const useFavoritesAdministrations = () => {
 
   const setFavorites = (favorites: string[]) => {
     setFavoritesMutation.mutate({
-      type: 'patient',
-      patientId: patient.id,
-      values: {
-        favoriteAdministrations: favorites,
+      key: 'favoritesAdministrations',
+      value: {
+        patientId: patient!.id,
+        data: favorites,
       },
     });
   };

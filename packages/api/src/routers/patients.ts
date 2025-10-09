@@ -11,7 +11,7 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 export const patientsRouter = createTRPCRouter({
   get: protectedProcedure.query(async ({ ctx }) => {
     const patient = await ctx.db.query.patients.findFirst({
-      where: (t, { eq }) => eq(t.profileId, ctx.user.id),
+      where: (t, { eq }) => eq(t.profileId, ctx.user.profileId),
       with: {
         profile: {
           extras: (fields) => {

@@ -16,7 +16,7 @@ interface Props {
   diaryType:
     | 'sleep_morning'
     | 'sleep_evening'
-    | 'cognitive_beahvioral'
+    | 'cognitive_behavioral'
     | 'food';
   numOfDiaries: number;
   lastDiary: string;
@@ -33,7 +33,7 @@ export const DiaryCard = (props: Props) => {
   const [openSheet, setOpenSheet] = useState(false);
 
   const diaryTitles = {
-    cognitive_beahvioral: 'Diario cognitivo-comportamentale',
+    cognitive_behavioral: 'Diario cognitivo-comportamentale',
     food: 'Diario alimentare',
     sleep_morning: 'Diario del sonno mattina',
     sleep_evening: 'Diario sonno sera',
@@ -46,7 +46,7 @@ export const DiaryCard = (props: Props) => {
 
   const { data: assignments } = useQuery(
     api.assignments.get.queryOptions(
-      patient ? { where: { id: patient.id } } : undefined,
+      { where: { id: patient?.id } },
       {
         enabled: !!patient,
         select: (data) =>
@@ -107,7 +107,7 @@ export const DiaryCard = (props: Props) => {
         <Badge
           className={cn(
             'bg-primary flex h-8 w-8 items-center justify-center text-white',
-            numOfDiaries !== 0 ? 'bg-primary' : 'bg-primary-300',
+            numOfDiaries !== 0 ? 'bg-primary' : 'bg-primary-500',
           )}
         >
           <span className="font-normal">{numOfDiaries}</span>

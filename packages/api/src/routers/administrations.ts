@@ -30,7 +30,7 @@ export const administrationsRouter = createTRPCRouter({
         });
       }
 
-      return { administration };
+      return administration;
     }),
 
   findMany: protectedProcedure

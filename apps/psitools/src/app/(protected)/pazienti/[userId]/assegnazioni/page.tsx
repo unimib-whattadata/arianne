@@ -16,13 +16,13 @@ import { assignmentTypeEnum } from '@arianne/db/schema';
 
 type Assignments = RouterOutputs['assignments']['get'];
 
-export default function DrivePage() {
+export default function AssignmentsPage() {
   const { patient } = usePatient();
   const api = useTRPC();
 
   const { data: assignments, isLoading } = useQuery(
     api.assignments.get.queryOptions(
-      { where: { id: patient?.id } },
+      { where: { id: patient!.id } },
       {
         enabled: !!patient,
         select: (data) => {

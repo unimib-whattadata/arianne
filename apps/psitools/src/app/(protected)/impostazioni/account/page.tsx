@@ -47,6 +47,7 @@ const testTherapist: AccountFormValues = {
   firstName: 'Mario',
   lastName: 'Rossi',
   phone: '3331234567',
+  avatar: '',
   email: 'mario.rossi@example.com',
   dateOfBirth: new Date('1985-06-15'),
   placeOfBirth: 'Roma',
@@ -73,6 +74,7 @@ const testTherapist: AccountFormValues = {
   spokenLanguages: 'Italiano, Inglese',
   therapyApproaches: 'behavioral',
   areasOfCompetence: 'Ansia, depressione, disturbi relazionali',
+
   ageRange: 'adults',
   specialCategories: 'LGBTQ+',
   // certifications: undefined,

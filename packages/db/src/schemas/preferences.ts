@@ -5,50 +5,6 @@ import z from "zod";
 import { profiles } from "../schema";
 import { createTable } from "../table";
 
-const profilePreferencesValuesSchema = z.object({
-  notifications: z.object({
-    patientMessages: z.boolean().default(true),
-    assignmentCompleted: z.boolean().default(true),
-    eventModified: z.boolean().default(true),
-    eventCancelled: z.boolean().default(true),
-  }),
-});
-
-const patientsPreferencesValuesSchema = z.object({
-  favoriteAdministrations: z.array(z.string().uuid()).default([]),
-});
-
-export const preferenceValuesSchema = z.object({
-  ...profilePreferencesValuesSchema.shape,
-  patients: z.map(
-    z.string().uuid(),
-    z.object(patientsPreferencesValuesSchema.shape),
-  ),
-});
-export type PreferenceValues = z.infer<typeof preferenceValuesSchema>;
-
-export const preferenceValuesUpdateSchema = z.discriminatedUnion("type", [
-  z.object({
-    type: z.literal("patient"),
-    patientId: z.string().uuid(),
-    values: z.object(patientsPreferencesValuesSchema.partial().shape),
-  }),
-  z.object({
-    type: z.literal("profile"),
-    values: z.object(profilePreferencesValuesSchema.partial().shape),
-  }),
-]);
-
-export const defaultValues: PreferenceValues = {
-  notifications: {
-    patientMessages: true,
-    assignmentCompleted: true,
-    eventModified: true,
-    eventCancelled: true,
-  },
-  patients: new Map(),
-};
-
 export const preferences = createTable(
   "preferences",
   (d) => ({
@@ -57,12 +13,10 @@ export const preferences = createTable(
     profileId: d
       .uuid("profile_id")
       .notNull()
-      .references(() => profiles.id),
-    values: d
-      .jsonb()
-      .$type<PreferenceValues>()
-      .notNull()
-      .default(defaultValues),
+      .references(() => profiles.id, { onDelete: "cascade" }),
+
+    key: d.text().notNull(),
+    value: d.jsonb().notNull(),
   }),
   (t) => [index("preference_id").on(t.id)],
 ).enableRLS();
@@ -73,3 +27,44 @@ export const preferencesRelations = relations(preferences, ({ one }) => ({
     references: [profiles.id],
   }),
 }));
+
+export const getPreferencesSchema = z.discriminatedUnion("key", [
+  z.object({
+    key: z.literal("notifications"),
+  }),
+  z.object({
+    key: z.literal("notificationsForPatients"),
+  }),
+  z.object({
+    key: z.literal("favoritesAdministrations"),
+    patientId: z.string().uuid().optional(),
+  }),
+]);
+
+export const setPreferenceSchema = z.discriminatedUnion("key", [
+  z.object({
+    key: z.literal("notifications"),
+    value: z.object({
+      patientMessages: z.boolean().default(true),
+      assignmentCompleted: z.boolean().default(true),
+      eventModified: z.boolean().default(true),
+      eventCancelled: z.boolean().default(true),
+    }),
+  }),
+  z.object({
+    key: z.literal("notificationsForPatients"),
+    value: z.object({
+      appointment: z.boolean().default(true),
+      appointmentReminders: z.boolean().default(true),
+      newQuestionnaire: z.boolean().default(true),
+      questionnaireReminder: z.boolean().default(true),
+    }),
+  }),
+  z.object({
+    key: z.literal("favoritesAdministrations"),
+    value: z.object({
+      patientId: z.string().uuid(),
+      data: z.array(z.string()),
+    }),
+  }),
+]);

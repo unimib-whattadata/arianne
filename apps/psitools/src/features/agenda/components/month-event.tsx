@@ -1,6 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
-
-import { useTRPC } from '@/trpc/react';
 import type { RouterOutputs } from '@arianne/api';
 
 type Event = RouterOutputs['events']['getAll'][number];
@@ -26,16 +23,6 @@ const MonthEvent: React.FC<MonthEventProps> = ({
   dayPosition,
   ...event
 }) => {
-  const api = useTRPC();
-  const therapist = useQuery(api.therapists.getAllPatients.queryOptions());
-
-  const patientsName =
-    therapist.data
-      ?.filter((patient) => {
-        event.participants.find((participant) => participant.id === patient.id);
-      })
-      .map((p) => p.profile.name) || [];
-
   const styles = labelColorStyles[event.labelColor ?? ''] ?? {
     border: 'border-l-gray-300',
     text: 'text-gray-800',
@@ -79,7 +66,9 @@ const MonthEvent: React.FC<MonthEventProps> = ({
             </p>
           )}
           <h2 className="w-full truncate text-xs text-[#64748b]">
-            {event.participants[0] ? patientsName.join(', ') : event.name}
+            {event.participants.length > 0
+              ? event.participants.map((p) => p.patient.profile.name).join(', ')
+              : event.name}
           </h2>
         </div>
       )}

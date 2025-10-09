@@ -27,17 +27,20 @@ import type { NoteCreate } from '@arianne/db/schema';
 import { NoteCreateSchema } from '@arianne/db/schema';
 
 export default function NuovaNotaPage() {
+  const { patient } = usePatient();
+
   const form = useForm<NoteCreate>({
     resolver: zodResolver(NoteCreateSchema),
     defaultValues: {
       title: '',
       content: '',
+      patientId: patient?.id,
+      pinned: false,
     },
   });
   const router = useRouter();
   const api = useTRPC();
   const queryClient = useQueryClient();
-  const { patient } = usePatient();
 
   const { mutateAsync: createNote } = useMutation(
     api.notes.create.mutationOptions({
