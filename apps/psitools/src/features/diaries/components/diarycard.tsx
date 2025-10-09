@@ -107,7 +107,7 @@ export const DiaryCard = (props: Props) => {
         <Badge
           className={cn(
             'bg-primary flex h-8 w-8 items-center justify-center text-white',
-            numOfDiaries !== 0 ? 'bg-primary' : 'bg-primary-300',
+            numOfDiaries !== 0 ? 'bg-primary' : 'bg-primary-500',
           )}
         >
           <span className="font-normal">{numOfDiaries}</span>
