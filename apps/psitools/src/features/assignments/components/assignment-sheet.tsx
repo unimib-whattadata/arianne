@@ -5,7 +5,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { Calendar1Icon, Check, ChevronDown } from 'lucide-react';
-import { useParams } from 'next/navigation';
 import React from 'react';
 import type {
   SubmitErrorHandler,
@@ -70,7 +69,7 @@ import type {
   MonthlyRecurrence,
   assignmentTypeEnum,
 } from '@arianne/db/schema';
-import { assignmentSchema } from '@arianne/db/schema';
+import { formAssignmentSchema } from '@arianne/db/schema';
 import { $Enums } from '@arianne/db/enums';
 
 type Assignment = RouterOutputs['assignments']['get'][number];
@@ -101,7 +100,7 @@ const getSheetTitle = (assignment?: Partial<Assignment>) => {
   return 'Assegnazione nuovo farmaco';
 };
 
-type AssignmentForm = z.infer<typeof assignmentSchema>;
+type AssignmentForm = z.infer<typeof formAssignmentSchema>;
 
 const RecurrenceConfig = ({
   recurrence,
@@ -234,7 +233,7 @@ export const AssignmentSheet = React.forwardRef<
 >(({ assignment, label, sheetProps, ...props }, ref) => {
   const api = useTRPC();
   const queryClient = useQueryClient();
-  const { userId } = useParams<{ userId: string }>();
+  const { patient } = usePatient();
 
   const [open, setOpen] = React.useState(false);
 
@@ -313,7 +312,7 @@ export const AssignmentSheet = React.forwardRef<
   };
 
   const form = useForm<AssignmentForm>({
-    resolver: zodResolver(assignmentSchema),
+    resolver: zodResolver(formAssignmentSchema),
     defaultValues: getDefaultValues(),
   });
 
@@ -387,7 +386,9 @@ export const AssignmentSheet = React.forwardRef<
   const onSubmit: SubmitHandler<AssignmentForm> = async (data) => {
     let mutateObj: AssignmentForm;
 
-    const patientId = assignment?.patientId ?? userId;
+    const patientId = patient?.id;
+
+    if (!patientId) return;
 
     switch (data.recurrence) {
       case $Enums.AssignmentRecurrence.none:
@@ -401,7 +402,6 @@ export const AssignmentSheet = React.forwardRef<
             weekdays: data.recurrenceConfig.weekdays ?? [],
             dayOfMonth: data.recurrenceConfig.dayOfMonth ?? [],
           },
-          patientId,
         };
         break;
       case $Enums.AssignmentRecurrence.weekly:
@@ -411,7 +411,6 @@ export const AssignmentSheet = React.forwardRef<
           type: data.type,
           date: data.date,
           recurrenceConfig: { weekdays: data.recurrenceConfig.weekdays ?? [] },
-          patientId,
         };
         break;
       case $Enums.AssignmentRecurrence.monthly:
@@ -423,7 +422,6 @@ export const AssignmentSheet = React.forwardRef<
           recurrenceConfig: {
             dayOfMonth: data.recurrenceConfig.dayOfMonth ?? [],
           },
-          patientId,
         };
         break;
       default:
@@ -435,13 +433,13 @@ export const AssignmentSheet = React.forwardRef<
         where: {
           id: assignment.id,
         },
-        data: { ...mutateObj, patientId: assignment?.patientId ?? userId },
+        data: { ...mutateObj, patientId },
       });
       return;
     } else {
       await create({
         ...mutateObj,
-        patientId: assignment?.patientId ?? userId,
+        patientId,
       });
     }
   };

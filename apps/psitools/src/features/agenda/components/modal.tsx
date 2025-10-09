@@ -23,7 +23,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetTitle,
+} from '@/components/ui/sheet';
 import { Textarea } from '@/components/ui/textarea';
 import { generateMeetingLink } from '@/features/agenda/utils/generate-meeting-link';
 import { useTRPC } from '@/trpc/react';
@@ -80,7 +85,7 @@ const Modal: React.FC<ModalProps> = ({
 }) => {
   const [eventName, setEventName] = useState('');
   const [eventDescription, setEventDescription] = useState('');
-  const [patient, setPatient] = useState('');
+  const [participants, setParticipants] = useState<string[]>([]);
   const [meetingLink, setMeetingLink] = useState<string | null>('');
   const [location, setLocation] = useState('');
   const [labelColor, setLabelColor] = useState('');
@@ -113,7 +118,6 @@ const Modal: React.FC<ModalProps> = ({
   const [notificationLabel, setNotificationLabel] = useState<
     'no' | 'sameDay' | 'oneDayBefore' | 'twoDaysBefore'
   >();
-  const [selected, setSelected] = useState<string[]>([]);
 
   const api = useTRPC();
   const queryClient = useQueryClient();
@@ -142,7 +146,7 @@ const Modal: React.FC<ModalProps> = ({
   const resetModalFields = () => {
     setEventName('');
     setEventDescription('');
-    setPatient('');
+    setParticipants([]);
     setEventDate(selectedDate || new Date());
     setEventEndDate(selectedDate || new Date());
     setMeetingLink('');
@@ -153,7 +157,6 @@ const Modal: React.FC<ModalProps> = ({
     );
     setIsAllDay(false);
     setLabelColor(defaultColors[0]);
-    setSelected([]);
     setSelectedString('');
     setRepeat('never');
     setNotificationLabel('no');
@@ -200,12 +203,19 @@ const Modal: React.FC<ModalProps> = ({
       return;
     }
 
+    const eventDateCorrected = new Date(
+      eventDate.getTime() - eventDate.getTimezoneOffset() * 60 * 1000,
+    );
+
+    const eventEndDateCorrected = new Date(
+      eventEndDate.getTime() - eventEndDate.getTimezoneOffset() * 60 * 1000,
+    );
+
     createEvent.mutate(
       {
         name: eventName,
-        patientId: patient || undefined,
-        date: eventDate,
-        endDate: eventEndDate,
+        date: eventDateCorrected,
+        endDate: eventEndDateCorrected,
         meetingLink,
         location,
         startTime: currentStartTime ?? '08:00',
@@ -213,9 +223,10 @@ const Modal: React.FC<ModalProps> = ({
         isAllDay,
         notification: notificationLabel,
         labelColor: labelColor || '#ffffff',
-        otherPartecipants: [...additionalParticipants],
+        otherParticipants: [...additionalParticipants],
         description: eventDescription,
         recurring: repeat,
+        participants,
       },
 
       {
@@ -234,6 +245,9 @@ const Modal: React.FC<ModalProps> = ({
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose} modal={false}>
+      <SheetDescription className="sr-only">
+        Aggiungi un nuovo evento al tuo calendario
+      </SheetDescription>
       <SheetContent className="overflow-y-auto py-0">
         <div className="sticky top-0 z-10 flex items-end justify-between bg-white py-4">
           <SheetTitle>Nuovo Evento</SheetTitle>
@@ -294,19 +308,12 @@ const Modal: React.FC<ModalProps> = ({
             id="state"
             searchable={false}
             defaultValue={''}
-            value={selected}
+            value={participants}
             onValueChange={(value) => {
               if (value.length === 0) {
-                return setSelected([]);
+                return setParticipants([]);
               }
-              setSelected(value);
-              const selectedPatient = options.find(
-                (option) => option.value === value[0],
-              );
-              if (selectedPatient) {
-                setPatient(selectedPatient.value);
-                setSelectedString(selectedPatient.label);
-              }
+              setParticipants(value);
             }}
             options={options}
             placeholder="Seleziona il paziente"

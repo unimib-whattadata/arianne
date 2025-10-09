@@ -27,11 +27,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { usePatient } from '@/hooks/use-patient';
 import { useTRPC } from '@/trpc/react';
 
-const formatDate = (dateString: string) => {
-  const [year, month, day] = dateString.split('-');
-  return `${day}/${month}/${year}`;
-};
-
 export default function Page() {
   const { patient } = usePatient();
   const router = useRouter();
@@ -126,17 +121,14 @@ export default function Page() {
   const hasDiary = (date: Date) => {
     if (!allDiaries) return false;
 
-    const dateStr = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-    return allDiaries.some((diary) => diary.date === dateStr);
-  };
-
-  const getFormattedDateString = (date: Date) => {
-    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+    return allDiaries.some(
+      (diary) => diary.date.toDateString() === date.toDateString(),
+    );
   };
 
   const selectedDateDiaries = allDiaries
     ? allDiaries.filter(
-        (diary) => diary.date === getFormattedDateString(selectedDate),
+        (diary) => diary.date.toDateString() === selectedDate.toDateString(),
       )
     : [];
 
@@ -192,7 +184,7 @@ export default function Page() {
               onClick={() => handleDateSelect(day)}
               className={`flex flex-col items-center justify-center rounded-lg p-2 ${
                 isSameDay(selectedDate, day)
-                  ? 'bg-forest-green-700 text-primary-foreground'
+                  ? 'bg-primary text-primary-foreground'
                   : 'hover:bg-muted'
               }`}
             >
@@ -201,7 +193,7 @@ export default function Page() {
               </span>
               <span className="text-lg font-semibold">{format(day, 'd')}</span>
               {hasDiary(day) && (
-                <span className="bg-forest-green-400 mt-1 h-1 w-1 rounded-full"></span>
+                <span className="bg-primary mt-1 h-1 w-1 rounded-full"></span>
               )}
             </button>
           ))}
@@ -238,7 +230,8 @@ export default function Page() {
                     <CardContent className="pt-4">
                       <div className="space-y-2">
                         <p>
-                          <strong>Data:</strong> {formatDate(diary.date)}
+                          <strong>Data:</strong>{' '}
+                          {format(diary.date, 'dd/MM/yyyy')}
                         </p>
                         <p>
                           <strong>Ultimo aggiornamento:</strong>{' '}
@@ -298,7 +291,8 @@ export default function Page() {
                   <CardContent className="pt-4">
                     <div className="space-y-2">
                       <p>
-                        <strong>Data:</strong> {formatDate(diary.date)}
+                        <strong>Data:</strong>{' '}
+                        {format(diary.date, 'dd/MM/yyyy')}
                       </p>
                       <p>
                         <strong>Completato il:</strong>{' '}

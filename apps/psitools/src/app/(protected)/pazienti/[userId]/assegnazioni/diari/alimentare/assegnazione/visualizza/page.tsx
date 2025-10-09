@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { usePatient } from '@/hooks/use-patient';
 import { useTRPC } from '@/trpc/react';
+import { format } from 'date-fns';
 
 const fieldLabels: Record<string, string> = {
   timeConsumation: 'Tempo di consumo',
@@ -51,11 +52,6 @@ export default function ViewDiary() {
   );
 
   const diary = allDiaries?.find((d) => d.id === diaryId);
-
-  const formatDate = (dateString: string) => {
-    const [year, month, day] = dateString.split('-');
-    return `${day}/${month}/${year}`;
-  };
 
   const handleBack = () => {
     router.push(`/pazienti/${userId}/diari/alimentare/assegnazione`);
@@ -137,7 +133,7 @@ export default function ViewDiary() {
         </CardHeader>
         <CardContent className="pt-4">
           <p>
-            <strong>Data:</strong> {formatDate(diary.date)}
+            <strong>Data:</strong> {format(diary.date, 'dd/MM/yyyy')}
           </p>
           <p>
             <strong>Completato il:</strong>{' '}

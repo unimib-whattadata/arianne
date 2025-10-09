@@ -36,7 +36,7 @@ export const therapistsRouter = createTRPCRouter({
 
   findUnique: protectedProcedure.query(async ({ ctx }) => {
     const therapist = await ctx.db.query.therapists.findFirst({
-      where: (t, { eq }) => eq(t.profileId, ctx.user.id),
+      where: (t, { eq }) => eq(t.profileId, ctx.user.profileId),
       with: {
         profile: {
           extras: (fields) => {
@@ -90,7 +90,7 @@ export const therapistsRouter = createTRPCRouter({
     .input(z.object({ patientId: z.string() }))
     .mutation(async ({ input, ctx }) => {
       const therapist = await ctx.db.query.therapists.findFirst({
-        where: (t, { eq }) => eq(t.profileId, ctx.user.id),
+        where: (t, { eq }) => eq(t.profileId, ctx.user.profileId),
         columns: {
           recentPatients: true,
         },

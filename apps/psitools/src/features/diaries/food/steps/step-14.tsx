@@ -19,7 +19,6 @@ export default function Step14() {
   return (
     <div className="flex h-full flex-col">
       <div className="space-y-4">
-        {' '}
         <FormField
           control={control}
           name="note"

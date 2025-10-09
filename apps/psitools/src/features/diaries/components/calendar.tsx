@@ -35,8 +35,8 @@ function Calendar({
     return (
       <div className="flex items-center justify-between">
         <div className="flex gap-1 text-lg font-bold">
-          <span className="text-[24px] capitalize text-[#2C3246]">{month}</span>
-          <span className="text-[24px] text-forest-green-700">{year}</span>
+          <span className="text-[24px] text-[#2C3246] capitalize">{month}</span>
+          <span className="text-primary text-[24px]">{year}</span>
         </div>
         <div className="flex items-center">
           <button onClick={prevMonth} className="h-7 w-7 text-[#2C3246]">
@@ -74,14 +74,14 @@ function Calendar({
         row: 'flex w-full mt-2',
         cell: 'text-center text-sm p-0 my-auto relative focus-within:relative focus-within:z-20',
         day: 'h-9 w-9 p-0 font-normal aria-selected:opacity-100',
-        day_selected: 'bg-forest-green-700 text-[#ffff] rounded-full',
+        day_selected: 'bg-primary text-[#ffff] rounded-full',
         day_today: 'bg-accent text-accent-foreground',
         day_outside: 'text-muted-foreground opacity-50',
         day_disabled: 'text-muted-foreground opacity-50',
         day_range_start: 'aria-selected:bg-accent aria-selected:rounded-r-none',
         day_range_end: 'aria-selected:bg-accent aria-selected:rounded-l-none',
         day_range_middle:
-          'aria-selected:bg-forest-green-700 aria-selected:rounded-none aria-selected:first:rounded-none aria-selected:text-accent-foreground',
+          'aria-selected:bg-primary aria-selected:rounded-none aria-selected:first:rounded-none aria-selected:text-accent-foreground',
         day_hidden: 'invisible',
         ...classNames,
       }}

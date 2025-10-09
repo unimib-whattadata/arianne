@@ -15,8 +15,15 @@ export const notesRouter = createTRPCRouter({
   findMany: protectedProcedure
     .input(NotesFindManySchema)
     .query(async ({ input, ctx }) => {
+      const { patientId } = input.where;
+      if (!patientId) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Patient ID is required",
+        });
+      }
       const notes = await ctx.db.query.notes.findMany({
-        where: (t, { eq }) => eq(t.patientId, input.where.patientId),
+        where: (t, { eq }) => eq(t.patientId, patientId),
       });
 
       return notes;
@@ -25,8 +32,16 @@ export const notesRouter = createTRPCRouter({
   findUnique: protectedProcedure
     .input(NoteFindUniqueSchema)
     .query(async ({ input, ctx }) => {
+      const { id } = input.where;
+      if (!id) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Note ID is required",
+        });
+      }
+
       const note = await ctx.db.query.notes.findFirst({
-        where: (t, { eq }) => eq(t.id, input.where.id),
+        where: (t, { eq }) => eq(t.id, id),
       });
       if (!note) {
         throw new TRPCError({ code: "NOT_FOUND", message: "Note not found" });

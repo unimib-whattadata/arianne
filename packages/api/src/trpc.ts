@@ -1,6 +1,5 @@
 import type { UserResponse } from "@arianne/supabase";
 import { db } from "@arianne/db";
-// import { verifyJWT } from "@arianne/supabase";
 import { initTRPC, TRPCError } from "@trpc/server";
 import { sql } from "drizzle-orm/sql";
 import superjson from "superjson";
@@ -101,7 +100,7 @@ const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
 
   const user = ctx.user.data.user;
 
-  const currentUser = await ctx.db.query.profiles.findFirst({
+  const profile = await ctx.db.query.profiles.findFirst({
     where: (t, { eq }) => eq(t.id, user.id),
     extras: (fields) => {
       return {
@@ -111,6 +110,26 @@ const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
       };
     },
   });
+
+  let currentUser;
+  if (profile?.role === "therapist") {
+    const therapist = await ctx.db.query.therapists.findFirst({
+      where: (t, { eq }) => eq(t.profileId, profile.id),
+    });
+
+    if (therapist) {
+      currentUser = { ...profile, id: therapist.id, profileId: profile.id };
+    }
+  }
+  if (profile?.role === "patient") {
+    const patient = await ctx.db.query.patients.findFirst({
+      where: (t, { eq }) => eq(t.profileId, profile.id),
+    });
+
+    if (patient) {
+      currentUser = { ...profile, id: patient.id, profileId: profile.id };
+    }
+  }
 
   if (!currentUser) {
     throw new TRPCError({

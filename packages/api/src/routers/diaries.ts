@@ -25,13 +25,13 @@ export const diariesRouter = createTRPCRouter({
         return diary;
       }
 
-      const dateObject = date ? new Date(date) : new Date();
-      const formattedDate = `${dateObject.getFullYear()}-${dateObject.getMonth() + 1}-${dateObject.getDate()}`;
+      // const dateObject = date ? new Date(date) : new Date();
+      // const formattedDate = `${dateObject.getFullYear()}-${dateObject.getMonth() + 1}-${dateObject.getDate()}`;
 
       const diaries = await ctx.db.query.diaries.findMany({
         where: (t, { eq, and }) =>
           and(
-            eq(t.date, formattedDate),
+            eq(t.date, date ?? new Date()),
             eq(t.type, type),
             eq(t.patientId, patientId),
           ),
@@ -72,16 +72,14 @@ export const diariesRouter = createTRPCRouter({
         });
       }
 
-      const dateObject = new Date();
-      const date = `${dateObject.getFullYear()}-${dateObject.getMonth() + 1}-${dateObject.getDate()}`;
       const { type, content } = input;
 
       const diary = await ctx.db
         .insert(diaries)
         .values({
-          date,
+          date: new Date(),
           type,
-          content: JSON.stringify(content),
+          content,
           patientId,
           medicalRecordId,
         })
@@ -99,7 +97,7 @@ export const diariesRouter = createTRPCRouter({
       const diary = await ctx.db
         .update(diaries)
         .set({
-          content: JSON.stringify(content),
+          content,
           ...(state !== undefined && { state }),
         })
         .where(eq(diaries.id, id))

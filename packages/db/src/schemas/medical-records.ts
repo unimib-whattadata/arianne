@@ -94,14 +94,14 @@ const cols = Object.keys(columns) as [col];
 
 export const MedicalRecordsFindUniqueSchema = z.object({
   where: z.object({
-    id: z.string().uuid(),
+    id: z.string().uuid().optional(),
   }),
   columns: z.record(z.enum(cols), z.boolean()).optional(),
 });
 
 export const MedicalRecordsUpdateSchema = z.object({
   where: z.object({
-    patientId: z.string().uuid(),
+    id: z.string().uuid(),
   }),
   data: z.custom<Partial<MedicalRecord>>((val: Record<string, unknown>) => {
     return (

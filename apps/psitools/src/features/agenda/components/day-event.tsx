@@ -1,7 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import type { RouterOutputs } from '@arianne/api';
-import { useTRPC } from '@/trpc/react';
 
 type Event = RouterOutputs['events']['getAll'][number];
 
@@ -10,16 +8,6 @@ interface DayEventProps extends Event {
 }
 
 const DayEvent: React.FC<DayEventProps> = ({ onEventClick, ...event }) => {
-  const api = useTRPC();
-  const therapist = useQuery(api.therapists.getAllPatients.queryOptions());
-
-  const patientsName =
-    therapist.data
-      ?.filter((patient) => {
-        event.participants.find((participant) => participant.id === patient.id);
-      })
-      .map((p) => p.profile.name) || [];
-
   const labelColorStyles: Record<string, { border: string; text: string }> = {
     '#def2d9': { border: 'border-l-[#92d482]', text: 'text-[#489834]' },
     '#f2d9de': { border: 'border-l-[#EAB1BC]', text: 'text-[#DC7E93]' },
@@ -44,7 +32,9 @@ const DayEvent: React.FC<DayEventProps> = ({ onEventClick, ...event }) => {
     >
       <div className="gap-1">
         <h2 className="w-full truncate text-xs text-[#64748b]">
-          {event.participants[0] ? patientsName.join(', ') : event.name}
+          {event.participants.length > 0
+            ? event.participants.map((p) => p.patient.profile.name).join(', ')
+            : event.name}
         </h2>
       </div>
     </div>

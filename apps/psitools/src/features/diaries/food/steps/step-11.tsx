@@ -17,7 +17,6 @@ export default function Step11() {
 
   return (
     <div className="space-y-4">
-      {' '}
       <FormField
         control={control}
         name="physicalActivity"

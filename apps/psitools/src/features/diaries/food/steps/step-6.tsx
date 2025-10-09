@@ -16,7 +16,6 @@ export default function Step6() {
 
   return (
     <div className="space-y-4">
-      {' '}
       <FormField
         control={control}
         name="mealConsideration"
@@ -29,7 +28,7 @@ export default function Step6() {
               <FormControl>
                 <div className="flex flex-col gap-4">
                   <RadioGroup
-                    value={field.value ?? ''}
+                    value={field.value}
                     onValueChange={field.onChange}
                     className="flex flex-col gap-4"
                   >

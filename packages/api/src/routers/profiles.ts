@@ -7,7 +7,7 @@ export const profileRouter = createTRPCRouter({
   get: protectedProcedure
     .input(z.object({ id: z.string().uuid() }).optional())
     .query(async ({ ctx, input }) => {
-      const profileId = input?.id ?? ctx.user.id;
+      const profileId = input?.id ?? ctx.user.profileId;
       const profile = await ctx.db.query.profiles.findFirst({
         where: (t, { eq }) => eq(t.id, profileId),
         extras: (fields) => {
@@ -23,7 +23,7 @@ export const profileRouter = createTRPCRouter({
   role: protectedProcedure
     .input(z.object({ id: z.string().uuid() }).optional())
     .query(async ({ ctx, input }) => {
-      const profileId = input?.id ?? ctx.user.id;
+      const profileId = input?.id ?? ctx.user.profileId;
       const profile = await ctx.db.query.profiles.findFirst({
         where: (t, { eq }) => eq(t.id, profileId),
         columns: {

@@ -16,7 +16,6 @@ export default function Step7() {
 
   return (
     <div className="space-y-4">
-      {' '}
       <FormField
         control={control}
         name="excessiveQuantity"
@@ -28,7 +27,7 @@ export default function Step7() {
               </FormLabel>
               <FormControl>
                 <RadioGroup
-                  value={field.value ?? ''}
+                  value={field.value}
                   onValueChange={(value) => field.onChange(value)}
                   className="flex flex-col gap-4"
                 >

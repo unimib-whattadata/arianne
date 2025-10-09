@@ -9,7 +9,7 @@ export const useNotes = () => {
   const { data: notes, isLoading: isLoadingNotes } = useQuery(
     api.notes.findMany.queryOptions(
       {
-        where: { patientId: patient!.id },
+        where: { patientId: patient?.id },
       },
       { enabled: !!patient },
     ),

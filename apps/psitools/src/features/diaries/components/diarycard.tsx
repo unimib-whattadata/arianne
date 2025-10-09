@@ -45,15 +45,18 @@ export const DiaryCard = (props: Props) => {
   const queryClient = useQueryClient();
 
   const { data: assignments } = useQuery(
-    api.assignments.get.queryOptions(patient?.id, {
-      enabled: !!patient,
-      select: (data) =>
-        data
-          .filter((assignments) => assignments.type === 'diary')
-          .map((assignment) => {
-            return { id: assignment.id, name: assignment.name };
-          }),
-    }),
+    api.assignments.get.queryOptions(
+      { where: { id: patient?.id } },
+      {
+        enabled: !!patient,
+        select: (data) =>
+          data
+            .filter((assignments) => assignments.type === 'diary')
+            .map((assignment) => {
+              return { id: assignment.id, name: assignment.name };
+            }),
+      },
+    ),
   );
 
   const { mutate: unassign } = useMutation(
@@ -81,7 +84,7 @@ export const DiaryCard = (props: Props) => {
         action: {
           label: 'Conferma',
           onClick: () => {
-            unassign(assignment.id);
+            unassign({ where: { id: assignment.id } });
           },
         },
         cancel: {
@@ -103,7 +106,7 @@ export const DiaryCard = (props: Props) => {
       <div className="flex items-center justify-center gap-4">
         <Badge
           className={cn(
-            'flex h-8 w-8 items-center justify-center bg-forest-green-700 text-white',
+            'bg-primary flex h-8 w-8 items-center justify-center text-white',
             numOfDiaries !== 0 ? 'bg-primary' : 'bg-primary-300',
           )}
         >
@@ -114,7 +117,7 @@ export const DiaryCard = (props: Props) => {
           <h3 className="text-base font-semibold">
             {diaryTitles[diaryType] || diaryType}
           </h3>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             Ultima compilazione:{' '}
             <span className="text-forest-green-700 underline">{lastDiary}</span>
           </p>

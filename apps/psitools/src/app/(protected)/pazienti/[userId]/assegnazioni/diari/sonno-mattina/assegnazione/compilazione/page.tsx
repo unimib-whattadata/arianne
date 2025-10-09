@@ -1,5 +1,15 @@
 'use client';
-import { useSteps } from '@/features/diaries/components/form-layout';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useQuery } from '@tanstack/react-query';
+import { use } from 'react';
+import { useForm } from 'react-hook-form';
+
+import { Form } from '@/components/ui/form';
+import { FormLayout } from '@/features/diaries/components/form-layout';
+import { useSteps } from '@/features/diaries/context/step-context';
+import type { FormData } from '@/features/diaries/sleep-morning/schema';
+import { FormSchema } from '@/features/diaries/sleep-morning/schema';
 import {
   Step1,
   Step2,
@@ -24,64 +34,63 @@ import {
   Step21,
   Step22,
 } from '@/features/diaries/sleep-morning/steps';
+import { useTRPC } from '@/trpc/react';
 
-export default function Page() {
+export default function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ id: string }>;
+}) {
+  const { id: diaryId } = use(searchParams);
   const { currentStep } = useSteps();
 
-  const Component = () => {
-    switch (currentStep) {
-      case 1:
-        return <Step1 />;
-      case 2:
-        return <Step2 />;
-      case 3:
-        return <Step3 />;
-      case 4:
-        return <Step4 />;
-      case 5:
-        return <Step5 />;
-      case 6:
-        return <Step6 />;
-      case 7:
-        return <Step7 />;
-      case 8:
-        return <Step8 />;
-      case 9:
-        return <Step9 />;
-      case 10:
-        return <Step10 />;
-      case 11:
-        return <Step11 />;
-      case 12:
-        return <Step12 />;
-      case 13:
-        return <Step13 />;
-      case 14:
-        return <Step14 />;
-      case 15:
-        return <Step15 />;
-      case 16:
-        return <Step16 />;
-      case 17:
-        return <Step17 />;
-      case 18:
-        return <Step18 />;
-      case 19:
-        return <Step19 />;
-      case 20:
-        return <Step20 />;
-      case 21:
-        return <Step21 />;
-      case 22:
-        return <Step22 />;
+  const api = useTRPC();
+  const { data } = useQuery(
+    api.diaries.find.queryOptions(
+      {
+        type: 'sleep_morning',
+        id: diaryId,
+      },
+      {
+        enabled: !!diaryId,
+        select: (diary) => diary?.content as FormData,
+      },
+    ),
+  );
 
-      default:
-        return null;
-    }
-  };
+  const methods = useForm<FormData>({
+    resolver: zodResolver(FormSchema),
+    values: data,
+  });
+
   return (
-    <div className="px-4">
-      <Component />
-    </div>
+    <Form {...methods}>
+      <form>
+        <FormLayout<FormData> type="sleep_morning" diaryId={diaryId}>
+          {currentStep === 1 && <Step1 />}
+          {currentStep === 2 && <Step2 />}
+          {currentStep === 3 && <Step3 />}
+          {currentStep === 4 && <Step4 />}
+          {currentStep === 5 && <Step5 />}
+          {currentStep === 6 && <Step6 />}
+          {currentStep === 7 && <Step7 />}
+          {currentStep === 8 && <Step8 />}
+          {currentStep === 9 && <Step9 />}
+          {currentStep === 10 && <Step10 />}
+          {currentStep === 11 && <Step11 />}
+          {currentStep === 12 && <Step12 />}
+          {currentStep === 13 && <Step13 />}
+          {currentStep === 14 && <Step14 />}
+          {currentStep === 15 && <Step15 />}
+          {currentStep === 16 && <Step16 />}
+          {currentStep === 17 && <Step17 />}
+          {currentStep === 18 && <Step18 />}
+          {currentStep === 19 && <Step19 />}
+          {currentStep === 20 && <Step20 />}
+          {currentStep === 21 && <Step21 />}
+          {currentStep === 22 && <Step22 />}
+        </FormLayout>
+      </form>
+    </Form>
   );
 }
