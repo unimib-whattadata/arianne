@@ -12,6 +12,7 @@ import {
   Pill,
   Settings,
   UserRound,
+  BookOpen,
 } from 'lucide-react';
 import { useMemo } from 'react';
 
@@ -102,7 +103,8 @@ export const usePatientMenu = ({
     | 'referti'
     | 'modelli'
     | 'builder'
-    | 'farmaci';
+    | 'farmaci'
+    | 'esercizi';
 }) => {
   const api = useTRPC();
   const { data: user, isLoading } = useQuery(
@@ -129,7 +131,8 @@ export const usePatientMenu = ({
           active === 'assegnazioni' ||
           active === 'diari' ||
           active === 'somministrazioni' ||
-          active === 'farmaci',
+          active === 'farmaci' ||
+          active === 'esercizi',
         items: [
           {
             title: 'Diari',
@@ -148,6 +151,12 @@ export const usePatientMenu = ({
             url: `/farmaci`,
             isActive: active === 'farmaci',
             icon: Pill,
+          },
+          {
+            title: 'Esercizi',
+            url: `/esercizi`,
+            isActive: active === 'esercizi',
+            icon: BookOpen,
           },
         ],
       },
