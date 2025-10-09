@@ -41,7 +41,12 @@ export const getPreferencesSchema = z.discriminatedUnion("key", [
 export const setPreferenceSchema = z.discriminatedUnion("key", [
   z.object({
     key: z.literal("notifications"),
-    value: z.boolean(),
+    value: z.object({
+      patientMessages: z.boolean().default(true),
+      assignmentCompleted: z.boolean().default(true),
+      eventModified: z.boolean().default(true),
+      eventCancelled: z.boolean().default(true),
+    }),
   }),
   z.object({
     key: z.literal("favoritesAdministrations"),
