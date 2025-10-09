@@ -12,6 +12,7 @@ export interface ExerciseCardProps {
   count: number;
   lastView: string;
   isAssigned?: boolean;
+  isDisabled?: boolean;
   onToggleAssign?: () => void;
 }
 
@@ -21,6 +22,7 @@ export const ExerciseCard = ({
   count,
   lastView,
   isAssigned = false,
+  isDisabled = false,
   onToggleAssign,
 }: ExerciseCardProps) => {
   const pathname = usePathname();
@@ -62,13 +64,19 @@ export const ExerciseCard = ({
             e.stopPropagation();
             onToggleAssign?.();
           }}
-          asChild
         >
-          <div>{isAssigned ? 'Rimuovi assegnazione' : 'Assegna'}</div>
+          {isAssigned ? 'Rimuovi assegnazione' : 'Assegna'}
         </Button>
 
-        <Button asChild size="sm" className="w-fit">
-          <Link href={`${pathname}/${id}`}>Visualizza</Link>
+        <Button size="sm" className="w-fit" disabled={isDisabled}>
+          <Link
+            href={isDisabled ? '#' : `${pathname}/${id}`}
+            onClick={(e) => {
+              if (isDisabled) e.preventDefault();
+            }}
+          >
+            Visualizza
+          </Link>
         </Button>
       </div>
     </div>

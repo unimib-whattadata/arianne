@@ -10,14 +10,15 @@ export default function ExercisesPage() {
       <h1 className="mb-4 text-xl font-semibold">Esercizi</h1>
 
       <div className="grid gap-4">
-        <ExerciseCard
+        {/* <ExerciseCard
           id="statiAnimo"
           title="Stati d’animo"
-          count={10}
+          count={0}
           lastView="20/09/2025"
           isAssigned={false}
-          onToggleAssign={() => console.log('toggle stati d’animo')}
-        />
+          isDisabled={true}
+
+        /> */}
 
         <ExerciseCard
           id="psicoeducazione"
@@ -25,7 +26,6 @@ export default function ExercisesPage() {
           count={lessons.length}
           lastView="Mai"
           isAssigned={false}
-          onToggleAssign={() => console.log('toggle psicoeducazione')}
         />
       </div>
     </div>

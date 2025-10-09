@@ -53,7 +53,7 @@ export default function Step1() {
                 accaduto?
               </FormLabel>
               <FormControl>
-                <RadioGroup className="flex flex-col gap-4" {...field}>
+                <RadioGroup className="flex gap-4" {...field}>
                   {moments.map(({ label }) => (
                     <FormItem
                       key={label}
