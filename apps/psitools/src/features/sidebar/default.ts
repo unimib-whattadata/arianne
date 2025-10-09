@@ -136,14 +136,14 @@ export const usePatientMenu = ({
           {
             title: 'Diari',
             url: `/diari`,
-            icon: UserRound,
+            icon: BookHeart,
             isActive: active === 'diari',
           },
           {
             title: 'Somministrazioni',
             url: `/somministrazioni`,
             isActive: active === 'somministrazioni',
-            icon: UserRound,
+            icon: NotepadText,
           },
           {
             title: 'Farmaci',

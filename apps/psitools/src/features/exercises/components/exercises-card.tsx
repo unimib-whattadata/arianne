@@ -10,7 +10,7 @@ export interface ExerciseCardProps {
   id: string;
   title: string;
   count: number;
-  lastView: string;
+  // lastView: string;
   isAssigned?: boolean;
   isDisabled?: boolean;
   onToggleAssign?: () => void;
@@ -20,7 +20,7 @@ export const ExerciseCard = ({
   id,
   title,
   count,
-  lastView,
+  // lastView,
   isAssigned = false,
   isDisabled = false,
   onToggleAssign,
@@ -48,10 +48,10 @@ export const ExerciseCard = ({
             </p>
           </div>
 
-          <p className="text-sm">
+          {/* <p className="text-sm">
             Ultima visualizzazione:
             <span className="text-primary pl-2">{lastView}</span>
-          </p>
+          </p> */}
         </div>
       </div>
 

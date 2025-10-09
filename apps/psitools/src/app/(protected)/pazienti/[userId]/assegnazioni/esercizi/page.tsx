@@ -24,7 +24,7 @@ export default function ExercisesPage() {
           id="psicoeducazione"
           title="Psicoeducazione"
           count={lessons.length}
-          lastView="Mai"
+          // lastView="Mai"
           isAssigned={false}
         />
       </div>
