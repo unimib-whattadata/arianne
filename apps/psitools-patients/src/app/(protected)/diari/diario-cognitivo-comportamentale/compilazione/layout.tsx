@@ -53,7 +53,7 @@ const defaultValues = {
 export type FormData = z.infer<typeof FormSchema>;
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const defaultStep = getCookieValue('cognitive_beahvioral');
+  const defaultStep = getCookieValue('cognitive_behavioral');
   const searchParams = useSearchParams();
   const diaryId = searchParams.get('id');
 
@@ -68,7 +68,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           queryKey: ['diary.find', { id: diaryId }],
           queryFn: async () => {
             const allDiaries = await queryClient.fetchQuery(
-              api.diaries.getAll.queryOptions({ type: 'cognitive_beahvioral' }),
+              api.diaries.getAll.queryOptions({ type: 'cognitive_behavioral' }),
             );
             return allDiaries?.find((diary) => diary.id === diaryId);
           },
@@ -85,7 +85,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <FormLayout
-      type="cognitive_beahvioral"
+      type="cognitive_behavioral"
       steps={12}
       methods={methods}
       defaultStep={defaultStep}

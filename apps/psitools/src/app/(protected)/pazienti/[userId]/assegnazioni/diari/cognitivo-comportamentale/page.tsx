@@ -89,7 +89,7 @@ export default function CognitiveBeahvioral() {
 
         const expires = new Date();
         expires.setHours(23, 59, 59, 0);
-        document.cookie = `cognitive_beahvioral=1; path=/; expires=${expires.toUTCString()}`;
+        document.cookie = `cognitive_behavioral=1; path=/; expires=${expires.toUTCString()}`;
 
         router.push(`${pathname}/assegnazione/compilazione?id=${data.id}`);
       },

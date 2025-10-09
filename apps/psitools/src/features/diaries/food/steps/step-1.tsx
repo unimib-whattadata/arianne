@@ -47,7 +47,7 @@ export default function Step1() {
         name="momentDay"
         render={({ field }) => (
           <FormItem>
-            <div className="grid grid-cols-2 gap-10 rounded-sm bg-white px-4 py-6">
+            <div className="grid grid-cols-1 gap-10 rounded-sm bg-white px-4 py-6">
               <FormLabel className="text-base font-normal text-gray-900">
                 Ti ricordi indicativamente il momento della giornata in cui è
                 accaduto?
@@ -57,7 +57,7 @@ export default function Step1() {
                   {moments.map(({ label }) => (
                     <FormItem
                       key={label}
-                      className={`relative cursor-pointer rounded-lg border px-4 py-3 text-center text-sm ${
+                      className={`relative w-full cursor-pointer rounded-lg border px-4 py-3 text-center text-sm ${
                         field.value === label
                           ? 'bg-primary-100 border-primary text-primary'
                           : 'border-gray-300 text-gray-700'

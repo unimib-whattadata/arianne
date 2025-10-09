@@ -73,6 +73,7 @@ export default function Food() {
   }, [date, dailyDiaries, selectedDiaryId]);
 
   const handleDiaryClick = (diaryId: string) => {
+    console.log('Diary clicked:', diaryId);
     setSelectedDiaryId(diaryId);
   };
 
@@ -106,6 +107,12 @@ export default function Food() {
       content: {},
     });
   };
+
+  console.log(
+    'test:',
+
+    !selectedDiaryId || dailyDiaries.length === 0,
+  );
 
   return (
     <>

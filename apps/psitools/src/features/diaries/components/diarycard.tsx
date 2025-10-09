@@ -16,7 +16,7 @@ interface Props {
   diaryType:
     | 'sleep_morning'
     | 'sleep_evening'
-    | 'cognitive_beahvioral'
+    | 'cognitive_behavioral'
     | 'food';
   numOfDiaries: number;
   lastDiary: string;
@@ -33,7 +33,7 @@ export const DiaryCard = (props: Props) => {
   const [openSheet, setOpenSheet] = useState(false);
 
   const diaryTitles = {
-    cognitive_beahvioral: 'Diario cognitivo-comportamentale',
+    cognitive_behavioral: 'Diario cognitivo-comportamentale',
     food: 'Diario alimentare',
     sleep_morning: 'Diario del sonno mattina',
     sleep_evening: 'Diario sonno sera',
