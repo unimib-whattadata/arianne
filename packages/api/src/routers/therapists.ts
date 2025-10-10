@@ -175,8 +175,35 @@ export const therapistsRouter = createTRPCRouter({
       }),
     );
 
-    return patientsWithStatus;
+    return patientsWithStatus.filter((p) => !!p);
   }),
+  updateAccount: protectedProcedure
+    .input(
+      z.object({
+        email: z.string().email(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const supabase = ctx.supabase;
+      if (!supabase) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Supabase client not found in context",
+        });
+      }
+
+      const { error } = await supabase.auth.updateUser({
+        email: input.email,
+      });
+
+      if (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: error.message,
+        });
+      }
+    }),
+
   getMatched: protectedProcedure.query(() => {
     const therapistList = [
       {
