@@ -5,6 +5,7 @@
     "@trpc/server": "catalog:",
     "drizzle-orm": "catalog:",
     "ioredis": "^5.7.0",
+    "next": "catalog:",
     "superjson": "catalog:",
     "zod": "catalog:"
   },
