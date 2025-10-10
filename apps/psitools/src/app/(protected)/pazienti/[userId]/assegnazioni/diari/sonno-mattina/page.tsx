@@ -40,6 +40,7 @@ export default function SleepMorning() {
       patientId: patient?.id,
     }),
   );
+
   const dailyDiaries = React.useMemo(() => {
     if (!diaries || !date) return [];
     return diaries.filter((diary) => {
@@ -119,137 +120,137 @@ export default function SleepMorning() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 gap-2 p-4 md:grid-cols-[0.5fr_4fr]">
-        <div className="flex h-[70vh] flex-col rounded-[4px] bg-white p-4">
-          <Calendar
-            mode="single"
-            selected={date}
-            onSelect={(newDate) => {
-              newDate?.setHours(0, 0, 0, 0);
-              setDate(newDate);
-              setSelectedDiaryId(undefined);
-            }}
-            className="p-2"
-            modifiers={{ hasDiary: diaryDates || [] }}
-            modifiersClassNames={{
-              hasDiary:
-                'relative after:content-[""] after:absolute after:bottom-1 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:rounded-full after:bg-primary',
-            }}
-          />
+      <div className="p-4">
+        <div className="flex max-w-3xl flex-col rounded-[4px] bg-white p-4">
+          <div className="flex gap-4">
+            <Calendar
+              mode="single"
+              selected={date}
+              onSelect={(newDate) => {
+                newDate?.setHours(0, 0, 0, 0);
+                setDate(newDate);
+                setSelectedDiaryId(undefined);
+              }}
+              className="p-2"
+              modifiers={{ hasDiary: diaryDates || [] }}
+              modifiersClassNames={{
+                hasDiary:
+                  'relative after:content-[""] after:absolute after:bottom-1 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:rounded-full after:bg-primary',
+              }}
+            />
 
-          <div className="mt-4 flex w-full flex-col overflow-hidden">
-            <p className="text-darkest-blue mb-3 text-[20px] font-bold">
-              Preview compilazioni
-            </p>
+            <div className="flex w-full flex-col overflow-hidden">
+              <p className="text-darkest-blue mb-3 text-[20px] font-bold">
+                Preview compilazioni
+              </p>
 
-            <div className="scrollbar-blue flex-1 overflow-y-auto">
-              {dailyDiaries.length > 0 ? (
-                dailyDiaries.map((diary) => {
-                  const lastUpdate = new Date(diary.updatedAt);
-                  const timeString = format(lastUpdate, 'HH:mm');
+              <div className="scrollbar-blue flex-1 overflow-y-auto">
+                {dailyDiaries.length > 0 ? (
+                  dailyDiaries.map((diary) => {
+                    const lastUpdate = new Date(diary.updatedAt);
+                    const timeString = format(lastUpdate, 'HH:mm');
 
-                  return (
-                    <button
-                      key={diary.id}
-                      onClick={() => handleDiaryClick(diary.id)}
-                      className={`mb-2 w-full rounded-[4px] bg-[#F3F6F9] p-3 text-left transition-colors hover:bg-[#D7E1EA] ${
-                        selectedDiaryId === diary.id ? 'bg-blue-50' : ''
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="text-[12px] font-bold">
-                          Diario delle {timeString}
-                        </span>
-                        <span
-                          className={`w-24 rounded-[8px] px-2 py-1 text-center text-xs font-medium ${
-                            diary.state
-                              ? 'bg-[#CCDBEF] text-[#004AAD]'
-                              : 'bg-[#E2E8F0] text-[#94A3B8]'
-                          }`}
-                        >
-                          {diary.state ? 'Completo' : 'Incompleto'}
-                        </span>
-                      </div>
-                    </button>
-                  );
-                })
-              ) : (
-                <p className="text-sm text-gray-500">
-                  Non sono state effettuate compilazioni
-                </p>
-              )}
+                    return (
+                      <button
+                        key={diary.id}
+                        onClick={() => handleDiaryClick(diary.id)}
+                        className={`mb-2 w-full rounded-[4px] bg-[#F3F6F9] p-3 text-left transition-colors hover:bg-[#D7E1EA] ${
+                          selectedDiaryId === diary.id ? 'bg-blue-50' : ''
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-[12px] font-bold">
+                            Diario delle {timeString}
+                          </span>
+                          <span
+                            className={`w-24 rounded-[8px] px-2 py-1 text-center text-xs font-medium ${
+                              diary.state
+                                ? 'bg-[#CCDBEF] text-[#004AAD]'
+                                : 'bg-[#E2E8F0] text-[#94A3B8]'
+                            }`}
+                          >
+                            {diary.state ? 'Completo' : 'Incompleto'}
+                          </span>
+                        </div>
+                      </button>
+                    );
+                  })
+                ) : (
+                  <p className="text-sm text-gray-500">
+                    Non sono state effettuate compilazioni
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <div
-          className={`scrollbar-blue relative h-[70vh] overflow-y-auto rounded-[4px] bg-white ${
-            !data?.content || dailyDiaries.length === 0 ? 'hidden' : ''
-          }`}
-        >
-          {dailyDiaries.length > 0 &&
-          data?.content &&
-          typeof data.content === 'object' &&
-          !Array.isArray(data.content) ? (
-            <>
-              <div className="sticky top-0 flex w-full items-center justify-between bg-white p-4">
-                <h2 className="text-space-gray text-[20px] font-semibold">
-                  Compilazione delle {format(new Date(data.updatedAt), 'HH:mm')}
-                </h2>
-                {data?.state ? (
-                  <span className="text-sm text-green-600">
-                    Diario Completo
-                  </span>
-                ) : (
-                  <Button size="sm" variant="outline" asChild>
-                    <Link
-                      href={`${pathname}/assegnazione/compilazione?id=${selectedDiaryId}`}
-                    >
-                      Riprendi compilazione
-                    </Link>
-                  </Button>
-                )}
-              </div>
-              <Diarylayout
-                key={selectedDiaryId}
-                type="sleep_morning"
-                content={
-                  data.content as {
-                    nap: string;
-                    napDuration: string;
-                    tense: number;
-                    exercise: string;
-                    caffeine: string;
-                    caffeineQuantity: string;
-                    caffeineTime: string;
-                    alcohol: string;
-                    alcoholQuantity: string;
-                    alcoholTime: string;
-                    sleepMedications: string;
-                    sleepMedicationsQuantity: string;
-                    sleepMedicationsTime: string;
-                    bedtime: string;
-                    lightsOffTime: string;
-                    sleepLatency: string;
-                    wakeUpPlanned: string;
-                    wakeUpTime: string;
-                    finalNap: string;
-                    outBed: string;
-                    awakening: string;
-                    nightawake: string;
-                    timetoWake: string;
-                    disturbe: number;
-                    qualitySleep: number;
-                    rest: number;
-                    tired: number;
-                    drowsiness: number;
-                    note: string;
-                  }
+      <div
+        className={`scrollbar-blue relative mx-4 mb-4 h-[70vh] overflow-y-auto rounded-[4px] bg-white ${
+          !data?.content || dailyDiaries.length === 0 ? 'hidden' : ''
+        }`}
+      >
+        {dailyDiaries.length > 0 &&
+        data?.content &&
+        typeof data.content === 'object' &&
+        !Array.isArray(data.content) ? (
+          <>
+            <div className="sticky top-0 flex w-full items-center justify-between bg-white p-4">
+              <h2 className="text-space-gray text-[20px] font-semibold">
+                Compilazione delle {format(new Date(data.updatedAt), 'HH:mm')}
+              </h2>
+              {data?.state ? (
+                <span className="text-primary text-sm">Diario Completo</span>
+              ) : (
+                <Button size="sm" variant="outline" asChild>
+                  <Link
+                    href={`${pathname}/assegnazione/compilazione?id=${selectedDiaryId}`}
+                  >
+                    Riprendi compilazione
+                  </Link>
+                </Button>
+              )}
+            </div>
+            <Diarylayout
+              key={selectedDiaryId}
+              type="sleep_morning"
+              content={
+                data.content as {
+                  nap: string;
+                  napDuration: string;
+                  tense: number;
+                  exercise: string;
+                  caffeine: string;
+                  caffeineQuantity: string;
+                  caffeineTime: string;
+                  alcohol: string;
+                  alcoholQuantity: string;
+                  alcoholTime: string;
+                  sleepMedications: string;
+                  sleepMedicationsQuantity: string;
+                  sleepMedicationsTime: string;
+                  bedtime: string;
+                  lightsOffTime: string;
+                  sleepLatency: string;
+                  wakeUpPlanned: string;
+                  wakeUpTime: string;
+                  finalNap: string;
+                  outBed: string;
+                  awakening: string;
+                  nightawake: string;
+                  timetoWake: string;
+                  disturbe: number;
+                  qualitySleep: number;
+                  rest: number;
+                  tired: number;
+                  drowsiness: number;
+                  note: string;
                 }
-              />
-            </>
-          ) : null}
-        </div>
+              }
+            />
+          </>
+        ) : null}
       </div>
     </>
   );
