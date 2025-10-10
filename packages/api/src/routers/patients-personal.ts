@@ -13,7 +13,7 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 export const patientsPersonalRouter = createTRPCRouter({
   get: protectedProcedure.query(async ({ ctx }) => {
     const personalInfo = await ctx.db.query.personalData.findFirst({
-      where: (t, { eq }) => eq(t.patientProfileId, ctx.user.id),
+      where: (t, { eq }) => eq(t.patientProfileId, ctx.user.profileId),
     });
 
     return personalInfo;
@@ -34,12 +34,11 @@ export const patientsPersonalRouter = createTRPCRouter({
   save: protectedProcedure
     .input(PersonalDataCreateSchema)
     .mutation(async ({ input, ctx }) => {
-      console.log("SAVE", ctx.user.id);
       const newPatientPersonalData = await ctx.db
         .insert(personalData)
         .values({
-          patientProfileId: ctx.user.id,
           ...input,
+          patientProfileId: ctx.user.profileId,
         })
         .returning();
 
@@ -50,7 +49,7 @@ export const patientsPersonalRouter = createTRPCRouter({
       const insertedPersonalData = newPatientPersonalData[0];
       if (
         insertedPersonalData &&
-        insertedPersonalData.patientProfileId !== ctx.user.id
+        insertedPersonalData.patientProfileId !== ctx.user.profileId
       ) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
@@ -64,7 +63,7 @@ export const patientsPersonalRouter = createTRPCRouter({
           .set({
             personalInfoAdded: true,
           })
-          .where(eq(patients.profileId, ctx.user.id));
+          .where(eq(patients.profileId, ctx.user.profileId));
       } catch (_) {
         throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       }

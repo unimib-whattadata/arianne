@@ -33,23 +33,22 @@ export default async function OnboardingPage() {
       icon: <UserRoundSearch className="h-6 w-6" />,
       route: '/match',
     },
-    {
-      value: 'fiscal',
-      title: 'Imposta il metodo di pagamento',
-      text: 'Definisci i dati di fatturazione ',
+    // {
+    //   value: 'fiscal',
+    //   title: 'Imposta il metodo di pagamento',
+    //   text: 'Definisci i dati di fatturazione ',
 
-      icon: <Wallet className="h-6 w-6" />,
-      route: '/fiscal',
-    },
+    //   icon: <Wallet className="h-6 w-6" />,
+    //   route: '/fiscal',
+    // },
   ];
 
-  console.log('PATIENT', patient);
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-10">
       <div className="mt-8 flex w-full flex-1 flex-col gap-4 p-4 pt-12 md:mt-0 md:p-10 md:pt-28">
         <div className="w-full">
           <h1 className="md:text-h1 text-2xl font-semibold text-slate-900 md:text-center">
-            Ciao Chiara!
+            Ciao {patient?.profile.name}!
           </h1>
           <h2 className="mt-2 text-lg font-medium text-slate-900 md:text-center md:text-xl">
             Completa gli ultimi step per attivare il tuo profilo
