@@ -17,7 +17,7 @@ export const therapists = createTable(
       .uuid("profile_id")
       .notNull()
       .unique()
-      .references(() => profiles.id),
+      .references(() => profiles.id, { onDelete: "cascade" }),
 
     recentPatients: d.uuid("recent_patients").array().notNull().default([]),
   }),
