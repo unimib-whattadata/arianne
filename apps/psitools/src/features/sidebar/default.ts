@@ -1,18 +1,22 @@
 import { useQuery } from '@tanstack/react-query';
 import {
   Bell,
-  BookCheck,
+  BetweenHorizontalStart,
+  Notebook,
   BookHeart,
   Calendar1,
-  Folder,
+  // CircleHelp,
+  PillBottle,
+  FilePlus,
   LayoutDashboard,
   MessageCircle,
-  NotebookPen,
   NotepadText,
-  Pill,
   Settings,
   UserRound,
   BookOpen,
+  NotebookPen,
+  BookCheck,
+  Folder,
 } from 'lucide-react';
 import { useMemo } from 'react';
 
@@ -150,7 +154,7 @@ export const usePatientMenu = ({
             title: 'Farmaci',
             url: `/farmaci`,
             isActive: active === 'farmaci',
-            icon: Pill,
+            icon: PillBottle,
           },
           {
             title: 'Esercizi',
@@ -165,6 +169,27 @@ export const usePatientMenu = ({
         url: `/pazienti/${userId}/note`,
         icon: NotebookPen,
         isActive: active === 'note',
+      },
+      {
+        title: 'Referti',
+        url: `/pazienti/${userId}/referti`,
+        icon: Notebook,
+        isActive:
+          active === 'referti' || active === 'modelli' || active === 'builder',
+        items: [
+          {
+            title: 'Modelli',
+            url: `/modelli`,
+            icon: FilePlus,
+            isActive: active === 'modelli',
+          },
+          {
+            title: 'Builder',
+            url: `/builder/nuovo`,
+            icon: BetweenHorizontalStart,
+            isActive: active === 'builder',
+          },
+        ],
       },
     ];
   }, [userId, active]);
