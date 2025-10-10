@@ -8,7 +8,7 @@ export default function SettingsPage() {
     <div className="p-4 pt-0">
       <h1 className="mb-3 text-2xl font-semibold">Impostazioni</h1>
       <div className="flex w-full flex-col gap-4">
-        <Link href="/impostazioni/modifica-password">
+        <Link href="/impostazioni/account">
           <Button
             variant="ghost"
             className="h-full w-full justify-between bg-white p-4 text-base"
