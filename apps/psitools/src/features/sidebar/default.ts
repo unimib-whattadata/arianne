@@ -40,6 +40,14 @@ export const useMenu = (active?: string) => {
       url: '/pazienti',
       icon: UserRound,
       disabled: false,
+      items: [
+        {
+          title: "Lista d'attesa",
+          url: '/lista-attesa',
+          icon: NotepadText,
+          disabled: false,
+        },
+      ],
     },
     {
       title: 'Agenda',
@@ -51,12 +59,6 @@ export const useMenu = (active?: string) => {
       title: 'Chats',
       url: '/chats',
       icon: MessageCircle,
-      disabled: false,
-    },
-    {
-      title: "Lista d'attesa",
-      url: '/lista-attesa',
-      icon: NotepadText,
       disabled: false,
     },
   ] satisfies SibebarMenuItems['items'];
