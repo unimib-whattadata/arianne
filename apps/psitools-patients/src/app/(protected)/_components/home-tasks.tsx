@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { Loader2 } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -31,7 +32,7 @@ const TaskCard = (props: TaskCardProps) => {
         : 'Iniziato';
 
   return (
-    <div className="flex w-full items-center justify-between rounded-lg bg-blue-water p-3">
+    <div className="bg-blue-water flex w-full items-center justify-between rounded-lg p-3">
       <div className="flex items-center gap-4">
         <Image
           src={imgUrl}
@@ -49,12 +50,10 @@ const TaskCard = (props: TaskCardProps) => {
           </p>
         </div>
       </div>
-      <div className="flex items-center gap-4">
-        <p className="text-center font-bold text-blue-waterTitle">
-          {stateString}
-        </p>
+      <div className="right flex flex-col items-end justify-end gap-2">
+        <Badge className="bg-primary">{stateString}</Badge>
         <Link href={`/questionari/${taskName}`}>
-          <Button className="rounded-sm border border-blue-waterTitle bg-transparent font-normal text-blue-waterTitle hover:bg-blue-waterTitle hover:text-white-900">
+          <Button className="border-secondary text-blue-waterTitle hover:bg-blue-waterTitle hover:text-white-900 bg-secondary/20 rounded-sm border font-normal">
             Svolgi il compito
           </Button>
         </Link>
@@ -112,7 +111,7 @@ export const Tasks = (props: TasksProps) => {
         ) : null}
       </div>
       <div className="flex flex-col gap-4">
-        {isLoading && <Loader2 className="h-8 w-8 animate-spin text-primary" />}
+        {isLoading && <Loader2 className="text-primary h-8 w-8 animate-spin" />}
         {administration && todayAdministrations.length == 0 && (
           <p className="mt-4 text-center">Nessun compito assegnato</p>
         )}
