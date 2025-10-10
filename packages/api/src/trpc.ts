@@ -1,26 +1,36 @@
 import type { UserResponse } from "@arianne/supabase";
+import type { cookies } from "next/headers";
 import { db } from "@arianne/db";
+import { createClient } from "@arianne/supabase/trpc-admin";
 import { initTRPC, TRPCError } from "@trpc/server";
 import { sql } from "drizzle-orm/sql";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
 interface CreateContextOptions {
+  user: UserResponse;
+  cookies?: Awaited<ReturnType<typeof cookies>>;
   headers: Headers;
+}
+
+interface CreateInnerContextOptions {
+  headers: Headers;
+  supabase: ReturnType<typeof createClient>;
   user: UserResponse;
 }
 
-const createInnerTRPCContext = (opts: CreateContextOptions) => {
+const createInnerTRPCContext = (opts: CreateInnerContextOptions) => {
   return {
     user: opts.user,
+    supabase: opts.supabase,
     db,
   };
 };
 
-export const createTRPCContext = (opts: {
-  headers: Headers;
-  user: UserResponse;
-}) => {
+export const createTRPCContext = (opts: CreateContextOptions) => {
+  const cookieStore = opts.cookies;
+  const supabase = createClient(cookieStore);
+
   const source = opts.headers.get("x-trpc-source") ?? "unknown";
   const { data } = opts.user;
   console.log(">>> tRPC Request from", source, "by", data.user?.id);
@@ -28,6 +38,7 @@ export const createTRPCContext = (opts: {
   return createInnerTRPCContext({
     headers: opts.headers,
     user: opts.user,
+    supabase,
   });
 };
 
