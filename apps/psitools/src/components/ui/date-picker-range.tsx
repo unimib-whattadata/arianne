@@ -42,7 +42,8 @@ export function DatePickerWithRange({ className, date, setDate }: Props) {
                 format(date.from, 'LLL dd, y', { locale: it })
               )
             ) : (
-              <span>Seleziona un periodo</span>
+              ''
+              // <span>Seleziona un periodo</span> ""
             )}
           </Button>
         </PopoverTrigger>

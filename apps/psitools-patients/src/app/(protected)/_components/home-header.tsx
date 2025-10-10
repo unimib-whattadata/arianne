@@ -1,14 +1,12 @@
-import { createClient } from '@arianne/supabase/server';
-import { cookies } from 'next/headers';
+import { api } from '@/trpc/server';
 
 export const HomeHeader = async () => {
-  const supabase = await createClient(cookies());
-  const { data } = await supabase.auth.getUser();
+  const profile = await api.profiles.get();
 
   return (
     <div>
       <h1 className="text-4xl font-semibold first:mt-0">
-        Ciao, {data.user?.user_metadata?.firstName} !
+        Ciao, {profile?.firstName} !
       </h1>
     </div>
   );

@@ -30,7 +30,7 @@ export default function ShowSingleAdministrationPage() {
     api.administrations.findUnique.queryOptions(
       { id: idTest },
       {
-        select: (data) => data.administration,
+        enabled: !!idTest,
       },
     ),
   );

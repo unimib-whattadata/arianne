@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 
 import { Button } from '@/components/ui/button';
@@ -12,13 +12,7 @@ import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Switch } from '@/components/ui/switch';
 import { useTRPC } from '@/trpc/react';
 
-import type { PreferenceValues } from '@arianne/db/schema';
-import { preferenceValuesSchema, defaultValues } from '@arianne/db/schema';
-
-const notificationSchema = preferenceValuesSchema.pick({
-  notifications: true,
-});
-type NotificationFormValues = Pick<PreferenceValues, 'notifications'>;
+import z from 'zod';
 
 const ITEM = [
   { name: 'patientMessages', label: 'Messaggio paziente' },
@@ -28,7 +22,16 @@ const ITEM = [
   },
   { name: 'eventModified', label: 'Evento modificato' },
   { name: 'eventCancelled', label: 'Evento annullato' },
-];
+] as const;
+
+const notificationSchema = z.object({
+  patientMessages: z.boolean(),
+  assignmentCompleted: z.boolean(),
+  eventModified: z.boolean(),
+  eventCancelled: z.boolean(),
+});
+
+type NotificationFormValues = z.infer<typeof notificationSchema>;
 
 export default function NotificationSettingsPage() {
   const api = useTRPC();
@@ -38,11 +41,25 @@ export default function NotificationSettingsPage() {
     data: notificationPrefs,
     isLoading,
     error,
-  } = useQuery(api.preferences.get.queryOptions());
+  } = useQuery(
+    api.preferences.get.queryOptions(
+      {
+        key: 'notifications',
+      },
+      {
+        select: (data) => data?.value as NotificationFormValues | undefined,
+      },
+    ),
+  );
 
   const form = useForm<NotificationFormValues>({
     resolver: zodResolver(notificationSchema),
-    defaultValues: defaultValues.notifications,
+    values: notificationPrefs ?? {
+      patientMessages: true,
+      assignmentCompleted: true,
+      eventModified: true,
+      eventCancelled: true,
+    },
   });
 
   const updateNotifications = useMutation(
@@ -52,14 +69,16 @@ export default function NotificationSettingsPage() {
       },
     }),
   );
-  useEffect(() => {
-    if (notificationPrefs) {
-      form.reset(notificationPrefs);
-    }
-  }, [notificationPrefs, form]);
 
   if (isLoading) return <div>Caricamento...</div>;
-  if (error || !notificationPrefs) return <div>Errore nel caricamento</div>;
+  if (error) return <div>Errore nel caricamento</div>;
+
+  const handleSubmit: SubmitHandler<NotificationFormValues> = (data) => {
+    updateNotifications.mutate({
+      key: 'notifications',
+      value: data,
+    });
+  };
 
   return (
     <div className="p-4 pt-0">
@@ -72,16 +91,7 @@ export default function NotificationSettingsPage() {
               Annulla
             </Button>
           </Link>
-          <Button
-            onClick={form.handleSubmit((values) => {
-              updateNotifications.mutate({
-                type: 'profile',
-                values,
-              });
-            })}
-          >
-            Salva
-          </Button>
+          <Button onClick={form.handleSubmit(handleSubmit)}>Salva</Button>
         </div>
 
         <Form {...form}>
@@ -92,7 +102,7 @@ export default function NotificationSettingsPage() {
                 <FormField
                   key={name}
                   control={form.control}
-                  name={name as keyof FormValues}
+                  name={name}
                   render={({ field }) => (
                     <FormItem className="flex items-center justify-between space-y-0">
                       <span className="text-base">{label}</span>

@@ -31,11 +31,11 @@ export default function AdministrationResultsIusRPage() {
   if (!currentAdministration || isLoading)
     return <Shimmer className="h-full w-full" />;
 
-  const records = currentAdministration.administration.records as FormValues;
+  const records = currentAdministration.records as FormValues;
 
   const response = records.response;
   const score = records.score;
-  const T = currentAdministration.administration.T ?? 0;
+  const T = currentAdministration.T ?? 0;
 
   if (response === undefined || score === undefined) return null;
 
@@ -45,12 +45,10 @@ export default function AdministrationResultsIusRPage() {
         <Shimmer className="h-full w-full" />
       ) : (
         <AdministrationCardDetail
-          testType={
-            currentAdministration.administration.type ?? 'Dato non trovato'
-          }
-          testNumber={`T${currentAdministration.administration.T ?? ''}`}
+          testType={currentAdministration.type ?? 'Dato non trovato'}
+          testNumber={`T${currentAdministration.T ?? ''}`}
           date={dateFormatting(
-            currentAdministration.administration.date ?? new Date(),
+            currentAdministration.date ?? new Date(),
             'dd/MM/yyyy',
           )}
         />

@@ -4,6 +4,9 @@ import '@/styles/globals.css';
 import { Poppins, Rubik } from 'next/font/google';
 import { TRPCReactProvider } from '@/trpc/react';
 import { Toaster } from 'sonner';
+import { createClient } from '@arianne/supabase/server';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 const rubik = Rubik({
   weight: ['500'],
@@ -23,12 +26,19 @@ export const metadata: Metadata = {
     'Piattaforma per la gestione di studi di psicologia e psicoterapia',
 };
 
-// eslint-disable-next-line @typescript-eslint/require-await
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const supabase = await createClient(cookies());
+  const { data, error } = await supabase.auth.getUser();
+
+  // If there is a user, redirect to the app
+  if (data.user && !error) {
+    return redirect('/');
+  }
+
   return (
     <html lang="it" className={`${rubik.variable} ${poppins.variable}`}>
       <body>

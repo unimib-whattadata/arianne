@@ -41,11 +41,10 @@ export default function DiariesPagese() {
   const eveningStats = useDiaryStats('sleep_evening', patient?.id);
   const morningStats = useDiaryStats('sleep_morning', patient?.id);
 
-  //TODO: Add map when we have the rest diary
   return (
     <div className="flex flex-col gap-2 p-4 pt-0">
       <DiaryCard
-        diaryType="cognitive_beahvioral"
+        diaryType="cognitive_behavioral"
         numOfDiaries={cognitiveStats.numOfDiaries}
         lastDiary={cognitiveStats.lastDiary}
         diary="cognitivo-comportamentale"

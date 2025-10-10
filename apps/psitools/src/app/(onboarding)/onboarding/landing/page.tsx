@@ -5,7 +5,6 @@ import {
   Wallet,
   ReceiptText,
   BookHeart,
-  Calendar,
   Calendar1,
 } from 'lucide-react';
 import { CardOption } from '@/features/terapeuti/onboarding/card';

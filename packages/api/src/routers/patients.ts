@@ -13,6 +13,16 @@ export const patientsRouter = createTRPCRouter({
     const patient = await ctx.db.query.patients.findFirst({
       where: (t, { eq }) => eq(t.profileId, ctx.user.profileId),
       with: {
+        profile: {
+          extras: (fields) => {
+            return {
+              name: sql<string>`concat(${fields.firstName}, ' ', ${fields.lastName})`.as(
+                "full_name",
+              ),
+            };
+          },
+        },
+        medicalRecords: true,
         therapist: {
           with: {
             profile: {

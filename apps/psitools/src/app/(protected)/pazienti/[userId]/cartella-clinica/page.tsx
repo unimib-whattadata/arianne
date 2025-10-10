@@ -143,223 +143,86 @@ export default function CartellaClinica() {
                 <CardHeader className="font-semibold">
                   Dati anamnestici
                 </CardHeader>
-                <CardContent className="grid grid-cols-2 gap-3">
-                  <FormField
-                    control={form.control}
-                    name="user.firstName"
-                    defaultValue={patient.profile.firstName}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          Nome
-                          <span className="text-primary ml-2">
-                            Obbligatorio
-                          </span>
-                        </FormLabel>
-                        <FormControl>
-                          <Input placeholder="Nome" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                <CardContent className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <p className="text-muted-foreground text-sm leading-none font-medium">
+                      Nome
+                    </p>
+                    <p>{patient.profile.firstName}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-muted-foreground text-sm leading-none font-medium">
+                      Cognome
+                    </p>
+                    <p>{patient.profile.lastName}</p>
+                  </div>
 
-                  <FormField
-                    control={form.control}
-                    name="user.lastName"
-                    defaultValue={patient.profile.lastName}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          Cognome
-                          <span className="text-primary ml-2">
-                            Obbligatorio
-                          </span>
-                        </FormLabel>
-                        <FormControl>
-                          <Input placeholder="Cognome" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <div className="col-span-2 space-y-2">
+                    <p className="text-muted-foreground text-sm leading-none font-medium">
+                      Nome d'elezione
+                    </p>
+                    <p>{patient.medicalRecords.alias || '-'}</p>
+                  </div>
 
-                  <FormField
-                    control={form.control}
-                    name="medicalRecords.alias"
-                    defaultValue={patient.medicalRecords.alias}
-                    render={({ field }) => (
-                      <FormItem className="col-span-2">
-                        <FormLabel>Nome d'elezione</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Nome d'elezione" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <div className="col-span-2 space-y-2">
+                    <p className="text-muted-foreground text-sm leading-none font-medium">
+                      Data di nascita
+                    </p>
+                    <p>
+                      {patient.medicalRecords.birthDate
+                        ? format(patient.medicalRecords.birthDate, 'PPP', {
+                            locale: it,
+                          })
+                        : '-'}
+                    </p>
+                  </div>
 
-                  <FormField
-                    control={form.control}
-                    name="medicalRecords.birthDate"
-                    defaultValue={patient.medicalRecords.birthDate ?? undefined}
-                    render={({ field }) => (
-                      <FormItem className="col-span-2 flex flex-col">
-                        <FormLabel>Data di nascita</FormLabel>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                type="button"
-                                variant="input"
-                                className={cn(
-                                  !field.value && 'text-muted-foreground',
-                                )}
-                              >
-                                {field.value ? (
-                                  format(field.value, 'PPP', {
-                                    locale: it,
-                                  })
-                                ) : (
-                                  <span>Seleziona la data di nascita</span>
-                                )}
-                                <Calendar1Icon className="ml-auto h-4 w-4 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0" align="start">
-                            <Calendar
-                              mode="single"
-                              captionLayout="dropdown-buttons"
-                              selected={field.value}
-                              onSelect={field.onChange}
-                              disabled={(date) =>
-                                date > new Date() ||
-                                date < new Date('1900-01-01')
-                              }
-                              initialFocus
-                            />
-                          </PopoverContent>
-                        </Popover>
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="medicalRecords.birthPlace"
-                    defaultValue={patient.medicalRecords.birthPlace}
-                    render={({ field }) => (
-                      <FormItem className="col-span-2">
-                        <FormLabel>Luogo di nascita</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Luogo di nascita" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="medicalRecords.sex"
-                    defaultValue={patient.medicalRecords.sex ?? undefined}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Sesso</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Seleziona il sesso" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="M">Maschio</SelectItem>
-                            <SelectItem value="F">Femmina</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="medicalRecords.gender"
-                    defaultValue={patient.medicalRecords.gender}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Genere</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Genere" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="medicalRecords.pronoun"
-                    defaultValue={patient.medicalRecords.pronoun}
-                    render={({ field }) => (
-                      <FormItem className="col-span-2">
-                        <FormLabel>Pronome</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Pronome" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="medicalRecords.occupation"
-                    defaultValue={patient.medicalRecords.occupation}
-                    render={({ field }) => (
-                      <FormItem className="col-span-2">
-                        <FormLabel>Professione</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Occupazione" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="medicalRecords.education"
-                    defaultValue={patient.medicalRecords.education}
-                    render={({ field }) => (
-                      <FormItem className="col-span-2">
-                        <FormLabel>Istruzione</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Istruzione" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="medicalRecords.otherNotes"
-                    defaultValue={patient.medicalRecords.otherNotes}
-                    render={({ field }) => (
-                      <FormItem className="col-span-2">
-                        <FormLabel>Note ulteriori</FormLabel>
-                        <FormControl>
-                          <Textarea placeholder="Note" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <div className="col-span-2 space-y-2">
+                    <p className="text-muted-foreground text-sm leading-none font-medium">
+                      Luogo di nascita
+                    </p>
+                    <p>{patient.medicalRecords.birthPlace || '-'}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-muted-foreground text-sm leading-none font-medium">
+                      Sesso
+                    </p>
+                    <p>{patient.medicalRecords.sex || '-'}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-muted-foreground text-sm leading-none font-medium">
+                      Genere
+                    </p>
+                    <p>{patient.medicalRecords.gender || '-'}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-muted-foreground text-sm leading-none font-medium">
+                      Pronome
+                    </p>
+                    <p>{patient.medicalRecords.pronoun || '-'}</p>
+                  </div>
+                  <div className="col-span-2 space-y-2">
+                    <p className="text-muted-foreground text-sm leading-none font-medium">
+                      Professione
+                    </p>
+                    <p>{patient.medicalRecords.occupation || '-'}</p>
+                  </div>
+                  <div className="col-span-2 space-y-2">
+                    <p className="text-muted-foreground text-sm leading-none font-medium">
+                      Istruzione
+                    </p>
+                    <p>{patient.medicalRecords.education || '-'}</p>
+                  </div>
+                  <div className="col-span-2 space-y-2">
+                    <p className="text-muted-foreground text-sm leading-none font-medium">
+                      Note ulteriori
+                    </p>
+                    <p
+                      dangerouslySetInnerHTML={{
+                        __html: patient.medicalRecords.otherNotes || '-',
+                      }}
+                    />
+                  </div>
                 </CardContent>
               </Card>
 
@@ -577,45 +440,19 @@ export default function CartellaClinica() {
 
               <Card>
                 <CardHeader className="font-semibold">Contatti</CardHeader>
-                <CardContent className="grid gap-3">
-                  <FormField
-                    control={form.control}
-                    name="user.email"
-                    defaultValue={patient.profile.email}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          Email
-                          <span className="text-primary ml-2">
-                            Obbligatorio
-                          </span>
-                        </FormLabel>
-                        <FormControl>
-                          <Input placeholder="Email" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="user.phone"
-                    defaultValue={patient.profile.phone ?? ''}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          Numero di telefono
-                          <span className="text-primary ml-2">
-                            Obbligatorio
-                          </span>
-                        </FormLabel>
-                        <FormControl>
-                          <Input placeholder="Numero di telefono" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                <CardContent className="grid gap-4">
+                  <div className="space-y-2">
+                    <p className="text-muted-foreground text-sm leading-none font-medium">
+                      Email
+                    </p>
+                    <p>{patient.profile.email}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-muted-foreground text-sm leading-none font-medium">
+                      Numero di telefono
+                    </p>
+                    <p>{patient.profile.phone}</p>
+                  </div>
                 </CardContent>
               </Card>
             </div>

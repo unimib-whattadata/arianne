@@ -31,7 +31,6 @@ export default function IusRPage() {
       { id: idTest },
       {
         enabled: !!idTest,
-        select: (data) => data.administration,
       },
     ),
   );

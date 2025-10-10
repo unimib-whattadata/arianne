@@ -17,7 +17,7 @@ export const therapists = createTable(
       .uuid("profile_id")
       .notNull()
       .unique()
-      .references(() => profiles.id),
+      .references(() => profiles.id, { onDelete: "cascade" }),
 
     isOnboardingPreliminaryFinished: d
       .boolean("is_onboarding_preliminary_finished")

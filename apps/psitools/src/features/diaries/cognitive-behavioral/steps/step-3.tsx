@@ -21,7 +21,7 @@ export default function Step3() {
         name="company"
         render={({ field }) => (
           <FormItem>
-            <div className="grid grid-cols-2 gap-10 rounded-sm bg-white px-4 py-6">
+            <div className="grid grid-cols-1 gap-10 rounded-sm bg-white px-4 py-6">
               <FormLabel className="text-base font-normal text-gray-900">
                 Eri in compagnia?
               </FormLabel>
@@ -29,12 +29,12 @@ export default function Step3() {
                 <RadioGroup
                   value={field.value ?? ''}
                   onValueChange={field.onChange}
-                  className="flex flex-col gap-4"
+                  className="flex gap-4"
                 >
                   {['Si', 'No'].map((option) => (
                     <FormItem
                       key={option}
-                      className={`relative cursor-pointer rounded-lg border px-4 py-3 text-center text-sm ${
+                      className={`relative w-full cursor-pointer rounded-lg border px-4 py-3 text-center text-sm ${
                         field.value === option
                           ? 'bg-primary-100 border-primary text-primary'
                           : 'border-gray-300 text-gray-700'

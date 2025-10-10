@@ -41,18 +41,21 @@ export const preferencesRouter = createTRPCRouter({
           and(eq(t.profileId, profileId), eq(t.key, input.key)),
       });
 
-      return preferences;
+      return preferences ?? null;
     }),
 
   set: protectedProcedure
     .input(setPreferenceSchema)
     .mutation(async ({ ctx, input }) => {
-      const profileId = ctx.user.id;
+      const profileId = ctx.user.profileId;
 
-      const isPatientSpecific =
-        typeof input.value === "object" && "patientId" in input.value;
+      const isPatientSpecific = (
+        data: typeof input,
+      ): data is typeof input & { value: { patientId: string } } => {
+        return typeof input.value === "object" && "patientId" in input.value;
+      };
 
-      if (isPatientSpecific && !input.value.patientId) {
+      if (isPatientSpecific(input) && !input.value.patientId) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Patient ID is required for this preference.",
@@ -60,7 +63,7 @@ export const preferencesRouter = createTRPCRouter({
       }
 
       // If the preference is patient-specific, we need to include the patientId in the query
-      if (isPatientSpecific) {
+      if (isPatientSpecific(input)) {
         const existingPreference = await ctx.db.query.preferences.findFirst({
           where: (t, { eq, and }) =>
             and(
@@ -96,6 +99,8 @@ export const preferencesRouter = createTRPCRouter({
         where: (t, { eq, and }) =>
           and(eq(t.profileId, profileId), eq(t.key, input.key)),
       });
+
+      console.log({ existingPreference });
 
       if (existingPreference) {
         const updatedPreference = await ctx.db

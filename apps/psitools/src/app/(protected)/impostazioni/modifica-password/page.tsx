@@ -1,6 +1,6 @@
 'use client';
 
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
 
@@ -79,7 +79,6 @@ export default function PasswordPage() {
   const api = useTRPC();
   const { data } = useQuery(api.therapists.findUnique.queryOptions());
   const [submitting, setSubmitting] = useState(false);
-  const queryClient = useQueryClient();
   const [edit, setEdit] = useState(false);
   const daysOfTheWeek = [
     { label: 'Lunedì', value: 'monday' },
@@ -381,7 +380,7 @@ export default function PasswordPage() {
             <CardContent className="grid grid-cols-2 gap-4">
               <div className="col-span-2 flex w-full gap-2">
                 <Image
-                  src={testTherapist.avatar!}
+                  src={testTherapist.avatar}
                   width={300}
                   height={300}
                   alt="Avatar"

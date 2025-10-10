@@ -31,10 +31,8 @@ export default function AdministrationsComparisonPage() {
   if (!administrationT0 || isLoadingT0 || !administrationT1 || isLoadingT1)
     return <Shimmer className="h-full w-full" />;
 
-  const recordsT0 = administrationT0.administration
-    .records as unknown as CbaRecord;
-  const recordsT1 = administrationT1.administration
-    .records as unknown as CbaRecord;
+  const recordsT0 = administrationT0.records as unknown as CbaRecord;
+  const recordsT1 = administrationT1.records as unknown as CbaRecord;
 
   const populateCards = (): ReactElement[] => {
     const cards: ReactElement[] = [];
@@ -88,10 +86,7 @@ export default function AdministrationsComparisonPage() {
       <div className="flex w-1/3 flex-col">
         <AdministrationResultsTable
           columns={columnsCompare}
-          data={[
-            administrationT0.administration,
-            administrationT1.administration,
-          ]}
+          data={[administrationT0, administrationT1]}
           questionnaire="cba-ve"
         />
       </div>

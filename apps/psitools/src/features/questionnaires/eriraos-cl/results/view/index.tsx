@@ -70,7 +70,6 @@ export default function PQ16Page() {
       { id: idTest },
       {
         enabled: !!idTest,
-        select: (data) => data.administration,
       },
     ),
   );

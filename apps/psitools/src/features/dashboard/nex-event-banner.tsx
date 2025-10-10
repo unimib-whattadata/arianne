@@ -50,7 +50,7 @@ const NextEventBanner = () => {
 
   if (upcomingEvents.length === 0) {
     return (
-      <Card className="h-full-safe w-full overflow-auto">
+      <Card className="w-full overflow-auto bg-white">
         <CardHeader className="sticky top-0 z-10 flex w-full flex-row items-center justify-between bg-white">
           <CardTitle className="text-base font-semibold">
             Prossimi eventi
@@ -74,7 +74,7 @@ const NextEventBanner = () => {
   );
 
   return (
-    <Card className="h-full-safe w-full max-w-[600px] overflow-auto">
+    <Card className="w-full overflow-hidden">
       <CardHeader className="sticky top-0 z-10 flex w-full flex-row items-center justify-between bg-white">
         <CardTitle className="text-base font-semibold">
           Prossimi eventi
@@ -86,95 +86,105 @@ const NextEventBanner = () => {
           Vedi tutti
         </Link>
       </CardHeader>
-      <CardContent className="flex flex-col items-center justify-between gap-3">
-        {sortedEvents.map((event, index) => {
-          const isAllDayOrMulti =
-            event.isAllDay || (event.endDate && event.endDate > event.date);
-          const label = (() => {
-            const today = new Date();
-            const tomorrow = addDays(today, 1);
+      <CardContent className="overflow-x-auto pb-3">
+        <div className="flex w-max gap-3">
+          {sortedEvents.map((event, index) => {
+            const isAllDayOrMulti =
+              event.isAllDay || (event.endDate && event.endDate > event.date);
+            const label = (() => {
+              const today = new Date();
+              const tomorrow = addDays(today, 1);
 
-            const startDate = new Date(event.date);
-            const endDate = event.endDate ? new Date(event.endDate) : startDate;
+              const startDate = new Date(event.date);
+              const endDate = event.endDate
+                ? new Date(event.endDate)
+                : startDate;
 
-            const todayInRange = isWithinInterval(today, {
-              start: startOfDay(startDate),
-              end: endOfDay(endDate),
-            });
+              const todayInRange = isWithinInterval(today, {
+                start: startOfDay(startDate),
+                end: endOfDay(endDate),
+              });
 
-            const tomorrowInRange = isWithinInterval(tomorrow, {
-              start: startOfDay(startDate),
-              end: endOfDay(endDate),
-            });
+              const tomorrowInRange = isWithinInterval(tomorrow, {
+                start: startOfDay(startDate),
+                end: endOfDay(endDate),
+              });
 
-            if (todayInRange) return 'Oggi';
-            if (tomorrowInRange) return 'Domani';
-            return '';
-          })();
-          const time = isAllDayOrMulti
-            ? ''
-            : event.startTime
-              ? event.startTime
-              : '';
+              if (todayInRange) return 'Oggi';
+              if (tomorrowInRange) return 'Domani';
+              return '';
+            })();
+            const time = isAllDayOrMulti
+              ? ''
+              : event.startTime
+                ? event.startTime
+                : '';
 
-          const patientsName = event.participants
-            .filter((p) => p.patientId)
-            .map((p) => p.patient.profile.name);
+            const patientsName =
+              user?.patients
+                ?.filter((patient) => {
+                  event.participants.find(
+                    (participant) => participant.id === patient.id,
+                  );
+                })
+                .map((p) => p.profile.name) || [];
 
-          const title =
-            patientsName.length > 1
-              ? `${event.name} (${patientsName.join(', ')})`
-              : patientsName[0] || event.name;
+            const title =
+              patientsName.length > 1
+                ? `${event.name} (${patientsName.join(', ')})`
+                : patientsName[0] || event.name;
 
-          const showButton = Boolean(event.meetingLink);
+            const safeDescription = title
+              .replace(/<\/?[^>]+(>|$)/g, '')
+              .replace(/\n/g, ' ')
+              .trim();
 
-          return (
-            <Card
-              key={event.id}
-              className={cn(
-                'bg-background w-full cursor-pointer hover:bg-[#EFF3F7]',
-                index === 0 ? 'border-primary/50 border' : 'border-none',
-              )}
-              onClick={() => {
-                router.push(`/agenda?eventId=${event.id}`);
-              }}
-            >
-              <CardHeader className="flex w-full flex-row items-center justify-between space-y-0 p-3">
-                <CardTitle className="text-base font-normal">{title}</CardTitle>
-                <Badge className="text-primary px-0 text-xs" variant="default">
-                  {time ? `${label}, ${time}` : label}
-                </Badge>
-              </CardHeader>
-              <CardContent
-                className={cn('w-full p-0 px-3', showButton && 'pb-3')}
+            const showButton = Boolean(event.meetingLink);
+
+            return (
+              <Card
+                key={event.id}
+                className={cn(
+                  'bg-background w-3xs cursor-pointer hover:bg-[#EFF3F7]',
+                  index === 0 ? 'border-primary/50 border' : 'border-none',
+                )}
+                onClick={() => {
+                  router.push(`/agenda?eventId=${event.id}`);
+                }}
               >
-                {event.description && (
-                  <div
-                    className="mb-3 block truncate text-xs text-ellipsis"
-                    dangerouslySetInnerHTML={{
-                      __html: event.description,
-                    }}
+                <CardHeader className="flex w-full flex-row items-center justify-between space-y-0 p-3">
+                  <CardTitle className="text-base font-normal">
+                    {title}
+                  </CardTitle>
+                  <Badge className="text-primary text-xs" variant="default">
+                    {time ? `${label}, ${time}` : label}
+                  </Badge>
+                </CardHeader>
+                <CardContent className="w-full px-3 pb-3">
+                  <p
+                    className="mb-2 block truncate overflow-hidden text-xs text-ellipsis"
+                    dangerouslySetInnerHTML={{ __html: safeDescription }}
                   />
-                )}
-                {showButton && (
-                  <Button
-                    variant={index === 0 ? 'default' : 'outline'}
-                    className={cn(
-                      'w-full gap-2 text-[14px]',
-                      index === 0 ? '' : 'bg-background',
-                    )}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      window.open(event.meetingLink!, '_blank');
-                    }}
-                  >
-                    <VideoIcon className="h-4 w-4" /> Partecipa
-                  </Button>
-                )}
-              </CardContent>
-            </Card>
-          );
-        })}
+                  {showButton && (
+                    <Button
+                      variant={index === 0 ? 'default' : 'outline'}
+                      className={cn(
+                        'w-full gap-2 text-[14px]',
+                        index === 0 ? '' : 'bg-background',
+                      )}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.open(event.meetingLink!, '_blank');
+                      }}
+                    >
+                      <VideoIcon className="h-4 w-4" /> Partecipa
+                    </Button>
+                  )}
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
       </CardContent>
     </Card>
   );

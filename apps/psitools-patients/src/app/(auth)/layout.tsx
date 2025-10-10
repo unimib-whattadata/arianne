@@ -2,14 +2,11 @@ import '@/styles/globals.css';
 
 import { TRPCReactProvider } from '@/trpc/react';
 import { Toaster } from 'sonner';
-import { Poppins, Rubik } from 'next/font/google';
+import { Poppins } from 'next/font/google';
 import { cn } from '@/utils/cn';
-
-const rubik = Rubik({
-  weight: ['500'],
-  subsets: ['latin-ext'],
-  variable: '--ff-rubik',
-});
+import { createClient } from '@arianne/supabase/server';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 const poppins = Poppins({
   weight: ['300', '400', '600', '700'],
@@ -17,12 +14,19 @@ const poppins = Poppins({
   variable: '--ff-poppins',
 });
 
-// eslint-disable-next-line @typescript-eslint/require-await
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const supabase = await createClient(cookies());
+  const { data, error } = await supabase.auth.getUser();
+
+  // If there is a user, redirect to the app
+  if (data.user && !error) {
+    return redirect('/');
+  }
+
   return (
     <html lang="it" className={cn('scroll-smooth', poppins.variable)}>
       <body>

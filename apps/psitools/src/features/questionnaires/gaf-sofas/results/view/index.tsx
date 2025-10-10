@@ -35,7 +35,6 @@ export default function GafSofasPage() {
       { id: idTest },
       {
         enabled: !!idTest,
-        select: (data) => data.administration,
       },
     ),
   );

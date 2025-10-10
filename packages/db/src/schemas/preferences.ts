@@ -33,6 +33,9 @@ export const getPreferencesSchema = z.discriminatedUnion("key", [
     key: z.literal("notifications"),
   }),
   z.object({
+    key: z.literal("notificationsForPatients"),
+  }),
+  z.object({
     key: z.literal("favoritesAdministrations"),
     patientId: z.string().uuid().optional(),
   }),
@@ -41,7 +44,21 @@ export const getPreferencesSchema = z.discriminatedUnion("key", [
 export const setPreferenceSchema = z.discriminatedUnion("key", [
   z.object({
     key: z.literal("notifications"),
-    value: z.boolean(),
+    value: z.object({
+      patientMessages: z.boolean().default(true),
+      assignmentCompleted: z.boolean().default(true),
+      eventModified: z.boolean().default(true),
+      eventCancelled: z.boolean().default(true),
+    }),
+  }),
+  z.object({
+    key: z.literal("notificationsForPatients"),
+    value: z.object({
+      appointment: z.boolean().default(true),
+      appointmentReminders: z.boolean().default(true),
+      newQuestionnaire: z.boolean().default(true),
+      questionnaireReminder: z.boolean().default(true),
+    }),
   }),
   z.object({
     key: z.literal("favoritesAdministrations"),

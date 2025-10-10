@@ -85,7 +85,7 @@ export default function Page() {
 
         const expires = new Date();
         expires.setHours(23, 59, 59, 0);
-        document.cookie = `cognitive_beahvioral=1; path=/; expires=${expires.toUTCString()}`;
+        document.cookie = `cognitive_behavioral=1; path=/; expires=${expires.toUTCString()}`;
 
         window.open(`${pathname}/compilazione?id=${data.id}`, '_blank');
       },
@@ -117,7 +117,6 @@ export default function Page() {
       type: 'cognitive_behavioral',
 
       patientId: patient?.id,
-
       content: {},
     });
   };
@@ -252,12 +251,12 @@ export default function Page() {
                           const currentCookie = document.cookie
                             .split('; ')
                             .find((row) =>
-                              row.startsWith('cognitive_beahvioral='),
+                              row.startsWith('cognitive_behavioral='),
                             );
                           if (!currentCookie) {
                             const expires = new Date();
                             expires.setHours(23, 59, 59, 0);
-                            document.cookie = `cognitive_beahvioral=1; path=/; expires=${expires.toUTCString()}`;
+                            document.cookie = `cognitive_behavioral=1; path=/; expires=${expires.toUTCString()}`;
                           }
                           router.push(
                             `${pathname}/compilazione?id=${diary.id}`,

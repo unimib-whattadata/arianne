@@ -36,7 +36,7 @@ export default function ViewDiary() {
 
   const { data: allDiaries, isLoading } = useQuery(
     api.diaries.getAll.queryOptions({
-      type: 'cognitive_beahvioral',
+      type: 'cognitive_behavioral',
     }),
   );
 
