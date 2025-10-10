@@ -2,14 +2,8 @@ import '@/styles/globals.css';
 
 import { TRPCReactProvider } from '@/trpc/react';
 import { Toaster } from 'sonner';
-import { Poppins, Rubik } from 'next/font/google';
+import { Poppins } from 'next/font/google';
 import { cn } from '@/utils/cn';
-
-const rubik = Rubik({
-  weight: ['500'],
-  subsets: ['latin-ext'],
-  variable: '--ff-rubik',
-});
 
 const poppins = Poppins({
   weight: ['300', '400', '600', '700'],

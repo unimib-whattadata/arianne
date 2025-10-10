@@ -11,14 +11,8 @@ import { api } from '@/trpc/server';
 import { redirect } from 'next/navigation';
 import { env } from '@/env.mjs';
 
-import { Poppins, Rubik } from 'next/font/google';
+import { Poppins } from 'next/font/google';
 import { cn } from '@/lib/utils';
-
-const rubik = Rubik({
-  weight: ['500'],
-  subsets: ['latin-ext'],
-  variable: '--ff-rubik',
-});
 
 const poppins = Poppins({
   weight: ['300', '400', '600', '700'],

@@ -71,7 +71,7 @@
     "dev": "pnpm with-env next dev --turbo -p 3002",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
     "format:write": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
-    "lint": "next lint",
+    "lint": "eslint",
     "lint:fix": "next lint --fix",
     "preview": "next build && next start",
     "start": "next start",

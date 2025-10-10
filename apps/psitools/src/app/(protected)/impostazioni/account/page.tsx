@@ -103,24 +103,6 @@ export default function AccountPage() {
   );
 
   const [edit, setEdit] = useState(false);
-  const [selected, setSelected] = useState<string[]>([]);
-
-  // const form = useForm<AccountFormValues>({
-  //   resolver: zodResolver(UpdateFormSchema),
-  //   values: therapist?.profile
-  //     ? {
-  //         firstName: therapist.profile.firstName,
-  //         lastName: therapist.profile.lastName,
-  //         phone: therapist.profile.phone,
-  //         email: therapist.profile.email,
-  //       }
-  //     : {
-  //         firstName: '',
-  //         lastName: '',
-  //         phone: '',
-  //         email: '',
-  //       },
-  // });
 
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(UpdateFormSchema),
@@ -135,20 +117,11 @@ export default function AccountPage() {
     );
   }
 
-  const onSubmit: SubmitHandler<AccountFormValues> = /* async */ (_data) => {
+  const _onSubmit: SubmitHandler<AccountFormValues> = /* async */ (_data) => {
     if (!therapist?.profile) {
       toast.error("C'è stato un errore nel recupero dei dati dell'account.");
       return;
     }
-
-    // const profile = {
-    //   firstName: data.firstName,
-    //   lastName: data.lastName,
-    //   attributes: {
-    //     phoneNumber: data.phone ? [data.phone] : [],
-    //   },
-    //   email: data.email,
-    // } satisfies Partial<KeycloakUser>;
 
     // TODO: Update user profile
   };

@@ -93,9 +93,9 @@ export function useAdministration<FormValues>(props?: {
         enabled: !!id && !isComparison,
         select: (data) => {
           return {
-            ...data.administration,
-            T: data.administration.T,
-            records: data.administration.records as FormValues,
+            ...data,
+            T: data.T,
+            records: data.records as FormValues,
           };
         },
       },

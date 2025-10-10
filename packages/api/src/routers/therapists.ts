@@ -121,7 +121,7 @@ export const therapistsRouter = createTRPCRouter({
         .where(eq(therapists.profileId, ctx.user.id));
     }),
 
-  getMatched: protectedProcedure.query(async () => {
+  getMatched: protectedProcedure.query(() => {
     const therapistList = [
       {
         id: "1",

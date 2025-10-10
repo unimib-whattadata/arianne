@@ -3,10 +3,10 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { Calendar1Icon, Plus, Trash2, TriangleAlert } from 'lucide-react';
-import { Fragment, useState } from 'react';
+import { Calendar1Icon } from 'lucide-react';
+import { useState } from 'react';
 import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import format from 'date-fns/format';
 import { it } from 'date-fns/locale';
@@ -73,7 +73,7 @@ export default function ProfilePage() {
     }
 
     return await mutateAsync({
-      where: { patientId: patient?.id },
+      where: { id: patient?.id },
       data: {},
     });
   };
