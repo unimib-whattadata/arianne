@@ -16,45 +16,63 @@ import {
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
+import { useTRPC } from '@/trpc/react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 interface ExperienceFormData {
-  modalitaLavoro: string;
-  esperienza: number;
-  descrizione: string;
-  orientamento: string;
-  lingue: string;
-  specializzazioneclinica: string;
-  competenza: string;
-  categorie: string[];
-  fasceEta: string[];
-  indirizzo: string;
-  paese: string;
-  provinciaIndirizzo: string;
+  workMode: string;
+  experienceYears: number;
+  description: string;
+  therapeuticOrientation: string;
+  languages: string;
+  clinicalSpecialization: string;
+  skills: string;
+  categories: string[];
+  ageRanges: string[];
+  address?: string;
+  country?: string;
+  province?: string;
 }
 
 export default function Experience() {
+  const api = useTRPC();
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const onboardingTherapistExperienceSave = useMutation(
+    api.onboardingTherapistExperience.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          api.therapists.findUnique.queryFilter(),
+        );
+        toast.success('Disponibilità salvata con successo!');
+        router.push('/onboarding/landing');
+      },
+    }),
+  );
   const form = useForm<ExperienceFormData>({
     defaultValues: {
-      modalitaLavoro: '',
-      esperienza: 0,
-      descrizione: '',
-      orientamento: '',
-      lingue: '',
-      specializzazioneclinica: '',
-      competenza: '',
-      categorie: [],
-      fasceEta: [],
-      indirizzo: '',
-      paese: '',
-      provinciaIndirizzo: '',
+      workMode: '',
+      experienceYears: 0,
+      description: '',
+      therapeuticOrientation: '',
+      languages: '',
+      clinicalSpecialization: '',
+      skills: '',
+      categories: [],
+      ageRanges: [],
+      address: '',
+      country: '',
+      province: '',
     },
   });
 
   const onSubmit: SubmitHandler<ExperienceFormData> = (data) => {
-    console.log('Form data:', data);
+    onboardingTherapistExperienceSave.mutate(data);
   };
 
-  const modalitaLavoro = form.watch('modalitaLavoro');
+  const modalitaLavoro = form.watch('workMode');
 
   return (
     <main className="min-h-safe px-6 py-36 sm:px-8 lg:px-12 lg:py-36">
@@ -72,7 +90,7 @@ export default function Experience() {
 
             <FormField
               control={form.control}
-              name="modalitaLavoro"
+              name="workMode"
               rules={{ required: 'Selezionare la modalità di lavoro' }}
               render={({ field }) => (
                 <FormItem className="mt-4 w-full">
@@ -102,7 +120,7 @@ export default function Experience() {
               <div className="mt-4 flex w-full flex-col gap-4 sm:flex-row sm:gap-4">
                 <FormField
                   control={form.control}
-                  name="indirizzo"
+                  name="address"
                   rules={{ required: "L'indirizzo è obbligatorio" }}
                   render={({ field }) => (
                     <FormItem className="w-full sm:flex-2">
@@ -119,7 +137,7 @@ export default function Experience() {
                 />
                 <FormField
                   control={form.control}
-                  name="paese"
+                  name="country"
                   rules={{ required: 'Il paese è obbligatorio' }}
                   render={({ field }) => (
                     <FormItem className="w-full sm:flex-1">
@@ -136,7 +154,7 @@ export default function Experience() {
                 />
                 <FormField
                   control={form.control}
-                  name="provinciaIndirizzo"
+                  name="province"
                   rules={{ required: 'La provincia è obbligatoria' }}
                   render={({ field }) => (
                     <FormItem className="w-full sm:flex-1">
@@ -165,7 +183,7 @@ export default function Experience() {
             <div className="mt-4 flex w-full flex-col gap-4 sm:flex-row sm:gap-4">
               <FormField
                 control={form.control}
-                name="esperienza"
+                name="experienceYears"
                 rules={{ required: "L'esperienza è obbligatoria" }}
                 render={({ field }) => (
                   <FormItem className="w-full sm:flex-1">
@@ -185,7 +203,7 @@ export default function Experience() {
               />
               <FormField
                 control={form.control}
-                name="lingue"
+                name="languages"
                 rules={{ required: 'Le lingue parlate sono obbligatorie' }}
                 render={({ field }) => (
                   <FormItem className="w-full sm:flex-1">
@@ -206,7 +224,7 @@ export default function Experience() {
 
             <FormField
               control={form.control}
-              name="descrizione"
+              name="description"
               rules={{ required: 'La descrizione è obbligatoria' }}
               render={({ field }) => (
                 <FormItem className="mt-4 w-full">
@@ -227,7 +245,7 @@ export default function Experience() {
             <div className="mt-4 flex w-full flex-col gap-4 sm:flex-row sm:gap-4">
               <FormField
                 control={form.control}
-                name="orientamento"
+                name="therapeuticOrientation"
                 rules={{
                   required: "L'orientamento terapeutico è obbligatorio",
                 }}
@@ -248,7 +266,7 @@ export default function Experience() {
               />
               <FormField
                 control={form.control}
-                name="specializzazioneclinica"
+                name="clinicalSpecialization"
                 rules={{
                   required: 'La specializzazione clinica è obbligatoria',
                 }}
@@ -278,7 +296,7 @@ export default function Experience() {
 
             <FormField
               control={form.control}
-              name="competenza"
+              name="skills"
               rules={{ required: 'La competenza è obbligatoria' }}
               render={({ field }) => (
                 <FormItem className="mt-4 w-full">
@@ -299,7 +317,7 @@ export default function Experience() {
             <div className="mt-4 flex w-full flex-col gap-4 sm:flex-row sm:gap-4">
               <FormField
                 control={form.control}
-                name="fasceEta"
+                name="ageRanges"
                 rules={{ required: "Selezionare almeno una fascia d'età" }}
                 render={({ field }) => (
                   <FormItem className="w-full sm:flex-1">
@@ -328,7 +346,7 @@ export default function Experience() {
 
               <FormField
                 control={form.control}
-                name="categorie"
+                name="categories"
                 rules={{ required: 'Selezionare almeno una categoria' }}
                 render={({ field }) => (
                   <FormItem className="w-full sm:flex-1">
@@ -369,9 +387,7 @@ export default function Experience() {
                 variant="secondary"
                 type="submit"
               >
-                <Link href="/onboarding/hours" className="w-full text-center">
-                  Passa al prossimo step
-                </Link>
+                Passa al prossimo step
               </Button>
             </div>
           </div>

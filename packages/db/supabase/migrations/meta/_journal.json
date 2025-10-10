@@ -162,6 +162,20 @@
       "when": 1760106596717,
       "tag": "0022_add_delete_cascade_actions",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1760107828588,
+      "tag": "0023_add-onboarding-therapist-experience",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1760110182099,
+      "tag": "0024_add-onboarding-therapist-time",
+      "breakpoints": true
     }
   ]
 }

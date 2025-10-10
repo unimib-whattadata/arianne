@@ -1,6 +1,6 @@
 import {
-  onboardingTherapistPersonal,
-  OnboardingTherapistPersonalCreateSchema,
+  onboardingTherapistExperience,
+  OnboardingTherapistExperienceSchema,
   profiles,
   therapists,
 } from "@arianne/db/schema";
@@ -9,32 +9,33 @@ import { and, eq } from "drizzle-orm";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
-export const onboardingTherapistPersonalRouter = createTRPCRouter({
+export const onboardingTherapistExperienceRouter = createTRPCRouter({
   get: protectedProcedure.query(async ({ ctx }) => {
-    const onboardingPersonalInfo =
-      await ctx.db.query.onboardingTherapistPersonal.findFirst({
+    const onboardingExperienceInfo =
+      await ctx.db.query.onboardingTherapistExperience.findFirst({
         where: (t, { eq }) => eq(t.therapistId, ctx.user.profileId),
       });
-    if (!onboardingPersonalInfo) return null;
-    return onboardingPersonalInfo;
+    if (!onboardingExperienceInfo) return null;
+    return onboardingExperienceInfo;
   }),
 
   create: protectedProcedure
-    .input(OnboardingTherapistPersonalCreateSchema)
+    .input(OnboardingTherapistExperienceSchema)
     .mutation(async ({ input, ctx }) => {
-      const newTherapistOnboardingPersonalInfo = await ctx.db
-        .insert(onboardingTherapistPersonal)
+      const newTherapistOnboardingExperienceInfo = await ctx.db
+        .insert(onboardingTherapistExperience)
         .values({
           ...input,
           therapistId: ctx.user.profileId,
         })
         .returning();
-      const addedTherapistPersonalInfo = newTherapistOnboardingPersonalInfo[0];
-      if (!addedTherapistPersonalInfo)
+      const addedTherapistExperienceInfo =
+        newTherapistOnboardingExperienceInfo[0];
+      if (!addedTherapistExperienceInfo)
         throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       await ctx.db
         .update(therapists)
-        .set({ isOnboardingPersonalFinished: true })
+        .set({ isOnboardingExperienceFinished: true })
         .where(eq(therapists.profileId, ctx.user.profileId));
 
       const currentTherapist = await ctx.db.query.therapists.findFirst({
@@ -54,6 +55,7 @@ export const onboardingTherapistPersonalRouter = createTRPCRouter({
           .where(and(eq(profiles.id, ctx.user.profileId)))
           .returning();
       }
-      return addedTherapistPersonalInfo;
+
+      return addedTherapistExperienceInfo;
     }),
 });

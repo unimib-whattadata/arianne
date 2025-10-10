@@ -20,3 +20,4 @@ export * from "./schemas/therapists";
 export * from "./schemas/onboarding-questionnaire";
 export * from "./schemas/onboarding-therapist";
 export * from "./schemas/onboarding-therapist-personal";
+export * from "./schemas/onboarding-therapist-experience";
