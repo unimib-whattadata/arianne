@@ -49,6 +49,7 @@ export const therapistsRouter = createTRPCRouter({
         },
         notes: true,
         patients: {
+          where: (p, { isNotNull }) => isNotNull(p.medicalRecordsId),
           with: {
             profile: {
               extras: (fields) => {
@@ -69,7 +70,8 @@ export const therapistsRouter = createTRPCRouter({
   }),
   getAllPatients: protectedProcedure.query(async ({ ctx }) => {
     const patients = await ctx.db.query.patients.findMany({
-      where: (p, { eq }) => eq(p.therapistId, ctx.user.id),
+      where: (p, { and, eq, isNotNull }) =>
+        and(eq(p.therapistId, ctx.user.id), isNotNull(p.medicalRecordsId)),
       with: {
         profile: {
           extras: (fields) => {
@@ -121,6 +123,60 @@ export const therapistsRouter = createTRPCRouter({
         .where(eq(therapists.profileId, ctx.user.id));
     }),
 
+  getInvitedPatients: protectedProcedure.query(async ({ ctx }) => {
+    const supabase = ctx.supabase;
+    if (!supabase) {
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Supabase client not found in context",
+      });
+    }
+
+    const patients = await ctx.db.query.patients.findMany({
+      where: (p, { and, eq, isNull }) =>
+        and(eq(p.therapistId, ctx.user.id), isNull(p.medicalRecordsId)),
+      with: {
+        profile: {
+          extras: (fields) => {
+            return {
+              name: sql<string>`concat(${fields.firstName}, ' ', ${fields.lastName})`.as(
+                "full_name",
+              ),
+            };
+          },
+        },
+      },
+    });
+
+    const patientsWithStatus = await Promise.all(
+      patients.map(async (patient) => {
+        const { data } = await supabase.auth.admin.getUserById(
+          patient.profileId,
+        );
+        if (!data.user) return;
+        const { invited_at, confirmed_at } = data.user;
+
+        if (!invited_at) return;
+
+        let status: "invited" | "confirmed" | "pending" = "invited";
+        if (invited_at && !confirmed_at) status = "invited";
+        if (invited_at && confirmed_at && !patient.profile.completedOnboarding)
+          status = "pending";
+        if (invited_at && confirmed_at && patient.profile.completedOnboarding)
+          status = "confirmed";
+
+        const { profile } = patient;
+
+        return {
+          ...profile,
+          status,
+          invitedAt: invited_at,
+        };
+      }),
+    );
+
+    return patientsWithStatus;
+  }),
   getMatched: protectedProcedure.query(() => {
     const therapistList = [
       {
