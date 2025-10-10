@@ -14,8 +14,7 @@ import type { TView } from '@/types/view-types';
 import { dateFormatting } from '@/utils/date-formatter';
 import type { RouterOutputs } from '@arianne/api';
 
-type Administration =
-  RouterOutputs['administrations']['findUnique']['administration'];
+type Administration = RouterOutputs['administrations']['findUnique'];
 
 const getAverageScores = (
   data: Administration[],
@@ -87,8 +86,7 @@ const ShowAdministrationResults = () => {
   )
     return <Shimmer className="h-full w-full" />;
 
-  const records = currentAdministration.administration
-    .records as unknown as CbaRecord;
+  const records = currentAdministration.records as unknown as CbaRecord;
 
   const adminAverageScores = getAverageScores(allCBAdministrations);
   const ansiaDS = getStandardDeviation(
@@ -188,12 +186,10 @@ const ShowAdministrationResults = () => {
         <Shimmer className="h-full w-full" />
       ) : (
         <AdministrationCardDetail
-          testType={
-            currentAdministration.administration.type ?? 'Dato non trovato'
-          }
+          testType={currentAdministration.type ?? 'Dato non trovato'}
           testNumber="T0"
           date={dateFormatting(
-            currentAdministration.administration.date ?? new Date(),
+            currentAdministration.date ?? new Date(),
             'dd/MM/yyyy',
           )}
         />

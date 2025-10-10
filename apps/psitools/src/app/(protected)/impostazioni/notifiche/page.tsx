@@ -12,7 +12,6 @@ import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Switch } from '@/components/ui/switch';
 import { useTRPC } from '@/trpc/react';
 
-import type {} from '@arianne/db/schemas/preferences';
 import z from 'zod';
 
 const ITEM = [

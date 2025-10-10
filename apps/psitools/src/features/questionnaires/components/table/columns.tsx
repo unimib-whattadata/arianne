@@ -12,8 +12,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useExport } from '@/features/questionnaires/context/export-context';
 import type { RouterOutputs } from '@arianne/api';
 
-type Administration =
-  RouterOutputs['administrations']['findUnique']['administration'];
+type Administration = RouterOutputs['administrations']['findUnique'];
 
 export const useColumns = (currentPath: string, exportMode: boolean) => {
   const { setSelectedIds } = useExport();
