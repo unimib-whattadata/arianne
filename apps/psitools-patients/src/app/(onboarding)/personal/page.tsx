@@ -54,8 +54,7 @@ export default function Personal() {
   const queryClient = useQueryClient();
   const savePersonalData = useMutation(
     api.patientsPersonal.save.mutationOptions({
-      onSuccess: async (data) => {
-        console.log(data);
+      onSuccess: async (_) => {
         await queryClient.invalidateQueries({
           queryKey: api.patients.get.queryKey(),
         });

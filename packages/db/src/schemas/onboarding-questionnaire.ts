@@ -33,11 +33,10 @@ export const formFlows = createTable(
 
     patientId: f.uuid("patient_id").references(() => patients.profileId),
 
-    // flow state
     currentStep: formStepEnum().default("step1").notNull(),
     path: formPathEnum(),
+    currentStepId: f.integer(),
 
-    // incremental json data
     step1: f.jsonb("step1").$type<{
       name?: string;
     }>(),
@@ -50,7 +49,6 @@ export const formFlows = createTable(
       gender?: number;
     }>(),
 
-    // Dynamic blocks (see better)
     individual: f.jsonb("individual").$type<{
       reasons?: number[];
       details?: Record<string, number[]>;
@@ -81,7 +79,7 @@ export const formFlows = createTable(
       therapyGoals?:
         | number[]
         | {
-            other: string;
+            other?: string;
           };
       preferredApproach?: number;
       questionType?: number;
@@ -92,14 +90,12 @@ export const formFlows = createTable(
       otherInfo?: string;
     }>(),
 
-    // tracking
     completed: f.boolean("completed").default(false),
     updatedAt: f.timestamp("updated_at").defaultNow().notNull(),
   }),
   (t) => [index("form_flow_id").on(t.id)],
 ).enableRLS();
 
-// --- Relations ---
 export const formFlowsRelations = relations(formFlows, ({ one }) => ({
   patient: one(patients, {
     fields: [formFlows.patientId],
@@ -107,14 +103,16 @@ export const formFlowsRelations = relations(formFlows, ({ one }) => ({
   }),
 }));
 
-// --- Zod Schemas for API ---
-
 export const FormFlowFindSchema = z.object({
   id: z.string(),
 });
 
+export const FormFlowFindSchemaFromClient = z.object({
+  patientId: z.string(),
+});
+
 export const FormFlowCreateSchema = z.object({
-  patientId: z.string().optional(),
+  patientId: z.string().optional(), // delete it
   currentStep: z.enum(formStepEnum.enumValues).default("step1"),
   path: z.enum(formPathEnum.enumValues).optional(),
   step1: z.object({ name: z.string().optional() }).optional(),
@@ -183,4 +181,46 @@ export const FormFlowUpdateSchema = z.object({
 
 export const FormFlowFindByPatientSchema = z.object({
   patientId: z.string(),
+});
+
+export const FullSchema = z.object({
+  name: z.string().optional(),
+  age: z.number().optional(),
+  gender: z.number().optional(),
+  duration: z.number().optional(),
+  pastTherapy: z.number().optional(),
+  therapyExperience: z.number().optional(),
+  therapyLocation: z.number().optional(),
+  therapistOrientation: z.number().optional(),
+  therapyGoals: z.array(z.number()).optional(),
+  preferredApproach: z.number().optional(),
+  questionType: z.number().optional(),
+  preferredGender: z.number().optional(),
+  preferredAge: z.number().optional(),
+  preferredOrientation: z.number().optional(),
+  timePreference: z.array(z.number()).optional(),
+  path: z.string().optional(),
+  individual: z
+    .object({
+      reasons: z.array(z.number()).optional(),
+      details: z.record(z.string(), z.array(z.number())).optional(),
+      detailText: z.string().optional(),
+    })
+    .optional(),
+  couple: z
+    .object({
+      reasons: z.array(z.number()).optional(),
+      details: z.record(z.string(), z.array(z.number())).optional(),
+      detailText: z.string().optional(),
+    })
+    .optional(),
+  family: z
+    .object({
+      reasons: z.array(z.number()).optional(),
+      details: z.record(z.string(), z.array(z.number())).optional(),
+      detailText: z.string().optional(),
+      numberOfChildren: z.number().optional(),
+      childrenAge: z.array(z.number()).optional(),
+    })
+    .optional(),
 });

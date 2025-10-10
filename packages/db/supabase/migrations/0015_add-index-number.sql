@@ -1,0 +1,1 @@
+ALTER TABLE "arianne_form_flows" ADD COLUMN "currentStepId" numeric;

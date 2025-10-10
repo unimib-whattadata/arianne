@@ -15,48 +15,58 @@ import {
 } from '@/components/ui/select';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
-
+import { useTRPC } from '@/trpc/react';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
+import { useMutation } from '@tanstack/react-query';
 
 interface OnboardingFormData {
-  nome: string;
-  cognome: string;
+  name: string;
+  surname: string;
   email: string;
-  numeroIscrizione: string;
-  orientamentoTerapeutico: string;
-  specializzazione: string;
-  anniEsperienza: string;
-  doveEsercita: string;
-  paese: string;
-  citta: string;
-  provincia: string;
+  subscriptionNumber: string;
+  therapeuticOrientation: string;
+  specialization: string;
+  experienceYears: string;
+  location: string;
+  country: string;
+  city: string;
+  province: string;
   cap: string;
   cv: FileList | null;
-  terminiAccettati: boolean;
+  acceptanceConditions: boolean;
 }
 
 export default function Onboarding() {
+  const api = useTRPC();
+  const saveOnboardingTherapist = useMutation(
+    api.onboardingTherapist.create.mutationOptions({
+      onSuccess: (data) => {
+        console.log('DATA', data);
+      },
+    }),
+  );
   const form = useForm<OnboardingFormData>({
     defaultValues: {
-      nome: '',
-      cognome: '',
+      name: '',
+      surname: '',
       email: '',
-      numeroIscrizione: '',
-      orientamentoTerapeutico: '',
-      specializzazione: '',
-      anniEsperienza: '',
-      doveEsercita: '',
-      paese: '',
-      citta: '',
-      provincia: '',
+      subscriptionNumber: '',
+      therapeuticOrientation: '',
+      specialization: '',
+      experienceYears: '',
+      location: '',
+      country: '',
+      city: '',
+      province: '',
       cap: '',
       cv: null,
-      terminiAccettati: false,
+      acceptanceConditions: false,
     },
   });
 
   const onSubmit: SubmitHandler<OnboardingFormData> = (data) => {
-    console.log('Form data:', data);
+    console.log('DATA INSERTED', data);
+    saveOnboardingTherapist.mutate(data);
   };
 
   return (
@@ -81,7 +91,7 @@ export default function Onboarding() {
             <div className="mt-10 flex w-full flex-col gap-4">
               <FormField
                 control={form.control}
-                name="nome"
+                name="name"
                 rules={{ required: 'Il nome è obbligatorio' }}
                 render={({ field, fieldState }) => (
                   <FormItem className="w-full">
@@ -103,7 +113,7 @@ export default function Onboarding() {
               />
               <FormField
                 control={form.control}
-                name="cognome"
+                name="surname"
                 rules={{ required: 'Il cognome è obbligatorio' }}
                 render={({ field, fieldState }) => (
                   <FormItem className="w-full">
@@ -151,7 +161,7 @@ export default function Onboarding() {
               />
               <FormField
                 control={form.control}
-                name="numeroIscrizione"
+                name="subscriptionNumber"
                 rules={{ required: 'Il numero di iscrizione è obbligatorio' }}
                 render={({ field, fieldState }) => (
                   <FormItem className="w-full">
@@ -174,7 +184,7 @@ export default function Onboarding() {
             <div className="mt-6 flex w-full flex-col gap-4">
               <FormField
                 control={form.control}
-                name="orientamentoTerapeutico"
+                name="therapeuticOrientation"
                 rules={{ required: 'Questo campo è obbligatorio' }}
                 render={({ field, fieldState }) => (
                   <FormItem className="w-full">
@@ -192,7 +202,7 @@ export default function Onboarding() {
               />
               <FormField
                 control={form.control}
-                name="specializzazione"
+                name="specialization"
                 rules={{ required: 'Questo campo è obbligatorio' }}
                 render={({ field, fieldState }) => (
                   <FormItem className="w-full">
@@ -210,7 +220,7 @@ export default function Onboarding() {
               />
               <FormField
                 control={form.control}
-                name="anniEsperienza"
+                name="experienceYears"
                 rules={{
                   required: 'Inserisci il numero di anni di esperienza',
                 }}
@@ -237,7 +247,7 @@ export default function Onboarding() {
 
             <FormField
               control={form.control}
-              name="doveEsercita"
+              name="location"
               rules={{ required: 'Seleziona dove eserciti' }}
               render={({ field, fieldState }) => (
                 <FormItem className="mt-6 w-full">
@@ -265,7 +275,7 @@ export default function Onboarding() {
             <div className="mt-6 flex w-full flex-col gap-4 sm:flex-row">
               <FormField
                 control={form.control}
-                name="paese"
+                name="country"
                 rules={{ required: 'Seleziona un paese' }}
                 render={({ field, fieldState }) => (
                   <FormItem className="w-full">
@@ -293,7 +303,7 @@ export default function Onboarding() {
               />
               <FormField
                 control={form.control}
-                name="citta"
+                name="city"
                 rules={{ required: 'La città è obbligatoria' }}
                 render={({ field, fieldState }) => (
                   <FormItem className="w-full">
@@ -311,7 +321,7 @@ export default function Onboarding() {
               />
               <FormField
                 control={form.control}
-                name="provincia"
+                name="province"
                 rules={{ required: 'La provincia è obbligatoria' }}
                 render={({ field, fieldState }) => (
                   <FormItem className="w-full">
@@ -402,7 +412,7 @@ export default function Onboarding() {
             </p>
             <FormField
               control={form.control}
-              name="terminiAccettati"
+              name="acceptanceConditions"
               rules={{ required: 'Devi accettare i termini' }}
               render={({ field, fieldState }) => (
                 <FormItem className="mt-4 flex items-start gap-2 text-slate-900">

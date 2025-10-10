@@ -21,9 +21,9 @@ export default async function OnboardingPage() {
       value: 'questionnaire',
       title: 'Rispondi al questionario ',
       text: 'Qui puoi dirci di cosa hai bisogno ',
-
       icon: <BookHeart className="h-6 w-6" />,
       route: '/questionnaire',
+      completed: patient?.questionnaireInfoAdded ?? false,
     },
     {
       value: 'match',

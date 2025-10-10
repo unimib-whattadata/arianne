@@ -8,6 +8,8 @@ import { medicalRecordsRouter } from "./routers/medical-records";
 import { notesRouter } from "./routers/notes";
 import { notificationsRouter } from "./routers/notifications";
 import { questionnaireOnboardingRouter } from "./routers/onboarding-questionnaire";
+import { onboardingTherapistRouter } from "./routers/onboarding-therapist";
+import { onboardingTherapistPersonalRouter } from "./routers/onboarding-therapist-personal";
 import { patientsRouter } from "./routers/patients";
 import { patientsPersonalRouter } from "./routers/patients-personal";
 import { preferencesRouter } from "./routers/preferences";
@@ -29,6 +31,8 @@ export const appRouter = createTRPCRouter({
   events: eventRouter,
   exports: exportsRouter,
   questionnaireOnboardingRouter: questionnaireOnboardingRouter,
+  onboardingTherapist: onboardingTherapistRouter,
+  onboardingTherapistPersonal: onboardingTherapistPersonalRouter,
   medicalRecords: medicalRecordsRouter,
   notes: notesRouter,
   notifications: notificationsRouter,

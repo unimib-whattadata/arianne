@@ -24,6 +24,10 @@ export const patients = createTable(
       .boolean("personal_info_added")
       .notNull()
       .default(false),
+    questionnaireInfoAdded: d
+      .boolean("questionnaire_info_added")
+      .notNull()
+      .default(false),
 
     medicalRecordsId: d.uuid("medical_records_id").notNull(),
   }),
