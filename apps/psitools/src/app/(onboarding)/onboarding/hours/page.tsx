@@ -15,7 +15,8 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Switch } from '@/components/ui/switch';
 import { useRouter } from 'next/navigation';
-
+import { useTRPC } from '@/trpc/react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Toaster, toast } from 'sonner';
 
 interface Slot {
@@ -25,7 +26,7 @@ interface Slot {
 
 interface DayAvailability {
   enabled: boolean;
-  slots: Slot[];
+  slots?: Slot[];
 }
 
 interface HoursFormData {
@@ -174,7 +175,20 @@ function DayAvailabilityRow({
 }
 
 export default function Personal() {
+  const api = useTRPC();
+  const queryClient = useQueryClient();
   const router = useRouter();
+  const saveHours = useMutation(
+    api.therapists.saveTimeSlot.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          api.therapists.findUnique.queryFilter(),
+        );
+        toast.success('Ore inserite correttamente');
+        router.push('/onboarding/landing');
+      },
+    }),
+  );
 
   const daysOfWeek = [
     'Lunedì',
@@ -237,9 +251,31 @@ export default function Personal() {
       return;
     }
 
-    console.log('Form data:', data);
+    const sanitizedAvailability: Record<
+      string,
+      { enabled: boolean; slots?: { from: string; to: string }[] }
+    > = Object.fromEntries(
+      Object.entries(data.availability).map(([day, info]) => {
+        if (!info.enabled) {
+          return [day, { enabled: false }];
+        }
 
-    router.push('/onboarding/fiscal');
+        const cleanedSlots = (info.slots ?? []).filter(
+          (s) => s.from.trim() !== '' && s.to.trim() !== '',
+        );
+
+        return [day, { enabled: true, slots: cleanedSlots }];
+      }),
+    );
+
+    const sanitizedData: HoursFormData = {
+      availability: sanitizedAvailability,
+    };
+
+    console.log('DATA (sanitized)', sanitizedData);
+
+    saveHours.mutate(sanitizedData);
+    //router.push('/onboarding/fiscal');
   };
 
   return (
@@ -270,7 +306,7 @@ export default function Personal() {
 
             <div className="mt-10 flex w-full flex-col gap-3 sm:flex-row sm:gap-4">
               <Button asChild className="w-full sm:flex-1" variant="outline">
-                <Link href="/onboarding/fiscal">
+                <Link href="/onboarding/landing">
                   Torna alla lista degli step
                 </Link>
               </Button>

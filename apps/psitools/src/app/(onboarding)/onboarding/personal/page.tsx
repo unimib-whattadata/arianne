@@ -16,7 +16,8 @@ import { useForm } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { useTRPC } from '@/trpc/react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { redirect } from 'next/navigation';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 interface PersonalFormData {
   name: string;
@@ -36,6 +37,7 @@ interface PersonalFormData {
 
 export default function Personal() {
   const api = useTRPC();
+  const router = useRouter();
   const queryClient = useQueryClient();
   const saveTherapistPersonalInfo = useMutation(
     api.onboardingTherapistPersonal.create.mutationOptions({
@@ -43,7 +45,8 @@ export default function Personal() {
         await queryClient.invalidateQueries(
           api.therapists.findUnique.queryFilter(),
         );
-        redirect('/onboarding/landing');
+        toast.success('Disponibilità salvata con successo!');
+        router.push('/onboarding/landing');
       },
     }),
   );

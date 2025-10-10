@@ -1,6 +1,7 @@
-import { therapists } from "@arianne/db/schemas/therapists";
+import { profiles } from "@arianne/db/schema";
+import { HoursFormSchema, therapists } from "@arianne/db/schemas/therapists";
 import { TRPCError } from "@trpc/server";
-import { eq, or, sql } from "drizzle-orm";
+import { and, eq, or, sql } from "drizzle-orm";
 import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
@@ -204,6 +205,38 @@ export const therapistsRouter = createTRPCRouter({
       }
     }),
 
+  saveTimeSlot: protectedProcedure
+    .input(HoursFormSchema)
+    .mutation(async ({ input, ctx }) => {
+      const newTimeSlot = await ctx.db
+        .update(therapists)
+        .set({
+          availability: input.availability,
+          isOnboardingTimeFinished: true,
+        })
+        .where(eq(therapists.profileId, ctx.user.profileId))
+        .returning();
+      const currentTherapist = await ctx.db.query.therapists.findFirst({
+        where: (t, { eq }) => eq(t.profileId, ctx.user.profileId),
+      });
+
+      if (
+        currentTherapist?.isOnboardingExperienceFinished &&
+        currentTherapist.isOnboardingPersonalFinished &&
+        currentTherapist.isOnboardingPreliminaryFinished &&
+        currentTherapist.isOnboardingTimeFinished
+      ) {
+        await ctx.db
+          .update(profiles)
+          .set({
+            completedOnboarding: true,
+          })
+          .where(and(eq(profiles.id, ctx.user.profileId)))
+          .returning();
+      }
+
+      return newTimeSlot;
+    }),
   getMatched: protectedProcedure.query(() => {
     const therapistList = [
       {

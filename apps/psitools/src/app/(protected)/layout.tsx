@@ -59,7 +59,7 @@ export default async function RootLayout({
   // If the user has not completed onboarding, redirect to onboarding
   const profile = await api.profiles.get();
   const therapist = await api.therapists.findUnique();
-  console.log('THERAPIST LAYOUT', therapist);
+
   if (!profile?.completedOnboarding) {
     if (therapist?.isOnboardingPreliminaryFinished) {
       redirect('/onboarding/landing');

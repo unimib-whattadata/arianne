@@ -17,7 +17,8 @@ import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { useTRPC } from '@/trpc/react';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { redirect } from 'next/navigation';
 
 interface OnboardingFormData {
   name: string;
@@ -38,10 +39,13 @@ interface OnboardingFormData {
 
 export default function Onboarding() {
   const api = useTRPC();
+  const queryClient = useQueryClient();
   const saveOnboardingTherapist = useMutation(
     api.onboardingTherapist.create.mutationOptions({
-      onSuccess: (data) => {
-        console.log('DATA', data);
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          api.therapists.findUnique.queryFilter(),
+        );
       },
     }),
   );

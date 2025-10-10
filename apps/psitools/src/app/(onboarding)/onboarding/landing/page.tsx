@@ -10,6 +10,7 @@ import {
 import { CardOption } from '@/features/terapeuti/onboarding/card';
 import type { CardOptionType } from '@/features/terapeuti/onboarding/card';
 import { useTherapist } from '@/hooks/use-therapist';
+import { redirect } from 'next/navigation';
 
 const OPTIONS: CardOptionType[] = [
   {
@@ -30,12 +31,12 @@ const OPTIONS: CardOptionType[] = [
     icon: <Calendar1 className="h-6 w-6" />,
     route: '/onboarding/hours',
   },
-  {
-    value: 'fiscal',
-    title: 'Dati Fiscali ',
-    icon: <Wallet className="h-6 w-6" />,
-    route: '/onboarding/fiscal',
-  },
+  // {
+  //   value: 'fiscal',
+  //   title: 'Dati Fiscali ',
+  //   icon: <Wallet className="h-6 w-6" />,
+  //   route: '/onboarding/fiscal',
+  // },
   {
     value: 'privacy',
     title: 'Accordi, privacy e accesso alla piattaforma',
@@ -57,11 +58,19 @@ export default function Landing() {
   if (user?.isOnboardingTimeFinished) {
     COMPLETED.push('hours');
   }
+
+  if (
+    user?.isOnboardingPersonalFinished &&
+    user?.isOnboardingExperienceFinished &&
+    user?.isOnboardingTimeFinished
+  )
+    redirect('/');
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-10 p-10 py-36">
       <div className="w-full max-w-3xl">
         <h1 className="text-h1 text-center font-bold text-slate-900">
-          Ciao Chiara!
+          Ciao {user?.profile.name}
         </h1>
         <h2 className="mt-2 text-center text-xl font-medium text-slate-900">
           Completa gli ultimi step per attivare il tuo profilo
