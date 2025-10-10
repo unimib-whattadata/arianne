@@ -111,3 +111,32 @@ export const MedicalRecordsUpdateSchema = z.object({
     );
   }),
 });
+
+export const ProfileSchema = z.object({
+  user: z.object({
+    firstName: z
+      .string()
+      .min(1, { message: "Il nome è obbligatorio" })
+      .max(50, { message: "Il nome deve essere inferiore a 50 caratteri" }),
+    lastName: z
+      .string()
+      .min(1, { message: "Il cognome è obbligatorio" })
+      .max(50, { message: "Il cognome deve essere inferiore a 50 caratteri" }),
+
+    gender: z.string().optional(),
+    birthDate: z
+      .date()
+      .refine((date) => date <= new Date(), {
+        message: "La data di nascita deve essere nel passato",
+      })
+
+      .optional(),
+    birthPlace: z.string().optional(),
+  }),
+  contacts: z.object({
+    phone: z.string(),
+    email: z.string().email({ message: "Indirizzo email non valido" }),
+  }),
+});
+
+export type FormValues = z.infer<typeof ProfileSchema>;

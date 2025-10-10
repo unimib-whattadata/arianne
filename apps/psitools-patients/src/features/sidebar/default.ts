@@ -6,6 +6,8 @@ import {
   LifeBuoy,
   MessageCircle,
   NotebookPen,
+  Settings,
+  UserRound,
 } from 'lucide-react';
 import { useMemo } from 'react';
 
@@ -20,6 +22,8 @@ export const useMenu = (
     | 'questionari'
     | 'diari'
     | 'assistenza'
+    | 'profilo'
+    | 'impostazioni'
     | 'chat',
 ) => {
   const api = useTRPC();
@@ -93,6 +97,20 @@ export const useMenu = (
   ];
 
   const NAV_SECONDARY = [
+    {
+      title: 'Profilo',
+      url: '/profilo',
+      icon: UserRound,
+      disabled: false,
+      isActive: active === 'profilo',
+    },
+    {
+      title: 'Impostazioni',
+      url: '/impostazioni',
+      icon: Settings,
+      disabled: false,
+      isActive: active === 'impostazioni',
+    },
     {
       title: 'Assistenza',
       url: '#',
