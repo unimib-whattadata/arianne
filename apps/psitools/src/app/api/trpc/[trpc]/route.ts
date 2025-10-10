@@ -26,6 +26,7 @@ export const OPTIONS = () => {
 const handler = async (req: NextRequest) => {
   const supabase = await createClient(cookies());
   const user = await supabase.auth.getUser();
+  const cookieStore = await cookies();
 
   const response = await fetchRequestHandler({
     endpoint: '/api/trpc',
@@ -34,6 +35,7 @@ const handler = async (req: NextRequest) => {
     createContext: () =>
       createTRPCContext({
         user,
+        cookies: cookieStore,
         headers: req.headers,
       }),
     onError({ error, path }) {
