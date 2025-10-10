@@ -30,6 +30,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { useState } from 'react';
 import { Logo } from '@/components/brand';
+import { Spinner } from '@/components/ui/spinner';
 
 const formSchema = z.object({
   account: z
@@ -218,9 +219,7 @@ export default function SignupPage() {
                         className="w-full"
                         disabled={sending}
                       >
-                        {sending && (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        )}
+                        {sending && <Spinner />}
                         Iscriviti
                       </Button>
                     </div>
