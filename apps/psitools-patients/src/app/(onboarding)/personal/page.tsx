@@ -32,6 +32,8 @@ import { format } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/utils/cn';
 import { it } from 'date-fns/locale';
+import { useTRPC } from '@/trpc/react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 interface PersonalFormData {
   name: string;
@@ -48,6 +50,21 @@ interface PersonalFormData {
 }
 
 export default function Personal() {
+  const api = useTRPC();
+  const queryClient = useQueryClient();
+  const savePersonalData = useMutation(
+    api.patientsPersonal.save.mutationOptions({
+      onSuccess: async (_) => {
+        await queryClient.invalidateQueries({
+          queryKey: api.patients.get.queryKey(),
+        });
+      },
+      onError: () => {
+        console.log('ERROR');
+      },
+    }),
+  );
+
   const form = useForm<PersonalFormData>({
     defaultValues: {
       name: '',
@@ -66,6 +83,7 @@ export default function Personal() {
 
   const onSubmit: SubmitHandler<PersonalFormData> = (data) => {
     console.log('Form data:', data);
+    savePersonalData.mutate(data);
     window.location.href = '/questionnaire';
   };
   const onError = () => {

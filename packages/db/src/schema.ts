@@ -17,3 +17,6 @@ export * from "./schemas/patients-personal";
 export * from "./schemas/preferences";
 export * from "./schemas/profiles";
 export * from "./schemas/therapists";
+export * from "./schemas/onboarding-questionnaire";
+export * from "./schemas/onboarding-therapist";
+export * from "./schemas/onboarding-therapist-personal";

@@ -1,0 +1,1 @@
+ALTER TABLE "arianne_form_flows" ALTER COLUMN "currentStepId" SET DATA TYPE integer;

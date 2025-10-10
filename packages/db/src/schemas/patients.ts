@@ -18,10 +18,14 @@ export const patients = createTable(
       .uuid("profile_id")
       .notNull()
       .unique()
-      .references(() => profiles.id),
+      .references(() => profiles.id, { onDelete: "cascade" }),
     therapistId: d.uuid("therapist_id").references(() => therapists.id),
     personalInfoAdded: d
       .boolean("personal_info_added")
+      .notNull()
+      .default(false),
+    questionnaireInfoAdded: d
+      .boolean("questionnaire_info_added")
       .notNull()
       .default(false),
 

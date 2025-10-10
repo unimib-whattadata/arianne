@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { CardOption } from '@/features/terapeuti/onboarding/card';
 import type { CardOptionType } from '@/features/terapeuti/onboarding/card';
+import { useTherapist } from '@/hooks/use-therapist';
 
 const OPTIONS: CardOptionType[] = [
   {
@@ -46,6 +47,16 @@ const OPTIONS: CardOptionType[] = [
 const COMPLETED = ['privacy'];
 
 export default function Landing() {
+  const { user } = useTherapist();
+  if (user?.isOnboardingPersonalFinished) {
+    COMPLETED.push('personal');
+  }
+  if (user?.isOnboardingExperienceFinished) {
+    COMPLETED.push('experience');
+  }
+  if (user?.isOnboardingTimeFinished) {
+    COMPLETED.push('hours');
+  }
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-10 p-10 py-36">
       <div className="w-full max-w-3xl">
