@@ -19,6 +19,23 @@ export const therapists = createTable(
       .unique()
       .references(() => profiles.id),
 
+    isOnboardingPreliminaryFinished: d
+      .boolean("is_onboarding_preliminary_finished")
+      .notNull()
+      .default(false),
+    isOnboardingPersonalFinished: d
+      .boolean("is_onboarding_personal_finished")
+      .notNull()
+      .default(false),
+    isOnboardingExperienceFinished: d
+      .boolean("is_onboarding_experience_finished")
+      .notNull()
+      .default(false),
+    isOnboardingTimeFinished: d
+      .boolean("is_onboarding_time_finished")
+      .notNull()
+      .default(false),
+
     recentPatients: d.uuid("recent_patients").array().notNull().default([]),
   }),
   (t) => [index("therapist_id").on(t.id)],

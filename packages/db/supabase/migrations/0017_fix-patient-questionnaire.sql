@@ -1,0 +1,1 @@
+ALTER TABLE "arianne_patients" ADD COLUMN "questionnaire_info_added" boolean DEFAULT false NOT NULL;

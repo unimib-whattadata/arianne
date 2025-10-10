@@ -14,44 +14,59 @@ import {
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
+import { useTRPC } from '@/trpc/react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { redirect } from 'next/navigation';
 
 interface PersonalFormData {
-  nome: string;
-  cognome: string;
-  data: string;
-  luogo: string;
+  name: string;
+  surname: string;
+  dateOfBirth: string;
+  placeOfBirth: string;
   email: string;
-  telefono: string;
-  genere: string;
-  codicefiscale: string;
-  titoloStudio: string;
-  specializzazione: string;
-  numeroIscrizione: string;
-  provincia: string;
-  anno: string;
+  phoneNumber: string;
+  gender: string;
+  taxCode: string;
+  educationDegree: string;
+  specialization: string;
+  registrationNumber: number;
+  province: string;
+  registrationYear: number;
 }
 
 export default function Personal() {
+  const api = useTRPC();
+  const queryClient = useQueryClient();
+  const saveTherapistPersonalInfo = useMutation(
+    api.onboardingTherapistPersonal.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          api.therapists.findUnique.queryFilter(),
+        );
+        redirect('/onboarding/landing');
+      },
+    }),
+  );
   const form = useForm<PersonalFormData>({
     defaultValues: {
-      nome: '',
-      cognome: '',
-      data: '',
-      luogo: '',
+      name: '',
+      surname: '',
+      dateOfBirth: '',
+      placeOfBirth: '',
       email: '',
-      telefono: '',
-      genere: '',
-      codicefiscale: '',
-      titoloStudio: '',
-      numeroIscrizione: '',
-      specializzazione: '',
-      provincia: '',
-      anno: '',
+      phoneNumber: '',
+      gender: '',
+      taxCode: '',
+      educationDegree: '',
+      registrationNumber: 0,
+      specialization: '',
+      province: '',
+      registrationYear: 0,
     },
   });
 
   const onSubmit: SubmitHandler<PersonalFormData> = (data) => {
-    console.log('Form data:', data);
+    saveTherapistPersonalInfo.mutate(data);
   };
 
   return (
@@ -76,7 +91,7 @@ export default function Personal() {
             <div className="flex w-full flex-col gap-4 sm:flex-row sm:gap-4">
               <FormField
                 control={form.control}
-                name="nome"
+                name="name"
                 rules={{ required: 'Il nome è obbligatorio' }}
                 render={({ field, fieldState }) => (
                   <FormItem className="w-full sm:flex-1">
@@ -98,7 +113,7 @@ export default function Personal() {
               />
               <FormField
                 control={form.control}
-                name="cognome"
+                name="surname"
                 rules={{ required: 'Il cognome è obbligatorio' }}
                 render={({ field, fieldState }) => (
                   <FormItem className="w-full sm:flex-1">
@@ -124,7 +139,7 @@ export default function Personal() {
             <div className="mt-4 flex w-full flex-col gap-4 sm:mt-6 sm:flex-row sm:gap-4">
               <FormField
                 control={form.control}
-                name="data"
+                name="dateOfBirth"
                 rules={{ required: 'La data di nascita è obbligatoria' }}
                 render={({ field, fieldState }) => (
                   <FormItem className="w-full sm:flex-1">
@@ -142,7 +157,7 @@ export default function Personal() {
               />
               <FormField
                 control={form.control}
-                name="luogo"
+                name="placeOfBirth"
                 rules={{ required: 'Il luogo di nascita è obbligatorio' }}
                 render={({ field, fieldState }) => (
                   <FormItem className="w-full sm:flex-1">
@@ -197,7 +212,7 @@ export default function Personal() {
               />
               <FormField
                 control={form.control}
-                name="telefono"
+                name="phoneNumber"
                 rules={{
                   required: 'Il numero di telefono è obbligatorio',
                   pattern: {
@@ -230,7 +245,7 @@ export default function Personal() {
             <div className="mt-4 flex w-full flex-col gap-4 sm:mt-6 sm:flex-row sm:gap-4">
               <FormField
                 control={form.control}
-                name="genere"
+                name="gender"
                 rules={{ required: 'Selezionare il genere' }}
                 render={({ field, fieldState }) => (
                   <FormItem className="w-full sm:flex-1">
@@ -265,7 +280,7 @@ export default function Personal() {
               />
               <FormField
                 control={form.control}
-                name="codicefiscale"
+                name="taxCode"
                 rules={{ required: 'Il codice fiscale è obbligatorio' }}
                 render={({ field, fieldState }) => (
                   <FormItem className="w-full sm:flex-1">
@@ -294,7 +309,7 @@ export default function Personal() {
 
             <FormField
               control={form.control}
-              name="titoloStudio"
+              name="educationDegree"
               rules={{ required: 'Il titolo di studio è obbligatorio' }}
               render={({ field, fieldState }) => (
                 <FormItem className="w-full">
@@ -326,7 +341,7 @@ export default function Personal() {
             {/* Specializzazione */}
             <FormField
               control={form.control}
-              name="specializzazione"
+              name="specialization"
               rules={{ required: 'La specializzazione è obbligatoria' }}
               render={({ field, fieldState }) => (
                 <FormItem className="mt-4 w-full">
@@ -351,7 +366,7 @@ export default function Personal() {
             <div className="mt-4 flex w-full flex-col gap-4 sm:mt-6 lg:flex-row lg:gap-4">
               <FormField
                 control={form.control}
-                name="numeroIscrizione"
+                name="registrationNumber"
                 rules={{ required: 'Il numero di iscrizione è obbligatorio' }}
                 render={({ field, fieldState }) => (
                   <FormItem className="w-full lg:flex-2">
@@ -376,7 +391,7 @@ export default function Personal() {
               <div className="flex w-full flex-col gap-4 sm:flex-row sm:gap-4 lg:w-auto">
                 <FormField
                   control={form.control}
-                  name="provincia"
+                  name="province"
                   rules={{ required: 'Selezionare la provincia' }}
                   render={({ field, fieldState }) => (
                     <FormItem className="w-full lg:min-w-[120px]">
@@ -404,7 +419,7 @@ export default function Personal() {
                 />
                 <FormField
                   control={form.control}
-                  name="anno"
+                  name="registrationYear"
                   rules={{ required: "L'anno è obbligatorio" }}
                   render={({ field, fieldState }) => (
                     <FormItem className="w-full lg:min-w-[100px]">
