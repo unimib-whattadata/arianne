@@ -55,12 +55,10 @@ export default function Personal() {
   const savePersonalData = useMutation(
     api.patientsPersonal.save.mutationOptions({
       onSuccess: async (_) => {
-        await queryClient.invalidateQueries({
-          queryKey: api.patients.get.queryKey(),
-        });
+        await queryClient.invalidateQueries(api.patients.get.queryFilter());
       },
-      onError: () => {
-        console.log('ERROR');
+      onError: (error) => {
+        console.log('ERROR', error);
       },
     }),
   );
@@ -81,10 +79,9 @@ export default function Personal() {
     },
   });
 
-  const onSubmit: SubmitHandler<PersonalFormData> = (data) => {
-    console.log('Form data:', data);
-    savePersonalData.mutate(data);
-    window.location.href = '/questionnaire';
+  const onSubmit: SubmitHandler<PersonalFormData> = async (data) => {
+    await savePersonalData.mutateAsync(data);
+    window.location.href = '/onboarding';
   };
   const onError = () => {
     toast.error('Per favore compila tutti i campi prima di procedere');
