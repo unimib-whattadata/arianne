@@ -81,4 +81,32 @@ export const patientsPersonalRouter = createTRPCRouter({
 
       return patient;
     }),
+  update: protectedProcedure
+    .input(PersonalDataCreateSchema)
+    .mutation(async ({ input, ctx }) => {
+      const updatedPatientPersonalData = await ctx.db
+        .update(personalData)
+        .set({
+          ...input,
+        })
+        .where(eq(personalData.patientProfileId, ctx.user.id))
+        .returning();
+
+      if (updatedPatientPersonalData.length === 0) {
+        throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+      }
+
+      const updatedPersonalData = updatedPatientPersonalData[0];
+      if (
+        updatedPersonalData &&
+        updatedPersonalData.patientProfileId !== ctx.user.id
+      ) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Data update verification failed",
+        });
+      }
+
+      return updatedPersonalData;
+    }),
 });

@@ -66,16 +66,31 @@ export default function ProfilePage() {
     }),
   );
 
-  const submintHandler: SubmitHandler<FormValues> = async (data) => {
-    if (!patient?.profile) {
-      toast.error('Paziente non trovato. Ricarica la pagina e riprova.');
-      return;
-    }
+  const submitHandler: SubmitHandler<FormValues> = async (data) => {
+    try {
+      if (!patient?.medicalRecords?.id) {
+        toast.error('Dati paziente non trovati');
+        return;
+      }
 
-    return await mutateAsync({
-      where: { id: patient?.id },
-      data: {},
-    });
+      const updateData = {
+        firstName: data.user.firstName ?? patient.profile.firstName,
+        lastName: data.user.lastName ?? patient.profile.lastName,
+        birthDate: data.user.birthDate ?? patient.medicalRecords.birthDate,
+        birthPlace: data.user.birthPlace ?? patient.medicalRecords.birthPlace,
+        gender: data.user.gender ?? patient.medicalRecords.gender,
+      };
+
+      await mutateAsync({
+        where: { id: patient.medicalRecords.id },
+        data: updateData,
+      });
+
+      toast.success('Dati aggiornati con successo.');
+    } catch (error) {
+      console.error(error);
+      toast.error('Errore durante il salvataggio.');
+    }
   };
 
   const errorHandler: SubmitErrorHandler<FormValues> = (error) => {
@@ -90,12 +105,17 @@ export default function ProfilePage() {
         <div className="bg-background sticky top-0 z-10 pb-3">
           <h1 className="text-xl font-semibold">Cartella Clinica</h1>
           <div className="flex justify-end">
-            <Button variant="ghost" onClick={() => setEdit(false)}>
+            <Button
+              variant="ghost"
+              className="text-secondary hover:bg-secondary/10 hover:text-secondary"
+              onClick={() => setEdit(false)}
+            >
               Annulla
             </Button>
             <Button
               className="ml-2"
-              onClick={form.handleSubmit(submintHandler, errorHandler)}
+              onClick={form.handleSubmit(submitHandler, errorHandler)}
+              variant="secondary"
             >
               Salva
             </Button>
@@ -104,7 +124,7 @@ export default function ProfilePage() {
         <Form {...form}>
           <form className="grid grid-cols-2 gap-4">
             <div className="flex flex-col gap-3">
-              <Card>
+              <Card className="bg-white">
                 <CardHeader className="font-semibold">
                   Dati anagrafici
                 </CardHeader>
@@ -157,13 +177,15 @@ export default function ProfilePage() {
                       <FormItem className="col-span-2 flex flex-col">
                         <FormLabel>Data di nascita</FormLabel>
                         <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl>
+                          <PopoverTrigger
+                            asChild
+                            className="ring-secondary hover:bg-secondary/10 hover:text-secondary focus:ring-secondary border-secondary"
+                          >
+                            <FormControl className="font-medium text-black">
                               <Button
                                 type="button"
-                                className={cn(
-                                  !field.value && 'text-muted-foreground',
-                                )}
+                                variant="outline"
+                                className={cn(!field.value && '')}
                               >
                                 {field.value ? (
                                   format(field.value, 'PPP', {
@@ -226,7 +248,7 @@ export default function ProfilePage() {
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="bg-white">
                 <CardHeader className="font-semibold">Contatti</CardHeader>
                 <CardContent className="grid gap-3">
                   <FormField
@@ -272,7 +294,7 @@ export default function ProfilePage() {
             </div>
 
             <div className="flex flex-col gap-3">
-              <Card>
+              <Card className="bg-white">
                 <CardHeader className="font-semibold">Dati terapia</CardHeader>
                 <CardContent className="grid grid-cols-2 gap-4">
                   <div className="col-span-2 space-y-2">
@@ -318,14 +340,18 @@ export default function ProfilePage() {
       <div className="bg-background sticky top-0 z-10 pb-3">
         <h1 className="text-xl font-semibold">Profilo</h1>
         <div className="flex justify-end">
-          <Button className="ml-2" onClick={() => setEdit(true)}>
+          <Button
+            className="ml-2"
+            variant="secondary"
+            onClick={() => setEdit(true)}
+          >
             Modifica
           </Button>
         </div>
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div className="flex flex-col gap-3">
-          <Card>
+          <Card className="bg-white">
             <CardHeader className="font-semibold">Dati anagrafici</CardHeader>
             <CardContent className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -376,7 +402,7 @@ export default function ProfilePage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="bg-white">
             <CardHeader className="font-semibold">Contatti</CardHeader>
             <CardContent className="grid gap-4">
               <div className="space-y-2">
@@ -396,7 +422,7 @@ export default function ProfilePage() {
         </div>
 
         <div className="flex flex-col gap-3">
-          <Card>
+          <Card className="bg-white">
             <CardHeader className="font-semibold">Dati terapia</CardHeader>
             <CardContent className="grid grid-cols-2 gap-4">
               <div className="col-span-2 space-y-2">

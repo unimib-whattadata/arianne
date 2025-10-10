@@ -64,7 +64,7 @@ export const assignments = createTable(
       weekdays?: Weekday[];
       dayOfMonth?: number[];
     }>(),
-    state: assignmentStateEnum().default("assigned"),
+    state: assignmentStateEnum().default("assigned").notNull(),
     createdAt: d.timestamp("created_at").defaultNow(),
     updatedAt: d.timestamp("updated_at").defaultNow(),
 

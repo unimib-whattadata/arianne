@@ -124,7 +124,7 @@ export const Diaries = () => {
               </div>
 
               <Link href={currentDiary.href}>
-                <Button className="border-blue-waterTitle text-blue-waterTitle hover:bg-blue-waterTitle rounded-sm border bg-transparent font-normal hover:text-white-900">
+                <Button className="border-secondary text-blue-waterTitle hover:bg-blue-waterTitle hover:text-white-900 bg-secondary/20 rounded-sm border font-normal">
                   Svolgi il compito
                 </Button>
               </Link>
