@@ -11,7 +11,9 @@ import { useTRPC } from '@/trpc/react';
 import type { RouterOutputs } from '@arianne/api';
 import type { medicalRecordStateEnum, Tag } from '@arianne/db/schema';
 
-type Patient = RouterOutputs['patients']['findUnique'];
+type Patient = NonNullable<
+  RouterOutputs['therapists']['findUnique']
+>['patients'][number];
 type Profile = RouterOutputs['profiles']['get'];
 
 const SortHeader = ({
@@ -115,7 +117,7 @@ export const useColumns = () => {
         enableResizing: true,
         cell(props) {
           const { row } = props;
-          const { profileId } = row.original!;
+          const { profileId } = row.original;
           if (!profileId) return null;
 
           const updateRecentPatients = () => {
