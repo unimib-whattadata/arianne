@@ -33,9 +33,9 @@ export default function NotesPage() {
   if (isLoading || !notes) return null;
 
   return (
-    <div className="relative grid h-full-safe grid-rows-[repeat(2,min-content)] overflow-auto p-4 pt-0">
-      <div className="sticky top-0 z-10 bg-background pb-3">
-        <h1 className="text-xl font-semibold">Note</h1>
+    <div className="h-full-safe relative grid grid-rows-[repeat(2,min-content)] overflow-auto p-4 pt-0">
+      <div className="bg-background sticky top-0 z-10 pb-3">
+        <h1 className="pb-3 text-xl font-semibold">Note</h1>
 
         <div className="flex items-center gap-2">
           <DatePickerWithRange date={date} setDate={setDate} />
@@ -44,7 +44,7 @@ export default function NotesPage() {
             size="sm"
             pressed={pinnedOnly}
             onPressedChange={() => setPinnedOnly((prev) => !prev)}
-            className="h-9 w-10 border border-primary text-base text-primary hover:bg-primary/5 [&>svg]:data-[state=on]:fill-primary [&>svg]:data-[state=on]:stroke-white"
+            className="border-primary text-primary hover:bg-primary/5 [&>svg]:data-[state=on]:fill-primary h-9 w-10 border text-base [&>svg]:data-[state=on]:stroke-white"
           >
             <Star className="h-5 w-5" />
           </Toggle>

@@ -73,7 +73,7 @@ const PatientPage = () => {
     : 'grid-cols-[auto_300px] grid-rows-auto';
 
   return (
-    <main className="h-full-safe grid grid-cols-[1fr_300px] gap-3 p-4">
+    <main className="h-full-safe gap-3 p-4">
       <div className="bg-background sticky top-0 z-40 col-span-full flex items-center justify-between">
         <h1 className="text-xl font-semibold">Dashboard</h1>
         {/* <Button variant="outline" onClick={() => setEditMode((prev) => !prev)}>
@@ -84,23 +84,16 @@ const PatientPage = () => {
 
       <div
         className={cn(
-          'grid h-fit gap-3 overflow-auto pr-2',
+          'flex h-fit flex-col gap-3 overflow-auto pr-2',
           isSingleCol ? 'hidden' : 'col-start-1',
         )}
       >
         {renderBlock('stats', <StatsBar />)}
+        {renderBlock('events', <NextEventBanner />)}
+
         {renderBlock('patients', <PatientsTable />)}
         {renderBlock('assignments', <AssignmentTable />)}
         {renderBlock('notifications', <NotificationCard />)}
-      </div>
-
-      <div
-        className={cn(
-          '[--header-height:140px]',
-          isSingleCol ? 'col-span-full' : 'h-full-safe col-start-2',
-        )}
-      >
-        {renderBlock('events', <NextEventBanner />)}
       </div>
     </main>
   );
