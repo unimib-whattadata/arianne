@@ -18,7 +18,8 @@ import { useForm } from 'react-hook-form';
 import { useTRPC } from '@/trpc/react';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { redirect } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
+import { useTherapist } from '@/hooks/use-therapist';
 
 interface OnboardingFormData {
   name: string;
@@ -38,6 +39,8 @@ interface OnboardingFormData {
 }
 
 export default function Onboarding() {
+  const { user } = useTherapist();
+  const router = useRouter();
   const api = useTRPC();
   const queryClient = useQueryClient();
   const saveOnboardingTherapist = useMutation(
@@ -46,6 +49,7 @@ export default function Onboarding() {
         await queryClient.invalidateQueries(
           api.therapists.findUnique.queryFilter(),
         );
+        router.push('/onboarding/landing');
       },
     }),
   );
@@ -69,7 +73,6 @@ export default function Onboarding() {
   });
 
   const onSubmit: SubmitHandler<OnboardingFormData> = (data) => {
-    console.log('DATA INSERTED', data);
     saveOnboardingTherapist.mutate(data);
   };
 
@@ -446,7 +449,7 @@ export default function Onboarding() {
             />
 
             <Button className="mt-10 w-full" variant="secondary" type="submit">
-              <Link href="/onboarding/waiting">Invia la tua candidatura</Link>
+              Invia la tua candidatura
             </Button>
           </div>
         </form>

@@ -70,7 +70,7 @@ export default function Landing() {
     <main className="flex min-h-screen flex-col items-center justify-center gap-10 p-10 py-36">
       <div className="w-full max-w-3xl">
         <h1 className="text-h1 text-center font-bold text-slate-900">
-          Ciao {user?.profile.name}
+          Ciao {user?.profile.firstName}!
         </h1>
         <h2 className="mt-2 text-center text-xl font-medium text-slate-900">
           Completa gli ultimi step per attivare il tuo profilo

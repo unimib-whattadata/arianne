@@ -21,6 +21,7 @@ export const onboardingTherapistRouter = createTRPCRouter({
   create: protectedProcedure
     .input(TherapistOnboardingCreateSchema)
     .mutation(async ({ input, ctx }) => {
+      console.log("ONBOARDING THERAPIST");
       const newTherapistOnboardingInfo = await ctx.db
         .insert(onboardingTherapist)
         .values({ ...input, therapistId: ctx.user.profileId })
